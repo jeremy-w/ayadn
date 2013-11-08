@@ -77,7 +77,7 @@ and to declare the app folder in your $PATH *or* create a symlink of the app in 
 
 ### Step 4
 
-I haven't coded an interactive authentification system yet, so you **have** to copy/paste your own unique token into the main file.
+I haven't coded an interactive authentification system yet, so you **have** to copy/paste your own unique token into the `token.rb` file.
 
 This is easy:
 
