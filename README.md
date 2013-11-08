@@ -1,13 +1,15 @@
 AYADN
 =====
 
-App.net read-only command-line client as an exercise for learning Ruby.
+App.net command-line client in Ruby.
 
 ## Features
 
 - read your App.net unified stream
 
-- read the App.net global stream
+- write a post
+
+- search hashtags  
 
 - get informations about a user
 
@@ -17,7 +19,7 @@ App.net read-only command-line client as an exercise for learning Ruby.
 
 - get the last posts starred by a user
 
-- search hashtags  
+- read the App.net global stream
 
 
 ## Instructions
@@ -95,6 +97,7 @@ If you've not made the app executable, use it through Ruby:
 
 ```
 ruby ayadn.rb stream
+ruby ayadn.rb write 'Good morning ADN!!!'
 ruby ayadn.rb posts @ericd
 ruby ayadn.rb stars @jws
 ruby ayadn.rb tag music
@@ -104,15 +107,18 @@ If the app is executable and in your $PATH, just launch it:
 
 ```
 ayadn.rb help
+ayadn.rb write 'Posting from AyaDN in #Ruby!'
 ayadn.rb infos @fredvd
+ayadn.rb tag ruby
 ```  
 
 If the app is executable but not in your $PATH, then launch it locally:
 
 ```
 ./ayadn.rb
+./ayadn.rb write '#Nowplaying some awesome music'
 ./ayadn.rb global
-./ayadn.rb mentions @hry
+./ayadn.rb mentions @duerig
 ```  
 
 My advice is to make an alias in your `.bashrc`:
@@ -125,6 +131,7 @@ Then it's easier to use:
 
 ```
 a stream
+a w 'The power of #shortcuts!'
 a global
 a infos @ksniod
 a posts @ericd

@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-# Read-only App.net client
+# App.net client
 # Learning Ruby and ADN
 # by Eric Dejonckheere
 # © 2013
@@ -12,7 +12,7 @@ when *winPlatforms
 end
 
 puts "\nAYADN".red
-puts "App.net read-only command-line client\n".reddish
+puts "App.net command-line client\n".reddish
 
 option1 = ARGV[0]
 option2 = ARGV[1]
@@ -46,10 +46,14 @@ when option1 == "tag"
 	puts "\nChargement des posts contenant ".green + "##{option2}...\n".reddish
 	client = AyaDN::AppdotnetHashtagSearch.new
 	puts client.getTaggedPosts(option2)
+when option1 == "write", option1 == "w"
+	puts "\nEnvoi du post...\n".green
+	client = AyaDN::AppdotnetSendPost.new(@token)
+	puts client.createPost(option2)
 when option1 == "help", option1 == "aide"
-	puts help
+	puts @help
 else
-	puts help
+	puts @help
 end
 
 

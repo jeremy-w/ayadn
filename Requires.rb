@@ -1,4 +1,6 @@
 require 'rubygems'
+require 'uri'
+require 'net/http'
 require 'rest_client'
 require 'json'
 
@@ -12,5 +14,6 @@ require_relative 'mylibs/AppdotnetUserPosts'
 require_relative 'mylibs/AppdotnetUserMentions'
 require_relative 'mylibs/AppdotnetStarredPosts'
 require_relative 'mylibs/AppdotnetGlobal'
+require_relative 'mylibs/AppdotnetSendPost'
 
 require_relative 'token.rb'
