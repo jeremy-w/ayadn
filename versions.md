@@ -1,0 +1,41 @@
+AYADN
+=====
+
+AYADN is a learning exercise: not only it is alpha (almost zero error handling) but it's not an official App.net application... yet.
+
+
+## 2013-11-08 v0.06
+- Changed the logic for ARGV
+- Inverted syntax for better consistance
+- Hashtag search
+
+## 2013-11-07 v0.05
+- User starred posts
+- Bug fixes
+
+## 2013-11-06 v0.04b
+- User mentions
+
+## 2013-11-06 v0.04a
+- Refactored libs
+- Token is declared in main app
+- Fixed 'deleted posts' bug
+- Add Gemfile
+- Better platform detection
+
+## 2013-11-05 v0.03
+- Platform detection
+- Colorization is Windows-compatible
+
+## 2013-11-04 v0.02b
+- User infos
+- User posts
+
+## 2013-11-04 v0.02a
+- Unified stream (+ directed posts)
+- colorization
+- ARGS
+
+## 2013-11-03 v0.01
+- Basic structure for an App.net read-only commande-line client
+
