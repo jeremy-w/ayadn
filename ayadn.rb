@@ -11,23 +11,6 @@ when *winPlatforms
 	require 'win32console'
 end
 
-token = ''
-
-help = "\nOptions disponibles:\n\n".cyan
-help += "- " + "stream ".green + "pour voir le Stream\n\n" 
-help += "- " + "infos @username ".green + "pour voir les informations de cet utilisateur\n\n"
-help += "- " + "posts @username ".green + "pour voir les posts de cet utilisateur\n\n"
-help += "- " + "mentions @username ".green + "pour voir les posts mentionnant cet utilisateur\n\n"
-help += "- " + "stars @username ".green + "pour voir les posts favoris de cet utilisateur\n\n"
-help += "- " + "tag motclé ".green + "pour chercher les hashtags (ne pas taper le '#')\n\n"
-help += "- " + "help ".green + "ou " + "aide ".green + "pour afficher l'aide\n\n"
-help += "La commande sans options affiche le Stream.\n\n\n".green
-help += "Exemples d'utilisation :\n\n".cyan
-help += "ayadn.rb stream\n".magenta
-help += "ayadn.rb tag hello\n".magenta
-help += "ayadn.rb posts @ericd\n".magenta
-help += "\n"
-
 puts "\nAYADN".red
 puts "App.net read-only command-line client\n".reddish
 
@@ -38,6 +21,10 @@ case
 when !option1, option1 == "stream", option1 == "s"
 	puts "\nChargement du Unified Stream...\n".green
 	client = AyaDN::AppdotnetUnified.new(token)
+	puts client.getText()
+when option1 == "global"
+	puts "\nChargement du Global Stream...\n".green
+	client = AyaDN::AppdotnetGlobal.new(token)
 	puts client.getText()
 when option1 == "infos"
 	puts "\nChargement des informations sur ".green + "#{option2}...\n".reddish
