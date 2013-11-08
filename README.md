@@ -83,9 +83,9 @@ This is easy:
 
 - Go to [http://dev-lite.jonathonduerig.com](http://dev-lite.jonathonduerig.com) and click the `Authorize` button. Copy the token it gives you back.
 
-- In any text editor, open the file `ayadn.rb` and paste the token between the ticks, like this:
+- In any text editor, open the file `token.rb` and paste the token between the ticks:
 
-![Paste your token in the file](https://www.evernote.com/shard/s89/sh/62c690fd-3852-4ef9-b15a-ff0a5b40b901/d4dd6fb6e08c07db2a83b99a90ae01f0/deep/0/token.png)
+![Paste your token in the file](https://www.evernote.com/shard/s89/sh/45c60042-292b-40ae-9a6a-fb23b4d93823/77635d28512633cd9fcf3315188b1096/deep/0/token.rb.png)
 
 Hit `Save` and you're done.
 
