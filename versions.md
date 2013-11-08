@@ -4,6 +4,11 @@ AYADN
 AYADN is a learning exercise: not only it is alpha (almost zero error handling) but it's not an official App.net application... yet.
 
 
+## 2013-11-08 v0.07
+- Each lib in its own file
+- Global stream
+- I botched the GitHub repo, so I add to start again from zero: no commit history before today
+
 ## 2013-11-08 v0.06
 - Changed the logic for ARGV
 - Inverted syntax for better consistance

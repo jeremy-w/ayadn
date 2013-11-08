@@ -7,6 +7,8 @@ App.net read-only command-line client as an exercise for learning Ruby.
 
 - read your App.net unified stream
 
+- read the App.net global stream
+
 - get informations about a user
 
 - get the last posts from a user
@@ -109,6 +111,7 @@ If the app is executable but not in your $PATH, then launch it locally:
 
 ```
 ./ayadn.rb
+./ayadn.rb global
 ./ayadn.rb mentions @hry
 ```  
 
@@ -122,6 +125,7 @@ Then it's easier to use:
 
 ```
 a stream
+a global
 a infos @ksniod
 a posts @ericd
 a tag adnafterdark
