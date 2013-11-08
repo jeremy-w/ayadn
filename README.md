@@ -144,10 +144,12 @@ You can contact me on [App.net](http://alpha.app.net/ericd) if you have question
 
 ## Screencaps
 
-![Help](https://www.evernote.com/shard/s89/sh/c94deb1f-318f-405b-b4bd-05e084d90f13/9d4553a41dddf7c582e1e152f67d8ddd/deep/0/help.png)
+![Write](https://www.evernote.com/shard/s89/sh/5f62c5f7-9232-4e1e-88d3-558af51814de/3adbfcbb38ce1ffae81e5ad0117f0689/deep/0/ayadn-write.png)
 
-![Stream](https://www.evernote.com/shard/s89/sh/19f3cf86-9af7-4417-a800-ad7e4f228606/29461ebb02b50eac4796d1c7b4f15f6f/deep/0/stream.png)
+![Stream](https://www.evernote.com/shard/s89/sh/c6dc5210-db9c-4068-8e7d-ffd9fa1e1da7/2e983a17a452d3fa9d8b76355e05d70a/deep/0/ayadn-stream.png)
 
-![Tag search](https://www.evernote.com/shard/s89/sh/e5bc450f-4c8a-4c66-91e6-8a66bfa76ab4/7d7ed1f01c75cc9b86d6be56a0a59c2c/deep/0/tag.png)
+![Tag search](https://www.evernote.com/shard/s89/sh/a41e4e52-09af-4ad9-8fa5-4690b08bdf09/d9a70ddea0cc5eb4ce0a593974d596e6/deep/0/ayadn-hashtag.png)
+
+![Help](https://www.evernote.com/shard/s89/sh/6c200507-4fc4-4939-b3a6-f56e1e479c0c/c3a881757288e77c3b8e172a5d9f9bdc/deep/0/ayadn-help.png)
 
 
