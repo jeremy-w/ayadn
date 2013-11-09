@@ -154,6 +154,24 @@ Enjoy!
 
 You can contact me on [App.net](http://alpha.app.net/ericd) if you have questions, ideas, if you've found bugs, or... if you know Ruby and you want to help some poor newbie. ;)
 
+## Help
+
+Be aware of the way the console treats what you type.
+
+When posting with `"double quotes"`, any special character will be interpreted! So `"echo !"` becomes `"echo last command"`. You may not want to do that...
+
+So you have to post with `'simple quotes'`, this way the console don't mess with your content.
+
+The thing is, how do you then post a text *containing one ore more simple quotes*?
+
+The answer is to use `\`, the *antislash* character, when posting **with double quotes**. Put an antislash before the special character that would be escaped, like this:
+
+```
+ayadn.rb write "Here\'s an escaped simple quote."
+```  
+
+In the future I will implement a method to automatically strip/escape the special characters. In the meantime, just be careful.
+
 ## Screencaps
 
 ![Write](https://www.evernote.com/shard/s89/sh/5f62c5f7-9232-4e1e-88d3-558af51814de/3adbfcbb38ce1ffae81e5ad0117f0689/deep/0/ayadn-write.png)
