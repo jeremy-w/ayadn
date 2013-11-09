@@ -43,7 +43,7 @@ when option1 == "stars", option1 == "starred", option1 == "s"
 	client = AyaDN::AppdotnetStarredPosts.new(@token)
 	puts client.getStarredPosts(option2)
 when option1 == "tag", option1 == "t"
-	puts "\nChargement des posts contenant ".green + "##{option2}...\n".reddish
+	puts "\nChargement des posts contenant ".green + "##{option2}...\n".blue
 	client = AyaDN::AppdotnetHashtagSearch.new
 	puts client.getTaggedPosts(option2)
 when option1 == "write", option1 == "w"

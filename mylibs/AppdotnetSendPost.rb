@@ -24,22 +24,8 @@ class AyaDN
 			blob = JSON.parse(callback)
 			adnData = blob['data']
 			postText = adnData['text']
-
+			coloredPost = colorize(postText)
 			userSentPost = ""
-			content = Array.new
-			splitted = postText.split(" ")
-			splitted.each do |word|
-				if word =~ /^#/
-					content.push(word.blue)
-				elsif word =~ /^@/
-					content.push(word.red)
-				elsif word =~ /^http/ or word =~ /^photos.app.net/ or word =~ /^files.app.net/ or word =~ /^chimp.li/ or word =~ /^bli.ms/
-					content.push(word.magenta)
-				else
-					content.push(word)
-				end
-			end
-			coloredPost = content.join(" ")
 			userName = adnData['user']['username']
 			createdAt = adnData['created_at']
 			createdDay = createdAt[0...10]

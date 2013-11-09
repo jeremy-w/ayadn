@@ -14,6 +14,7 @@ class AyaDN
 		def getJSON(postID)
 		 	return getPostURL(postID)
 		end
+
 		def getPostInfo(postID)
 			hashOfResponse = JSON.parse(getJSON(postID))
 			postInfo = hashOfResponse['data']
@@ -25,21 +26,8 @@ class AyaDN
 			userFollows = postInfo['follows_you']
 			userFollowed = postInfo['you_follow']
 			
+			coloredPost = colorize(postText)
 
-			content = Array.new
-			splitted = postText.split(" ")
-			splitted.each do |word|
-				if word =~ /^#/
-					content.push(word.blue)
-				elsif word =~ /^@/
-					content.push(word.red)
-				elsif word =~ /^http/ or word =~ /^photos.app.net/ or word =~ /^files.app.net/ or word =~ /^chimp.li/ or word =~ /^bli.ms/
-					content.push(word.magenta)
-				else
-					content.push(word)
-				end
-			end
-			coloredPost = content.join(" ")
 			createdAt = postInfo['created_at']
 			createdDay = createdAt[0...10]
 			createdHour = createdAt[11...19]

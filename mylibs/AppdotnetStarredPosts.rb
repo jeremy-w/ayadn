@@ -15,47 +15,14 @@ class AyaDN
 		 	return getPosts(name)
 		end
 		def getStarredPosts(name)
-			userStarredPostsStream = ""
 			hashOfResponse = JSON.parse(getJSON(name))
 			starredPosts = hashOfResponse['data']
 			if starredPosts == nil
 				exit
 			end
 			starredPostsReverse = starredPosts.reverse
-			starredPostsReverse.each do |item|
-				content = Array.new
-				textOfStarredPosts = item['text']
-				splitted = textOfStarredPosts.split(" ")
-				splitted.each do |word|
-					if word =~ /^#/
-						content.push(word.blue)
-					elsif word =~ /^@/
-						content.push(word.red)
-					elsif word =~ /^http/ or word =~ /^photos.app.net/ or word =~ /^files.app.net/ or word =~ /^chimp.li/ or word =~ /^bli.ms/
-						content.push(word.magenta)
-					else
-						content.push(word)
-					end
-				end
-				coloredPost = content.join(" ")
-				userName = item['user']['username']
-				createdAt = item['created_at']
-				createdDay = createdAt[0...10]
-				createdHour = createdAt[11...19]
-				links = item['entities']['links']
-				userStarredPostsStream += "\nLe " + createdDay.cyan + ' à ' + createdHour.cyan + ' par ' + "@".green + userName.green + " :\n" + "---\n".red + coloredPost + "\n\n"
-				postId = item['id']
-				userStarredPostsStream += "Post ID : ".cyan + postId.to_s.brown
-				if !links.empty?
-					userStarredPostsStream +=  " - " + "Lien : ".cyan
-					links.each do |link|
-						linkURL = link['url']
-						userStarredPostsStream += linkURL.brown + " "
-					end
-				end
-				userStarredPostsStream += "\n\n"
-			end
-			return userStarredPostsStream
+			resp = buildPost(starredPostsReverse)
+			return resp
 		end
 	end
 end

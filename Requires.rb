@@ -6,6 +6,7 @@ require 'json'
 
 require_relative 'mylibs/color_output'
 require_relative 'mylibs/help'
+require_relative 'mylibs/AyadnHelpers'
 
 require_relative 'mylibs/AppdotnetUnified'
 require_relative 'mylibs/AppdotnetHashtagSearch'
