@@ -1,11 +1,11 @@
 @help = "\nOptions disponibles:\n\n".cyan
-@help += "- " + "stream ".green + "pour voir votre stream personnalisé\n\n" 
-@help += "- " + "global ".green + "pour voir le global stream\n\n" 
+@help += "- " + "stream ".green + "pour voir votre stream\n\n" 
+@help += "- " + "global ".green + "pour voir le stream global\n\n" 
 @help += "- " + "infos @username ".green + "pour voir les informations de cet utilisateur\n\n"
 @help += "- " + "posts @username ".green + "pour voir les posts de cet utilisateur\n\n"
 @help += "- " + "mentions @username ".green + "pour voir les posts mentionnant cet utilisateur\n\n"
 @help += "- " + "stars @username ".green + "pour voir les posts favoris de cet utilisateur\n\n"
-@help += "- " + "tag motclé ".green + "pour chercher les hashtags (ne pas taper le '#')\n\n"
+@help += "- " + "tag keyword ".green + "pour chercher les hashtags (ne pas taper le '#')\n\n"
 @help += "- " + "help ".green + "ou " + "aide ".green + "pour afficher l'aide\n\n\n"
 @help += "- " + "write ".green + "ou " + "w ".green + "pour poster un texte (guillemets simples obligatoires)\n\n\n"
 @help += "La commande sans options affiche le Stream.\n\n\n".green
