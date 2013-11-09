@@ -107,6 +107,7 @@ ruby ayadn.rb write 'Good morning ADN!!!'
 ruby ayadn.rb posts @ericd
 ruby ayadn.rb stars @jws
 ruby ayadn.rb tag music
+ruby ayadn.rb details 14582145
 ```
 
 If the app is executable and in your $PATH, just launch it:
@@ -116,6 +117,7 @@ ayadn.rb help
 ayadn.rb write 'Posting from AyaDN in #Ruby!'
 ayadn.rb infos @fredvd
 ayadn.rb tag ruby
+ayadn.rb mentions @timrowe
 ```  
 
 If the app is executable but not in your $PATH, then launch it locally:
@@ -123,8 +125,6 @@ If the app is executable but not in your $PATH, then launch it locally:
 ```
 ./ayadn.rb
 ./ayadn.rb write '#Nowplaying some awesome music'
-./ayadn.rb global
-./ayadn.rb mentions @duerig
 ```  
 
 My advice is to make an alias in your `.bashrc`:
@@ -145,6 +145,7 @@ a p @ericd
 a t adnafterdark
 a m @hry
 a p @nam3
+a d 14579853
 ```  
 
 Enjoy!  
