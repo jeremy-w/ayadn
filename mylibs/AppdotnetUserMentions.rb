@@ -8,8 +8,13 @@ class AyaDN
 		end
 		def getMentions(name)
 			@url += "#{name}" + "/mentions" + "/?access_token=#{@token}"
-			response = RestClient.get(@url)
-			return response.body
+			begin
+				response = RestClient.get(@url)
+				return response.body
+			rescue
+				warnings = ErrorWarning.new
+				puts warnings.errorHTTP
+			end
 		end
 		def getJSON(name)
 		 	return getMentions(name)

@@ -18,21 +18,25 @@ option1 = ARGV[0]
 option2 = ARGV[1]
 
 warnings = ErrorWarning.new
+status = ClientStatus.new
 
 case
 when !option1, option1 == "flux", option1 == "f", option1 == "stream"
-	puts "\nChargement du Unified Stream...\n".green
+
+	puts status.getUnified()
 	client = AyaDN::AppdotnetUnified.new(@token)
 	puts client.getText()
 
 when option1 == "global", option1 == "g"
-	puts "\nChargement du Global Stream...\n".green
+
+	puts status.getGlobal()
 	client = AyaDN::AppdotnetGlobal.new(@token)
 	puts client.getText()
 
 when option1 == "infos", option1 == "i"
+
 	if option2 =~ /^@/
-		puts "\nChargement des informations sur ".green + "#{option2}...\n".reddish
+		puts status.infosUser(option2)
 		client = AyaDN::AppdotnetUserInfo.new(@token)
 		puts client.getUserInfo(option2)
 	else
@@ -40,8 +44,9 @@ when option1 == "infos", option1 == "i"
 	end
 
 when option1 == "posts", option1 == "p"
+
 	if option2 =~ /^@/
-		puts "\nChargement des posts de ".green + "#{option2}...\n".reddish
+		puts status.postsUser(option2)
 	 	client = AyaDN::AppdotnetUserPosts.new(@token)
 	 	puts client.getUserPosts(option2)
 	 else
@@ -49,8 +54,9 @@ when option1 == "posts", option1 == "p"
 	 end
 
 when option1 == "mentions", option1 == "m"
+
 	if option2 =~ /^@/
-		puts "\nChargement des posts mentionnant ".green + "#{option2}...\n".reddish
+		puts status.mentionsUser(option2)
 	 	client = AyaDN::AppdotnetUserMentions.new(@token)
 	 	puts client.getUserMentions(option2)
  	else
@@ -58,8 +64,9 @@ when option1 == "mentions", option1 == "m"
  	end
 
 when option1 == "stars", option1 == "starred", option1 == "s"
+
 	if option2 =~ /^@/
- 		puts "\nChargement des posts favoris de ".green + "#{option2}...\n".reddish
+ 		puts status.starsUser(option2)
 		client = AyaDN::AppdotnetStarredPosts.new(@token)
 		puts client.getStarredPosts(option2)
 	else
@@ -67,22 +74,25 @@ when option1 == "stars", option1 == "starred", option1 == "s"
 	end
 
 when option1 == "tag", option1 == "t"
+
 	client = AyaDN::AppdotnetHashtagSearch.new
 	option2_new = option2.dup
 	if option2_new =~ /^#/
 		option2_new[0] = ""
 	end
-	puts "\nChargement des posts contenant ".green + "##{option2_new}...\n".blue
+	puts status.getHashtags(option2_new)
 	puts client.getTaggedPosts(option2_new)
 
 when option1 == "write", option1 == "w"
-	puts "\nEnvoi du post...\n".green
+
+	puts status.sendPost()
 	client = AyaDN::AppdotnetSendPost.new(@token)
 	puts client.createPost(option2)
 
 when option1 == "details", option1 == "d"
+
 	if option2.is_integer?
-		puts "\nDétails du post...\n".green
+		puts status.getDetails()
 		client = AyaDN::AppdotnetPostInfo.new(@token)
 		puts client.getPostInfo(option2)
 	else
@@ -90,9 +100,17 @@ when option1 == "details", option1 == "d"
 	end
 
 when option1 == "help", option1 == "aide", option1 == "h"
+
 	puts @help
 
 else
+
+	if option1 != nil
+		option = ARGV
+		bad_option = option.join(" ")
+		puts warnings.syntaxError(bad_option)
+	end
+	puts warnings.globalError()
 	puts @help
 
 end

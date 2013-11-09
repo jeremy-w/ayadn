@@ -8,8 +8,13 @@ class AyaDN
 		end
 		def getPosts(name)
 			@url += "#{name}" + "/posts" + "/?access_token=#{@token}"
-			response = RestClient.get(@url)
-			return response.body
+			begin
+				response = RestClient.get(@url)
+				return response.body
+			rescue
+				warnings = ErrorWarning.new
+				puts warnings.errorHTTP
+			end
 		end
 		def getJSON(name)
 		 	return getPosts(name)

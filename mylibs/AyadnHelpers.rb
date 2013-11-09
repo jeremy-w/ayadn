@@ -80,6 +80,48 @@ class ErrorWarning
 		raise ArgumentError.new("\n\n-> ".brown + "Erreur de connection.\n".red)
 		exit
 	end
+	def globalError
+		72.times{print "*".reverse_color}
+		print "\n"
+		15.times{print "-".reverse_color}
+		print "Une erreur de type inconnu s'est produite.".reverse_color
+		15.times{print "-".reverse_color}
+		puts "\nN'hésitez pas à m'envoyer un message -> ".reverse_color + "@ericd".reverse_color + " pour m'aider à débugger !".reverse_color
+		72.times{print "*".reverse_color}
+		return nil
+	end
+	def syntaxError(arg)
+		raise ArgumentError.new("\n\n-> ".brown + "#{arg}".magenta + " n'est pas une option valide. Il s'agit probablement d'une erreur de frappe...\n".red)
+	end
+end
+class ClientStatus
+	def getUnified
+		s = "\nChargement du Unified Stream...\n".green
+	end
+	def getGlobal
+		s = "\nChargement du Global Stream...\n".green
+	end
+	def infosUser(arg)
+		s = "\nChargement des informations sur ".green + "#{arg}...\n".reddish
+	end
+	def postsUser(arg)
+		s = "\nChargement des posts de ".green + "#{arg}...\n".reddish
+	end
+	def mentionsUser(arg)
+		s = "\nChargement des posts mentionnant ".green + "#{arg}...\n".reddish
+	end
+	def starsUser(arg)
+		s = "\nChargement des posts favoris de ".green + "#{arg}...\n".reddish
+	end
+	def getHashtags(arg)
+		s = "\nChargement des posts contenant ".green + "##{arg}...\n".blue
+	end
+	def sendPost
+		s = "\nEnvoi du post...\n".green
+	end
+	def getDetails
+		s = "\nDétails du post...\n".green
+	end
 end
 class String
 	def is_integer?

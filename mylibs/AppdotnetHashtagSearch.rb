@@ -6,7 +6,13 @@ class AyaDN
 		end
 		def getHashtag(hashtag)
 			@url += "#{hashtag}"
-			response = RestClient.get(@url)
+			begin
+				response = RestClient.get(@url)
+				return response.body
+			rescue
+				warnings = ErrorWarning.new
+				puts warnings.errorHTTP
+			end
 		end
 		def getJSON(hashtag)
 			return getHashtag(hashtag)
