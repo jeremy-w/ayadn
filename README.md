@@ -162,12 +162,14 @@ When posting with `"double quotes"`, any special character will be interpreted! 
 
 So you have to post with `'simple quotes'`, this way the console don't mess with your content.
 
-The thing is, how do you then post a text *containing one ore more simple quotes*?
+The thing is, how do you then post a text *containing one ore more exclamation marks + one or more simple quotes*?
 
-The answer is to use `\`, the *antislash* character, when posting **with double quotes**. Put an antislash before the special character that would be escaped, like this:
+The answer is to use `\`, the *antislash* character, before any exclamation mark when posting **with double quotes**. 
+
+Put an antislash before the special character that would be escaped, like this:
 
 ```
-ayadn.rb write "Here\'s an escaped simple quote."
+ayadn.rb write "Here's an escaped exclamation mark \!."
 ```  
 
 In the future I will implement a method to automatically strip/escape the special characters. In the meantime, just be careful.
