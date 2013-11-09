@@ -36,7 +36,7 @@ class AyaDN
 						end
 					end
 				else
-					content.push("--Deleted post--".red)
+					content.push("--Post supprimé--".red)
 				end
 				coloredPost = content.join(" ")
 				userName = item['user']['username']
@@ -44,7 +44,7 @@ class AyaDN
 				createdDay = createdAt[0...10]
 				createdHour = createdAt[11...19]
 				links = item['entities']['links']
-				userPostsStream += "\nLe " + createdDay.cyan + ' a ' + createdHour.cyan + ' par ' + "@".green + userName.green + " :\n" + "---\n".red + coloredPost + "\n\n"
+				userPostsStream += "\nLe " + createdDay.cyan + ' à ' + createdHour.cyan + ' par ' + "@".green + userName.green + " :\n" + "---\n".red + coloredPost + "\n\n"
 				postId = item['id']
 				userPostsStream += "Post ID : ".cyan + postId.to_s.brown
 				if !links.empty?

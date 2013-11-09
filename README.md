@@ -21,6 +21,8 @@ App.net command-line client in Ruby.
 
 - read the App.net global stream
 
+- get detailed informations on a post
+
 
 ## Instructions
 
@@ -65,7 +67,11 @@ gem install rest-client
 
 ```
 gem install win32console -v 1.3.2
-```
+```  
+
+*Sometimes Windows seems to have problems with UTF8 and Ruby quits with errors. I haven't found a solution yet. Note: I don't have Windows, so... :p*
+
+*Windows, again: jump to Step 4 now.*
 
 ### Step 3
 
@@ -127,16 +133,21 @@ My advice is to make an alias in your `.bashrc`:
 alias a="your/path/to/ayadn.rb"
 ```  
 
-Then it's easier to use:
+Then it's easier to use, and very fast with the app's shortcuts:
 
 ```
-a stream
+a 
+a h
 a w 'The power of #shortcuts!'
-a global
-a infos @ksniod
-a posts @ericd
-a tag adnafterdark
+a g
+a i @ksniod
+a p @ericd
+a t adnafterdark
+a m @hry
+a p @nam3
 ```  
+
+Enjoy!  
 
 ## Contact
 

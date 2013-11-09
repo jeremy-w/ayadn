@@ -35,7 +35,7 @@ class AyaDN
 				createdDay = createdAt[0...10]
 				createdHour = createdAt[11...19]
 				links = item['entities']['links']
-				hashtagStream += 'Le ' + createdDay.cyan + ' a ' + createdHour.cyan + ' par ' + "@".green + userName.green + " :\n" + "---\n".red + '"' + coloredPost + '"' + "\n\n"
+				hashtagStream += 'Le ' + createdDay.cyan + ' à ' + createdHour.cyan + ' par ' + "@".green + userName.green + " :\n" + "---\n".red + '"' + coloredPost + '"' + "\n\n"
 				postId = item['id']
 				hashtagStream += "Post ID : ".cyan + postId.to_s.brown
 				if !links.empty?
