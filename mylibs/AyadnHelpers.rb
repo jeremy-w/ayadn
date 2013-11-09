@@ -69,3 +69,24 @@ def buildUniquePost(postHash)
 	postString += "\n\n\n"
 	return postString
 end
+class ErrorWarning
+	def errorUsername(arg)
+		raise ArgumentError.new("\n\n->".brown + " #{arg}".reddish + " n'est pas un ".red + "@username\n".green)
+	end
+	def errorPostID(arg)
+		raise ArgumentError.new("\n\n->".brown + " #{arg}".reddish + " n'est pas un Post ID\n".red)
+	end
+	def errorHTTP
+		raise ArgumentError.new("\n\n-> ".brown + "Erreur de connection.\n".red)
+		exit
+	end
+end
+class String
+	def is_integer?
+	  self.to_i.to_s == self
+	end
+end
+
+
+
+

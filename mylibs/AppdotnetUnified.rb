@@ -8,8 +8,13 @@ class AyaDN
 		end
 		def getUnified
 			@url += @token + '&include_deleted=0&include_directed_posts=1&include_html=0'
-			response = RestClient.get(@url)
-			return response.body
+			begin
+				response = RestClient.get(@url)
+				return response.body
+			rescue
+				warnings = ErrorWarning.new
+				puts warnings.errorHTTP
+			end
 		end
 		def getJSON
 			return getUnified()

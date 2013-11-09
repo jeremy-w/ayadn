@@ -26,11 +26,13 @@ App.net command-line client in Ruby.
 
 ## Instructions
 
-On Mac OS X Ruby should already be installed. 
+With Mac OS X Ruby is already installed on your machine.
 
 Windows users: first install Ruby with [http://rubyinstaller.org](http://rubyinstaller.org), it will automatically install Rubygems.
 
 The app hasn't been tested on Linux yet, but it should work.
+
+*Ruby > 1.9.x is mandatory, if you have Ruby =< 1.8 you have to upgrade.*
 
 ### Step 1
 
@@ -150,10 +152,6 @@ a d 14579853
 
 Enjoy!  
 
-## Contact
-
-You can contact me on [App.net](http://alpha.app.net/ericd) if you have questions, ideas, if you've found bugs, or... if you know Ruby and you want to help some poor newbie. ;)
-
 ## Help
 
 Be aware of the way the console treats what you type.
@@ -182,6 +180,8 @@ In the future I will implement a method to automatically strip/escape the specia
 
 ![Post details](https://www.evernote.com/shard/s89/sh/62090404-4996-42b1-b558-ae5dc5fed8ca/3b7cf40503570db9cb1382826c767312/deep/0/ayadn-details.png)
 
-![Help](https://www.evernote.com/shard/s89/sh/a3314901-093c-423a-81a8-b74554b2dd1e/575e5f316249822490a67e0bca4e3bc3/deep/0/ayadn-help.png)
+![Help](https://www.evernote.com/shard/s89/sh/a3314901-093c-423a-81a8-b74554b2dd1e/575e5f316249822490a67e0bca4e3bc3/deep/0/ayadn-help.png)  
 
+## Contact
 
+You can contact me on [App.net](http://alpha.app.net/ericd) if you have questions, ideas, if you've found bugs, or... if you know Ruby and you want to help some poor newbie. ;)
