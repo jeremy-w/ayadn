@@ -11,7 +11,9 @@ App.net command-line client in Ruby.
 
 - search hashtags  
 
-- get informations about a user
+- read the conversation around a post
+
+- get detailed informations on a post
 
 - get the last posts from a user
 
@@ -19,9 +21,10 @@ App.net command-line client in Ruby.
 
 - get the last posts starred by a user
 
+- get informations about a user
+
 - read the App.net global stream
 
-- get detailed informations on a post
 
 
 ## Instructions
@@ -106,10 +109,12 @@ If you've not made the app executable, use it through Ruby:
 ```
 ruby ayadn.rb
 ruby ayadn.rb write 'Good morning ADN!!!'
+ruby ayadn.rb write '@ksniod Bonjour Laurent'
+ruby ayadn.rb tag music
 ruby ayadn.rb posts @ericd
 ruby ayadn.rb stars @jws
-ruby ayadn.rb tag music
 ruby ayadn.rb details 14582145
+ruby ayadn.rb convo 14638413
 ```
 
 If the app is executable and in your $PATH, just launch it:
@@ -117,6 +122,7 @@ If the app is executable and in your $PATH, just launch it:
 ```
 ayadn.rb help
 ayadn.rb write 'Posting from AyaDN in #Ruby!'
+ayadn.rb write '@davidby Salut David, comment va ?'
 ayadn.rb infos @fredvd
 ayadn.rb tag ruby
 ayadn.rb mentions @timrowe
@@ -145,9 +151,10 @@ a g
 a i @ksniod
 a p @ericd
 a t adnafterdark
-a m @hry
+a m @charl
 a p @nam3
 a d 14579853
+a c 14638413
 ```  
 
 Enjoy!  
