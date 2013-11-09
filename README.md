@@ -162,6 +162,8 @@ You can contact me on [App.net](http://alpha.app.net/ericd) if you have question
 
 ![Tag search](https://www.evernote.com/shard/s89/sh/a41e4e52-09af-4ad9-8fa5-4690b08bdf09/d9a70ddea0cc5eb4ce0a593974d596e6/deep/0/ayadn-hashtag.png)
 
-![Help](https://www.evernote.com/shard/s89/sh/6c200507-4fc4-4939-b3a6-f56e1e479c0c/c3a881757288e77c3b8e172a5d9f9bdc/deep/0/ayadn-help.png)
+![Post details](https://www.evernote.com/shard/s89/sh/62090404-4996-42b1-b558-ae5dc5fed8ca/3b7cf40503570db9cb1382826c767312/deep/0/ayadn-details.png)
+
+![Help](https://www.evernote.com/shard/s89/sh/a3314901-093c-423a-81a8-b74554b2dd1e/575e5f316249822490a67e0bca4e3bc3/deep/0/ayadn-help.png)
 
 
