@@ -45,7 +45,7 @@ class AyaDN
 			createdDay = createdAt[0...10]
 			createdHour = createdAt[11...19]
 			links = adnData['entities']['links']
-			userSentPost += "\nPost envoyé le " + createdDay.cyan + ' à ' + createdHour.cyan + ' par ' + "@".green + userName.green + " :\n" + "---\n".red + coloredPost + "\n\n"
+			userSentPost += "\nPost envoyé le " + createdDay.cyan + ' a ' + createdHour.cyan + ' par ' + "@".green + userName.green + " :\n" + "---\n".red + coloredPost + "\n\n"
 			postId = adnData['id']
 			userSentPost += "Post ID : ".cyan + postId.to_s.brown
 			if !links.empty?

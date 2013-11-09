@@ -43,7 +43,7 @@ class AyaDN
 				createdDay = createdAt[0...10]
 				createdHour = createdAt[11...19]
 				links = item['entities']['links']
-				userStarredPostsStream += "\nLe " + createdDay.cyan + ' à ' + createdHour.cyan + ' par ' + "@".green + userName.green + " :\n" + "---\n".red + coloredPost + "\n\n"
+				userStarredPostsStream += "\nLe " + createdDay.cyan + ' a ' + createdHour.cyan + ' par ' + "@".green + userName.green + " :\n" + "---\n".red + coloredPost + "\n\n"
 				postId = item['id']
 				userStarredPostsStream += "Post ID : ".cyan + postId.to_s.brown
 				if !links.empty?
