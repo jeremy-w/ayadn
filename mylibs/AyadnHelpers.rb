@@ -43,3 +43,29 @@ def buildPost(postHash)
 	end
 	return postString
 end
+def buildUniquePost(postHash)
+	postString = ""
+	postText = postHash['text']
+	if postText != nil
+		coloredPost = colorize(postText)
+	else
+		coloredPost = "--Post supprimé--".red
+	end
+	userName = postHash['user']['username']
+	createdAt = postHash['created_at']
+	createdDay = createdAt[0...10]
+	createdHour = createdAt[11...19]
+	links = postHash['entities']['links']
+	postString += "\nLe " + createdDay.cyan + ' à ' + createdHour.cyan + ' par ' + "@".green + userName.green + " :\n" + "---\n".red + coloredPost + "\n\n"
+	postId = postHash['id']
+	postString += "Post ID : ".cyan + postId.to_s.brown
+	if !links.empty?
+		postString +=  " - " + "Lien : ".cyan
+		links.each do |link|
+			linkURL = link['url']
+			postString += linkURL.brown + " "
+		end
+	end
+	postString += "\n\n\n"
+	return postString
+end

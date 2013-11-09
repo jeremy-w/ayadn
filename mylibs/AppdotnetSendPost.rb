@@ -23,27 +23,8 @@ class AyaDN
 
 			blob = JSON.parse(callback)
 			adnData = blob['data']
-			postText = adnData['text']
-			coloredPost = colorize(postText)
-			userSentPost = ""
-			userName = adnData['user']['username']
-			createdAt = adnData['created_at']
-			createdDay = createdAt[0...10]
-			createdHour = createdAt[11...19]
-			links = adnData['entities']['links']
-			userSentPost += "\nPost envoyé le " + createdDay.cyan + ' à ' + createdHour.cyan + ' par ' + "@".green + userName.green + " :\n" + "---\n".red + coloredPost + "\n\n"
-			postId = adnData['id']
-			userSentPost += "Post ID : ".cyan + postId.to_s.brown
-			if !links.empty?
-				userSentPost += " - " + "Lien : ".cyan
-				links.each do |link|
-					linkURL = link['url']
-					userSentPost += linkURL.brown + " "
-				end
-			end
-			userSentPost += "\n\n\n"
-
-		return userSentPost
+			resp = buildUniquePost(adnData)
+			return resp
 		end
 	end
 end
