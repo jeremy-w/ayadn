@@ -1,3 +1,4 @@
+# encoding: utf-8
 class AyaDN
 	class AppdotnetHashtagSearch
 		@url

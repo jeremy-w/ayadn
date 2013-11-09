@@ -1,3 +1,4 @@
+# encoding: utf-8
 def colorize(contentText)
 	content = Array.new
 	splitted = contentText.split(" ")
@@ -121,6 +122,9 @@ class ClientStatus
 	end
 	def getDetails
 		s = "\nDétails du post...\n".green
+	end
+	def getPostReplies(arg)
+		s = "Chargement de la conversation autour du post ".green + "#{arg}".reddish
 	end
 end
 class String

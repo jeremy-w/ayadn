@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'rubygems'
 require 'uri'
 require 'net/http'
@@ -17,5 +18,6 @@ require_relative 'mylibs/AppdotnetStarredPosts'
 require_relative 'mylibs/AppdotnetGlobal'
 require_relative 'mylibs/AppdotnetSendPost'
 require_relative 'mylibs/AppdotnetPostInfo'
+require_relative 'mylibs/AppdotnetPostReplies'
 
 require_relative 'token.rb'

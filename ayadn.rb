@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
+# encoding: utf-8
 # App.net client
-# Learning Ruby and ADN
 # by Eric Dejonckheere
 # © 2013
 
@@ -95,6 +95,16 @@ when option1 == "details", option1 == "d"
 		puts status.getDetails()
 		client = AyaDN::AppdotnetPostInfo.new(@token)
 		puts client.getPostInfo(option2)
+	else
+		puts warnings.errorPostID(option2)
+	end
+
+when option1 == "convo", option1 == "c"
+
+	if option2.is_integer?
+		puts status.getPostReplies(option2)
+		client = AyaDN::AppdotnetPostReplies.new(@token)
+		puts client.getPostReplies(option2)
 	else
 		puts warnings.errorPostID(option2)
 	end

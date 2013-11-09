@@ -1,3 +1,4 @@
+# encoding: utf-8
 class String
     def reddish;
         "\033[1;31m#{self}\033[0m"

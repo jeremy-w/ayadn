@@ -1,3 +1,4 @@
+# encoding: utf-8
 class AyaDN
 	class AppdotnetSendPost
 		@url
@@ -10,6 +11,7 @@ class AyaDN
 			uri = URI("#{@url}")
 			https = Net::HTTP.new(uri.host,uri.port)
 			https.use_ssl = true
+			https.verify_mode = OpenSSL::SSL::VERIFY_NONE
 			request = Net::HTTP::Post.new(uri.path)
 			request["Authorization"] = "Bearer #{@token}"
 			request["Content-Type"] = "application/json"
