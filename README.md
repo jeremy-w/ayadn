@@ -30,7 +30,7 @@ On Mac OS X Ruby should already be installed.
 
 Windows users: first install Ruby with [http://rubyinstaller.org](http://rubyinstaller.org), it will automatically install Rubygems.
 
-The hasn't been tested on Linux yet, but it should work.
+The app hasn't been tested on Linux yet, but it should work.
 
 ### Step 1
 
@@ -51,7 +51,7 @@ cd ayadn-master
 bundle install
 ```  
 
-Installation done, you can jump to Step 3 now.
+Installation done, you can **jump to Step 3 now**.
 
 #### Without Bundler
 
@@ -102,7 +102,7 @@ Hit `Save` and you're done.
 If you've not made the app executable, use it through Ruby:
 
 ```
-ruby ayadn.rb stream
+ruby ayadn.rb
 ruby ayadn.rb write 'Good morning ADN!!!'
 ruby ayadn.rb posts @ericd
 ruby ayadn.rb stars @jws
