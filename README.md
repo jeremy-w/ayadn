@@ -104,6 +104,10 @@ Hit `Save` and you're done.
 
 ## How to use
 
+You type the name of the app + the action you want to do + the destination of this action.
+
+If you don't provide any argument to the app, your personnalized stream is displayed.
+
 ### Through the Ruby interpreter
 
 If you've not made the app executable, use it through Ruby:
@@ -127,9 +131,20 @@ If the app is executable and in your $PATH, just launch it:
 ayadn.rb help
 ayadn.rb write 'Posting from AyaDN in #Ruby!'
 ayadn.rb write '@davidby Salut David, comment va ?'
-ayadn.rb infos @fredvd
-ayadn.rb tag ruby
-ayadn.rb mentions @timrowe
+```
+
+And maybe make a symlink:
+
+```
+ln -s ayadn.rb ayadn
+```  
+
+->
+
+```
+ayadn infos @fredvd
+ayadn tag ruby
+ayadn mentions @timrowe
 ```  
 
 ### As a local executable
@@ -171,8 +186,10 @@ Want to be the ultimate geek?
 alias p='ayadn.rb w '
 ```  
 
+->
+
 ```
-p 'Wohoo! #AyaDN'
+p 'Wohoo! Posting to App.net with a single keystroke! #AyaDN'
 ```  
 
 Enjoy!  
