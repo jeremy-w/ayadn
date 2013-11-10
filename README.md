@@ -157,6 +157,17 @@ a d 14579853
 a c 14638413
 ```  
 
+Want to be the ultimate geek?
+
+```
+alias p='ayadn.rb w '
+```  
+
+```
+p 'Wohoo! #AyaDN'
+```  
+
+
 Enjoy!  
 
 ## Help
