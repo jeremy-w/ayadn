@@ -104,9 +104,11 @@ Hit `Save` and you're done.
 
 ## How to use
 
-You type the name of the app + the action you want to do + the destination of this action.
+**You type the name of the app + the action you want to do + the destination of this action.**
 
 If you don't provide any argument to the app, your personnalized stream is displayed.
+
+If you provide the `write` command without text, you will enter the compose message feature.
 
 ### Through the Ruby interpreter
 
@@ -114,6 +116,7 @@ If you've not made the app executable, use it through Ruby:
 
 ```
 ruby ayadn.rb
+ruby ayadn.rb write
 ruby ayadn.rb write 'Good morning ADN!!!'
 ruby ayadn.rb write '@ksniod Bonjour Laurent'
 ruby ayadn.rb tag music
@@ -129,6 +132,7 @@ If the app is executable and in your $PATH, just launch it:
 
 ```
 ayadn.rb help
+ayadn.rb write 
 ayadn.rb write 'Posting from AyaDN in #Ruby!'
 ayadn.rb write '@davidby Salut David, comment va ?'
 ```
@@ -153,6 +157,7 @@ If the app is executable but not in your $PATH, then launch it locally:
 
 ```
 ./ayadn.rb
+./ayadn.rb w
 ./ayadn.rb write '#Nowplaying some awesome music'
 ```  
 
@@ -169,6 +174,7 @@ Then it's easier to use, and very fast with the app's shortcuts:
 ```
 a 
 a h
+a w
 a w 'The power of #shortcuts!'
 a g
 a i @ksniod
