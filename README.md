@@ -238,9 +238,10 @@ The answer is to post with *"double quotes"* but use `\`, the *antislash* charac
 ayadn.rb write "Here's an escaped exclamation mark \! and normal simple quotes in the same text."
 ```  
 
-In the future I will implement a method to automatically strip/escape the special characters. In the meantime, just be careful.
+**To avoid these problems, post with the compose feature, that is to say without providing arguments:** 
 
-**To avoid these problems, post with the compose feature, eg without providing arguments to `ayadn.rb write`.**
+`ayadn.rb write`  
+
 
 ## Screencaps
 
