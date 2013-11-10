@@ -13,7 +13,7 @@
 @help += "- " + "write ".green + '\'votre texte\' '.green + "pour poster un texte (guillemets simples obligatoires)\n\n\n"
 @help += "La commande sans options affiche le Stream.\n\n".brown
 @help += "Toutes les options ont un raccourci à une lettre : f, g, i, p, m, s, t, d, c, h, w.\n\n\n".blue
-@help += "Exemples d'utilisation :\n\n".cyan
+@help += "Exemples d'utilisation :\n".cyan
 @help += "ayadn.rb\n".magenta
 @help += "ayadn.rb flux\n".magenta
 @help += "ayadn.rb write ".magenta + '\'Bonjour ADN !\'' + "\n"

@@ -4,6 +4,7 @@ require 'uri'
 require 'net/http'
 require 'rest_client'
 require 'json'
+require 'io/console'
 
 require_relative 'mylibs/color_output'
 require_relative 'mylibs/help'

@@ -28,5 +28,40 @@ class AyaDN
 			resp = buildUniquePost(adnData)
 			return resp
 		end
+		def composePost
+			$stdout.sync = true
+			i = 0
+			maxChar = 256
+			numChar = 256
+			text = ""
+			print "\n\r#{numChar}".brown + " -> "
+			while i < maxChar
+				input = STDIN.getch
+				text += input
+				i += 1
+				numChar -= 1
+				print "\r#{numChar}".brown + " -> ".green + "#{text}"
+				if input == "\r"
+					puts "\n"
+					client = AyaDN::AppdotnetSendPost.new(@token)
+					puts client.createPost(text)
+					exit
+				elsif input == "\e"
+					abort("\n\nAnnulation.".reverse_color + " Votre post n'a pas été envoyé.\n\n".red)
+				elsif input == "\177"
+					text = text[0...-2]
+					numChar += 2
+					print "\n\r#{numChar}".brown + " -> ".green + "#{text}"
+				# elsif 
+					# fleches clavier à ignorer	
+				end
+			end
+		end
 	end
 end
+
+
+
+
+
+

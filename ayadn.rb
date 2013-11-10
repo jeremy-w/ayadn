@@ -91,10 +91,8 @@ when option1 == "write", option1 == "w"
 		puts client.createPost(option2)
 	else
 		puts status.writePost()
-		wpost = STDIN.gets
-		puts "\n\n"
 		client = AyaDN::AppdotnetSendPost.new(@token)
-		puts client.createPost(wpost)
+		puts client.composePost()
 	end
 
 when option1 == "details", option1 == "d"

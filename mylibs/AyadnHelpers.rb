@@ -19,7 +19,6 @@ def buildPost(postHash)
 	postString = ""
 	postHash.each do |item|
 		postText = item['text']
-		# coloredPost = colorize(postText)
 		if postText != nil
 			coloredPost = colorize(postText)
 		else
@@ -127,7 +126,8 @@ class ClientStatus
 		s = "Chargement de la conversation autour du post ".green + "#{arg}".reddish
 	end
 	def writePost
-		s = "\n\n\nTapez le texte de votre post (256 caractères maximum) :\n".green
+		s = "\n256 caractères maximum, validez avec Entrée (return) ou annulez avec Echap (esc).\n".green
+		s += "\nEntrez votre texte : ".cyan
 	end
 end
 class String
