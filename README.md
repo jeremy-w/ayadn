@@ -74,7 +74,7 @@ gem install rest-client
 gem install win32console -v 1.3.2
 ```  
 
-*Sometimes Windows seems to have problems with UTF8 and Ruby quits with errors. I haven't found a solution yet. Note: I don't have Windows, so... :p*
+*Sometimes Windows has problems with UTF8 and accented characters are broken. I haven't found an acceptable solution yet.*
 
 *Windows, again: jump to Step 4 now.*
 
