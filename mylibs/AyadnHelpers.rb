@@ -71,10 +71,13 @@ def buildUniquePost(postHash)
 end
 class ErrorWarning
 	def errorUsername(arg)
-		raise ArgumentError.new("\n\n->".brown + " #{arg}".reddish + " n'est pas un ".red + "@username\n".green)
+		raise ArgumentError.new("\n\n->".brown + " #{arg}".reddish + " n'est pas un @username\n".red)
 	end
 	def errorPostID(arg)
 		raise ArgumentError.new("\n\n->".brown + " #{arg}".reddish + " n'est pas un Post ID\n".red)
+	end
+	def errorInfos(arg)
+		raise ArgumentError.new("\n\n->".brown + " #{arg}".reddish + " n'est pas un @username ni un Post ID\n".red)
 	end
 	def errorHTTP
 		raise ArgumentError.new("\n\n-> ".brown + "Erreur de connection.\n".red)
@@ -92,6 +95,9 @@ class ErrorWarning
 	end
 	def syntaxError(arg)
 		raise ArgumentError.new("\n\n-> ".brown + "#{arg}".magenta + " n'est pas une option valide. Il s'agit probablement d'une erreur de frappe...\n".red)
+	end
+	def errorReply(arg)
+		raise ArgumentError.new("\n\n-> ".brown + "#{arg}".reddish + " n'est pas un Post ID.".red)
 	end
 end
 class ClientStatus
@@ -128,6 +134,9 @@ class ClientStatus
 	def writePost
 		s = "\n256 caractères maximum, validez avec Entrée (return) ou annulez avec Echap (esc).\n".green
 		s += "\nEntrez votre texte : ".cyan
+	end
+	def writeReply(arg)
+		s = "\nRécupération des informations du post #{arg}...\n".reddish
 	end
 end
 class String

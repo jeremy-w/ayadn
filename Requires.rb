@@ -20,5 +20,6 @@ require_relative 'mylibs/AppdotnetGlobal'
 require_relative 'mylibs/AppdotnetSendPost'
 require_relative 'mylibs/AppdotnetPostInfo'
 require_relative 'mylibs/AppdotnetPostReplies'
+require_relative 'mylibs/AppdotnetSendReply'
 
 require_relative 'token.rb'

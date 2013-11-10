@@ -1,7 +1,7 @@
 AYADN
 =====
 
-App.net command-line client in Ruby.
+App.net command-line client written in Ruby.
 
 ## Features
 
@@ -9,19 +9,19 @@ App.net command-line client in Ruby.
 
 - write a post
 
-- search hashtags  
+- reply to a post 
 
 - read the conversation around a post
 
-- get detailed informations on a post
+- search hashtags 
+
+- get detailed informations on a post/user
 
 - get the last posts from a user
 
 - get the last posts mentioning a user
 
 - get the last posts starred by a user
-
-- get informations about a user
 
 - read the App.net global stream
 
@@ -56,7 +56,7 @@ cd ayadn-master
 bundle install
 ```  
 
-Installation done, you can **jump to Step 3 now**.
+**Installation done, you can jump to Step 3 now**.
 
 #### Without Bundler
 
@@ -119,6 +119,7 @@ ruby ayadn.rb
 ruby ayadn.rb write
 ruby ayadn.rb write 'Good morning ADN!!!'
 ruby ayadn.rb write '@ksniod Bonjour Laurent'
+ruby ayadn.rb reply 14579853
 ruby ayadn.rb tag music
 ruby ayadn.rb posts @ericd
 ruby ayadn.rb stars @jws
@@ -149,6 +150,7 @@ ln -s ayadn.rb ayadn
 ayadn infos @fredvd
 ayadn tag ruby
 ayadn mentions @timrowe
+ayadn reply 14579853
 ```  
 
 ### As a local executable
@@ -176,14 +178,15 @@ a
 a h
 a w
 a w 'The power of #shortcuts!'
-a g
+a r 14579853
 a i @ksniod
+a i 14698777
 a p @ericd
-a t adnafterdark
 a m @charl
-a p @nam3
-a d 14579853
+a s @nam3
 a c 14638413
+a t adnafterdark
+a g
 ```  
 
 Want to be the ultimate geek?

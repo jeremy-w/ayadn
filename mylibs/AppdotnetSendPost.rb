@@ -7,7 +7,7 @@ class AyaDN
 			@url = 'https://alpha-api.app.net/stream/0/posts'
 			@token = token
 		end
-		def createPost(text)
+		def createPost(text, replyto)
 			uri = URI("#{@url}")
 			https = Net::HTTP.new(uri.host,uri.port)
 			https.use_ssl = true
@@ -16,9 +16,16 @@ class AyaDN
 			request["Authorization"] = "Bearer #{@token}"
 			request["Content-Type"] = "application/json"
 
-			payload = {
-				"text" => "#{text}"
-			}.to_json
+			if replyto == nil
+				payload = {
+					"text" => "#{text}"
+				}.to_json
+			else
+				payload = {
+					"text" => "#{text}",
+					"reply_to" => "#{replyto}"
+				}.to_json
+			end
 
 			response = https.request(request, payload)
 			callback = response.body
@@ -28,7 +35,7 @@ class AyaDN
 			resp = buildUniquePost(adnData)
 			return resp
 		end
-		def composePost
+		def composePost(replyto)
 			$stdout.sync = true
 			i = 0
 			maxChar = 256
@@ -42,9 +49,9 @@ class AyaDN
 				numChar -= 1
 				print "\r#{numChar}".brown + " -> ".green + "#{text}"
 				if input == "\r"
-					puts "\n"
+					puts "\n\n"
 					client = AyaDN::AppdotnetSendPost.new(@token)
-					puts client.createPost(text)
+					puts client.createPost(text, replyto)
 					exit
 				elsif input == "\e"
 					abort("\n\nAnnulation.".reverse_color + " Votre post n'a pas été envoyé.\n\n".red)

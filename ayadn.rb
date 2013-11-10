@@ -11,8 +11,7 @@ when *winPlatforms
 	require 'win32console'
 end
 
-puts "\nAYADN".red
-puts "App.net command-line client\n".reddish
+puts "\nAYADN".red + " - " + "App.net command-line client\n".brown
 
 option1 = ARGV[0]
 option2 = ARGV[1]
@@ -39,9 +38,16 @@ when option1 == "infos", option1 == "i"
 		puts status.infosUser(option2)
 		client = AyaDN::AppdotnetUserInfo.new(@token)
 		puts client.getUserInfo(option2)
+	elsif option2.is_integer?
+		puts status.getDetails()
+		client = AyaDN::AppdotnetPostInfo.new(@token)
+		puts client.getPostInfo(option2)
 	else
-		puts warnings.errorUsername(option2)
+		puts warnings.errorInfos(option2)
+		#puts warnings.errorPostID(option2)
 	end
+	# 	puts warnings.errorUsername(option2)
+	# end
 
 when option1 == "posts", option1 == "p"
 
@@ -92,18 +98,35 @@ when option1 == "write", option1 == "w"
 	else
 		puts status.writePost()
 		client = AyaDN::AppdotnetSendPost.new(@token)
-		puts client.composePost()
+		puts client.composePost(nil)
 	end
 
-when option1 == "details", option1 == "d"
+
+when option1 == "reply", option1 == "r"
 
 	if option2.is_integer?
-		puts status.getDetails()
-		client = AyaDN::AppdotnetPostInfo.new(@token)
-		puts client.getPostInfo(option2)
+		# option2 is the ID of the post
+		# compose window
+		#puts status.writeReply(option2)
+		client = AyaDN::AppdotnetSendReply.new(@token)
+		puts client.replyPost(option2)
+		exit
 	else
-		puts warnings.errorPostID(option2)
+		# option2 is the USERNAME of the original post
+		puts warnings.errorReply(option2)
+		exit
 	end
+
+
+#when option1 == "details", option1 == "d"
+
+	# if option2.is_integer?
+	# 	puts status.getDetails()
+	# 	client = AyaDN::AppdotnetPostInfo.new(@token)
+	# 	puts client.getPostInfo(option2)
+	# else
+	# 	puts warnings.errorPostID(option2)
+	# end
 
 when option1 == "convo", option1 == "c"
 
