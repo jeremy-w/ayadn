@@ -206,6 +206,16 @@ ayadn.rb infos me
 
 *Only for the 'infos' action at the moment (V0.11)*
 
+### Post a single word
+
+No need to provide quotes if you want to post a single word (no spaces).
+
+```
+ayadn.rb write Awesome!
+```  
+
+But maybe you shouldn't post single words to ADN... :p
+
 ## Help
 
 Be aware of the way the console treats what you type.
