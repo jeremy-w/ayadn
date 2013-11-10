@@ -245,7 +245,7 @@ ayadn.rb write "Here's an escaped exclamation mark \! and a normal simple quote 
 
 ## Demo
 
-<iframe width="960" height="720" src="//www.youtube.com/embed/WEvEm2-tGoU?rel=0" frameborder="0" allowfullscreen></iframe>  
+[![AyaDN](https://www.youtube.com/watch?v=WEvEm2-tGoU)](http://youtu.be/WEvEm2-tGoU)
 
 ## Contact
 
