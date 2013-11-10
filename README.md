@@ -235,7 +235,7 @@ The thing is, how do you then post a text *containing one ore more exclamation m
 The answer is to post with *"double quotes"* but use `\`, the *antislash* character, before any exclamation mark:
 
 ```
-ayadn.rb write "Here's an escaped exclamation mark \! and normal simple quotes in the same text."
+ayadn.rb write "Here's an escaped exclamation mark \! and a normal simple quote in the same text."
 ```  
 
 **To avoid these problems, post with the compose feature, that is to say without providing arguments:** 
@@ -257,7 +257,9 @@ ayadn.rb write "Here's an escaped exclamation mark \! and normal simple quotes i
 
 ## Contact
 
-You can contact me on [App.net](http://alpha.app.net/ericd) if you have questions, ideas, if you've found bugs, or... if you know Ruby and you want to help some poor newbie. ;)
+Contact me on ADN [(@ericd)](http://alpha.app.net/ericd) if you have questions, ideas, if you've found bugs, or... if you know Ruby and you want to help this poor newbie. ;)
+
+Don't bother with @ayaio or @aya_tests, they are bots. The handle for the app itself is @ayadn but isn't active yet.
 
 ## Credits
 
