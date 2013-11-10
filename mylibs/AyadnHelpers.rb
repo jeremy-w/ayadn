@@ -126,6 +126,9 @@ class ClientStatus
 	def getPostReplies(arg)
 		s = "Chargement de la conversation autour du post ".green + "#{arg}".reddish
 	end
+	def writePost
+		s = "\n\n\nTapez le texte de votre post (256 caractères maximum) :\n".green
+	end
 end
 class String
 	def is_integer?

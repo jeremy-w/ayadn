@@ -85,9 +85,17 @@ when option1 == "tag", option1 == "t"
 
 when option1 == "write", option1 == "w"
 
-	puts status.sendPost()
-	client = AyaDN::AppdotnetSendPost.new(@token)
-	puts client.createPost(option2)
+	if option2 != nil
+		puts status.sendPost()
+		client = AyaDN::AppdotnetSendPost.new(@token)
+		puts client.createPost(option2)
+	else
+		puts status.writePost()
+		wpost = STDIN.gets
+		puts "\n\n"
+		client = AyaDN::AppdotnetSendPost.new(@token)
+		puts client.createPost(wpost)
+	end
 
 when option1 == "details", option1 == "d"
 
