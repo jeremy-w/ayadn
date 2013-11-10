@@ -238,22 +238,14 @@ The answer is to post with *"double quotes"* but use `\`, the *antislash* charac
 ayadn.rb write "Here's an escaped exclamation mark \! and a normal simple quote in the same text."
 ```  
 
-**To avoid these problems, post with the compose feature, that is to say without providing arguments:** 
+**To avoid any problem, post with the compose feature, that is to say without providing arguments:** 
 
 `ayadn.rb write`  
 
 
-## Screencaps
+## Demo
 
-![Write](https://www.evernote.com/shard/s89/sh/5f62c5f7-9232-4e1e-88d3-558af51814de/3adbfcbb38ce1ffae81e5ad0117f0689/deep/0/ayadn-write.png)
-
-![Stream](https://www.evernote.com/shard/s89/sh/c6dc5210-db9c-4068-8e7d-ffd9fa1e1da7/2e983a17a452d3fa9d8b76355e05d70a/deep/0/ayadn-stream.png)
-
-![Tag search](https://www.evernote.com/shard/s89/sh/a41e4e52-09af-4ad9-8fa5-4690b08bdf09/d9a70ddea0cc5eb4ce0a593974d596e6/deep/0/ayadn-hashtag.png)
-
-![Post details](https://www.evernote.com/shard/s89/sh/62090404-4996-42b1-b558-ae5dc5fed8ca/3b7cf40503570db9cb1382826c767312/deep/0/ayadn-details.png)
-
-![Help](https://www.evernote.com/shard/s89/sh/a3314901-093c-423a-81a8-b74554b2dd1e/575e5f316249822490a67e0bca4e3bc3/deep/0/ayadn-help.png)  
+<iframe width="960" height="720" src="//www.youtube.com/embed/WEvEm2-tGoU?rel=0" frameborder="0" allowfullscreen></iframe>  
 
 ## Contact
 
@@ -263,4 +255,5 @@ Don't bother with @ayaio or @aya_tests, they are bots. The handle for the app it
 
 ## Credits
 
-- Windows beta-test: @ksniod
+- Windows beta-test: [@ksniod](http://alpha.app.net/ksniod)
+- Linux beta-test: [@martner_mala](http://alpha.app.net/martner_mala)
