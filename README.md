@@ -240,6 +240,8 @@ ayadn.rb write "Here's an escaped exclamation mark \! and normal simple quotes i
 
 In the future I will implement a method to automatically strip/escape the special characters. In the meantime, just be careful.
 
+**To avoid these problems, post with the compose feature, eg without providing arguments to `ayadn.rb write`.**
+
 ## Screencaps
 
 ![Write](https://www.evernote.com/shard/s89/sh/5f62c5f7-9232-4e1e-88d3-558af51814de/3adbfcbb38ce1ffae81e5ad0117f0689/deep/0/ayadn-write.png)
