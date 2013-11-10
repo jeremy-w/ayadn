@@ -9,7 +9,7 @@
 @help += "- " + "details postID ".green + "pour des informations détaillées sur un post\n\n"
 @help += "- " + "infos @username ".green + "pour des informations détaillées sur un utilisateur\n\n"
 @help += "- " + "global ".green + "pour voir le stream global\n\n" 
-@help += "- " + "help ".green + "ou " + "aide ".green + "pour l'aide\n\n\n"
+@help += "- " + "help ".green + "ou " + "aide ".green + "pour l'aide. Consultez " + "https://github.com/ericdke/ayadn#how-to-use".magenta + " pour l'aide complète.".green + "\n\n\n"
 @help += "- " + "write ".green + '\'votre texte\' '.green + "pour poster un texte (guillemets simples obligatoires)\n\n\n"
 @help += "La commande sans options affiche le Stream.\n\n".brown
 @help += "Toutes les options ont un raccourci à une lettre : f, g, i, p, m, s, t, d, c, h, w.\n\n\n".blue

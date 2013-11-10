@@ -35,7 +35,7 @@ when option1 == "global", option1 == "g"
 
 when option1 == "infos", option1 == "i"
 
-	if option2 =~ /^@/
+	if option2 =~ /^@/ or option2 == "me"
 		puts status.infosUser(option2)
 		client = AyaDN::AppdotnetUserInfo.new(@token)
 		puts client.getUserInfo(option2)

@@ -104,6 +104,8 @@ Hit `Save` and you're done.
 
 ## How to use
 
+### Through the Ruby interpreter
+
 If you've not made the app executable, use it through Ruby:
 
 ```
@@ -117,6 +119,8 @@ ruby ayadn.rb details 14582145
 ruby ayadn.rb convo 14638413
 ```
 
+### As an executable in your PATH
+
 If the app is executable and in your $PATH, just launch it:
 
 ```
@@ -128,12 +132,16 @@ ayadn.rb tag ruby
 ayadn.rb mentions @timrowe
 ```  
 
+### As a local executable
+
 If the app is executable but not in your $PATH, then launch it locally:
 
 ```
 ./ayadn.rb
 ./ayadn.rb write '#Nowplaying some awesome music'
 ```  
+
+### With an alias (recommended)
 
 My advice is to make an alias in your `.bashrc`:
 
@@ -167,8 +175,19 @@ alias p='ayadn.rb w '
 p 'Wohoo! #AyaDN'
 ```  
 
-
 Enjoy!  
+
+## Tips
+
+### Data about yourself
+
+When you want to ask information about yourself (the App.net account connected to AyaDN), you can use the keyword `me` instead of your `@username` to get correct data.
+
+```
+ayadn.rb infos me
+```  
+
+*Only for the 'infos' action at the moment (V0.11)*
 
 ## Help
 
@@ -203,3 +222,7 @@ In the future I will implement a method to automatically strip/escape the specia
 ## Contact
 
 You can contact me on [App.net](http://alpha.app.net/ericd) if you have questions, ideas, if you've found bugs, or... if you know Ruby and you want to help some poor newbie. ;)
+
+## Credits
+
+- Windows beta-test: @ksniod
