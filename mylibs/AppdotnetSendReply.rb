@@ -6,22 +6,25 @@ class AyaDN
 		end
 		def replyPost(postID)
 			puts "Replying to post ".cyan + "#{postID}...\n".brown
-			puts "Insert the @username(s) you're replying to at the beginning of your post.".red
 			# récup mentions dans le post
-			# formatte le post avec @username au début suivi des autres @mentionnés !
+			puts "Extracting mentions...\n".cyan
+			client = AyaDN::AppdotnetPostInfo.new(@token)
+			# returns the posts's raw text
+			rawMentionsText = client.getPostMentions(postID)
+			# get mentions
+			content = Array.new
+			splitted = rawMentionsText.split(" ")
+			splitted.each do |word|
+				if word =~ /^@/
+					content.push(word)
+				end
+			end
+			mentionsList = content.join(" ")
+			# go!
 			status = ClientStatus.new
 			puts status.writePost()
 			client = AyaDN::AppdotnetSendPost.new(@token)
-			puts client.composePost(postID)
-		end
-	end
-	class AppdotnetStarPost
-		@token
-		def initialize(token)
-			@token = token
-		end
-		def starPost(postID)
-
+			puts client.composePost(postID, mentionsList)
 		end
 	end
 end

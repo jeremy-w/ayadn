@@ -35,13 +35,16 @@ class AyaDN
 			resp = buildUniquePost(adnData)
 			return resp
 		end
-		def composePost(replyto)
+		def composePost(replyto, mentionsList)
 			$stdout.sync = true
 			i = 0
 			maxChar = 256
-			numChar = 256
+			numChar = 256 - mentionsList.length
 			text = ""
-			print "\n\r#{numChar}".brown + " -> "
+			text += mentionsList + " "
+			# ne pas oublier d'enlever du compte l'espace que l'on a rajouté
+			numChar -= 1
+			print "\n\r#{numChar}".brown + " -> " + text
 			while i < maxChar
 				input = STDIN.getch
 				text += input

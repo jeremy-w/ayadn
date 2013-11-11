@@ -7,7 +7,7 @@
 # © 2013
 
 require_relative 'Requires'
-winPlatforms = ['mswin', 'mingw', 'mingw_18', 'mingw_19', 'mingw_20']
+winPlatforms = ['mswin', 'mingw', 'mingw_18', 'mingw_19', 'mingw_20', 'mingw32']
 case Gem::Platform.local.os
 when *winPlatforms
 	require 'win32console'
@@ -46,10 +46,7 @@ when option1 == "infos", option1 == "i"
 		puts client.getPostInfo(option2)
 	else
 		puts warnings.errorInfos(option2)
-		#puts warnings.errorPostID(option2)
 	end
-	# 	puts warnings.errorUsername(option2)
-	# end
 
 when option1 == "posts", option1 == "p"
 
