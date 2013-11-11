@@ -36,6 +36,7 @@ class AyaDN
 			return resp
 		end
 		def composePost(replyto = "", mentionsList = "", myUsername = "")
+			# todo: replace all this with a gem or curses or else
 			$stdout.sync = true
 			maxChar = 256
 			charCount = maxChar - mentionsList.length

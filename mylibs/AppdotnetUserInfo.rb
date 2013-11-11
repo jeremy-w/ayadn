@@ -33,8 +33,8 @@ class AyaDN
 			userName = userInfo['username']
 			userShow = "\n--- @".brown + userName.brown + " ---\n".brown
 			theName = "@" + userName
-			if userInfo['name'] != nil
-				userRealName = userInfo['name']
+			userRealName = userInfo['name']
+			if userRealName != nil
 				userShow += "Name: ".red + userRealName.cyan + "\n"
 			end
 			if userInfo['description'] != nil
@@ -42,9 +42,13 @@ class AyaDN
 			else
 				userDescr = "No description available.".red
 			end
-			if userInfo['timezone'] != nil
-				userTimezone = userInfo['timezone']
+			userTimezone = userInfo['timezone']
+			if userTimezone != nil
 				userShow += "Timezone: ".red + userTimezone.cyan + "\n"
+			end
+			locale = userInfo['locale']
+			if locale != nil
+				userShow += "Locale: ".red + locale.cyan + "\n"
 			end
 			userShow += theName.red
 
@@ -64,15 +68,15 @@ class AyaDN
 					userShow += "You don't follow ".reddish + theName.red
 				end
 			else
-				userShow += ": yourself!".cyan
+				userShow += ":".red + " yourself!".cyan
 			end
 			#
 			
 			userPosts = userInfo['counts']['posts']
 			userFollowers = userInfo['counts']['followers']
 			userFollowing = userInfo['counts']['following']
-			userShow += "\nPosts : ".red + userPosts.to_s.cyan + "\nFollowers : ".red + userFollowers.to_s.cyan + "\nFollowing : ".red + userFollowing.to_s.cyan
-			userShow += "\nBio : \n".red + userDescr + "\n\n"
+			userShow += "\nPosts: ".red + userPosts.to_s.cyan + "\nFollowers: ".red + userFollowers.to_s.cyan + "\nFollowing: ".red + userFollowing.to_s.cyan
+			userShow += "\nBio: \n".red + userDescr + "\n\n"
 			return userShow
 		end
 	end

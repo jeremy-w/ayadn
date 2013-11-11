@@ -68,7 +68,7 @@ when option1 == "mentions", option1 == "m"
  		puts warnings.errorUsername(option2)
  	end
 
-when option1 == "stars", option1 == "starred", option1 == "s"
+when option1 == "starred", option1 == "s"
 
 	if option2 =~ /^@/
  		puts status.starsUser(option2)
@@ -111,21 +111,22 @@ when option1 == "reply", option1 == "r"
 		puts client.replyPost(option2)
 		exit
 	else
-		# option2 is the USERNAME of the original post
 		puts warnings.errorReply(option2)
 		exit
 	end
 
+when option1 == "star"
 
-#when option1 == "details", option1 == "d"
+	if option2.is_integer?
+		client = AyaDN::AppdotnetStarPost.new(@token)
+		client.starPost(option2)
+		puts "\nYou just starred post #{option2}.\n\n"
+		exit
+	else
+		puts warnings.errorPostID(option2)
+		exit
+	end
 
-	# if option2.is_integer?
-	# 	puts status.getDetails()
-	# 	client = AyaDN::AppdotnetPostInfo.new(@token)
-	# 	puts client.getPostInfo(option2)
-	# else
-	# 	puts warnings.errorPostID(option2)
-	# end
 
 when option1 == "convo", option1 == "c"
 

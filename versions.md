@@ -5,6 +5,8 @@ AYADN is a learning exercise: while it's fully functional, it's alpha and it's n
 
 ## 2013-11-11 v0.14
 - auto-fill with the right mentions when replying!
+- refactoring
+- star a post!
 
 ## 2013-11-11 v0.13
 - better layout

@@ -13,6 +13,8 @@ App.net command-line client written in Ruby.
 
 - read the conversation around a post
 
+- star a post
+
 - search hashtags 
 
 - get detailed informations on a post/user
@@ -118,7 +120,8 @@ ruby ayadn.rb write '@ksniod Bonjour Laurent'
 ruby ayadn.rb reply 14579853
 ruby ayadn.rb tag music
 ruby ayadn.rb posts @ericd
-ruby ayadn.rb stars @jws
+ruby ayadn.rb star 14760322
+ruby ayadn.rb starred @jws
 ruby ayadn.rb infos 14582145
 ruby ayadn.rb convo 14638413
 ```
@@ -147,6 +150,8 @@ ayadn infos @fredvd
 ayadn tag ruby
 ayadn mentions @timrowe
 ayadn reply 14579853
+ayadn star 14746446
+ayadn starred @martner_mala
 ```  
 
 ### As a local executable
@@ -220,6 +225,10 @@ ayadn.rb write Awesome!
 ```  
 
 *But maybe you shouldn't post single words to ADN... :p*
+
+### Unsafe commands
+
+Some commands like *star a post* (and others to come) don't have a shortcut, this is to reduce the risk of accidental manipulation.
 
 ## Help
 

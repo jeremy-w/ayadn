@@ -21,5 +21,6 @@ require_relative 'mylibs/AppdotnetSendPost'
 require_relative 'mylibs/AppdotnetPostInfo'
 require_relative 'mylibs/AppdotnetPostReplies'
 require_relative 'mylibs/AppdotnetSendReply'
+require_relative 'mylibs/AppdotnetStarPost'
 
 require_relative 'token.rb'

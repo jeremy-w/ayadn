@@ -5,13 +5,13 @@
 @help += "- " + "reply postID ".green + "to reply to a post\n\n"
 @help += "- " + "posts @username ".green + "to display a user's posts\n"
 @help += "- " + "mentions @username ".green + "to display posts mentionning a user\n"
-@help += "- " + "stars @username ".green + "to display a user's starred posts\n"
+@help += "- " + "starred @username ".green + "to display a user's starred posts\n"
 @help += "- " + "tag hashtag ".green + "to search for hashtags (don't write the '#')\n"
 @help += "- " + "convo postID ".green + "to display the conversation around a post\n"
 @help += "- " + "infos @username ".green + "or " + "infos postID ".green + "to display detailed informations on a user or a post\n"
 @help += "- " + "global ".green + "to display the Global stream\n" 
 @help += "- " + "help ".green + "to display this screen. See " + "https://github.com/ericdke/ayadn#how-to-use".magenta + " for even more detailed instructions." + "\n\n"
-@help += "All options have a one-letter shortcut: w, r, p, m, s, t, c, i, g, h.\n\n".blue
+@help += "Most options have a one-letter shortcut: w, r, p, m, s, t, c, i, g, h.\n\n".blue
 @help += "Examples:\n".cyan
 @help += "ayadn.rb\n".magenta
 @help += "ayadn.rb write\n".magenta

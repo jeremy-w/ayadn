@@ -30,8 +30,6 @@ class AyaDN
 		end
 
 		def getPosterName(postID)
-			test = "from getPosterName after a reply to #{postID} "
-			puts test
 			hashOfResponse = JSON.parse(getJSON(postID))
 			postData = hashOfResponse['data']
 			userName = postData['user']['username']
@@ -84,9 +82,9 @@ class AyaDN
 			locale = postInfo['user']['locale']
 			timezone = postInfo['user']['timezone']
 
-			postDetails += "\nReplies : ".cyan + numReplies.to_s.reddish
-			postDetails += "  Reposts : ".cyan + numReposts.to_s.reddish
-			postDetails += "  Stars : ".cyan + numStars.to_s.reddish
+			postDetails += "\nReplies: ".cyan + numReplies.to_s.reddish
+			postDetails += "  Reposts: ".cyan + numReposts.to_s.reddish
+			postDetails += "  Stars: ".cyan + numStars.to_s.reddish
 
 			if youReposted == true
 				postDetails += "\nYou reposted this post.".cyan

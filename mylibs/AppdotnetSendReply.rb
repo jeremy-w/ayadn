@@ -6,11 +6,9 @@ class AyaDN
 		end
 		def replyPost(postID)
 			puts "Replying to post ".cyan + "#{postID}...\n".brown
-			# récup mentions du post
 			puts "Extracting mentions...\n".cyan
 			clientPostInfo = AyaDN::AppdotnetPostInfo.new(@token)
 			rawMentionsText, replyingToThisUsername = clientPostInfo.getPostMentions(postID)
-			# get mentions
 			content = Array.new
 			splitted = rawMentionsText.split(" ")
 			splitted.each do |word|
