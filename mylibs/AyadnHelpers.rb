@@ -22,18 +22,18 @@ def buildPost(postHash)
 		if postText != nil
 			coloredPost = colorize(postText)
 		else
-			coloredPost = "--Post supprimé--".red
+			coloredPost = "--Post deleted--".red
 		end
 		userName = item['user']['username']
 		createdAt = item['created_at']
 		createdDay = createdAt[0...10]
 		createdHour = createdAt[11...19]
 		links = item['entities']['links']
-		postString += "\nLe " + createdDay.cyan + ' à ' + createdHour.cyan + ' par ' + "@".green + userName.green + " :\n" + "---\n".red + coloredPost + "\n\n"
+		postString += createdDay.cyan + ' ' + createdHour.cyan + ' by ' + "@".green + userName.green + " :\n" + "---\n".red + coloredPost + "\n\n"
 		postId = item['id']
 		postString += "Post ID : ".cyan + postId.to_s.brown
 		if !links.empty?
-			postString +=  " - " + "Lien : ".cyan
+			postString +=  " - " + "Link : ".cyan
 			links.each do |link|
 				linkURL = link['url']
 				postString += linkURL.brown + " "
@@ -49,18 +49,18 @@ def buildUniquePost(postHash)
 	if postText != nil
 		coloredPost = colorize(postText)
 	else
-		coloredPost = "--Post supprimé--".red
+		coloredPost = "--Post deleted--".red
 	end
 	userName = postHash['user']['username']
 	createdAt = postHash['created_at']
 	createdDay = createdAt[0...10]
 	createdHour = createdAt[11...19]
 	links = postHash['entities']['links']
-	postString += "\nLe " + createdDay.cyan + ' à ' + createdHour.cyan + ' par ' + "@".green + userName.green + " :\n" + "---\n".red + coloredPost + "\n\n"
+	postString += createdDay.cyan + ' ' + createdHour.cyan + ' by ' + "@".green + userName.green + " :\n" + "---\n".red + coloredPost + "\n\n"
 	postId = postHash['id']
 	postString += "Post ID : ".cyan + postId.to_s.brown
 	if !links.empty?
-		postString +=  " - " + "Lien : ".cyan
+		postString +=  " - " + "Link : ".cyan
 		links.each do |link|
 			linkURL = link['url']
 			postString += linkURL.brown + " "
@@ -71,72 +71,72 @@ def buildUniquePost(postHash)
 end
 class ErrorWarning
 	def errorUsername(arg)
-		raise ArgumentError.new("\n\n->".brown + " #{arg}".reddish + " n'est pas un @username\n".red)
+		raise ArgumentError.new("\n\n->".brown + " #{arg}".reddish + " is not a @username\n".red)
 	end
 	def errorPostID(arg)
-		raise ArgumentError.new("\n\n->".brown + " #{arg}".reddish + " n'est pas un Post ID\n".red)
+		raise ArgumentError.new("\n\n->".brown + " #{arg}".reddish + " is not a Post ID\n".red)
 	end
 	def errorInfos(arg)
-		raise ArgumentError.new("\n\n->".brown + " #{arg}".reddish + " n'est pas un @username ni un Post ID\n".red)
+		raise ArgumentError.new("\n\n->".brown + " #{arg}".reddish + " isn't a @username nor a Post ID\n".red)
 	end
 	def errorHTTP
-		raise ArgumentError.new("\n\n-> ".brown + "Erreur de connection.\n".red)
+		raise ArgumentError.new("\n\n-> ".brown + "Connexion error.\n".red)
 		exit
 	end
 	def globalError
-		72.times{print "*".reverse_color}
+		63.times{print "*".reverse_color}
 		print "\n"
-		15.times{print "-".reverse_color}
-		print "Une erreur de type inconnu s'est produite.".reverse_color
-		15.times{print "-".reverse_color}
-		puts "\nN'hésitez pas à m'envoyer un message -> ".reverse_color + "@ericd".reverse_color + " pour m'aider à débugger !".reverse_color
-		72.times{print "*".reverse_color}
+		26.times{print "-".reverse_color}
+		print "UNKNOW ERROR".reverse_color
+		25.times{print "-".reverse_color}
+		puts "\nDon't hesitate to send me a message -> ".reverse_color + "@ericd" + " to help me debug!".reverse_color
+		63.times{print "*".reverse_color}
 		return nil
 	end
 	def syntaxError(arg)
-		raise ArgumentError.new("\n\n-> ".brown + "#{arg}".magenta + " n'est pas une option valide. Il s'agit probablement d'une erreur de frappe...\n".red)
+		raise ArgumentError.new("\n\n-> ".brown + "#{arg}".magenta + " is not a valid option\n".red)
 	end
 	def errorReply(arg)
-		raise ArgumentError.new("\n\n-> ".brown + "#{arg}".reddish + " n'est pas un Post ID.".red)
+		raise ArgumentError.new("\n\n-> ".brown + "#{arg}".reddish + " is not a Post ID.".red)
 	end
 end
 class ClientStatus
 	def getUnified
-		s = "\nChargement du Unified Stream...\n".green
+		s = "\nLoading the Unified Stream...\n".green
 	end
 	def getGlobal
-		s = "\nChargement du Global Stream...\n".green
+		s = "\nLoading the Global Stream...\n".green
 	end
 	def infosUser(arg)
-		s = "\nChargement des informations sur ".green + "#{arg}...\n".reddish
+		s = "\nLoading informations on ".green + "#{arg}...\n".reddish
 	end
 	def postsUser(arg)
-		s = "\nChargement des posts de ".green + "#{arg}...\n".reddish
+		s = "\nLoading posts of ".green + "#{arg}...\n".reddish
 	end
 	def mentionsUser(arg)
-		s = "\nChargement des posts mentionnant ".green + "#{arg}...\n".reddish
+		s = "\nLoading posts mentionning ".green + "#{arg}...\n".reddish
 	end
 	def starsUser(arg)
-		s = "\nChargement des posts favoris de ".green + "#{arg}...\n".reddish
+		s = "\nLoading ".green + "#{arg}".reddish + "'s favorite posts...\n".green
 	end
 	def getHashtags(arg)
-		s = "\nChargement des posts contenant ".green + "##{arg}...\n".blue
+		s = "\nLoading posts containing ".green + "##{arg}...\n".blue
 	end
 	def sendPost
-		s = "\nEnvoi du post...\n".green
+		s = "\nSending post...\n".green
 	end
 	def getDetails
-		s = "\nDétails du post...\n".green
+		s = "\nInformations...\n".green
 	end
 	def getPostReplies(arg)
-		s = "Chargement de la conversation autour du post ".green + "#{arg}".reddish
+		s = "Loading the conversation around post ".green + "#{arg}".reddish
 	end
 	def writePost
-		s = "\n256 caractères maximum, validez avec Entrée (return) ou annulez avec Echap (esc).\n".green
-		s += "\nEntrez votre texte : ".cyan
+		s = "\n256 characters max, validate with [Enter] or cancel with [esc].\n".green
+		s += "\nType your text: ".cyan
 	end
 	def writeReply(arg)
-		s = "\nRécupération des informations du post #{arg}...\n".reddish
+		s = "\nLoading informations of post #{arg}...\n".green
 	end
 end
 class String

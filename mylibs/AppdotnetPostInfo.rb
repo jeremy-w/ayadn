@@ -39,24 +39,24 @@ class AyaDN
 			createdHour = createdAt[11...19]
 			links = postInfo['entities']['links']
 
-			postDetails = "\nLe " + createdDay.cyan + ' à ' + createdHour.cyan + ' par ' + "@".green + userName.green
+			postDetails = createdDay.cyan + ' ' + createdHour.cyan + ' by ' + "@".green + userName.green
 			if !realName.empty?
 				postDetails += " \[#{realName}\]".reddish
 			end
 			postDetails += " :\n"
 			postDetails += "\n---\n".red + coloredPost + "\n---".red + "\n\n" 
-			postDetails += "Post ID : ".cyan + thePostId.to_s.brown
+			postDetails += "Post ID: ".cyan + thePostId.to_s.brown
 			if !links.empty?
 				links.each do |link|
 					linkURL = link['url']
-					postDetails += " Lien : ".cyan + linkURL.brown + " "
+					postDetails += " Link: ".cyan + linkURL.brown + " "
 				end
 			else
 				postDetails += "\n"
 			end
 			postURL = postInfo['canonical_url']
 
-			postDetails += "\n\nURL du post : ".cyan + postURL.brown
+			postDetails += "\n\nPost URL: ".cyan + postURL.brown
 
 			numStars = postInfo['num_stars']
 			numReplies = postInfo['num_replies']
@@ -67,20 +67,20 @@ class AyaDN
 			locale = postInfo['user']['locale']
 			timezone = postInfo['user']['timezone']
 
-			postDetails += "\n\nRéponses : ".cyan + numReplies.to_s.reddish
+			postDetails += "\n\nReplies : ".cyan + numReplies.to_s.reddish
 			postDetails += "  Reposts : ".cyan + numReposts.to_s.reddish
 			postDetails += "  Stars : ".cyan + numStars.to_s.reddish
 
 			if youReposted == true
-				postDetails += "\n\nVous avez reposté ce message. ".cyan
+				postDetails += "\n\nYou reposted this post.".cyan
 			end
 			if youStarred == true
-				postDetails += "\n\nVous avez starré ce message.".cyan
+				postDetails += "\n\nYou starred this post.".cyan
 			end
 
-			postDetails += "\n\nClient ADN : ".cyan + sourceApp.reddish
-			postDetails += "  Locale : ".cyan + locale.reddish
-			postDetails += "  Fuseau horaire : ".cyan + timezone.reddish
+			postDetails += "\n\nADN client: ".cyan + sourceApp.reddish
+			postDetails += "  Locale: ".cyan + locale.reddish
+			postDetails += "  Timezone: ".cyan + timezone.reddish
 
 
 			postDetails += "\n\n\n"

@@ -1,7 +1,9 @@
 #!/usr/bin/ruby
 # encoding: utf-8
-# App.net client
+# 
+# App.net command-line client
 # by Eric Dejonckheere
+# http://alpha.app.net/ericd
 # © 2013
 
 require_relative 'Requires'

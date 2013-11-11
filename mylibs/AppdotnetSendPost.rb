@@ -54,7 +54,7 @@ class AyaDN
 					puts client.createPost(text, replyto)
 					exit
 				elsif input == "\e"
-					abort("\n\nAnnulation.".reverse_color + " Votre post n'a pas été envoyé.\n\n".red)
+					abort("\n\nCanceled.".reverse_color + " Your post hasn't been sent.\n\n".red)
 				elsif input == "\177"
 					text = text[0...-2]
 					numChar += 2

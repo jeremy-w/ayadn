@@ -29,13 +29,9 @@ App.net command-line client written in Ruby.
 
 ## Instructions
 
-With Mac OS X Ruby is already installed on your machine.
+Mac OS X + Linux = it just works.
 
-Windows users: first install Ruby with [http://rubyinstaller.org](http://rubyinstaller.org), it will automatically install Rubygems.
-
-The app hasn't been tested on Linux yet, but it should work.
-
-*Ruby > 1.9.x is mandatory, if you have Ruby =< 1.8 you have to upgrade.*
+Windows = install Ruby with [http://rubyinstaller.org](http://rubyinstaller.org), it will automatically install Rubygems.
 
 ### Step 1
 
@@ -49,7 +45,7 @@ git clone https://github.com/ericdke/ayadn.git
 
 #### With Bundler
 
-If you already have `bundler` installed, you just have to enter the app folder and run `bundle install`:
+If you already have [bundler](http://bundler.io) installed, you just have to enter the app folder and run `bundle install`:
 
 ```
 cd ayadn-master
@@ -74,13 +70,11 @@ gem install rest-client
 gem install win32console -v 1.3.2
 ```  
 
-*Sometimes Windows has problems with UTF8 and accented characters are broken. I haven't found an acceptable solution yet.*
-
 *Windows, again: jump to Step 4 now.*
 
 ### Step 3
 
-While you can use the app with the ruby interpreter (see 'How to use'), it's recommended to make the app executable:
+While you can use the app with the ruby interpreter -see [How to use](https://github.com/ericdke/ayadn#how-to-use)-, it's recommended to make the app executable:
 
 ```
 chmod +x ayadn.rb
@@ -94,7 +88,7 @@ I haven't coded an interactive authentification system yet, so you **have** to c
 
 This is easy:
 
-- Go to [http://dev-lite.jonathonduerig.com](http://dev-lite.jonathonduerig.com) and click the `Authorize` button. Copy the token it gives you back.
+- Go to [http://dev-lite.jonathonduerig.com](http://dev-lite.jonathonduerig.com) and click the `Authorize` button, connect with your App.net account then copy the token Dev-Lite gives you back.
 
 - In any text editor, open the file `token.rb` and paste the token between the ticks:
 
@@ -104,11 +98,11 @@ Hit `Save` and you're done.
 
 ## How to use
 
-**You type the name of the app + the action you want to do + the destination of this action.**
+**You type the name of the app + the action you want to do + the target of this action.**
 
-If you don't provide any argument to the app, your personnalized stream is displayed.
+**If you don't provide any argument to the app, your personnalized stream is displayed.**
 
-If you provide the `write` command without text, you will enter the compose message feature.
+**If you provide the `write` command without text, you will enter the compose message feature.** *(recommended)*
 
 ### Through the Ruby interpreter
 
@@ -123,7 +117,7 @@ ruby ayadn.rb reply 14579853
 ruby ayadn.rb tag music
 ruby ayadn.rb posts @ericd
 ruby ayadn.rb stars @jws
-ruby ayadn.rb details 14582145
+ruby ayadn.rb infos 14582145
 ruby ayadn.rb convo 14638413
 ```
 
@@ -213,7 +207,7 @@ When you want to ask information about yourself (the App.net account connected t
 ayadn.rb infos me
 ```  
 
-*Only for the 'infos' action at the moment (V0.11)*
+*Only available for the 'infos' action at the moment (V0.11)*
 
 ### Post a single word
 
@@ -223,7 +217,7 @@ No need to provide quotes if you want to post a single word (no spaces).
 ayadn.rb write Awesome!
 ```  
 
-But maybe you shouldn't post single words to ADN... :p
+*But maybe you shouldn't post single words to ADN... :p*
 
 ## Help
 
@@ -248,15 +242,18 @@ ayadn.rb write "Here's an escaped exclamation mark \! and a normal simple quote 
 
 ## Demo
 
+*(has to be updated)*
+
 http://youtu.be/WEvEm2-tGoU
 
 ## Contact
 
-Contact me on ADN [(@ericd)](http://alpha.app.net/ericd) if you have questions, ideas, if you've found bugs, or... if you know Ruby and you want to help this poor newbie. ;)
+Contact me on ADN [(@ericd)](http://alpha.app.net/ericd) if you have questions, ideas, if you've found bugs, or... if you know Ruby and you want to help a newbie refactoring his code. ;)
 
-Don't bother with @ayaio or @aya_tests, they are bots. The handle for the app itself is @ayadn but isn't active yet.
+Don't bother with @ayaio or @aya_tests, they are bots. The handle for the app itself is @ayadn but it's not active yet.
 
 ## Credits
 
 - Windows beta-test: [@ksniod](http://alpha.app.net/ksniod)
 - Linux beta-test: [@martner_mala](http://alpha.app.net/martner_mala)
+- OpenBSD beta-test: *(soon)*

@@ -28,16 +28,16 @@ class AyaDN
 			theName = "@" + userName
 			if userInfo['name'] != nil
 				userRealName = userInfo['name']
-				userShow += "Nom : ".red + userRealName.cyan + "\n"
+				userShow += "Name: ".red + userRealName.cyan + "\n"
 			end
 			if userInfo['description'] != nil
 				userDescr = userInfo['description']['text']
 			else
-				userDescr = "Pas de description disponible.".red
+				userDescr = "No description available.".red
 			end
 			if userInfo['timezone'] != nil
 				userTimezone = userInfo['timezone']
-				userShow += "Fuseau horaire : ".red + userTimezone.cyan + "\n"
+				userShow += "Timezone: ".red + userTimezone.cyan + "\n"
 			end
 			userShow += theName.red
 
@@ -47,17 +47,17 @@ class AyaDN
 				userFollows = userInfo['follows_you']
 				userFollowed = userInfo['you_follow']
 				if userFollows == true
-					userShow += " vous suit\n".green
+					userShow += " follows you\n".green
 				else
-					userShow += " ne vous suit pas\n".reddish
+					userShow += " doesn't follow you\n".reddish
 				end
 				if userFollowed == true
-					userShow += "Vous suivez ".green + theName.red
+					userShow += "You follow ".green + theName.red
 				else
-					userShow += "Vous ne suivez pas ".reddish + theName.red
+					userShow += "You don't follow ".reddish + theName.red
 				end
 			else
-				userShow += " : c'est vous !".cyan
+				userShow += ": yourself!".cyan
 			end
 			#
 			

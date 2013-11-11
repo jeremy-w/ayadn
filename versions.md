@@ -6,7 +6,7 @@ AYADN is a learning exercise: while it's fully functional, it's alpha and it's n
 ## 2013-11-10 v0.12
 - Reply to!
 - better help screen
-- `details` is gone, fusioned with `infos`
+- `details` is gone, merged with `infos`
 
 ## 2013-11-10 v0.11
 - compatible Windows
