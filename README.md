@@ -72,6 +72,8 @@ gem install win32console -v 1.3.2
 
 *Windows, again: jump to Step 4 now.*
 
+Installing the gems only has to be done *once*, it's not necessary to do it each time you update AyaDN.
+
 ### Step 3
 
 While you can use the app with the ruby interpreter -see [How to use](https://github.com/ericdke/ayadn#how-to-use)-, it's recommended to make the app executable:
@@ -242,9 +244,9 @@ ayadn.rb write "Here's an escaped exclamation mark \! and a normal simple quote 
 
 ## Demo
 
-*(has to be updated)*
+*(todo)*
 
-http://youtu.be/WEvEm2-tGoU
+A few screencaps [here](http://ericd.re-app.net).
 
 ## Contact
 
@@ -254,6 +256,13 @@ Don't bother with @ayaio or @aya_tests, they are bots. The handle for the app it
 
 ## Credits
 
-- Windows beta-test: [@ksniod](http://alpha.app.net/ksniod)
-- Linux beta-test: [@martner_mala](http://alpha.app.net/martner_mala)
-- OpenBSD beta-test: *(soon)*
+### Beta-testers
+
+- Windows: [@ksniod](http://alpha.app.net/ksniod)
+
+- Linux: 
+
+    - [@martner_mala](http://alpha.app.net/martner_mala)
+    - [@nguarracino](http://alpha.app.net/nguarracino)
+
+- OpenBSD: *(soon)*
