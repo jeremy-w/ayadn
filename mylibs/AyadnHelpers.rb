@@ -61,10 +61,10 @@ def buildUniquePost(postHash)
 	createdHour = createdAt[11...19]
 	links = postHash['entities']['links']
 	postId = postHash['id']
-	postString += "Post ID: ".cyan + postId.to_s.green
-	postString += " - " + "The " + createdDay.cyan + ' at ' + createdHour.cyan + ' by ' + "@".green + userName.green + " :\n" + "---\n".brown + coloredPost + "\n" + "---".brown
+	postString += "\n\nPost ID: ".cyan + postId.to_s.green
+	postString += " - " + createdDay.cyan + ' at ' + createdHour.cyan + ' by ' + "@".green + userName.green + "\n\n" + coloredPost + "\n" + "\n"
 	if !links.empty?
-		postString += "\nLink: ".cyan
+		postString += "Link: ".cyan
 		links.each do |link|
 			linkURL = link['url']
 			postString += linkURL.brown + " "
