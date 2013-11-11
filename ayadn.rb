@@ -97,7 +97,7 @@ when option1 == "write", option1 == "w"
 	else
 		puts status.writePost()
 		client = AyaDN::AppdotnetSendPost.new(@token)
-		puts client.composePost(nil)
+		puts client.composePost()
 	end
 
 

@@ -20,6 +20,13 @@ class AyaDN
 		def getJSON(name)
 		 	return getUserURL(name)
 		end
+
+		def getUserName(name)
+			hashOfResponse = JSON.parse(getJSON(name))
+			userInfo = hashOfResponse['data']
+			userName = userInfo['username']
+		end
+
 		def getUserInfo(name)
 			hashOfResponse = JSON.parse(getJSON(name))
 			userInfo = hashOfResponse['data']

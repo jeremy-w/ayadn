@@ -74,17 +74,20 @@ def buildUniquePost(postHash)
 	return postString
 end
 class ErrorWarning
+	def errorMaxChars
+		raise ArgumentError.new("\n\nToo many characters. 256 max.\n\n".red)
+	end
 	def errorUsername(arg)
-		raise ArgumentError.new("\n\n->".brown + " #{arg}".reddish + " is not a @username\n".red)
+		raise ArgumentError.new("\n\n->".brown + " #{arg}".reddish + " is not a @username\n\n".red)
 	end
 	def errorPostID(arg)
-		raise ArgumentError.new("\n\n->".brown + " #{arg}".reddish + " is not a Post ID\n".red)
+		raise ArgumentError.new("\n\n->".brown + " #{arg}".reddish + " is not a Post ID\n\n".red)
 	end
 	def errorInfos(arg)
-		raise ArgumentError.new("\n\n->".brown + " #{arg}".reddish + " isn't a @username nor a Post ID\n".red)
+		raise ArgumentError.new("\n\n->".brown + " #{arg}".reddish + " isn't a @username nor a Post ID\n\n".red)
 	end
 	def errorHTTP
-		raise ArgumentError.new("\n\n-> ".brown + "Connexion error.\n".red)
+		raise ArgumentError.new("\n\n-> ".brown + "Connexion error.\n\n".red)
 		exit
 	end
 	def globalError
@@ -95,13 +98,14 @@ class ErrorWarning
 		25.times{print "-".reverse_color}
 		puts "\nDon't hesitate to send me a message -> ".reverse_color + "@ericd" + " to help me debug!".reverse_color
 		63.times{print "*".reverse_color}
+		puts "\n"
 		return nil
 	end
 	def syntaxError(arg)
-		raise ArgumentError.new("\n\n-> ".brown + "#{arg}".magenta + " is not a valid option\n".red)
+		raise ArgumentError.new("\n\n-> ".brown + "#{arg}".magenta + " is not a valid option\n\n".red)
 	end
 	def errorReply(arg)
-		raise ArgumentError.new("\n\n-> ".brown + "#{arg}".reddish + " is not a Post ID.".red)
+		raise ArgumentError.new("\n\n-> ".brown + "#{arg}".reddish + " is not a Post ID.\n\n".red)
 	end
 end
 class ClientStatus

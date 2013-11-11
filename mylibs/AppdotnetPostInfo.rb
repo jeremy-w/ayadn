@@ -24,9 +24,18 @@ class AyaDN
 		def getPostMentions(postID)
 			hashOfResponse = JSON.parse(getJSON(postID))
 			postInfo = hashOfResponse['data']
-			thePostId = postInfo['id']
+			userName = postInfo['user']['username']
 			rawText = postInfo['text']
-			return rawText 
+			return rawText, userName
+		end
+
+		def getPosterName(postID)
+			test = "from getPosterName after a reply to #{postID} "
+			puts test
+			hashOfResponse = JSON.parse(getJSON(postID))
+			postData = hashOfResponse['data']
+			userName = postData['user']['username']
+			return userName
 		end
 
 		def getPostInfo(postID)

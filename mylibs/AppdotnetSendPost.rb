@@ -35,37 +35,37 @@ class AyaDN
 			resp = buildUniquePost(adnData)
 			return resp
 		end
-		def composePost(replyto, mentionsList)
+		def composePost(replyto = "", mentionsList = "", myUsername = "")
 			$stdout.sync = true
-			i = 0
 			maxChar = 256
-			numChar = 256 - mentionsList.length
-			text = ""
-			text += mentionsList + " "
-			# ne pas oublier d'enlever du compte l'espace que l'on a rajouté
-			numChar -= 1
-			print "\n\r#{numChar}".brown + " -> " + text
-			while i < maxChar
+			charCount = maxChar - mentionsList.length
+			text = mentionsList
+			print "\n\r#{charCount}".brown + " -> " + text
+			while charCount >= 0
 				input = STDIN.getch
 				text += input
-				i += 1
-				numChar -= 1
-				print "\r#{numChar}".brown + " -> ".green + "#{text}"
+				charCount -= 1
+				print "\r#{charCount}".brown + " -> ".green + "#{text}"
 				if input == "\r"
+					#si touche entrée
 					puts "\n\n"
 					client = AyaDN::AppdotnetSendPost.new(@token)
 					puts client.createPost(text, replyto)
 					exit
 				elsif input == "\e"
+					#si touche echapp
 					abort("\n\nCanceled.".reverse_color + " Your post hasn't been sent.\n\n".red)
 				elsif input == "\177"
+					#backspace counts as 1 character as well
 					text = text[0...-2]
-					numChar += 2
-					print "\n\r#{numChar}".brown + " -> ".green + "#{text}"
-				# elsif 
-					# fleches clavier à ignorer	
+					charCount += 2
+					print "\n\r#{charCount}".brown + " -> ".green + "#{text}"
+				#elsif 
+					#fleches clavier et autres touches à ignorer	
 				end
 			end
+			warnings = ErrorWarning.new
+			puts warnings.errorMaxChars
 		end
 	end
 end
