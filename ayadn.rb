@@ -96,7 +96,7 @@ when option1 == "write", option1 == "w"
 	if option2 != nil
 		puts status.sendPost()
 		client = AyaDN::AppdotnetSendPost.new(@token)
-		puts client.createPost(option2)
+		puts client.createPost(option2, nil)
 	else
 		puts status.writePost()
 		client = AyaDN::AppdotnetSendPost.new(@token)
