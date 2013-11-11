@@ -44,8 +44,8 @@ class AyaDN
 				postDetails += " \[#{realName}\]".reddish
 			end
 			postDetails += ":\n"
-			postDetails += "\n---\n".brown + coloredPost + "\n---".brown + "\n\n" 
-			postDetails += "Post ID: ".cyan + thePostId.to_s.green + "\n"
+			postDetails += "\n" + coloredPost + "\n" + "\n\n" 
+			postDetails += "Post ID: ".cyan + thePostId.to_s.green
 			if !links.empty?
 				links.each do |link|
 					linkURL = link['url']
@@ -56,7 +56,7 @@ class AyaDN
 			end
 			postURL = postInfo['canonical_url']
 
-			postDetails += "\n\nPost URL: ".cyan + postURL.brown
+			postDetails += "\nPost URL: ".cyan + postURL.brown
 
 			numStars = postInfo['num_stars']
 			numReplies = postInfo['num_replies']
@@ -67,18 +67,18 @@ class AyaDN
 			locale = postInfo['user']['locale']
 			timezone = postInfo['user']['timezone']
 
-			postDetails += "\n\nReplies : ".cyan + numReplies.to_s.reddish
+			postDetails += "\nReplies : ".cyan + numReplies.to_s.reddish
 			postDetails += "  Reposts : ".cyan + numReposts.to_s.reddish
 			postDetails += "  Stars : ".cyan + numStars.to_s.reddish
 
 			if youReposted == true
-				postDetails += "\n\nYou reposted this post.".cyan
+				postDetails += "\nYou reposted this post.".cyan
 			end
 			if youStarred == true
-				postDetails += "\n\nYou starred this post.".cyan
+				postDetails += "\nYou starred this post.".cyan
 			end
 
-			postDetails += "\n\nPosted with: ".cyan + sourceApp.reddish
+			postDetails += "\nPosted with: ".cyan + sourceApp.reddish
 			postDetails += "  Locale: ".cyan + locale.reddish
 			postDetails += "  Timezone: ".cyan + timezone.reddish
 

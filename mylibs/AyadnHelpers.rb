@@ -30,15 +30,19 @@ def buildPost(postHash)
 		createdHour = createdAt[11...19]
 		links = item['entities']['links']
 		postId = item['id']
+		#postString += "---\n".brown
 		postString += "Post ID: ".cyan + postId.to_s.green
-		postString += " - " + "The " + createdDay.cyan + ' at ' + createdHour.cyan + ' by ' + "@".green + userName.green + "\n" + "---\n".brown + coloredPost + "\n" + "---".brown
+		#postString += "\nThe "
+		postString += " - "
+		postString += createdDay.cyan + ' at ' + createdHour.cyan + ' by ' + "@".green + userName.green + "\n" + coloredPost + "\n"
 		if !links.empty?
-			postString += "\nLink: ".cyan
+			postString += "Link: ".cyan
 			links.each do |link|
 				linkURL = link['url']
 				postString += linkURL.brown + " \n"
 			end
 		end
+		#postString += "---\n".brown
 		postString += "\n\n"
 	end
 	return postString

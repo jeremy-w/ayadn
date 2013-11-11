@@ -3,6 +3,9 @@ AYADN
 
 AYADN is a learning exercise: while it's fully functional, it's alpha and it's not an official App.net application yet. That's why you have to log in with your Dev-Lite token. In a near future a real unique authentication system will be used, + the app will post in its own name. 
 
+## 2013-11-11 v0.13
+- better layout
+
 ## 2013-11-10 v0.12
 - Reply to!
 - better help screen
@@ -19,7 +22,7 @@ AYADN is a learning exercise: while it's fully functional, it's alpha and it's n
 - Conversations!
 
 ## 2013-11-09 v0.09
-- Post details
+- Post details!
 - shortcuts
 - bugfixes
 - better help + readme
@@ -30,20 +33,20 @@ AYADN is a learning exercise: while it's fully functional, it's alpha and it's n
 ## 2013-11-08 v0.07
 - Each lib in its own file
 - token is declared in a separate file
-- Global stream
+- Global stream!
 - I botched the GitHub repo, so I had to start again from zero: no commit history before today
 
 ## 2013-11-08 v0.06
 - Changed the logic for ARGV
 - Inverted syntax for better consistance
-- Hashtag search
+- Hashtag search!
 
 ## 2013-11-07 v0.05
-- User starred posts
+- User starred posts!
 - Bug fixes
 
 ## 2013-11-06 v0.04b
-- User mentions
+- User mentions!
 
 ## 2013-11-06 v0.04a
 - Refactored libs
@@ -57,11 +60,11 @@ AYADN is a learning exercise: while it's fully functional, it's alpha and it's n
 - Colorization is Windows-compatible
 
 ## 2013-11-04 v0.02b
-- User infos
-- User posts
+- User infos!
+- User posts!
 
 ## 2013-11-04 v0.02a
-- Unified stream (+ directed posts)
+- Unified stream (+ directed posts)!
 - colorization
 - ARGS
 
