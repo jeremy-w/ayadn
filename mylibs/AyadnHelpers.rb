@@ -29,17 +29,17 @@ def buildPost(postHash)
 		createdDay = createdAt[0...10]
 		createdHour = createdAt[11...19]
 		links = item['entities']['links']
-		postString += createdDay.cyan + ' ' + createdHour.cyan + ' by ' + "@".green + userName.green + " :\n" + "---\n".red + coloredPost + "\n\n"
 		postId = item['id']
-		postString += "Post ID : ".cyan + postId.to_s.brown
+		postString += "Post ID: ".cyan + postId.to_s.green
+		postString += " - " + "The " + createdDay.cyan + ' at ' + createdHour.cyan + ' by ' + "@".green + userName.green + "\n" + "---\n".brown + coloredPost + "\n" + "---".brown
 		if !links.empty?
-			postString +=  " - " + "Link : ".cyan
+			postString += "\nLink: ".cyan
 			links.each do |link|
 				linkURL = link['url']
-				postString += linkURL.brown + " "
+				postString += linkURL.brown + " \n"
 			end
 		end
-		postString += "\n\n\n"
+		postString += "\n\n"
 	end
 	return postString
 end
@@ -56,17 +56,17 @@ def buildUniquePost(postHash)
 	createdDay = createdAt[0...10]
 	createdHour = createdAt[11...19]
 	links = postHash['entities']['links']
-	postString += createdDay.cyan + ' ' + createdHour.cyan + ' by ' + "@".green + userName.green + " :\n" + "---\n".red + coloredPost + "\n\n"
 	postId = postHash['id']
-	postString += "Post ID : ".cyan + postId.to_s.brown
+	postString += "Post ID: ".cyan + postId.to_s.green
+	postString += " - " + "The " + createdDay.cyan + ' at ' + createdHour.cyan + ' by ' + "@".green + userName.green + " :\n" + "---\n".brown + coloredPost + "\n" + "---".brown
 	if !links.empty?
-		postString +=  " - " + "Link : ".cyan
+		postString += "\nLink: ".cyan
 		links.each do |link|
 			linkURL = link['url']
 			postString += linkURL.brown + " "
 		end
 	end
-	postString += "\n\n\n"
+	postString += "\n\n"
 	return postString
 end
 class ErrorWarning
@@ -126,10 +126,10 @@ class ClientStatus
 		s = "\nSending post...\n".green
 	end
 	def getDetails
-		s = "\nInformations...\n".green
+		s = "\nLoading informations...\n".green
 	end
 	def getPostReplies(arg)
-		s = "Loading the conversation around post ".green + "#{arg}".reddish
+		s = "Loading the conversation around post ".green + "#{arg}\n".reddish
 	end
 	def writePost
 		s = "\n256 characters max, validate with [Enter] or cancel with [esc].\n".green

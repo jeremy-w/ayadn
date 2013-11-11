@@ -39,17 +39,17 @@ class AyaDN
 			createdHour = createdAt[11...19]
 			links = postInfo['entities']['links']
 
-			postDetails = createdDay.cyan + ' ' + createdHour.cyan + ' by ' + "@".green + userName.green
+			postDetails = "\nThe " + createdDay.cyan + ' at ' + createdHour.cyan + ' by ' + "@".green + userName.green
 			if !realName.empty?
 				postDetails += " \[#{realName}\]".reddish
 			end
-			postDetails += " :\n"
-			postDetails += "\n---\n".red + coloredPost + "\n---".red + "\n\n" 
-			postDetails += "Post ID: ".cyan + thePostId.to_s.brown
+			postDetails += ":\n"
+			postDetails += "\n---\n".brown + coloredPost + "\n---".brown + "\n\n" 
+			postDetails += "Post ID: ".cyan + thePostId.to_s.green + "\n"
 			if !links.empty?
 				links.each do |link|
 					linkURL = link['url']
-					postDetails += " Link: ".cyan + linkURL.brown + " "
+					postDetails += "\nLink: ".cyan + linkURL.brown
 				end
 			else
 				postDetails += "\n"
@@ -78,7 +78,7 @@ class AyaDN
 				postDetails += "\n\nYou starred this post.".cyan
 			end
 
-			postDetails += "\n\nADN client: ".cyan + sourceApp.reddish
+			postDetails += "\n\nPosted with: ".cyan + sourceApp.reddish
 			postDetails += "  Locale: ".cyan + locale.reddish
 			postDetails += "  Timezone: ".cyan + timezone.reddish
 

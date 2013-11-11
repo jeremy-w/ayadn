@@ -13,7 +13,7 @@ when *winPlatforms
 	require 'win32console'
 end
 
-puts "\nAYADN".red + " - " + "App.net command-line client\n".brown
+puts "\n\nAYADN".red + " - " + "App.net command-line client\n".brown
 
 option1 = ARGV[0]
 option2 = ARGV[1]
