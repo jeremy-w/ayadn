@@ -120,7 +120,19 @@ when option1 == "star"
 	if option2.is_integer?
 		client = AyaDN::AppdotnetStarPost.new(@token)
 		client.starPost(option2)
-		puts "\nYou just starred post #{option2}.\n\n"
+		puts "\nYou just starred post ".green + " #{option2}".brown + ".\n\n".green
+		exit
+	else
+		puts warnings.errorPostID(option2)
+		exit
+	end
+
+when option1 == "unstar"
+
+	if option2.is_integer?
+		client = AyaDN::AppdotnetStarPost.new(@token)
+		client.unstarPost(option2)
+		puts "\nYou just unstarred post ".green + " #{option2}".brown + ".\n\n".green
 		exit
 	else
 		puts warnings.errorPostID(option2)

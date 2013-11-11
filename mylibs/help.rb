@@ -4,6 +4,7 @@
 @help += "- " + "write ".green + "+ [Enter key], or " + 'write \'your text\' '.green + "to create a post\n"
 @help += "- " + "reply postID ".green + "to reply to a post\n"
 @help += "- " + "star postID ".green + "to star a post\n"
+@help += "- " + "unstar postID ".green + "to unstar a post\n"
 @help += "- " + "posts @username ".green + "to display a user's posts\n"
 @help += "- " + "mentions @username ".green + "to display posts mentionning a user\n"
 @help += "- " + "starred @username ".green + "to display a user's starred posts\n"

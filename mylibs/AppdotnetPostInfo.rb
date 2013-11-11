@@ -21,6 +21,14 @@ class AyaDN
 		 	return getPostURL(postID)
 		end
 
+		def getPostStarred(postID)
+			hashOfResponse = JSON.parse(getJSON(postID))
+			postInfo = hashOfResponse['data']
+			youStarred = postInfo['you_starred']
+			isRepost = postInfo['repost_of']
+			return youStarred, isRepost
+		end
+
 		def getPostMentions(postID)
 			hashOfResponse = JSON.parse(getJSON(postID))
 			postInfo = hashOfResponse['data']
