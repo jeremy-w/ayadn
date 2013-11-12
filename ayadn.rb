@@ -85,17 +85,32 @@ when option1 == "starred", option1 == "s"
 		client = AyaDN::AppdotnetWhoStarred.new(@token)
 		puts client.getStarredByUsers(option2)
 	else
-		puts warnings.errorUsername(option2)
+		puts warnings.errorInfos(option2)
 	end
 
 when option1 == "reposted"
 
 	if option2.is_integer?
-		# status
+		puts status.whoReposted(option2)
 		client = AyaDN::AppdotnetWhoReposted.new(@token)
 		puts client.getRepostedByUsers(option2)
 	else
-		# err not postID
+		puts warnings.errorPostID(option2)
+		#exit
+	end
+
+when option1 == "original"
+
+	if option2.is_integer?
+		client = AyaDN::AppdotnetPostInfo.new(@token)
+		goToID = client.getOriginalPost(option2)
+		puts "\nFetching original post of #{option2}...\n".green
+		client = AyaDN::AppdotnetPostInfo.new(@token)
+		puts client.getPostInfo(goToID)
+		#exit
+	else
+		puts warnings.errorPostID(option2)
+		#exit
 	end
 
 when option1 == "tag", option1 == "t"
@@ -107,6 +122,7 @@ when option1 == "tag", option1 == "t"
 	end
 	puts status.getHashtags(option2_new)
 	puts client.getTaggedPosts(option2_new)
+	exit
 
 when option1 == "write", option1 == "w"
 
@@ -124,15 +140,12 @@ when option1 == "write", option1 == "w"
 when option1 == "reply", option1 == "r"
 
 	if option2.is_integer?
-		# option2 is the ID of the post
-		# compose window
-		#puts status.writeReply(option2)
 		client = AyaDN::AppdotnetSendReply.new(@token)
 		puts client.replyPost(option2)
-		exit
+		#exit
 	else
 		puts warnings.errorReply(option2)
-		exit
+		#exit
 	end
 
 when option1 == "star"
@@ -141,10 +154,10 @@ when option1 == "star"
 		client = AyaDN::AppdotnetStarPost.new(@token)
 		client.starPost(option2)
 		puts "\nYou just starred post ".green + " #{option2}".brown + ".\n\n".green
-		exit
+		#exit
 	else
 		puts warnings.errorPostID(option2)
-		exit
+		#exit
 	end
 
 when option1 == "unstar"
@@ -153,10 +166,10 @@ when option1 == "unstar"
 		client = AyaDN::AppdotnetStarPost.new(@token)
 		client.unstarPost(option2)
 		puts "\nYou just unstarred post ".green + "#{option2}".brown + ".\n\n".green
-		exit
+		#exit
 	else
 		puts warnings.errorPostID(option2)
-		exit
+		#exit
 	end
 
 when option1 == "delete"
@@ -165,10 +178,10 @@ when option1 == "delete"
 		client = AyaDN::AppdotnetPosts.new(@token)
 		puts client.deletePost(option2)
 		puts "\nYou just deleted post ".green + "#{option2}".brown + ".\n\n".green
-		exit
+		#exit
 	else
 		puts warnings.errorPostID(option2)
-		exit
+		#exit
 	end
 
 when option1 == "follow"
@@ -191,7 +204,6 @@ when option1 == "unfollow"
 		puts warnings.errorUsername(option2)
 	end
 
-
 when option1 == "convo", option1 == "c"
 
 	if option2.is_integer?
@@ -205,16 +217,15 @@ when option1 == "convo", option1 == "c"
 when option1 == "help", option1 == "aide", option1 == "h"
 
 	puts @help
+	exit
 
-else
+when option1 != nil
 
-	if option1 != nil
-		option = ARGV
-		bad_option = option.join(" ")
-		puts warnings.syntaxError(bad_option)
-	end
-	puts warnings.globalError()
+	option = ARGV
+	bad_option = option.join(" ")
+	puts warnings.syntaxError(bad_option)
 	puts @help
+	exit
 
 end
 

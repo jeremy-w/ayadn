@@ -21,6 +21,13 @@ class AyaDN
 		 	return getPostURL(postID)
 		end
 
+		def getOriginalPost(postID)
+			hashOfResponse = JSON.parse(getJSON(postID))
+			postInfo = hashOfResponse['data']
+			isRepost = postInfo['repost_of']
+			goToID = isRepost['id']
+		end
+
 		def ifExists(postID)
 			hashOfResponse = JSON.parse(getJSON(postID))
 			postInfo = hashOfResponse['data']

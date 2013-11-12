@@ -23,12 +23,11 @@ class AyaDN
 		def getRepostedByUsers(postID)
 			hashOfResponse = JSON.parse(getJSON(postID))
 			repostedByUsers = hashOfResponse['data']
-			if repostedByUsers == nil
-				puts "\n\nThis post hasn't been reposted by anyone.\n\n"
+			if repostedByUsers.empty?
+				puts "This post hasn't been reposted by anyone.\n\n".red
 				exit
 			end
-			repostedByUsersInverse = repostedByUsers.reverse
-			resp = buildUsersList(repostedByUsersInverse)
+			resp = buildUsersList(repostedByUsers)
 			return resp
 		end
 	end

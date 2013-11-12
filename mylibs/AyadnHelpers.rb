@@ -127,6 +127,9 @@ class ClientStatus
 	def getGlobal
 		s = "\nLoading the Global Stream...\n".green
 	end
+	def whoReposted(arg)
+		s = "\nLoading informations on ".green + "#{arg}...\n".reddish
+	end
 	def infosUser(arg)
 		s = "\nLoading informations on ".green + "#{arg}...\n".reddish
 	end
