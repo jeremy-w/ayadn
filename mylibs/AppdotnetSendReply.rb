@@ -40,7 +40,7 @@ class AyaDN
 			# go!
 			status = ClientStatus.new
 			puts status.writePost()
-			sendPost = AyaDN::AppdotnetSendPost.new(@token)
+			sendPost = AyaDN::AppdotnetPosts.new(@token)
 			puts sendPost.composePost(postID, mentionsList)
 		end
 	end

@@ -112,11 +112,11 @@ when option1 == "write", option1 == "w"
 
 	if option2 != nil
 		puts status.sendPost()
-		client = AyaDN::AppdotnetSendPost.new(@token)
+		client = AyaDN::AppdotnetPosts.new(@token)
 		puts client.createPost(option2, nil)
 	else
 		puts status.writePost()
-		client = AyaDN::AppdotnetSendPost.new(@token)
+		client = AyaDN::AppdotnetPosts.new(@token)
 		puts client.composePost()
 	end
 
@@ -153,6 +153,18 @@ when option1 == "unstar"
 		client = AyaDN::AppdotnetStarPost.new(@token)
 		client.unstarPost(option2)
 		puts "\nYou just unstarred post ".green + "#{option2}".brown + ".\n\n".green
+		exit
+	else
+		puts warnings.errorPostID(option2)
+		exit
+	end
+
+when option1 == "delete"
+
+	if option2.is_integer?
+		client = AyaDN::AppdotnetPosts.new(@token)
+		puts client.deletePost(option2)
+		puts "\nYou just deleted post ".green + "#{option2}".brown + ".\n\n".green
 		exit
 	else
 		puts warnings.errorPostID(option2)
