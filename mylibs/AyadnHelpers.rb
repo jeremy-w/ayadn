@@ -15,6 +15,18 @@ def colorize(contentText)
 	end
 	coloredPost = content.join(" ")
 end
+def buildUsersList(usersHash)
+	usersString = ""
+	usersHash.each do |item|
+		userName = item['username']
+		userRealName = item['name']
+
+		userHandle = "@" + userName
+		usersString += userHandle.green + " #{userRealName}\n".cyan
+	end
+	usersString += "\n\n"
+	return usersString
+end
 def buildPost(postHash)
 	postString = ""
 	postHash.each do |item|
@@ -126,6 +138,9 @@ class ClientStatus
 	end
 	def starsUser(arg)
 		s = "\nLoading ".green + "#{arg}".reddish + "'s favorite posts...\n".green
+	end
+	def starsPost(arg)
+		s = "\nLoading users who starred post ".green + "#{arg}".reddish + "...\n" .green
 	end
 	def getHashtags(arg)
 		s = "\nLoading posts containing ".green + "##{arg}...\n".blue

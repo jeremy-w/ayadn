@@ -80,8 +80,22 @@ when option1 == "starred", option1 == "s"
  		puts status.starsUser(option2)
 		client = AyaDN::AppdotnetStarredPosts.new(@token)
 		puts client.getStarredPosts(option2)
+	elsif option2.is_integer?
+		puts status.starsPost(option2)
+		client = AyaDN::AppdotnetWhoStarred.new(@token)
+		puts client.getStarredByUsers(option2)
 	else
 		puts warnings.errorUsername(option2)
+	end
+
+when option1 == "reposted"
+
+	if option2.is_integer?
+		# status
+		client = AyaDN::AppdotnetWhoReposted.new(@token)
+		puts client.getRepostedByUsers(option2)
+	else
+		# err not postID
 	end
 
 when option1 == "tag", option1 == "t"

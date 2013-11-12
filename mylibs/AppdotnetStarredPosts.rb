@@ -4,7 +4,7 @@ class AyaDN
 		@url
 		@token
 		def initialize(token)
-			@url = 'https://alpha-api.app.net/stream/0/users/'
+			@url = 'https://alpha-api.app.net/stream/0/users/' 
 			@token = token
 		end
 		def getPosts(name)
@@ -24,6 +24,7 @@ class AyaDN
 			hashOfResponse = JSON.parse(getJSON(name))
 			starredPosts = hashOfResponse['data']
 			if starredPosts == nil
+				puts "\n\nNo starred posts by this user.\n\n"
 				exit
 			end
 			starredPostsReverse = starredPosts.reverse
@@ -31,4 +32,43 @@ class AyaDN
 			return resp
 		end
 	end
-end
+	class AppdotnetWhoStarred
+		@url
+		@token
+		def initialize(token)
+			@url = 'https://alpha-api.app.net/stream/0/posts/'
+			@token = token
+		end
+		def getUsers(postID)
+			@url += "#{postID}" + "/stars" + "/?access_token=#{@token}"
+			begin
+				response = RestClient.get(@url)
+				return response.body
+			rescue
+				warnings = ErrorWarning.new
+				puts warnings.errorHTTP
+			end
+		end
+		def getJSON(postID)
+			return getUsers(postID)
+		end
+		def getStarredByUsers(postID)
+			hashOfResponse = JSON.parse(getJSON(postID))
+			starredByUsers = hashOfResponse['data']
+			if starredByUsers == nil
+				puts "\n\nThis post hasn't been starred by anyone.\n\n"
+				exit
+			end
+			starredByUsersInverse = starredByUsers.reverse
+			resp = buildUsersList(starredByUsersInverse)
+			return resp
+		end
+	end
+ end
+
+
+
+
+
+
+
