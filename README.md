@@ -33,7 +33,9 @@ App.net command-line client written in Ruby.
 
 - read the App.net Explore streams: trending, checkins, conversations
 
-- delete a post  
+- delete a post
+
+- find original post from a repost  
 
 
 ## TL;DR
@@ -42,7 +44,7 @@ App.net command-line client written in Ruby.
 git clone https://github.com/ericdke/ayadn.git
 cd ayadn-master && chmod +x ayadn.rb
 bundle install
-[copy/paste your token from Dev-Lite]
+[copy/paste your token from [Dev-Lite](http://dev-lite.jonathonduerig.com)]
 ./ayadn.rb write 'Posting to App.net with Ruby!'
 ``` 
 

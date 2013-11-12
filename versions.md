@@ -8,6 +8,7 @@ AYADN is a learning exercise: while it's fully functional, it's alpha and it's n
 - see who reposted this post!
 - follow/unfollow a user!
 - delete a post!
+- get original post from a repost!
 
 ## 2013-11-11 v0.14
 - auto-fill with the right mentions when replying!
