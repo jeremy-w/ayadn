@@ -27,6 +27,13 @@ class AyaDN
 			userName = userInfo['username']
 		end
 
+		def getUserFollowInfo(name)
+			hashOfResponse = JSON.parse(getJSON(name))
+			userInfo = hashOfResponse['data']
+			youFollow = userInfo['you_follow']
+			followsYou = userInfo['follows_you']
+			return youFollow, followsYou
+		end
 		def getUserInfo(name)
 			hashOfResponse = JSON.parse(getJSON(name))
 			userInfo = hashOfResponse['data']

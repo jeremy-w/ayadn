@@ -1,21 +1,21 @@
 # encoding: utf-8
 class AyaDN
-	class AppdotnetStarPost
+	class AppdotnetFollow
 		@token
 		@url
 		def initialize(token)
-			@url = 'https://alpha-api.app.net/stream/0/posts/'
+			@url = 'https://alpha-api.app.net/stream/0/users/'
 			@token = token
 		end
-		def starPost(postID)
-			clientStarred = AyaDN::AppdotnetPostInfo.new(@token)
-			isStarred, isRepost = clientStarred.getPostStarred(postID)
-			if isRepost != nil
-				puts "This post is a repost. Please star the parent post.\n\n".red
+		def followUser(userID)
+			clientFollowed = AyaDN::AppdotnetUserInfo.new(@token)
+			youFollow, followsYou = clientFollowed.getUserFollowInfo(userID)
+			if youFollow == true
+				puts "You're already following this user.\n\n".red
 				exit
 			end
-			if isStarred == false
-				@url += "#{postID}" + "/star" + "/?access_token=#{@token}"
+			if youFollow == false
+				@url += "#{userID}" + "/follow" + "/?access_token=#{@token}"
 				uri = URI("#{@url}")
 				https = Net::HTTP.new(uri.host,uri.port)
 				https.use_ssl = true
@@ -25,16 +25,17 @@ class AyaDN
 				request["Content-Type"] = "application/json"
 				response = https.request(request)
 				return response
-			else
-				puts "Canceled: the post is already starred.\n\n".red
-				exit
 			end
 		end
-		def unstarPost(postID)
-			clientStarred = AyaDN::AppdotnetPostInfo.new(@token)
-			isStarred, isRepost = clientStarred.getPostStarred(postID)
-			if isStarred == true
-				@url += "#{postID}" + "/star" + "/?access_token=#{@token}"
+		def unFollowUser(userID)
+			clientFollowed = AyaDN::AppdotnetUserInfo.new(@token)
+			youFollow, followsYou = clientFollowed.getUserFollowInfo(userID)
+			if youFollow == false
+				puts "You're already not following this user.\n\n".red
+				exit
+			end
+			if youFollow == true
+				@url += "#{userID}" + "/follow" + "/?access_token=#{@token}"
 				uri = URI("#{@url}")
 				https = Net::HTTP.new(uri.host,uri.port)
 				https.use_ssl = true
@@ -44,10 +45,8 @@ class AyaDN
 				request["Content-Type"] = "application/json"
 				response = https.request(request)
 				return response
-			else
-				puts "Canceled: the post wasn't already starred.\n\n".red
-				exit
 			end
 		end
+
 	end
 end
