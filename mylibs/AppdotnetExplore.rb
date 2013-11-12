@@ -8,7 +8,11 @@ class AyaDN
 			@token = token
 		end
 		def getExploreStream(whichStream)
-			@url += "#{whichStream}" + "?access_token=#{@token}" + '&include_deleted=0&include_html=0'
+			if whichStream != "checkins"
+				@url += "#{whichStream}" + "?access_token=#{@token}" + '&include_deleted=0&include_html=0'
+			else
+				@url += "#{whichStream}" + "?access_token=#{@token}" + '&include_deleted=0&include_html=0&include_annotations=1'
+			end
 			begin
 				response = RestClient.get(@url)
 				return response.body
@@ -24,7 +28,11 @@ class AyaDN
 			hashOfResponse = JSON.parse(getJSON(whichStream))
 			adnData = hashOfResponse['data']
 			adnDataReverse = adnData.reverse
-			resp = buildPost(adnDataReverse)
+			if whichStream == "checkins"
+				resp = buildCheckinsPosts(adnDataReverse)
+			else
+				resp = buildPost(adnDataReverse)
+			end
 			return resp
 		end
 

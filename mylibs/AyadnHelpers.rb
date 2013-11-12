@@ -59,6 +59,66 @@ def buildPost(postHash)
 	end
 	return postString
 end
+def buildCheckinsPosts(postHash)
+	postString = ""
+	geoString = ""
+	postHash.each do |item|
+		postText = item['text']
+		if postText != nil
+			coloredPost = colorize(postText)
+		else
+			coloredPost = "--Post deleted--".red
+		end
+		userName = item['user']['username']
+		createdAt = item['created_at']
+		createdDay = createdAt[0...10]
+		createdHour = createdAt[11...19]
+		links = item['entities']['links']
+		postId = item['id']
+		#postString += "---\n".brown
+		postString += "Post ID: ".cyan + postId.to_s.green
+		#postString += "\nThe "
+		postString += " - "
+		postString += createdDay.cyan + ' at ' + createdHour.cyan + ' by ' + "@".green + userName.green + "\n" + coloredPost + "\n"
+		if !links.empty?
+			postString += "Link: ".cyan
+			links.each do |link|
+				linkURL = link['url']
+				postString += linkURL.brown + " \n"
+			end
+		end
+		sourceName = item['source']['name']
+		sourceLink = item['source']['link']
+		# plusieurs annotations par post, dont checkin
+		anno = item['annotations']
+
+		typesList = anno[]
+
+		puts typesList
+		exit
+
+		type = typesList['type']
+		if type == "net.app.core.checkin"
+			value = typesList['value']
+			chName = value['name']
+			chAddress = value['address']
+			chLocality = value['locality']
+			chRegion = value['region']
+			chPostcode = value['postcode']
+			chCountryCode = value['country_code']
+			fancy = chName.length + 7
+			postString += "-" * fancy
+			postString += "\n-Name: ".green + chName.upcase
+			postString += "\n-Address: ".green + chAddress
+			postString += "\n-Locality: ".green + chLocality
+			postString += "\n-State/Region: ".green + chRegion + " (" + chCountryCode.upcase + ")"
+			postString += "\n-Posted with: ".green + sourceName + " [#{sourceLink}]"
+		end
+		
+		postString += "\n\n"
+	end
+	return postString
+end
 def buildUniquePost(postHash)
 	postString = ""
 	postText = postHash['text']
