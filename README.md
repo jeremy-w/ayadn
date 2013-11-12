@@ -15,15 +15,19 @@ App.net command-line client written in Ruby.
 
 - star/unstar a post
 
+- follow/unfollow a user
+
 - search hashtags 
 
-- get detailed informations on a post/user
+- get informations on a post/user
 
-- get the last posts from a user
+- get posts from a user
 
-- get the last posts mentioning a user
+- get posts mentioning a user
 
-- get the last posts starred by a user
+- get posts starred by a user
+
+- get users who starred a post
 
 - read the App.net Global stream
 
@@ -133,6 +137,8 @@ ruby ayadn.rb tag music
 ruby ayadn.rb posts @ericd
 ruby ayadn.rb star 14760322
 ruby ayadn.rb starred @jws
+ruby ayadn.rb starred 14682795
+ruby ayadn.rb reposted 14805563
 ruby ayadn.rb infos 14582145
 ruby ayadn.rb convo 14638413
 ```
@@ -242,6 +248,24 @@ ayadn.rb write Awesome!
 ### Unsafe commands
 
 Some commands like *star a post* (and others to come) don't have a shortcut, this is to reduce the risk of accidental manipulation.
+
+### GCC
+
+If you've got an error while installing or cloning regarding `gcc`
+not found, just type:
+
+```
+which gcc
+```  
+
+It should give you the location of your `gcc`, typically `/usr/bin/gcc`. Then make a symlink:
+
+```
+sudo ln -s /usr/bin/gcc /usr/bin/gcc-4.2
+```  
+
+On Mac OS X, you may have to answer `yes` if your computer asks you to download and install the "developer tools".
+
 
 ## Help
 
