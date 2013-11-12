@@ -7,6 +7,7 @@ AYADN is a learning exercise: while it's fully functional, it's alpha and it's n
 - see who starred this post!
 - see who reposted this post!
 - follow/unfollow a user!
+- delete a post!
 
 ## 2013-11-11 v0.14
 - auto-fill with the right mentions when replying!

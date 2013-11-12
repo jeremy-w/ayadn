@@ -33,6 +33,8 @@ App.net command-line client written in Ruby.
 
 - read the App.net Explore streams: trending, checkins, conversations
 
+- delete a post  
+
 
 ## TL;DR
 
