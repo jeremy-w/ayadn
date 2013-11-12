@@ -34,6 +34,12 @@ when option1 == "global", option1 == "g"
 	client = AyaDN::AppdotnetGlobal.new(@token)
 	puts client.getText()
 
+when option1 == "trending", option1 == "checkins", option1 == "conversations"
+
+	#todo: puts status.whichExplore(option1)
+	client = AyaDN::AppdotnetExplore.new(@token)
+	puts client.getText(option1)
+
 when option1 == "infos", option1 == "i"
 
 	if option2 =~ /^@/ or option2 == "me"

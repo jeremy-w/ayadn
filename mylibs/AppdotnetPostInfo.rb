@@ -34,7 +34,8 @@ class AyaDN
 			postInfo = hashOfResponse['data']
 			userName = postInfo['user']['username']
 			rawText = postInfo['text']
-			return rawText, userName
+			isRepost = postInfo['repost_of']
+			return rawText, userName, isRepost
 		end
 
 		def getPosterName(postID)

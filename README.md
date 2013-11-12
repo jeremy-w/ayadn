@@ -13,7 +13,7 @@ App.net command-line client written in Ruby.
 
 - read the conversation around a post
 
-- star a post
+- star/unstar a post
 
 - search hashtags 
 
@@ -25,9 +25,20 @@ App.net command-line client written in Ruby.
 
 - get the last posts starred by a user
 
-- read the App.net global stream
+- read the App.net Global stream
+
+- read the App.net Explore streams: trending, checkins, conversations
 
 
+## TL;DR
+
+```
+git clone https://github.com/ericdke/ayadn.git
+cd ayadn-master && chmod +x ayadn.rb
+bundle install
+[copy/paste your token from Dev-Lite]
+./ayadn.rb write 'Posting to App.net with Ruby!'
+``` 
 
 ## Instructions
 
@@ -150,7 +161,7 @@ ayadn infos @fredvd
 ayadn tag ruby
 ayadn mentions @timrowe
 ayadn reply 14579853
-ayadn star 14746446
+ayadn unstar 14746446
 ayadn starred @martner_mala
 ```  
 
@@ -162,6 +173,9 @@ If the app is executable but not in your $PATH, then launch it locally:
 ./ayadn.rb
 ./ayadn.rb w
 ./ayadn.rb write '#Nowplaying some awesome music'
+./ayadn.rb checkins
+./ayadn.rb conversations
+./ayadn.rb trending
 ```  
 
 ### With an alias (recommended)
@@ -187,7 +201,6 @@ a m @charl
 a s @nam3
 a c 14638413
 a t adnafterdark
-a g
 ```  
 
 Want to be the ultimate geek?

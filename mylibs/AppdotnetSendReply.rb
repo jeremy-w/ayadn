@@ -8,7 +8,11 @@ class AyaDN
 			puts "Replying to post ".cyan + "#{postID}...\n".brown
 			puts "Extracting mentions...\n".cyan
 			clientPostInfo = AyaDN::AppdotnetPostInfo.new(@token)
-			rawMentionsText, replyingToThisUsername = clientPostInfo.getPostMentions(postID)
+			rawMentionsText, replyingToThisUsername, isRepost = clientPostInfo.getPostMentions(postID)
+			if isRepost != nil
+				puts "This post is a repost. Please reply to the parent post.\n\n".red
+				exit
+			end
 			content = Array.new
 			splitted = rawMentionsText.split(" ")
 			splitted.each do |word|
