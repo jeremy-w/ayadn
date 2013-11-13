@@ -74,13 +74,6 @@ def buildCheckinsPosts(postHash)
 		postString += "Post ID: ".cyan + postId.to_s.green
 		postString += " - "
 		postString += createdDay.cyan + ' at ' + createdHour.cyan + ' by ' + "@".green + userName.green + "\n" + coloredPost + "\n"
-		if !links.empty?
-			postString += "Link: ".cyan
-			links.each do |link|
-				linkURL = link['url']
-				postString += linkURL.brown + " \n"
-			end
-		end
 		sourceName = item['source']['name']
 		sourceLink = item['source']['link']
 		# plusieurs annotations par post, dont checkin
@@ -98,30 +91,37 @@ def buildCheckinsPosts(postHash)
 					chPostcode = annoValue['postcode']
 					chCountryCode = annoValue['country_code']
 					fancy = chName.length + 7
-					postString += "-" * fancy
+					postString += "." * fancy #longueur du nom plus son étiquette
 					unless chName.nil?
-						postString += "\n-Name: ".green + chName.upcase
+						postString += "\n-Name: ".cyan + chName.upcase.reddish
 					end
 					unless chAddress.nil?
-						postString += "\n-Address: ".green + chAddress
+						postString += "\n-Address: ".cyan + chAddress.green
 					end
 					unless chLocality.nil?
-						postString += "\n-Locality: ".green + chLocality
+						postString += "\n-Locality: ".cyan + chLocality.green
 					end
 					unless chPostcode.nil?
-						postString += " (#{chPostcode})"
+						postString += " (#{chPostcode})".green
 					end
 					unless chRegion.nil?
-						postString += "\n-State/Region: ".green + chRegion
+						postString += "\n-State/Region: ".cyan + chRegion.green
 					end
 					unless chCountryCode.nil?
-						postString += " (" + chCountryCode.upcase + ")"
+						postString += " (#{chCountryCode})".upcase.green
 					end
 					unless sourceName.nil?
-						postString += "\n-Posted with: ".green + sourceName + " [#{sourceLink}]"
+						postString += "\n-Posted with: ".cyan + "#{sourceName} [#{sourceLink}]".green
+					end
+					if !links.empty?
+						postString += "\n-Internal link: ".cyan
+						links.each do |link|
+							linkURL = link['url']
+							postString += linkURL.brown
+						end
 					end
 					#todo:
-					#chCategories = annoValue['categories']
+					#chCategories
 				end
 				xxx += 1
 			end
