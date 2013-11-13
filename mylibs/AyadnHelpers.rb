@@ -90,16 +90,15 @@ def buildCheckinsPosts(postHash)
 		sourceName = item['source']['name']
 		sourceLink = item['source']['link']
 		# plusieurs annotations par post, dont checkin
-		anno = item['annotations']
+		typesList = item['annotations']
 
-		typesList = anno[]
+		type = typesList[0]['type']
+		value = typesList[0]['value']
+		# puts type
+		# puts value
 
-		puts typesList
-		exit
 
-		type = typesList['type']
-		if type == "net.app.core.checkin"
-			value = typesList['value']
+		if  type == "net.app.core.checkin"
 			chName = value['name']
 			chAddress = value['address']
 			chLocality = value['locality']
