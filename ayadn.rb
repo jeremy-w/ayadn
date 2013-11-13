@@ -34,6 +34,7 @@ when option1 == "global", option1 == "g"
 	client = AyaDN::AppdotnetGlobal.new(@token)
 	puts client.getText()
 
+#explore stream
 when option1 == "trending", option1 == "checkins", option1 == "conversations"
 
 	#todo: puts status.whichExplore(option1)

@@ -20,7 +20,6 @@ def buildUsersList(usersHash)
 	usersHash.each do |item|
 		userName = item['username']
 		userRealName = item['name']
-
 		userHandle = "@" + userName
 		usersString += userHandle.green + " #{userRealName}\n".cyan
 	end
@@ -42,9 +41,7 @@ def buildPost(postHash)
 		createdHour = createdAt[11...19]
 		links = item['entities']['links']
 		postId = item['id']
-		#postString += "---\n".brown
 		postString += "Post ID: ".cyan + postId.to_s.green
-		#postString += "\nThe "
 		postString += " - "
 		postString += createdDay.cyan + ' at ' + createdHour.cyan + ' by ' + "@".green + userName.green + "\n" + coloredPost + "\n"
 		if !links.empty?
@@ -54,7 +51,6 @@ def buildPost(postHash)
 				postString += linkURL.brown + " \n"
 			end
 		end
-		#postString += "---\n".brown
 		postString += "\n\n"
 	end
 	return postString
@@ -75,9 +71,7 @@ def buildCheckinsPosts(postHash)
 		createdHour = createdAt[11...19]
 		links = item['entities']['links']
 		postId = item['id']
-		#postString += "---\n".brown
 		postString += "Post ID: ".cyan + postId.to_s.green
-		#postString += "\nThe "
 		postString += " - "
 		postString += createdDay.cyan + ' at ' + createdHour.cyan + ' by ' + "@".green + userName.green + "\n" + coloredPost + "\n"
 		if !links.empty?
@@ -91,29 +85,47 @@ def buildCheckinsPosts(postHash)
 		sourceLink = item['source']['link']
 		# plusieurs annotations par post, dont checkin
 		typesList = item['annotations']
-
-		type = typesList[0]['type']
-		value = typesList[0]['value']
-		# puts type
-		# puts value
-
-
-		if  type == "net.app.core.checkin"
-			chName = value['name']
-			chAddress = value['address']
-			chLocality = value['locality']
-			chRegion = value['region']
-			chPostcode = value['postcode']
-			chCountryCode = value['country_code']
-			fancy = chName.length + 7
-			postString += "-" * fancy
-			postString += "\n-Name: ".green + chName.upcase
-			postString += "\n-Address: ".green + chAddress
-			postString += "\n-Locality: ".green + chLocality
-			postString += "\n-State/Region: ".green + chRegion + " (" + chCountryCode.upcase + ")"
-			postString += "\n-Posted with: ".green + sourceName + " [#{sourceLink}]"
+		xxx = 0
+		if typesList.length > 0
+			typesList.each do |it|
+				annoType = typesList[xxx]['type']
+				annoValue = typesList[xxx]['value']
+				if annoType == "net.app.core.checkin" or annoType == "net.app.ohai.location"
+					chName = annoValue['name']
+					chAddress = annoValue['address']
+					chLocality = annoValue['locality']
+					chRegion = annoValue['region']
+					chPostcode = annoValue['postcode']
+					chCountryCode = annoValue['country_code']
+					fancy = chName.length + 7
+					postString += "-" * fancy
+					unless chName.nil?
+						postString += "\n-Name: ".green + chName.upcase
+					end
+					unless chAddress.nil?
+						postString += "\n-Address: ".green + chAddress
+					end
+					unless chLocality.nil?
+						postString += "\n-Locality: ".green + chLocality
+					end
+					unless chPostcode.nil?
+						postString += " (#{chPostcode})"
+					end
+					unless chRegion.nil?
+						postString += "\n-State/Region: ".green + chRegion
+					end
+					unless chCountryCode.nil?
+						postString += " (" + chCountryCode.upcase + ")"
+					end
+					unless sourceName.nil?
+						postString += "\n-Posted with: ".green + sourceName + " [#{sourceLink}]"
+					end
+					#todo:
+					#chCategories = annoValue['categories']
+				end
+				xxx += 1
+			end
 		end
-		
 		postString += "\n\n"
 	end
 	return postString
