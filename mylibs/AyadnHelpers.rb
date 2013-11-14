@@ -55,6 +55,11 @@ def buildPost(postHash)
 	end
 	return postString
 end
+
+def getLocationAnnotations(annoList)
+	#todo
+end
+
 def buildCheckinsPosts(postHash)
 	postString = ""
 	geoString = ""
@@ -69,20 +74,20 @@ def buildCheckinsPosts(postHash)
 		createdAt = item['created_at']
 		createdDay = createdAt[0...10]
 		createdHour = createdAt[11...19]
-		links = item['entities']['links']
 		postId = item['id']
 		postString += "Post ID: ".cyan + postId.to_s.green
 		postString += " - "
 		postString += createdDay.cyan + ' at ' + createdHour.cyan + ' by ' + "@".green + userName.green + "\n" + coloredPost + "\n"
+		links = item['entities']['links']
 		sourceName = item['source']['name']
 		sourceLink = item['source']['link']
 		# plusieurs annotations par post, dont checkin
-		typesList = item['annotations']
+		annoList = item['annotations']
 		xxx = 0
-		if typesList.length > 0
-			typesList.each do |it|
-				annoType = typesList[xxx]['type']
-				annoValue = typesList[xxx]['value']
+		if annoList.length > 0
+			annoList.each do |it|
+				annoType = annoList[xxx]['type']
+				annoValue = annoList[xxx]['value']
 				if annoType == "net.app.core.checkin" or annoType == "net.app.ohai.location"
 					chName = annoValue['name']
 					chAddress = annoValue['address']
@@ -234,6 +239,9 @@ class ClientStatus
 	end
 	def writeReply(arg)
 		s = "\nLoading informations of post #{arg}...\n".green
+	end
+	def savingFile(what, path, file)
+		s = "\nSaving ".green + "#{what} ".brown + "in ".green + "#{path}#{file}".magenta
 	end
 end
 class String

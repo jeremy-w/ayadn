@@ -50,7 +50,41 @@ when option1 == "infos", option1 == "i"
 	elsif option2.is_integer?
 		puts status.getDetails()
 		client = AyaDN::AppdotnetPostInfo.new(@token)
-		puts client.getPostInfo(option2)
+		puts client.getPostInfo("call", option2)
+	else
+		puts warnings.errorInfos(option2)
+	end
+
+when option1 == "save"
+
+	if option2.is_integer?
+		name = option2.to_s
+		path = "./data/posts/"
+		file = "#{name}.post"
+		fileURL = path + file
+		if File.exists?(fileURL)
+			puts "\nYou already saved this post.\n\n".reddish
+			exit
+		end
+		puts "\nLoading post ".green + "#{option2}".brown
+		client = AyaDN::AppdotnetPostInfo.new(@token)
+		thePost = client.savePost(option2)
+		puts status.savingFile(name, path, file)
+		f = File.new(fileURL, "w")
+		f.puts(thePost)
+		f.close
+		puts "\nSuccessfully saved the post.\n\n".green
+		exit
+	else
+		puts warnings.errorPostID(option2)
+	end
+
+when option1 == "load"
+
+	if option2.is_integer?
+		puts status.getDetails()
+		client = AyaDN::AppdotnetPostInfo.new(@token)
+		puts client.getPostInfo("load", option2)
 	else
 		puts warnings.errorInfos(option2)
 	end
@@ -107,7 +141,7 @@ when option1 == "original"
 		goToID = client.getOriginalPost(option2)
 		puts "\nFetching original post of #{option2}...\n".green
 		client = AyaDN::AppdotnetPostInfo.new(@token)
-		puts client.getPostInfo(goToID)
+		puts client.getPostInfo("call", goToID)
 		#exit
 	else
 		puts warnings.errorPostID(option2)

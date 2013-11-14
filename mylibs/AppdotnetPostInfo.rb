@@ -8,7 +8,7 @@ class AyaDN
 			@token = token
 		end
 		def getPostURL(postID)
-			@url += "#{postID}" + "/?access_token=#{@token}"
+			@url += "#{postID}" + "/?access_token=#{@token}" #&include_html=0
 			begin
 				response = RestClient.get(@url)
 				return response.body
@@ -19,6 +19,29 @@ class AyaDN
 		end
 		def getJSON(postID)
 		 	return getPostURL(postID)
+		end
+
+		def savePost(postID)
+			hashOfResponse = JSON.parse(getJSON(postID))
+			return hashOfResponse
+		end
+
+		def getSinglePost(action, postID)
+			if action == "call"
+				hashOfResponse = JSON.parse(getJSON(postID))
+				return hashOfResponse
+			elsif action == "load"
+				# load post file and return content
+				fileContent = Hash.new
+				File.open("./data/posts/#{postID}.post", "r") do |f|
+					fileContent = f.gets
+				end
+				hashOfResponse = eval(fileContent)
+				return hashOfResponse
+			else
+				puts "syntax error"
+				exit
+			end
 		end
 
 		def getOriginalPost(postID)
@@ -60,9 +83,11 @@ class AyaDN
 			return userName
 		end
 
-		def getPostInfo(postID)
-			hashOfResponse = JSON.parse(getJSON(postID))
+		def getPostInfo(action, postID)
+			hashOfResponse = getSinglePost(action, postID)
+
 			postInfo = hashOfResponse['data']
+
 			thePostId = postInfo['id']
 			postText = postInfo['text']
 			userName = postInfo['user']['username']
@@ -83,7 +108,7 @@ class AyaDN
 				postDetails += " \[#{realName}\]".reddish
 			end
 			postDetails += ":\n"
-			postDetails += "\n" + coloredPost + "\n" + "\n\n" 
+			postDetails += "\n" + coloredPost + "\n" + "\n" 
 			postDetails += "Post ID: ".cyan + thePostId.to_s.green
 			if !links.empty?
 				links.each do |link|
@@ -120,7 +145,6 @@ class AyaDN
 			postDetails += "\nPosted with: ".cyan + sourceApp.reddish
 			postDetails += "  Locale: ".cyan + locale.reddish
 			postDetails += "  Timezone: ".cyan + timezone.reddish
-
 
 			postDetails += "\n\n\n"
 		return postDetails
