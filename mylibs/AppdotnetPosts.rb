@@ -54,7 +54,8 @@ class AyaDN
 
 			blob = JSON.parse(callback)
 			adnData = blob['data']
-			resp = buildUniquePost(adnData)
+			builder = AyaDN::BuildPosts.new
+			resp = builder.buildUniquePost(adnData)
 			return resp
 		end
 		def composePost(replyto = "", mentionsList = "", myUsername = "")

@@ -24,7 +24,8 @@ class AyaDN
 			hashOfResponse = JSON.parse(getJSON(postID))
 			postReplies = hashOfResponse['data']
 			postRepliesReverse = postReplies.reverse
-			resp = buildPost(postRepliesReverse)
+			builder = AyaDN::BuildPosts.new
+			resp = builder.buildPost(postRepliesReverse)
 			return resp
 		end
 	end

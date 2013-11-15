@@ -28,7 +28,8 @@ class AyaDN
 				exit
 			end
 			starredPostsReverse = starredPosts.reverse
-			resp = buildPost(starredPostsReverse)
+			builder = AyaDN::BuildPosts.new
+			resp = builder.buildPost(starredPostsReverse)
 			return resp
 		end
 	end

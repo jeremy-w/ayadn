@@ -24,4 +24,7 @@ require_relative 'mylibs/AppdotnetStarPost'
 require_relative 'mylibs/AppdotnetExplore'
 require_relative 'mylibs/AppdotnetReposts'
 require_relative 'mylibs/AppdotnetFollow'
+
+require_relative 'mylibs/AyadnBuildPost'
+
 require_relative 'token.rb'

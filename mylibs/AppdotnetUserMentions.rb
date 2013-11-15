@@ -24,7 +24,8 @@ class AyaDN
 			hashOfResponse = JSON.parse(getJSON(name))
 			userMentions = hashOfResponse['data']
 			userMentionsReverse = userMentions.reverse
-			resp = buildPost(userMentionsReverse)
+			builder = AyaDN::BuildPosts.new
+			resp = builder.buildPost(userMentionsReverse)
 			return resp
 		end
 	end

@@ -8,7 +8,7 @@ class AyaDN
 			@token = token
 		end
 		def getPostURL(postID)
-			@url += "#{postID}" + "/?access_token=#{@token}" #&include_html=0
+			@url += "#{postID}" + "/?access_token=#{@token}&include_annotations=1&include_html=0" #
 			begin
 				response = RestClient.get(@url)
 				return response.body
@@ -96,7 +96,8 @@ class AyaDN
 			userFollows = postInfo['follows_you']
 			userFollowed = postInfo['you_follow']
 			
-			coloredPost = colorize(postText)
+			builder = AyaDN::BuildPosts.new
+			coloredPost = builder.colorize(postText)
 
 			createdAt = postInfo['created_at']
 			createdDay = createdAt[0...10]

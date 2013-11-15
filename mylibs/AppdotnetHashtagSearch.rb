@@ -22,7 +22,8 @@ class AyaDN
 			hashOfResponse = JSON.parse(getJSON(hashtag))
 			hashtagData = hashOfResponse['data']
 			hashtagList = hashtagData.reverse
-			resp = buildPost(hashtagList)
+			builder = AyaDN::BuildPosts.new
+			resp = builder.buildPost(hashtagList)
 			return resp
 		end
 	end

@@ -29,9 +29,11 @@ class AyaDN
 			adnData = hashOfResponse['data']
 			adnDataReverse = adnData.reverse
 			if whichStream == "checkins"
-				resp = buildCheckinsPosts(adnDataReverse)
+				builder = AyaDN::BuildPosts.new
+				resp = builder.buildCheckinsPosts(adnDataReverse)
 			else
-				resp = buildPost(adnDataReverse)
+				builder = AyaDN::BuildPosts.new
+				resp = builder.buildPost(adnDataReverse)
 			end
 			return resp
 		end

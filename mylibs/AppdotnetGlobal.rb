@@ -24,7 +24,8 @@ class AyaDN
 			hashOfResponse = JSON.parse(getJSON())
 			adnData = hashOfResponse['data']
 			adnDataReverse = adnData.reverse
-			resp = buildPost(adnDataReverse)
+			builder = AyaDN::BuildPosts.new
+			resp = builder.buildPost(adnDataReverse)
 			return resp
 		end
 	end
