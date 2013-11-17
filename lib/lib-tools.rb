@@ -20,7 +20,7 @@ class AyaDN
 		end
         def helpScreen
             help = ""
-            help += "- " + "without options: display the Unified stream + your directed posts\n\n"
+            help += "- " + "without options: display the Unified stream + your directed posts\n\n".magenta
             help += "- " + "write ".green + "+ [Enter key], or " + "write \"your text\" ".green + "to create a post\n"
             help += "- " + "reply postID ".green + "to reply to a post\n"
             help += "- " + "delete postID ".green + "to delete a post\n"

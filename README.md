@@ -1,11 +1,11 @@
 AYADN
 =====
 
-App.net command-line client written in Ruby.
+[App.net](http://app.net) command-line client written in Ruby.
 
 ## Features
 
-- read your App.net unified stream
+- read your App.net personalized stream
 
 - write a post
 
@@ -15,9 +15,11 @@ App.net command-line client written in Ruby.
 
 - star/unstar a post
 
+- repost/unrepost a post
+
 - follow/unfollow a user
 
-- search hashtags 
+- search posts containing a hashtag
 
 - get informations on a post/user
 
@@ -27,15 +29,15 @@ App.net command-line client written in Ruby.
 
 - get posts starred by a user
 
+- get posts reposted by a user
+
 - get users who starred a post
 
-- read the App.net Global stream
-
-- read the App.net Explore streams: trending, checkins, conversations
+- read the App.net other streams: Checkins, Global, Trending, Conversations
 
 - delete a post
 
-- find original post from a repost  
+- save/load a post
 
 
 ## TL;DR
@@ -105,9 +107,14 @@ chmod +x ayadn.rb
 
 and to declare the app folder in your $PATH *or* create a symlink of the app in `/usr/local/bin` or whatever you're using as your $PATH.
 
+```
+sudo ln -s ayadn.rb /usr/local/bin/ayadn
+source ~/.bashrc
+```  
+
 ### Step 4
 
-I haven't coded an interactive authentification system yet, so you **have** to copy/paste your own unique token into the `token.rb` file.
+I haven't coded an interactive authentification system yet, so you **have to** copy/paste your own unique token into the `token.rb` file.
 
 This is easy:
 
@@ -115,7 +122,7 @@ This is easy:
 
 - In any text editor, open the file `token.rb` and paste the token between the ticks:
 
-![Paste your token in the file](https://www.evernote.com/shard/s89/sh/45c60042-292b-40ae-9a6a-fb23b4d93823/77635d28512633cd9fcf3315188b1096/deep/0/token.rb.png)
+![Paste your token in the file](https://www.evernote.com/shard/s89/sh/f7a5778c-f3db-4be8-9d95-0e9f14234899/3c061a327822a7a1a9e0bf1bcd70488f/deep/0/token.png)
 
 Hit `Save` and you're done.
 
@@ -158,13 +165,7 @@ ayadn.rb write 'Posting from AyaDN in #Ruby!'
 ayadn.rb write '@davidby Salut David, comment va ?'
 ```
 
-And maybe make a symlink:
-
-```
-ln -s ayadn.rb ayadn
-```  
-
-->
+### If you made the symlink
 
 ```
 ayadn infos @fredvd
@@ -172,7 +173,6 @@ ayadn tag ruby
 ayadn mentions @timrowe
 ayadn reply 14579853
 ayadn unstar 14746446
-ayadn starred @martner_mala
 ```  
 
 ### As a local executable
@@ -196,6 +196,12 @@ My advice is to make an alias in your `.bashrc`:
 alias a="your/path/to/ayadn.rb"
 ```  
 
+Refresh:  
+
+```
+source ~/.bashrc
+```  
+
 Then it's easier to use, and very fast with the app's shortcuts:
 
 ```
@@ -207,8 +213,7 @@ a r 14579853
 a i @ksniod
 a i 14698777
 a p @ericd
-a m @charl
-a s @nam3
+a m @nam3
 a c 14638413
 a t adnafterdark
 ```  
@@ -229,29 +234,9 @@ Enjoy!
 
 ## Tips
 
-### Data about yourself
-
-When you want to ask information about yourself (the App.net account connected to AyaDN), you can use the keyword `me` instead of your `@username` to get correct data.
-
-```
-ayadn.rb infos me
-```  
-
-*Only available for the 'infos' action at the moment (V0.11)*
-
-### Post a single word
-
-No need to provide quotes if you want to post a single word (no spaces).
-
-```
-ayadn.rb write Awesome!
-```  
-
-*But maybe you shouldn't post single words to ADN... :p*
-
 ### Unsafe commands
 
-Some commands like *star a post* (and others to come) don't have a shortcut, this is to reduce the risk of accidental manipulation.
+Some commands like *delete a post* don't have a shortcut, reducing the risk of accidental manipulation.
 
 ### GCC
 
@@ -268,8 +253,7 @@ It should give you the location of your `gcc`, typically `/usr/bin/gcc`. Then ma
 sudo ln -s /usr/bin/gcc /usr/bin/gcc-4.2
 ```  
 
-On Mac OS X, you may have to answer `yes` if your computer asks you to download and install the "developer tools".
-
+On Mac OS X, you may have to answer `yes` if your computer asks you to download and install the "developer tools".  
 
 ## Help
 
@@ -300,9 +284,9 @@ A few screencaps [here](http://ericd.re-app.net).
 
 ## Contact
 
-Contact me on ADN [(@ericd)](http://alpha.app.net/ericd) if you have questions, ideas, if you've found bugs, or... if you know Ruby and you want to help a newbie refactoring his code. ;)
+Contact me on ADN [(@ericd)](http://alpha.app.net/ericd) if you have questions, ideas, if you've found bugs, or... if you know Ruby and you want to help a newbie to code better. ;)
 
-Don't bother with @ayaio or @aya_tests, they are bots. The handle for the app itself is @ayadn but it's not active yet.
+Don't bother with @ayaio or @aya_tests, they are bots. The handle for the app itself is [@ayadn](http://alpha.app.net/ayadn).
 
 ## Credits
 
