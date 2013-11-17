@@ -1,270 +1,202 @@
 #!/usr/bin/ruby
 # encoding: utf-8
-# 
 # App.net command-line client
 # by Eric Dejonckheere
 # http://alpha.app.net/ericd
 # © 2013
 
-require_relative 'Requires'
-winPlatforms = ['mswin', 'mingw', 'mingw_18', 'mingw_19', 'mingw_20', 'mingw32']
-case Gem::Platform.local.os
-when *winPlatforms
-	require 'win32console'
-end
+require_relative 'requires'
 
-puts "\n\nAYADN".red + " - " + "App.net command-line client\n".brown
+puts "\nAYADN".red + " - " + "App.net command-line client\n".brown
 
-option1 = ARGV[0]
-option2 = ARGV[1]
-
-warnings = ErrorWarning.new
+run = AyaDN.new(@token)
 status = ClientStatus.new
 
+arg1, arg2, arg3 = ARGV[0], ARGV[1], ARGV[2]
+
 case
-when !option1, option1 == "flux", option1 == "f", option1 == "stream"
+when !arg1, arg1 == "flux", arg1 == "stream", arg1 == "uni", arg1 == "unified"
+	# get unified
+	run.ayadnUnified
 
-	puts status.getUnified()
-	client = AyaDN::AppdotnetUnified.new(@token)
-	puts client.getText()
+when arg1 == "global", arg1 == "g"
+	# get global
+	run.ayadnGlobal()
 
-when option1 == "global", option1 == "g"
+when arg1 == "trending", arg1 == "conversations", arg1 == "checkins"
+	# get explore streams
+	run.ayadnExplore(arg1)
 
-	puts status.getGlobal()
-	client = AyaDN::AppdotnetGlobal.new(@token)
-	puts client.getText()
-
-#explore stream
-when option1 == "trending", option1 == "checkins", option1 == "conversations"
-
-	#todo: puts status.whichExplore(option1)
-	client = AyaDN::AppdotnetExplore.new(@token)
-	puts client.getText(option1)
-
-when option1 == "infos", option1 == "i"
-
-	if option2 =~ /^@/ or option2 == "me"
-		puts status.infosUser(option2)
-		client = AyaDN::AppdotnetUserInfo.new(@token)
-		puts client.getUserInfo(option2)
-	elsif option2.is_integer?
-		puts status.getDetails()
-		client = AyaDN::AppdotnetPostInfo.new(@token)
-		puts client.getPostInfo("call", option2)
+when arg1 == "mentions", arg1 == "m"
+	# get user mentions
+	if arg2 =~ /^@/
+		run.ayadnUserMentions(arg2)
 	else
-		puts warnings.errorInfos(option2)
+		puts status.errorUserID(arg2)
 	end
 
-when option1 == "save"
+when arg1 == "posts", arg1 == "p"
+	# get user posts
+	if arg2 =~ /^@/
+		run.ayadnUserPosts(arg2)
+	else
+		puts status.errorUserID(arg2)
+	end
 
-	if option2.is_integer?
-		name = option2.to_s
-		path = "./data/posts/"
-		file = "#{name}.post"
-		fileURL = path + file
-		if File.exists?(fileURL)
-			puts "\nYou already saved this post.\n\n".reddish
-			exit
+when arg1 == "starred"
+	if arg2 =~ /^@/
+		# get a user's starred posts
+		run.ayadnStarredPosts(arg2)
+	elsif arg2.is_integer?
+		# get who starred a post
+		run.ayadnWhoStarred(arg2)
+	else
+		puts status.errorUserID(arg2)
+	end
+
+when arg1 == "reposted"
+	if arg2.is_integer?
+		# get who reposted a post
+		run.ayadnWhoReposted(arg2)
+	else
+		puts status.errorPostID(arg2)
+	end
+
+when arg1 == "infos", arg1 == "i"
+	if arg2 =~ /^@/
+		# get user infos
+		run.ayadnUserInfos(arg2)
+	elsif arg2.is_integer?
+		# get post infos
+		run.ayadnPostInfos("call", arg2)
+	else
+		puts status.errorInfos(arg2)
+	end
+
+
+when arg1 == "convo", arg1 == "c"
+	# read the conversation around a post
+	if arg2.is_integer?
+		run.ayadnConversation(arg2)
+	else
+		puts status.errorPostID(arg2)
+	end
+
+when arg1 == "tag", arg1 == "t"
+	# get hashtags
+	theTag = arg2.dup
+	if theTag =~ /^#/
+		theTag[0] = ""
+	end
+	run.ayadnHashtags(theTag)
+
+when arg1 == "delete"
+	# delete a post
+	if arg2.is_integer?
+		puts "\nAre you sure you want to delete post ".green + "#{arg2}? ".brown + "(n/y) ".green 
+		input = STDIN.getch
+		if input == "y" or input == "Y"
+			run.ayadnDeletePost(arg2)
+		else
+			puts "\nCanceled.\n\n".red
 		end
-		puts "\nLoading post ".green + "#{option2}".brown
-		client = AyaDN::AppdotnetPostInfo.new(@token)
-		thePost = client.savePost(option2)
-		puts status.savingFile(name, path, file)
-		f = File.new(fileURL, "w")
-		f.puts(thePost)
-		f.close
-		puts "\nSuccessfully saved the post.\n\n".green
-		exit
 	else
-		puts warnings.errorPostID(option2)
+		puts status.errorPostID(arg2)
 	end
 
-when option1 == "load"
-
-	if option2.is_integer?
-		puts status.getDetails()
-		client = AyaDN::AppdotnetPostInfo.new(@token)
-		puts client.getPostInfo("load", option2)
+when arg1 == "save"
+	if arg2.is_integer?
+		# save a post
+		run.ayadnSavePost(arg2)
 	else
-		puts warnings.errorInfos(option2)
+		puts status.errorPostID(arg2)
 	end
 
-when option1 == "posts", option1 == "p"
-
-	if option2 =~ /^@/
-		puts status.postsUser(option2)
-	 	client = AyaDN::AppdotnetUserPosts.new(@token)
-	 	puts client.getUserPosts(option2)
-	 else
-	 	puts warnings.errorUsername(option2)
-	 end
-
-when option1 == "mentions", option1 == "m"
-
-	if option2 =~ /^@/
-		puts status.mentionsUser(option2)
-	 	client = AyaDN::AppdotnetUserMentions.new(@token)
-	 	puts client.getUserMentions(option2)
- 	else
- 		puts warnings.errorUsername(option2)
- 	end
-
-when option1 == "starred", option1 == "s"
-
-	if option2 =~ /^@/
- 		puts status.starsUser(option2)
-		client = AyaDN::AppdotnetStarredPosts.new(@token)
-		puts client.getStarredPosts(option2)
-	elsif option2.is_integer?
-		puts status.starsPost(option2)
-		client = AyaDN::AppdotnetWhoStarred.new(@token)
-		puts client.getStarredByUsers(option2)
+when arg1 == "load"
+	if arg2.is_integer?
+		# load a post
+		run.ayadnPostInfos("load", arg2)
 	else
-		puts warnings.errorInfos(option2)
+		puts status.errorPostID(arg2)
 	end
 
-when option1 == "reposted"
-
-	if option2.is_integer?
-		puts status.whoReposted(option2)
-		client = AyaDN::AppdotnetWhoReposted.new(@token)
-		puts client.getRepostedByUsers(option2)
+when arg1 == "star"
+	if arg2.is_integer?
+		# star a post
+		run.ayadnStarringPost("star", arg2)
 	else
-		puts warnings.errorPostID(option2)
-		#exit
+		puts status.errorPostID(arg2)
 	end
 
-when option1 == "original"
-
-	if option2.is_integer?
-		client = AyaDN::AppdotnetPostInfo.new(@token)
-		goToID = client.getOriginalPost(option2)
-		puts "\nFetching original post of #{option2}...\n".green
-		client = AyaDN::AppdotnetPostInfo.new(@token)
-		puts client.getPostInfo("call", goToID)
-		#exit
+when arg1 == "unstar"
+	if arg2.is_integer?
+		# unstar a post
+		run.ayadnStarringPost("unstar", arg2)
 	else
-		puts warnings.errorPostID(option2)
-		#exit
+		puts status.errorPostID(arg2)
 	end
 
-when option1 == "tag", option1 == "t"
-
-	client = AyaDN::AppdotnetHashtagSearch.new
-	option2_new = option2.dup
-	if option2_new =~ /^#/
-		option2_new[0] = ""
-	end
-	puts status.getHashtags(option2_new)
-	puts client.getTaggedPosts(option2_new)
-	exit
-
-when option1 == "write", option1 == "w"
-
-	if option2 != nil
-		puts status.sendPost()
-		client = AyaDN::AppdotnetPosts.new(@token)
-		puts client.createPost(option2, nil)
+when arg1 == "repost"
+	if arg2.is_integer?
+		# repost
+		run.ayadnReposting("repost", arg2)
 	else
-		puts status.writePost()
-		client = AyaDN::AppdotnetPosts.new(@token)
-		puts client.composePost()
+		puts status.errorPostID(arg2)
 	end
 
-
-when option1 == "reply", option1 == "r"
-
-	if option2.is_integer?
-		client = AyaDN::AppdotnetSendReply.new(@token)
-		puts client.replyPost(option2)
-		#exit
+when arg1 == "unrepost"
+	if arg2.is_integer?
+		# unrepost
+		run.ayadnReposting("unrepost", arg2)
 	else
-		puts warnings.errorReply(option2)
-		#exit
+		puts status.errorPostID(arg2)
 	end
 
-when option1 == "star"
-
-	if option2.is_integer?
-		client = AyaDN::AppdotnetStarPost.new(@token)
-		client.starPost(option2)
-		puts "\nYou just starred post ".green + " #{option2}".brown + ".\n\n".green
-		#exit
+when arg1 == "follow"
+	if arg2 =~ /^@/
+		# follow a user
+		run.ayadnFollowing("follow", arg2)
 	else
-		puts warnings.errorPostID(option2)
-		#exit
+		puts status.errorUserID(arg2)
 	end
 
-when option1 == "unstar"
-
-	if option2.is_integer?
-		client = AyaDN::AppdotnetStarPost.new(@token)
-		client.unstarPost(option2)
-		puts "\nYou just unstarred post ".green + "#{option2}".brown + ".\n\n".green
-		#exit
+when arg1 == "unfollow"
+	if arg2 =~ /^@/
+		# unfollow a user
+		run.ayadnFollowing("unfollow", arg2)
 	else
-		puts warnings.errorPostID(option2)
-		#exit
+		puts status.errorUserID(arg2)
 	end
 
-when option1 == "delete"
 
-	if option2.is_integer?
-		client = AyaDN::AppdotnetPosts.new(@token)
-		puts client.deletePost(option2)
-		puts "\nYou just deleted post ".green + "#{option2}".brown + ".\n\n".green
-		#exit
+when arg1 == "write", arg1 == "w"
+	if arg2 != nil
+		# write
+		run.ayadnSendPost(arg2, nil)
 	else
-		puts warnings.errorPostID(option2)
-		#exit
+		# compose
+		run.ayadnComposePost()
 	end
 
-when option1 == "follow"
-
-	if option2 =~ /^@/
-		client = AyaDN::AppdotnetFollow.new(@token)
-		client.followUser(option2)
-		puts "\nYou just followed user ".green + "#{option2}".brown + "\n\n"
+when arg1 == "reply", arg1 == "r"
+	if arg2 != nil
+		if arg2.is_integer?
+			# reply to postID
+			run.ayadnReply(arg2)
+		else
+			puts status.errorPostID(arg2)
+		end
 	else
-		puts warnings.errorUsername(option2)
+		puts status.errorNoID
 	end
 
-when option1 == "unfollow"
+when arg1 == "help", arg1 == "h"
+	puts AyaDN::Tools.new.helpScreen()
 
-	if option2 =~ /^@/
-		client = AyaDN::AppdotnetFollow.new(@token)
-		client.unFollowUser(option2)
-		puts "\nYou just unfollowed user ".green + "#{option2}".brown + "\n\n"
-	else
-		puts warnings.errorUsername(option2)
-	end
-
-when option1 == "convo", option1 == "c"
-
-	if option2.is_integer?
-		puts status.getPostReplies(option2)
-		client = AyaDN::AppdotnetPostReplies.new(@token)
-		puts client.getPostReplies(option2)
-	else
-		puts warnings.errorPostID(option2)
-	end
-
-when option1 == "help", option1 == "aide", option1 == "h"
-
-	puts @help
-	exit
-
-when option1 != nil
-
+when arg1 != nil
 	option = ARGV
 	bad_option = option.join(" ")
-	puts warnings.syntaxError(bad_option)
-	puts @help
-	exit
+	puts "\nSyntax error: ".red + "#{bad_option} ".brown + "is not a valid option.\n\n".red
+	puts AyaDN::Tools.new.helpScreen()
 
 end
-
-
-
-
-

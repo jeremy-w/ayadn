@@ -1,3 +1,4 @@
+#!/usr/bin/ruby
 # encoding: utf-8
 require 'rubygems'
 require 'uri'
@@ -5,26 +6,13 @@ require 'net/http'
 require 'rest_client'
 require 'json'
 require 'io/console'
-
-require_relative 'mylibs/color_output'
-require_relative 'mylibs/help'
-require_relative 'mylibs/AyadnHelpers'
-require_relative 'mylibs/AppdotnetUnified'
-require_relative 'mylibs/AppdotnetHashtagSearch'
-require_relative 'mylibs/AppdotnetUserInfo'
-require_relative 'mylibs/AppdotnetUserPosts'
-require_relative 'mylibs/AppdotnetUserMentions'
-require_relative 'mylibs/AppdotnetStarredPosts'
-require_relative 'mylibs/AppdotnetGlobal'
-require_relative 'mylibs/AppdotnetPosts'
-require_relative 'mylibs/AppdotnetPostInfo'
-require_relative 'mylibs/AppdotnetPostReplies'
-require_relative 'mylibs/AppdotnetSendReply'
-require_relative 'mylibs/AppdotnetStarPost'
-require_relative 'mylibs/AppdotnetExplore'
-require_relative 'mylibs/AppdotnetReposts'
-require_relative 'mylibs/AppdotnetFollow'
-
-require_relative 'mylibs/AyadnBuildPost'
-
-require_relative 'token.rb'
+require_relative "lib/lib-tools"
+require_relative "lib/lib-api"
+require_relative "lib/lib-view"
+require_relative "lib/lib-main"
+require_relative "token"
+winPlatforms = ['mswin', 'mingw', 'mingw_18', 'mingw_19', 'mingw_20', 'mingw32']
+case Gem::Platform.local.os
+when *winPlatforms
+	require 'win32console'
+end
