@@ -6,53 +6,51 @@ class AyaDN
 		@api = AyaDN::API.new(@token)
 		@status = ClientStatus.new
 	end
+
 	def stream
-		client = AyaDN::View.new(@hash)
-	    puts client.showStream()
+	 	puts AyaDN::View.new(@hash).showStream
 	end
 	def checkinsStream
-		client = AyaDN::View.new(@hash)
-	    puts client.showCheckinsStream()
+	    puts AyaDN::View.new(@hash).showCheckinsStream
 	end
 	def ayadnGlobal
 		puts @status.getGlobal
-		@hash = @api.getGlobal()
-		stream()
+		@hash = @api.getGlobal
+		stream
 	end
 	def ayadnUnified
 		puts @status.getUnified
-		@hash = @api.getUnified()
-		stream()
+		@hash = @api.getUnified
+		stream
 	end
 	def ayadnHashtags(tag)
 		puts @status.getHashtags(tag)
 		@hash = @api.getHashtags(tag)
-		stream()
+		stream
 	end
 	def ayadnExplore(explore)
 		puts @status.getExplore(explore)
 		@hash = @api.getExplore(explore)
 		if explore == "checkins"
-			checkinsStream()
+			checkinsStream
 		else
-			stream()
+			stream
 		end
 	end
 	def ayadnUserMentions(name)
 		puts @status.mentionsUser(name)
 		@hash = @api.getUserMentions(name)
-		stream()
+		stream
 	end
 	def ayadnUserPosts(name)
 		puts @status.postsUser(name)
 		@hash = @api.getUserPosts(name)
-		stream()
+		stream
 	end
 	def ayadnUserInfos(name)
 		puts @status.infosUser(name)
 		@hash = @api.getUserInfos(name)
-		client = AyaDN::View.new(@hash)
-	    puts client.showUsersInfos(name)
+	    puts AyaDN::View.new(@hash).showUsersInfos(name)
 	end
 	def ayadnWhoReposted(postID)
 		puts @status.whoReposted(postID)
@@ -61,8 +59,7 @@ class AyaDN
 			puts "\nThis post hasn't been reposted by anyone.\n\n".red
 			exit
 		end
-		client = AyaDN::View.new(@hash)
-	    puts client.showUsersList()
+	    puts AyaDN::View.new(@hash).showUsersList()
 	end
 	def ayadnWhoStarred(postID)
 		puts @status.whoStarred(postID)
@@ -71,24 +68,22 @@ class AyaDN
 			puts "\nThis post hasn't been starred by anyone.\n\n".red
 			exit
 		end
-		client = AyaDN::View.new(@hash)
-	    puts client.showUsersList()
+	    puts AyaDN::View.new(@hash).showUsersList()
 	end
 	def ayadnStarredPosts(name)
 		puts @status.starsUser(name)
 		@hash = @api.getStarredPosts(name)
-		stream()
+		stream
 	end
 	def ayadnConversation(postID)
 		puts @status.getPostReplies(postID)
 		@hash = @api.getPostReplies(postID)
-		stream()
+		stream
 	end
 	def ayadnPostInfos(action, postID)
 		puts @status.infosPost(postID)
 		@hash = @api.getPostInfos(action, postID)
-		client = AyaDN::View.new(@hash)
-	    puts client.showPostInfos(postID)
+	    puts AyaDN::View.new(@hash).showPostInfos(postID)
 	end
 	def ayadnSendPost(text, reply_to = nil)
 		if text.empty? or text == nil
@@ -99,8 +94,7 @@ class AyaDN
 		callback = @api.httpSend(text, reply_to)
 		blob = JSON.parse(callback)
 		@hash = blob['data']
-		client = AyaDN::View.new(@hash)
-		puts client.buildPostInfo(@hash)
+		puts AyaDN::View.new(@hash).buildPostInfo(@hash)
 		puts @status.postSent
 	end
 	def ayadnComposePost(reply_to = "", mentionsList = "", myUsername = "")
@@ -183,6 +177,49 @@ class AyaDN
 			exit
 		end
 	end
+	def ayadnGetFollowingList(name)
+		beforeID = nil
+		globArray = []
+		@hash = @api.getFollowings(name, beforeID)
+	    usersArray, pagination_array = AyaDN::View.new(@hash).buildFollowingList()
+	    globArray.push(usersArray)
+	    beforeID = pagination_array.last
+		while pagination_array != nil
+			@hash = @api.getFollowings(name, beforeID)
+		    usersArray, pagination_array = AyaDN::View.new(@hash).buildFollowingList()
+		    globArray.push(usersArray)
+	    	break if pagination_array.first == nil
+	    	beforeID = pagination_array.last
+		end
+	    return globArray
+	end
+	def ayadnSaveFollowingList(name)
+		puts "Fetching ".cyan + "#{name}".brown + "'s list of followings.\n".cyan
+		puts "Please wait...\n".green
+		home = Dir.home
+		ayadn_root_path = home + "/.ayadn"
+		ayadn_data_path = ayadn_root_path + "/data"
+		ayadn_lists_path = ayadn_data_path + "/lists/"
+		file = "#{name}.following"
+		fileURL = ayadn_lists_path + file
+		unless Dir.exists?ayadn_lists_path
+			puts "Creating lists directory in ".green + "#{ayadn_data_path}".brown + "\n"
+			FileUtils.mkdir_p ayadn_lists_path
+		end
+		if File.exists?(fileURL)
+			puts "\nYou already saved this list.\n\n".red
+			exit
+			# option pour écraser
+		end
+		followingList = ayadnGetFollowingList(name)
+		puts "Saving the list...\n".green
+		puts followingList.join("  ").brown
+		f = File.new(fileURL, "w")
+			f.puts(followingList)
+		f.close
+		puts "\nSuccessfully saved the list.\n\n".green
+		exit
+	end
 	def ayadnSavePost(postID)
 		name = postID.to_s
 		home = Dir.home
@@ -190,20 +227,20 @@ class AyaDN
 		ayadn_data_path = ayadn_root_path + "/data"
 		ayadn_posts_path = ayadn_data_path + "/posts/"
 		unless Dir.exists?ayadn_posts_path
-			puts "Creating storage directory in ".green + "#{ayadn_posts_path}...".brown
+			puts "Creating posts directory in ".green + "#{ayadn_posts_path}...".brown
 			FileUtils.mkdir_p ayadn_posts_path
 		end
 		file = "#{name}.post"
 		fileURL = ayadn_posts_path + file
 		if File.exists?(fileURL)
-			puts "\nYou already saved this post.\n\n".reddish
+			puts "\nYou already saved this post.\n\n".red
 			exit
 		end
 		puts "\nLoading post ".green + "#{postID}".brown
 		@hash = @api.getSinglePost(postID)
 		puts @status.savingFile(name, ayadn_posts_path, file)
 		f = File.new(fileURL, "w")
-		f.puts(@hash)
+			f.puts(@hash)
 		f.close
 		puts "\nSuccessfully saved the post.\n\n".green
 		exit

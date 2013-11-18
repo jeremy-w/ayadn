@@ -120,6 +120,15 @@ when arg1 == "load"
 		puts status.errorPostID(arg2)
 	end
 
+when arg1 == "backup"
+	if arg2 == "followings"
+		if arg3 =~ /^@/
+			run.ayadnSaveFollowingList(arg3)
+		else
+			puts "syntax error"
+		end
+	end
+
 when arg1 == "star"
 	if arg2.is_integer?
 		# star a post

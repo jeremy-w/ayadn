@@ -8,7 +8,9 @@ class AyaDN
 		def getData(hash)
 			adnData = @hash['data']
 			adnDataReverse = adnData.reverse
-			return adnDataReverse
+		end
+		def getDataNormal(hash)
+			adnData = @hash['data']
 		end
 		def showStream
 			hashes = getData(@hash)
@@ -194,7 +196,6 @@ class AyaDN
 			postDetails += "  Timezone: ".cyan + timezone.reddish
 
 			postDetails += "\n\n\n"
-			return postDetails
 		end
 		def buildUsersList(usersHash)
 			usersString = ""
@@ -203,9 +204,23 @@ class AyaDN
 				userRealName = item['name']
 				userHandle = "@" + userName
 				usersString += userHandle.green + " #{userRealName}\n".cyan
+				pagi = item['pagination_id']
+				usersString += pagi + "\n"
 			end
 			usersString += "\n\n"
-			return usersString
+		end
+		def buildFollowingList
+			hashes = getDataNormal(@hash)
+			pagination_array = []
+			usersArray = []
+			hashes.each do |item|
+				userName = item['username']
+				#userRealName = item['name']
+				userHandle = "@" + userName
+				pagination_array.push(item['pagination_id'])
+				usersArray.push(userHandle)
+			end
+			return usersArray, pagination_array
 		end
 		def buildUserInfos(name, adnData)
 			userName = adnData['username']
@@ -255,7 +270,6 @@ class AyaDN
 			userFollowing = adnData['counts']['following']
 			userShow += "\nPosts: ".red + userPosts.to_s.cyan + "\nFollowers: ".red + userFollowers.to_s.cyan + "\nFollowing: ".red + userFollowing.to_s.cyan
 			userShow += "\nBio: \n".red + userDescr + "\n\n"
-			return userShow
 		end
 	end
 end
