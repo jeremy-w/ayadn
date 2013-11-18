@@ -190,7 +190,7 @@ class ClientStatus
     def writeReply(arg)
         s = "\nLoading informations of post " + "#{arg}".brown + "...\n".green
     end
-    def savingFile(what, path, file)
-        s = "\nSaving ".green + "#{what} ".brown + "in ".green + "#{path}#{file}".magenta
+    def savingFile(name, path, file)
+        s = "\nSaving ".green + "#{name} ".brown + "in ".green + "#{path}#{file}".magenta
     end
 end

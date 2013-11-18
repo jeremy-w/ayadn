@@ -6,6 +6,7 @@ require 'net/http'
 require 'rest_client'
 require 'json'
 require 'io/console'
+require 'fileutils'
 require_relative "lib/lib-tools"
 require_relative "lib/lib-api"
 require_relative "lib/lib-view"

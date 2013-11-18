@@ -185,16 +185,23 @@ class AyaDN
 	end
 	def ayadnSavePost(postID)
 		name = postID.to_s
-		path = "./data/posts/"
+		home = Dir.home
+		ayadn_root_path = home + "/.ayadn"
+		ayadn_data_path = ayadn_root_path + "/data"
+		ayadn_posts_path = ayadn_data_path + "/posts/"
+		unless Dir.exists?ayadn_posts_path
+			puts "Creating storage directory in ".green + "#{ayadn_posts_path}...".brown
+			FileUtils.mkdir_p ayadn_posts_path
+		end
 		file = "#{name}.post"
-		fileURL = path + file
+		fileURL = ayadn_posts_path + file
 		if File.exists?(fileURL)
 			puts "\nYou already saved this post.\n\n".reddish
 			exit
 		end
 		puts "\nLoading post ".green + "#{postID}".brown
 		@hash = @api.getSinglePost(postID)
-		puts @status.savingFile(name, path, file)
+		puts @status.savingFile(name, ayadn_posts_path, file)
 		f = File.new(fileURL, "w")
 		f.puts(@hash)
 		f.close
