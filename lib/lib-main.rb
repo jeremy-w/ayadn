@@ -17,36 +17,32 @@ class AyaDN
 	def ayadnGlobal
 		puts @status.getGlobal
 		@hash = @api.getGlobal
-		stream
+		checkinsStream
 	end
 	def ayadnUnified
 		puts @status.getUnified
 		@hash = @api.getUnified
-		stream
+		checkinsStream
 	end
 	def ayadnHashtags(tag)
 		puts @status.getHashtags(tag)
 		@hash = @api.getHashtags(tag)
-		stream
+		checkinsStream
 	end
 	def ayadnExplore(explore)
 		puts @status.getExplore(explore)
 		@hash = @api.getExplore(explore)
-		if explore == "checkins"
-			checkinsStream
-		else
-			stream
-		end
+		checkinsStream
 	end
 	def ayadnUserMentions(name)
 		puts @status.mentionsUser(name)
 		@hash = @api.getUserMentions(name)
-		stream
+		checkinsStream
 	end
 	def ayadnUserPosts(name)
 		puts @status.postsUser(name)
 		@hash = @api.getUserPosts(name)
-		stream
+		checkinsStream
 	end
 	def ayadnUserInfos(name)
 		puts @status.infosUser(name)
@@ -74,12 +70,12 @@ class AyaDN
 	def ayadnStarredPosts(name)
 		puts @status.starsUser(name)
 		@hash = @api.getStarredPosts(name)
-		stream
+		checkinsStream
 	end
 	def ayadnConversation(postID)
 		puts @status.getPostReplies(postID)
 		@hash = @api.getPostReplies(postID)
-		stream
+		checkinsStream
 	end
 	def ayadnPostInfos(action, postID)
 		puts @status.infosPost(postID)
@@ -226,7 +222,6 @@ class AyaDN
 			puts users
 			puts "Number of users: ".green + " #{number}\n".brown
 		end
-			
 	end
 
 	def ayadnSaveList(list, name)
@@ -296,7 +291,7 @@ class AyaDN
 
 	def ayadnSearch(value)
 		@hash = @api.getSearch(value)
-		stream
+		checkinsStream
 	end
 
 	def ayadnFollowing(action, name)
