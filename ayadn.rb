@@ -204,6 +204,21 @@ when arg1 == "unfollow"
 		puts status.errorUserID(arg2)
 	end
 
+when arg1 == "mute"
+	if arg2 =~ /^@/
+		# mute a user
+		run.ayadnMuting("mute", arg2)
+	else
+		puts status.errorUserID(arg2)
+	end
+
+when arg1 == "unmute"
+	if arg2 =~ /^@/
+		# unmute a user
+		run.ayadnMuting("unmute", arg2)
+	else
+		puts status.errorUserID(arg2)
+	end
 
 when arg1 == "write", arg1 == "w"
 	if arg2 != nil

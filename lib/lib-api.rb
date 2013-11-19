@@ -149,6 +149,11 @@ class AyaDN
 				@url += "#{value}"
 				@url += "/muted" 
 				@url += "/?access_token=#{@token}"
+			when stream == "mute"
+				@url += 'stream/0/users/'
+				@url += "#{value}"
+				@url += "/mute" 
+				@url += "/?access_token=#{@token}"
 
 			end
 		end
@@ -273,6 +278,20 @@ class AyaDN
 			youFollow = userInfo['you_follow']
 			followsYou = userInfo['follows_you']
 			return youFollow, followsYou
+		end
+		def getUserMuteInfo(name)
+			@url = makeStreamURL("userInfo", name)
+			theHash = getHash
+			userInfo = theHash['data']
+			youMuted = userInfo['you_muted']
+		end
+		def muteUser(name)
+			@url = makeStreamURL("mute", name)
+			httpPost(@url)
+		end
+		def unmuteUser(name)
+			@url = makeStreamURL("mute", name)
+			restDelete
 		end
 		def followUser(name)
 			@url = makeStreamURL("follow", name)

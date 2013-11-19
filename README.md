@@ -31,7 +31,7 @@ AYADN
 
 - get posts reposted by a user
 
-- get users who starred a post
+- get users who starred/reposted a post
 
 - read other streams: Checkins, Global, Trending, Conversations
 
@@ -267,16 +267,15 @@ ayadn.rb infos me
 ayadn.rb posts me
 ```  
 
-### Backup your followings/followers
-
-Semi-secret feature.
+### Backup some data
 
 ```
 ayadn.rb backup followings @ericd
 ayadn.rb backup followers @ericd
+ayadn.rb backup muted
 ```  
 
-A JSON file containing the username and real name of your followings/followers will be saved in `%USERDIR%/.ayadn/data/lists`.
+A JSON file containing the username and real name of your followings/followers/muted will be saved in `%USERDIR%/.ayadn/data/lists`.
 
 ## Help
 

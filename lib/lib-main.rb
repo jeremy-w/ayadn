@@ -315,6 +315,30 @@ class AyaDN
 			puts "\nsyntax error\n"
 		end
 	end
+	
+	def ayadnMuting(action, name)
+		youMuted = @api.getUserMuteInfo(name)
+		if action == "mute"
+			if youMuted == "true"
+				puts "You've already muted this user.\n\n".red
+				exit
+			else
+				resp = @api.muteUser(name)
+				puts "\nYou just muted user ".green + "#{name}".brown + "\n\n"
+			end
+		elsif action == "unmute"
+			if youMuted == "false"
+				puts "This user is not muted.\n\n".red
+				exit
+			else
+				resp = @api.unmuteUser(name)
+				puts "\nYou just unmuted user ".green + "#{name}".brown + "\n\n"
+			end
+		else
+			puts "\nsyntax error\n"
+		end
+	end
+
 	def ayadnStarringPost(action, postID)
 		@hash = @api.getSinglePost(postID)
 		postInfo = @hash['data']

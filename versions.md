@@ -6,6 +6,7 @@ AYADN is a learning exercise: while it's fully functional, it's alpha and it's n
 ## 2013-11-19 v0.21
 - bugfixes
 - backup/display followings/followers/muted lists
+- mute/unmute a user
 
 ## 2013-11-17 v0.20
 - major internal refactoring
