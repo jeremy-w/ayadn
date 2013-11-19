@@ -27,10 +27,12 @@ class AyaDN
 
 		def showUsers
 			users = ""
-			@hash.each do |handle, name|
+			sortedHash = @hash.sort
+			sortedHash.each do |handle, name|
 				users += "#{handle}".red + " - " + "#{name}\n".cyan
 			end
-			return users
+			hashLength = @hash.length
+			return users, hashLength
 		end
 
 		def showUsersInfos(name)

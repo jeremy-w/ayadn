@@ -211,13 +211,19 @@ class AyaDN
 		@hash = getList(list, name)
 		if list == "muted"
 			puts "Your list of muted users:\n\n".green
-			puts AyaDN::View.new(@hash).showUsers()
+			users, number = AyaDN::View.new(@hash).showUsers()
+			puts users
+			puts "Number of users: ".green + " #{number}\n".brown
 		elsif list == "followings"
 			puts "List of users you're following:\n".green
-			puts AyaDN::View.new(@hash).showUsers()
+			users, number = AyaDN::View.new(@hash).showUsers()
+			puts users
+			puts "Number of users: ".green + " #{number}\n".brown
 		elsif list == "followers"
 			puts "List of users following you:\n".green
-			puts AyaDN::View.new(@hash).showUsers()
+			users, number = AyaDN::View.new(@hash).showUsers()
+			puts users
+			puts "Number of users: ".green + " #{number}\n".brown
 		end
 			
 	end
@@ -315,7 +321,7 @@ class AyaDN
 			puts "\nsyntax error\n"
 		end
 	end
-	
+
 	def ayadnMuting(action, name)
 		youMuted = @api.getUserMuteInfo(name)
 		if action == "mute"
