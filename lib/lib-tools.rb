@@ -36,6 +36,7 @@ class AyaDN
             help += "- " + "tag hashtag ".green + "to search for hashtags (don't write the '#')\n"
             help += "- " + "follow/unfollow @username ".green + "to follow/unfollow a user\n"
             help += "- " + "save/load postID ".green + "to save/load a post locally\n"
+            help += "- " + "list/backup keyword ".green + "to list/backup your followings, followers, muted users...\n"
             help += "- " + "help ".green + "to display this screen. See " + "https://github.com/ericdke/ayadn#how-to-use".magenta + " for detailed instructions, examples and tips." + "\n"
             help += "- some options have a one-letter shortcut: w(rite), r(eply), p(osts), m(entions), t(ag), c(onversations), i(nfos), h(elp).\n\n"
             help += "Examples:\n".cyan
@@ -47,6 +48,7 @@ class AyaDN
             help += "ayadn.rb star 14685167 ".green + "(star post n°14685167)\n"
             help += "ayadn.rb checkins ".green + "(display the Checkins stream)\n"
             help += "ayadn.rb follow @ericd ".green + "(follow user @ericd)\n"
+            help += "ayadn.rb list followers @ericd ".green + "(follow user @ericd)\n"
             help += "\n"
             return help
         end

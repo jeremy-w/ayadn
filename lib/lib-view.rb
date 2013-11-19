@@ -24,6 +24,15 @@ class AyaDN
 			hashes = getData(@hash)
 			buildUsersList(hashes)
 		end
+
+		def showUsers
+			users = ""
+			@hash.each do |handle, name|
+				users += "#{handle}".red + " - " + "#{name}\n".cyan
+			end
+			return users
+		end
+
 		def showUsersInfos(name)
 			adnData = @hash['data']
 			buildUserInfos(name, adnData)
@@ -204,8 +213,8 @@ class AyaDN
 				userRealName = item['name']
 				userHandle = "@" + userName
 				usersString += userHandle.green + " #{userRealName}\n".cyan
-				pagi = item['pagination_id']
-				usersString += pagi + "\n"
+				# pagi = item['pagination_id']
+				# usersString += pagi + "\n"
 			end
 			usersString += "\n\n"
 		end

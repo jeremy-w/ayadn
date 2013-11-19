@@ -39,7 +39,7 @@ AYADN
 
 - save/load a post
 
-- backup your followings/followers lists
+- backup/display your lists of followings, followers, muted users...
 
 
 ## TL;DR
@@ -256,6 +256,16 @@ sudo ln -s /usr/bin/gcc /usr/bin/gcc-4.2
 ```  
 
 On Mac OS X, you may have to answer `yes` if your computer asks you to download and install the "developer tools".  
+
+### "me"
+
+With some features like `infos`, `mentions` and more, you can replace `@username` by `me` if you want to check yourself.
+
+```
+ayadn.rb mentions me
+ayadn.rb infos me
+ayadn.rb posts me
+```  
 
 ### Backup your followings/followers
 

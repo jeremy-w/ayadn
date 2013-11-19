@@ -184,6 +184,8 @@ class AyaDN
 			@hash = @api.getFollowers(name, beforeID)
 		elsif list == "followings"
 			@hash = @api.getFollowings(name, beforeID)
+		elsif list == "muted"
+			@hash = @api.getMuted(name, beforeID)
 		end
 		usersHash, pagination_array = AyaDN::View.new(@hash).buildFollowList()
 	    bigHash.merge!(usersHash)
@@ -193,6 +195,8 @@ class AyaDN
 				@hash = @api.getFollowers(name, beforeID)
 			elsif list == "followings"
 				@hash = @api.getFollowings(name, beforeID)
+			elsif list == "muted"
+				@hash = @api.getMuted(name, beforeID)
 			end
 		    usersHash, pagination_array = AyaDN::View.new(@hash).buildFollowList()
 		    bigHash.merge!(usersHash)
@@ -202,27 +206,52 @@ class AyaDN
 	    return bigHash
 	end
 
+	def ayadnShowList(list, name)
+		puts "\nFetching the \'#{list}\' list. Please wait...\n\n".green
+		@hash = getList(list, name)
+		if list == "muted"
+			puts "Your list of muted users:\n\n".green
+			puts AyaDN::View.new(@hash).showUsers()
+		elsif list == "followings"
+			puts "List of users you're following:\n".green
+			puts AyaDN::View.new(@hash).showUsers()
+		elsif list == "followers"
+			puts "List of users following you:\n".green
+			puts AyaDN::View.new(@hash).showUsers()
+		end
+			
+	end
+
 	def ayadnSaveList(list, name)
 		# to call with: var = ayadnSaveList("followers", "@ericd")
-		puts "Fetching ".cyan + "#{name}".brown + "'s list of #{list}.\n".cyan
-		puts "Please wait...\n".green
 		home = Dir.home
 		ayadn_root_path = home + "/.ayadn"
 		ayadn_data_path = ayadn_root_path + "/data"
 		ayadn_lists_path = ayadn_data_path + "/lists/"
-		time = Time.new
-		fileTime = time.strftime("%Y%m%d%H%M%S")
-		file = "#{name}-#{list}-#{fileTime}.json"
+		# time = Time.new
+		# fileTime = time.strftime("%Y%m%d%H%M%S")
+		# file = "#{name}-#{list}-#{fileTime}.json"
+		file = "#{name}-#{list}.json"
 		fileURL = ayadn_lists_path + file
 		unless Dir.exists?ayadn_lists_path
 			puts "Creating lists directory in ".green + "#{ayadn_data_path}".brown + "\n"
 			FileUtils.mkdir_p ayadn_lists_path
 		end
 		if File.exists?(fileURL)
-			puts "\nYou already saved this list.\n\n".red
-			exit
-			#todo: option pour écraser
+			puts "\nYou already saved this list.\n".red
+			puts "Delete the old one and replace with this one?\n".red + "(n/y) ".green 
+			input = STDIN.getch
+			unless input == "y" or input == "Y"
+				puts "\nCanceled.\n\n".red
+				exit
+			end
 		end
+		if list == "muted"
+			puts "\nFetching your muted users list.\n".cyan
+		else
+			puts "\nFetching ".cyan + "#{name}".brown + "'s list of #{list}.\n".cyan
+		end
+		puts "Please wait...\n".green
 		followList = getList(list, name)
 		puts "Saving the list...\n".green
 		f = File.new(fileURL, "w")

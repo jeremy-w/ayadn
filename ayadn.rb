@@ -29,7 +29,7 @@ when arg1 == "trending", arg1 == "conversations", arg1 == "checkins"
 
 when arg1 == "mentions", arg1 == "m"
 	# get user mentions
-	if arg2 =~ /^@/
+	if arg2 =~ /^@/ or arg2 == "me"
 		run.ayadnUserMentions(arg2)
 	else
 		puts status.errorUserID(arg2)
@@ -37,14 +37,14 @@ when arg1 == "mentions", arg1 == "m"
 
 when arg1 == "posts", arg1 == "p"
 	# get user posts
-	if arg2 =~ /^@/
+	if arg2 =~ /^@/ or arg2 == "me"
 		run.ayadnUserPosts(arg2)
 	else
 		puts status.errorUserID(arg2)
 	end
 
 when arg1 == "starred"
-	if arg2 =~ /^@/
+	if arg2 =~ /^@/ or arg2 == "me"
 		# get a user's starred posts
 		run.ayadnStarredPosts(arg2)
 	elsif arg2.is_integer?
@@ -63,7 +63,7 @@ when arg1 == "reposted"
 	end
 
 when arg1 == "infos", arg1 == "i"
-	if arg2 =~ /^@/
+	if arg2 =~ /^@/ or arg2 == "me"
 		# get user infos
 		run.ayadnUserInfos(arg2)
 	elsif arg2.is_integer?
@@ -122,14 +122,35 @@ when arg1 == "load"
 
 when arg1 == "backup"
 	if arg2 == "followings"
-		if arg3 =~ /^@/
+		if arg3 =~ /^@/ or arg3 == "me"
 			run.ayadnSaveList("followings", arg3)
 		else
 			puts "syntax error"
 		end
 	elsif arg2 == "followers"
-		if arg3 =~ /^@/
+		if arg3 =~ /^@/ or arg3 == "me"
 			run.ayadnSaveList("followers", arg3)
+		else
+			puts "syntax error"
+		end
+	elsif arg2 == "muted"
+			run.ayadnSaveList("muted", "me")
+	end
+
+when arg1 == "list"
+	if arg2 == "muted"
+		puts run.ayadnShowList("muted", "me")
+	end
+	if arg2 == "followings"
+		if arg3 =~ /^@/ or arg3 == "me"
+			run.ayadnShowList("followings", arg3)
+		else
+			puts "syntax error"
+		end
+	end
+	if arg2 == "followers"
+		if arg3 =~ /^@/ or arg3 == "me"
+			run.ayadnShowList("followers", arg3)
 		else
 			puts "syntax error"
 		end
