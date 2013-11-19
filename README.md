@@ -19,6 +19,8 @@ AYADN
 
 - follow/unfollow a user
 
+- mute/unmute a user
+
 - search posts containing a hashtag
 
 - get informations on a post/user
