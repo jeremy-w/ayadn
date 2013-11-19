@@ -209,18 +209,18 @@ class AyaDN
 			end
 			usersString += "\n\n"
 		end
-		def buildFollowingList
+		def buildFollowList
 			hashes = getDataNormal(@hash)
 			pagination_array = []
-			usersArray = []
+			usersHash = {}
 			hashes.each do |item|
 				userName = item['username']
-				#userRealName = item['name']
+				userRealName = item['name']
 				userHandle = "@" + userName
 				pagination_array.push(item['pagination_id'])
-				usersArray.push(userHandle)
+				usersHash[userHandle] = userRealName
 			end
-			return usersArray, pagination_array
+			return usersHash, pagination_array
 		end
 		def buildUserInfos(name, adnData)
 			userName = adnData['username']

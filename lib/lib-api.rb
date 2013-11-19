@@ -139,6 +139,16 @@ class AyaDN
 				@url += "#{value}"
 				@url += "/following" 
 				@url += "/?access_token=#{@token}"
+			when stream == "followers"
+				@url += 'stream/0/users/'
+				@url += "#{value}"
+				@url += "/followers" 
+				@url += "/?access_token=#{@token}"
+			when stream == "muted"
+				@url += 'stream/0/users/'
+				@url += "#{value}"
+				@url += "/muted" 
+				@url += "/?access_token=#{@token}"
 
 			end
 		end
@@ -275,6 +285,20 @@ class AyaDN
 		def getFollowings(name, beforeID)
 			@url = makeStreamURL("followings", name)
 			@url += "&count=200"
+			if beforeID != nil
+				@url += "&before_id=#{beforeID}"
+			end
+			getHash
+		end
+		def getFollowers(name, beforeID)
+			@url = makeStreamURL("followers", name)
+			if beforeID != nil
+				@url += "&before_id=#{beforeID}"
+			end
+			getHash
+		end
+		def getMuted(name, beforeID)
+			@url = makeStreamURL("muted", name)
 			if beforeID != nil
 				@url += "&before_id=#{beforeID}"
 			end

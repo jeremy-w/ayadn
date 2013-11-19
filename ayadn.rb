@@ -127,6 +127,12 @@ when arg1 == "backup"
 		else
 			puts "syntax error"
 		end
+	elsif arg2 == "followers"
+		if arg3 =~ /^@/
+			run.ayadnSaveFollowersList(arg3)
+		else
+			puts "syntax error"
+		end
 	end
 
 when arg1 == "star"
