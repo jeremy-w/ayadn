@@ -3,6 +3,10 @@ AYADN
 
 AYADN is a learning exercise: while it's fully functional, it's alpha and it's not an official App.net application yet. That's why you have to log in with your Dev-Lite token. In a near future a real unique authentication system will be used, + the app will post in its own name. 
 
+## 2013-11-19 v0.21
+- bugfixes
+- save followings/followers lists
+
 ## 2013-11-17 v0.20
 - major internal refactoring
 

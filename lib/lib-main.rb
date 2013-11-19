@@ -202,67 +202,36 @@ class AyaDN
 	    return bigHash
 	end
 
-	# test
-	# def ayadnSaveList(list, value)
-	# 	if list == ""
-	# end
+	def ayadnSaveList(list, name)
+		# to call with: var = ayadnSaveList("followers", "@ericd")
+		puts "Fetching ".cyan + "#{name}".brown + "'s list of #{list}.\n".cyan
+		puts "Please wait...\n".green
+		home = Dir.home
+		ayadn_root_path = home + "/.ayadn"
+		ayadn_data_path = ayadn_root_path + "/data"
+		ayadn_lists_path = ayadn_data_path + "/lists/"
+		time = Time.new
+		fileTime = time.strftime("%Y%m%d%H%M%S")
+		file = "#{name}-#{list}-#{fileTime}.json"
+		fileURL = ayadn_lists_path + file
+		unless Dir.exists?ayadn_lists_path
+			puts "Creating lists directory in ".green + "#{ayadn_data_path}".brown + "\n"
+			FileUtils.mkdir_p ayadn_lists_path
+		end
+		if File.exists?(fileURL)
+			puts "\nYou already saved this list.\n\n".red
+			exit
+			#todo: option pour écraser
+		end
+		followList = getList(list, name)
+		puts "Saving the list...\n".green
+		f = File.new(fileURL, "w")
+			f.puts(followList.to_json)
+		f.close
+		puts "\nSuccessfully saved the list.\n\n".green
+		exit
+	end
 
-	def ayadnSaveFollowersList(name)
-		puts "Fetching ".cyan + "#{name}".brown + "'s list of followers.\n".cyan
-		puts "Please wait...\n".green
-		home = Dir.home
-		ayadn_root_path = home + "/.ayadn"
-		ayadn_data_path = ayadn_root_path + "/data"
-		ayadn_lists_path = ayadn_data_path + "/lists/"
-		time = Time.new
-		fileTime = time.strftime("%Y%m%d%H%M%S")
-		file = "#{name}-followers-#{fileTime}.json"
-		fileURL = ayadn_lists_path + file
-		unless Dir.exists?ayadn_lists_path
-			puts "Creating lists directory in ".green + "#{ayadn_data_path}".brown + "\n"
-			FileUtils.mkdir_p ayadn_lists_path
-		end
-		if File.exists?(fileURL)
-			puts "\nYou already saved this list.\n\n".red
-			exit
-			# option pour écraser
-		end
-		followersList = getList("followers", name)
-		puts "Saving the list...\n".green
-		f = File.new(fileURL, "w")
-			f.puts(followersList.to_json)
-		f.close
-		puts "\nSuccessfully saved the list.\n\n".green
-		exit
-	end
-	def ayadnSaveFollowingList(name)
-		puts "Fetching ".cyan + "#{name}".brown + "'s list of followings.\n".cyan
-		puts "Please wait...\n".green
-		home = Dir.home
-		ayadn_root_path = home + "/.ayadn"
-		ayadn_data_path = ayadn_root_path + "/data"
-		ayadn_lists_path = ayadn_data_path + "/lists/"
-		time = Time.new
-		fileTime = time.strftime("%Y%m%d%H%M%S")
-		file = "#{name}-followings-#{fileTime}.json"
-		fileURL = ayadn_lists_path + file
-		unless Dir.exists?ayadn_lists_path
-			puts "Creating lists directory in ".green + "#{ayadn_data_path}".brown + "\n"
-			FileUtils.mkdir_p ayadn_lists_path
-		end
-		if File.exists?(fileURL)
-			puts "\nYou already saved this list.\n\n".red
-			exit
-			# option pour écraser
-		end
-		followingsList = getList("followings", name)
-		puts "Saving the list...\n".green
-		f = File.new(fileURL, "w")
-			f.puts(followingsList.to_json)
-		f.close
-		puts "\nSuccessfully saved the list.\n\n".green
-		exit
-	end
 	def ayadnSavePost(postID)
 		name = postID.to_s
 		home = Dir.home

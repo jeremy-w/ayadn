@@ -123,13 +123,13 @@ when arg1 == "load"
 when arg1 == "backup"
 	if arg2 == "followings"
 		if arg3 =~ /^@/
-			run.ayadnSaveFollowingList(arg3)
+			run.ayadnSaveList("followings", arg3)
 		else
 			puts "syntax error"
 		end
 	elsif arg2 == "followers"
 		if arg3 =~ /^@/
-			run.ayadnSaveFollowersList(arg3)
+			run.ayadnSaveList("followers", arg3)
 		else
 			puts "syntax error"
 		end

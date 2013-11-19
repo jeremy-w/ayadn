@@ -33,11 +33,13 @@ AYADN
 
 - get users who starred a post
 
-- read the App.net other streams: Checkins, Global, Trending, Conversations
+- read other streams: Checkins, Global, Trending, Conversations
 
 - delete a post
 
 - save/load a post
+
+- backup your followings/followers lists
 
 
 ## TL;DR
@@ -254,6 +256,17 @@ sudo ln -s /usr/bin/gcc /usr/bin/gcc-4.2
 ```  
 
 On Mac OS X, you may have to answer `yes` if your computer asks you to download and install the "developer tools".  
+
+### Backup your followings/followers
+
+Semi-secret feature.
+
+```
+ayadn.rb backup followings @ericd
+ayadn.rb backup followers @ericd
+```  
+
+A JSON file containing the username and real name of your followings/followers will be saved in `%USERDIR%/.ayadn/data/lists`.
 
 ## Help
 
