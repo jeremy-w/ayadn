@@ -231,7 +231,7 @@ class AyaDN
 	def ayadnSaveList(list, name)
 		# to call with: var = ayadnSaveList("followers", "@ericd")
 		home = Dir.home
-		ayadn_root_path = home + "/.ayadn"
+		ayadn_root_path = home + "/ayadn"
 		ayadn_data_path = ayadn_root_path + "/data"
 		ayadn_lists_path = ayadn_data_path + "/lists/"
 		# time = Time.new
@@ -270,7 +270,7 @@ class AyaDN
 	def ayadnSavePost(postID)
 		name = postID.to_s
 		home = Dir.home
-		ayadn_root_path = home + "/.ayadn"
+		ayadn_root_path = home + "/ayadn"
 		ayadn_data_path = ayadn_root_path + "/data"
 		ayadn_posts_path = ayadn_data_path + "/posts/"
 		unless Dir.exists?ayadn_posts_path
