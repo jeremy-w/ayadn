@@ -32,7 +32,7 @@ class AyaDN
             help += "- " + "convo postID ".green + "to display the conversation around a post\n"
             help += "- " + "posts @username ".green + "to display a user's posts\n"
             help += "- " + "mentions @username ".green + "to display posts mentionning a user\n"
-            help += "- " + "starred @username/postID ".green + "to display a user's starred posts, or who starred a post\n"
+            help += "- " + "starred @username/postID ".green + "to display a user's starred posts / who starred a post\n"
             help += "- " + "reposted postID ".green + "to display who reposted a post\n"
             help += "- " + "global/trending/checkins/conversations ".green + "to display one of these streams\n"
             help += "- " + "follow/unfollow @username ".green + "to follow/unfollow a user\n"
@@ -40,7 +40,7 @@ class AyaDN
             help += "- " + "save/load postID ".green + "to save/load a post locally\n"
             help += "- " + "list/backup followings/followers/muted @username ".green + "to list/backup users you're following, who follow you, that you've muted\n"
             help += "- " + "help ".green + "to display this screen. See " + "https://github.com/ericdke/ayadn#how-to-use".magenta + " for detailed instructions, examples and tips." + "\n"
-            help += "- some options have a one-letter shortcut: w(rite), r(eply), p(osts), m(entions), t(ag), c(onversations), i(nfos), h(elp).\n\n"
+            help += "- some options have a one-letter shortcut: w(rite), r(eply), s(earch), p(osts), m(entions), t(ag), c(onvo), i(nfos), h(elp).\n\n"
             help += "Examples:\n".cyan
             help += "ayadn.rb ".green + "(display your Unified stream)\n"
             help += "ayadn.rb write ".green + "(write a post with a compose window)\n"

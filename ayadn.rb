@@ -241,7 +241,7 @@ when arg1 == "reply", arg1 == "r"
 		puts status.errorNoID
 	end
 
-when arg1 == "search"
+when arg1 == "search", arg1 == "s"
 	if arg2 != nil
 		run.ayadnSearch(arg2)
 	else

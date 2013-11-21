@@ -21,7 +21,9 @@ AYADN
 
 - mute/unmute a user
 
-- search posts containing a hashtag
+- search posts for word(s)
+
+- search posts with hashtag
 
 - get informations on a post/user
 
@@ -188,8 +190,8 @@ If the app is executable but not in your $PATH, then launch it locally:
 ./ayadn.rb w
 ./ayadn.rb write '#Nowplaying some awesome music'
 ./ayadn.rb checkins
-./ayadn.rb conversations
-./ayadn.rb trending
+./ayadn.rb search ruby,json
+./ayadn.rb list followings @ericd
 ```  
 
 ### With an alias (recommended)
@@ -277,7 +279,7 @@ ayadn.rb backup followers @ericd
 ayadn.rb backup muted
 ```  
 
-A JSON file containing the username and real name of your followings/followers/muted will be saved in `%USERDIR%/.ayadn/data/lists`.
+A JSON file containing the username and real name of your followings/followers/muted will be saved in `%USERDIR%/ayadn/data/lists`.
 
 ## Help
 
