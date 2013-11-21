@@ -96,7 +96,8 @@ class AyaDN
 				# plusieurs annotations par post, dont checkin
 				annoList = item['annotations']
 				xxx = 0
-				if annoList.length > 0
+				#if annoList.length > 0
+				if annoList != nil
 					annoList.each do |it|
 						annoType = annoList[xxx]['type']
 						annoValue = annoList[xxx]['value']
@@ -110,40 +111,44 @@ class AyaDN
 							fancy = chName.length + 7
 							postString += "." * fancy #longueur du nom plus son étiquette
 							unless chName.nil?
-								postString += "\n-Name: ".cyan + chName.upcase.reddish
+								postString += "\nName: ".cyan + chName.upcase.reddish
 							end
 							unless chAddress.nil?
-								postString += "\n-Address: ".cyan + chAddress.green
+								postString += "\nAddress: ".cyan + chAddress.green
 							end
 							unless chLocality.nil?
-								postString += "\n-Locality: ".cyan + chLocality.green
+								postString += "\nLocality: ".cyan + chLocality.green
 							end
 							unless chPostcode.nil?
 								postString += " (#{chPostcode})".green
 							end
 							unless chRegion.nil?
-								postString += "\n-State/Region: ".cyan + chRegion.green
+								postString += "\nState/Region: ".cyan + chRegion.green
 							end
 							unless chCountryCode.nil?
 								postString += " (#{chCountryCode})".upcase.green
 							end
 							unless sourceName.nil?
-								postString += "\n-Posted with: ".cyan + "#{sourceName} [#{sourceLink}]".green
+								postString += "\nPosted with: ".cyan + "#{sourceName} [#{sourceLink}]".green + " "
 							end
-							if !links.empty?
-								postString += "\n-Internal link: ".cyan
-								links.each do |link|
-									linkURL = link['url']
-									postString += linkURL.brown
-								end
-							end
+							#if !links.empty?
+							postString += "\n"
+							#end
 							#todo:
 							#chCategories
 						end
 						xxx += 1
 					end
 				end
-				postString += "\n\n"
+				if !links.empty?
+					#postString += "\n"
+					links.each do |link|
+						linkURL = link['url']
+						postString += "Link: ".cyan + linkURL.brown + " "
+					end
+					postString += "\n"
+				end
+				postString += "\n"
 			end
 			return postString
 		end
