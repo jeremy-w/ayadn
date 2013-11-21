@@ -75,7 +75,7 @@ class AyaDN
 			when stream == "checkins"
 				@url += 'stream/0/posts/stream/explore/'
 				@url += stream + "?access_token=#{@token}" + '&include_deleted=0&include_html=0&include_annotations=1'
-			when stream == "trending", stream == "conversations"
+			when stream == "trending", stream == "conversations", stream == "photos"
 				@url += 'stream/0/posts/stream/explore/'
 				@url += "#{stream}" + "?access_token=#{@token}" + '&include_deleted=0&include_html=0'
 			when stream == "tag"
@@ -154,6 +154,12 @@ class AyaDN
 				@url += "#{value}"
 				@url += "/mute" 
 				@url += "/?access_token=#{@token}"
+			when stream == "search"
+				@url += 'stream/0/posts/'
+				@url += "search"
+				@url += "?text=#{value}"
+				@url += "&include_annotations=1"
+				@url += "&access_token=#{@token}"
 
 			end
 		end
@@ -201,7 +207,7 @@ class AyaDN
 				getHash
 			elsif action == "load"
 				fileContent = Hash.new
-				File.open("./data/posts/#{postID}.post", "r") do |f|
+				File.open("/data/posts/#{postID}.post", "r") do |f|
 					fileContent = f.gets
 				end
 				theHash = eval(fileContent)
@@ -321,6 +327,10 @@ class AyaDN
 			if beforeID != nil
 				@url += "&before_id=#{beforeID}"
 			end
+			getHash
+		end
+		def getSearch(value)
+			@url = makeStreamURL("search", value)
 			getHash
 		end
 	end

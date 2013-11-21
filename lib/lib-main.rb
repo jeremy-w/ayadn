@@ -5,6 +5,7 @@ class AyaDN
 		@token = token
 		@api = AyaDN::API.new(@token)
 		@status = ClientStatus.new
+		@ayadn_data_path = Dir.home + "/ayadn/data"
 	end
 
 	def stream
@@ -230,10 +231,7 @@ class AyaDN
 
 	def ayadnSaveList(list, name)
 		# to call with: var = ayadnSaveList("followers", "@ericd")
-		home = Dir.home
-		ayadn_root_path = home + "/ayadn"
-		ayadn_data_path = ayadn_root_path + "/data"
-		ayadn_lists_path = ayadn_data_path + "/lists/"
+		ayadn_lists_path = @ayadn_data_path + "/lists/"
 		# time = Time.new
 		# fileTime = time.strftime("%Y%m%d%H%M%S")
 		# file = "#{name}-#{list}-#{fileTime}.json"
@@ -269,10 +267,7 @@ class AyaDN
 
 	def ayadnSavePost(postID)
 		name = postID.to_s
-		home = Dir.home
-		ayadn_root_path = home + "/ayadn"
-		ayadn_data_path = ayadn_root_path + "/data"
-		ayadn_posts_path = ayadn_data_path + "/posts/"
+		ayadn_posts_path = @ayadn_data_path + "/posts/"
 		unless Dir.exists?ayadn_posts_path
 			puts "Creating posts directory in ".green + "#{ayadn_posts_path}...".brown
 			FileUtils.mkdir_p ayadn_posts_path
@@ -298,6 +293,11 @@ class AyaDN
 		originalPostID = @api.getOriginalPost(postID)
 	end
 	#
+
+	def ayadnSearch(value)
+		@hash = @api.getSearch(value)
+		stream
+	end
 
 	def ayadnFollowing(action, name)
 		youFollow, followsYou = @api.getUserFollowInfo(name)

@@ -23,7 +23,7 @@ when arg1 == "global", arg1 == "g"
 	# get global
 	run.ayadnGlobal()
 
-when arg1 == "trending", arg1 == "conversations", arg1 == "checkins"
+when arg1 == "trending", arg1 == "conversations", arg1 == "checkins", arg1 == "photos"
 	# get explore streams
 	run.ayadnExplore(arg1)
 
@@ -239,6 +239,13 @@ when arg1 == "reply", arg1 == "r"
 		end
 	else
 		puts status.errorNoID
+	end
+
+when arg1 == "search"
+	if arg2 != nil
+		run.ayadnSearch(arg2)
+	else
+		puts "\nsyntax error\n"
 	end
 
 when arg1 == "help", arg1 == "h"

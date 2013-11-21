@@ -24,6 +24,8 @@ class AyaDN
             help += "- " + "write ".green + "+ [Enter key], or " + "write \"your text\" ".green + "to create a post\n"
             help += "- " + "reply postID ".green + "to reply to a post\n"
             help += "- " + "delete postID ".green + "to delete a post\n"
+            help += "- " + "search word(s) ".green + "to search for word(s) (separate words with a comma)\n"
+            help += "- " + "tag hashtag ".green + "to search for a hashtag (don't write the '#')\n"
             help += "- " + "star/unstar postID ".green + "to star/unstar a post\n"
             help += "- " + "repost/unrepost postID ".green + "to repost/unrepost a post\n"
             help += "- " + "infos @username/postID ".green + "to display detailed informations on a user or a post\n"
@@ -33,7 +35,6 @@ class AyaDN
             help += "- " + "starred @username/postID ".green + "to display a user's starred posts, or who starred a post\n"
             help += "- " + "reposted postID ".green + "to display who reposted a post\n"
             help += "- " + "global/trending/checkins/conversations ".green + "to display one of these streams\n"
-            help += "- " + "tag hashtag ".green + "to search for hashtags (don't write the '#')\n"
             help += "- " + "follow/unfollow @username ".green + "to follow/unfollow a user\n"
             help += "- " + "mute/unmute @username ".green + "to mute/unmute a user\n"
             help += "- " + "save/load postID ".green + "to save/load a post locally\n"
@@ -50,6 +51,7 @@ class AyaDN
             help += "ayadn.rb checkins ".green + "(display the Checkins stream)\n"
             help += "ayadn.rb follow @ayadn ".green + "(follow user @ericd)\n"
             help += "ayadn.rb list followings @ericd ".green + "(follow user @ericd)\n"
+            help += "ayadn.rb search ruby,json ".green + "(search for posts with these words)\n"
             help += "\n"
             return help
         end
