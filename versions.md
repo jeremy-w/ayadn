@@ -6,6 +6,7 @@ AYADN is a learning exercise: while it's fully functional, it's alpha and it's n
 ## 2013-11-23 v0.23
 - Markdown links
 - AyaDN displays only the new posts in the stream since your last visit!
+- new token procedure
 
 ## 2013-11-21 v0.22
 - search for word(s) 

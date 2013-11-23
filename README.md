@@ -124,9 +124,13 @@ source ~/.bashrc
 
 I haven't coded an interactive authentification system yet, so you **have to** copy/paste your own unique token into the `token.rb` file.
 
-This is easy:
+- Connect to your app.net page, go to `settings`, go to `Manage apps` and in `Your app` create a new app with these characteristics: 
 
-- Go to [http://dev-lite.jonathonduerig.com](http://dev-lite.jonathonduerig.com) and click the `Authorize` button, connect with your App.net account then copy the token Dev-Lite gives you back.
+    - Application Name: "AyaDN"
+    - Website: "http://ayadn-app.net"
+    - Callback URL: leave it like it is
+
+then in `App settings` click on `Generate a user token for yourself`. Copy the code it gives you back, it's your unique authetification token for using AyaDN.
 
 - In any text editor, open the file `token.rb` and paste the token between the ticks:
 
