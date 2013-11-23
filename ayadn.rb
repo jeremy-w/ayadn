@@ -12,38 +12,43 @@ puts "\nAYADN".red + " - " + "App.net command-line client\n".brown
 run = AyaDN.new(@token)
 status = ClientStatus.new
 
-arg1, arg2, arg3 = ARGV[0], ARGV[1], ARGV[2]
+arg1, arg2, arg3, arg4 = ARGV[0], ARGV[1], ARGV[2], ARGV[3]
 
-case
-when !arg1, arg1 == "flux", arg1 == "stream", arg1 == "uni", arg1 == "unified"
+case arg1
+when nil, "flux", "stream", "uni", "unified"
 	# get unified
 	run.ayadnUnified
+	exit
 
-when arg1 == "global", arg1 == "g"
+when "global", "g"
 	# get global
 	run.ayadnGlobal()
+	exit
 
-when arg1 == "trending", arg1 == "conversations", arg1 == "checkins", arg1 == "photos"
+when "trending", "conversations", "checkins", "photos"
 	# get explore streams
 	run.ayadnExplore(arg1)
+	exit
 
-when arg1 == "mentions", arg1 == "m"
+when "mentions", "m"
 	# get user mentions
 	if arg2 =~ /^@/ or arg2 == "me"
 		run.ayadnUserMentions(arg2)
 	else
 		puts status.errorUserID(arg2)
 	end
+	exit
 
-when arg1 == "posts", arg1 == "p"
+when "posts", "p"
 	# get user posts
 	if arg2 =~ /^@/ or arg2 == "me"
 		run.ayadnUserPosts(arg2)
 	else
 		puts status.errorUserID(arg2)
 	end
+	exit
 
-when arg1 == "starred"
+when "starred"
 	if arg2 =~ /^@/ or arg2 == "me"
 		# get a user's starred posts
 		run.ayadnStarredPosts(arg2)
@@ -53,16 +58,18 @@ when arg1 == "starred"
 	else
 		puts status.errorUserID(arg2)
 	end
+	exit
 
-when arg1 == "reposted"
+when "reposted"
 	if arg2.is_integer?
 		# get who reposted a post
 		run.ayadnWhoReposted(arg2)
 	else
 		puts status.errorPostID(arg2)
 	end
+	exit
 
-when arg1 == "infos", arg1 == "i"
+when "infos", "i"
 	if arg2 =~ /^@/ or arg2 == "me"
 		# get user infos
 		run.ayadnUserInfos(arg2)
@@ -72,25 +79,28 @@ when arg1 == "infos", arg1 == "i"
 	else
 		puts status.errorInfos(arg2)
 	end
+	exit
 
 
-when arg1 == "convo", arg1 == "c"
+when "convo", "c"
 	# read the conversation around a post
 	if arg2.is_integer?
 		run.ayadnConversation(arg2)
 	else
 		puts status.errorPostID(arg2)
 	end
+	exit
 
-when arg1 == "tag", arg1 == "t"
+when "tag", "t"
 	# get hashtags
 	theTag = arg2.dup
 	if theTag =~ /^#/
 		theTag[0] = ""
 	end
 	run.ayadnHashtags(theTag)
+	exit
 
-when arg1 == "delete"
+when "delete"
 	# delete a post
 	if arg2.is_integer?
 		puts "\nAre you sure you want to delete post ".green + "#{arg2}? ".brown + "(n/y) ".green 
@@ -103,24 +113,27 @@ when arg1 == "delete"
 	else
 		puts status.errorPostID(arg2)
 	end
+	exit
 
-when arg1 == "save"
+when "save"
 	if arg2.is_integer?
 		# save a post
 		run.ayadnSavePost(arg2)
 	else
 		puts status.errorPostID(arg2)
 	end
+	exit
 
-when arg1 == "load"
+when "load"
 	if arg2.is_integer?
 		# load a post
 		run.ayadnPostInfos("load", arg2)
 	else
 		puts status.errorPostID(arg2)
 	end
+	exit
 
-when arg1 == "backup"
+when "backup"
 	if arg2 == "followings"
 		if arg3 =~ /^@/ or arg3 == "me"
 			run.ayadnSaveList("followings", arg3)
@@ -136,8 +149,9 @@ when arg1 == "backup"
 	elsif arg2 == "muted"
 			run.ayadnSaveList("muted", "me")
 	end
+	exit
 
-when arg1 == "list"
+when "list"
 	if arg2 == "muted"
 		puts run.ayadnShowList("muted", "me")
 	end
@@ -155,72 +169,81 @@ when arg1 == "list"
 			puts "syntax error"
 		end
 	end
+	exit
 
-when arg1 == "star"
+when "star"
 	if arg2.is_integer?
 		# star a post
 		run.ayadnStarringPost("star", arg2)
 	else
 		puts status.errorPostID(arg2)
 	end
+	exit
 
-when arg1 == "unstar"
+when "unstar"
 	if arg2.is_integer?
 		# unstar a post
 		run.ayadnStarringPost("unstar", arg2)
 	else
 		puts status.errorPostID(arg2)
 	end
+	exit
 
-when arg1 == "repost"
+when "repost"
 	if arg2.is_integer?
 		# repost
 		run.ayadnReposting("repost", arg2)
 	else
 		puts status.errorPostID(arg2)
 	end
+	exit
 
-when arg1 == "unrepost"
+when "unrepost"
 	if arg2.is_integer?
 		# unrepost
 		run.ayadnReposting("unrepost", arg2)
 	else
 		puts status.errorPostID(arg2)
 	end
+	exit
 
-when arg1 == "follow"
+when "follow"
 	if arg2 =~ /^@/
 		# follow a user
 		run.ayadnFollowing("follow", arg2)
 	else
 		puts status.errorUserID(arg2)
 	end
+	exit
 
-when arg1 == "unfollow"
+when "unfollow"
 	if arg2 =~ /^@/
 		# unfollow a user
 		run.ayadnFollowing("unfollow", arg2)
 	else
 		puts status.errorUserID(arg2)
 	end
+	exit
 
-when arg1 == "mute"
+when "mute"
 	if arg2 =~ /^@/
 		# mute a user
 		run.ayadnMuting("mute", arg2)
 	else
 		puts status.errorUserID(arg2)
 	end
+	exit
 
-when arg1 == "unmute"
+when "unmute"
 	if arg2 =~ /^@/
 		# unmute a user
 		run.ayadnMuting("unmute", arg2)
 	else
 		puts status.errorUserID(arg2)
 	end
+	exit
 
-when arg1 == "write", arg1 == "w"
+when "write", "w"
 	if arg2 != nil
 		# write
 		run.ayadnSendPost(arg2, nil)
@@ -228,8 +251,9 @@ when arg1 == "write", arg1 == "w"
 		# compose
 		run.ayadnComposePost()
 	end
+	exit
 
-when arg1 == "reply", arg1 == "r"
+when "reply", "r"
 	if arg2 != nil
 		if arg2.is_integer?
 			# reply to postID
@@ -240,29 +264,38 @@ when arg1 == "reply", arg1 == "r"
 	else
 		puts status.errorNoID
 	end
+	exit
 
-when arg1 == "search", arg1 == "s"
+when "search", "s"
 	if arg2 != nil
 		run.ayadnSearch(arg2)
 	else
 		puts "\nsyntax error\n"
 	end
+	exit
 
-when arg1 == "help", arg1 == "h"
+when "help", "h"
 	puts AyaDN::Tools.new.helpScreen()
+	exit
 
-when arg1 == "debug"
+when "debug"
 	if arg2 == nil
 		run.ayadnDebugStream
 	elsif arg2.is_integer?
 		run.ayadnDebugPost(arg2)
 	end
-		
+	exit
 
-when arg1 != nil
-	option = ARGV
-	bad_option = option.join(" ")
-	puts "\nSyntax error: ".red + "#{bad_option} ".brown + "is not a valid option.\n\n".red
-	puts AyaDN::Tools.new.helpScreen()
+when "reset"
+	if arg2 == "pagination"
+		run.ayadnReset("pagination", arg3, arg4)
+	end
+	exit
 
 end
+
+# if not any known argument
+option = ARGV
+bad_option = option.join(" ")
+puts "\nSyntax error: ".red + "#{bad_option} ".brown + "is not a valid option.\n\n".red
+puts AyaDN::Tools.new.helpScreen()

@@ -300,6 +300,17 @@ ayadn.rb write "Subscribe to the #AyaDN broadcast! https://app.net/c/2zqf"
 ayadn.rb write "[Subscribe](https://app.net/c/2zqf) to the #AyaDN broadcast!"
 ```  
 
+### Reset pagination data
+
+If AyaDN shows you "No recent posts in this stream" but you still want to see the stream, you have to reset the pagination data first (without arguments: resets all pagination data).
+
+```
+./ayadn.rb reset pagination
+./ayadn.rb reset pagination unified
+./ayadn.rb reset pagination mentions @ericd
+(etc)
+```  
+
 ## Help
 
 Be aware of the way the console treats what you type.

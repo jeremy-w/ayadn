@@ -3,9 +3,10 @@
 class AyaDN
 	class Tools
         def initialize
-            
+            @ayadn_data_path = Dir.home + "/ayadn/data"
+            @ayadn_lastPageID_path = @ayadn_data_path + "/.pagination"
         end
-        def fileOps(action, value, content = nil)
+        def fileOps(action, value, content = nil, option = nil)
             if action == "makedir"
                 unless Dir.exists?value
                     FileUtils.mkdir_p value
@@ -23,6 +24,36 @@ class AyaDN
                 f = File.new(value, "w")
                     f.puts(content)
                 f.close
+            elsif action == "reset"
+                if value == "pagination"
+                    if content != nil
+                        if option != nil
+                            puts "\nResetting #{content} pagination for #{option}.\n".red
+                            filePath = @ayadn_lastPageID_path + "/lastPageID-#{content}-#{option}"
+                            if File.exists?(filePath)
+                                FileUtils.rm_rf(filePath)
+                                puts "\nDone!\n\n".green
+                            else
+                                puts "\nAlready done: no #{content} pagination value for #{option} was found.\n\n".green
+                            end
+                        else
+                            puts "\nResetting the pagination for #{content}.\n".red
+                            filePath = @ayadn_lastPageID_path + "/lastPageID-#{content}"
+                            if File.exists?(filePath)
+                                FileUtils.rm_rf(filePath)
+                                puts "\nDone!\n\n".green
+                            else
+                                puts "\nAlready done: no #{content} pagination value was found.\n\n".green
+                            end
+                        end
+                    else
+                        puts "\nResetting all pagination data.\n".red
+                        Dir["#{@ayadn_lastPageID_path}/*"].each do |file|
+                            FileUtils.rm_rf file
+                        end
+                        puts "\nDone!\n\n".green
+                    end
+                end
             end
         end
 		def colorize(contentText)

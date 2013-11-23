@@ -447,6 +447,9 @@ class AyaDN
 			puts "\nsyntax error\n".red
 		end
 	end
+	def ayadnReset(target, content, option)
+		@tools.fileOps("reset", target, content, option)
+	end
 end
 
 
