@@ -14,6 +14,17 @@ class AyaDN
 	def checkinsStream
 	    puts AyaDN::View.new(@hash).showCheckinsStream
 	end
+	def debugStream
+		puts AyaDN::View.new(@hash).showDebugStream
+	end
+	def ayadnDebugStream
+		@hash = @api.getUnified
+		debugStream
+	end
+	def ayadnDebugPost(postID)
+		@hash = @api.getPostInfos("call", postID)
+		debugStream
+	end
 	def ayadnGlobal
 		puts @status.getGlobal
 		@hash = @api.getGlobal

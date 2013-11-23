@@ -251,6 +251,14 @@ when arg1 == "search", arg1 == "s"
 when arg1 == "help", arg1 == "h"
 	puts AyaDN::Tools.new.helpScreen()
 
+when arg1 == "debug"
+	if arg2 == nil
+		run.ayadnDebugStream
+	elsif arg2.is_integer?
+		run.ayadnDebugPost(arg2)
+	end
+		
+
 when arg1 != nil
 	option = ARGV
 	bad_option = option.join(" ")

@@ -45,6 +45,8 @@ AYADN
 
 - backup/display your lists of followings, followers, muted users...
 
+- Markdown links in your text
+
 
 ## TL;DR
 

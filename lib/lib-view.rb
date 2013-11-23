@@ -20,6 +20,11 @@ class AyaDN
 			hashes = getData(@hash)
 			buildCheckinsStream(hashes)
 		end
+		def showDebugStream
+			hashes = getDataNormal(@hash)
+			buildDebugStream(hashes)
+		end
+
 		def showUsersList
 			hashes = getData(@hash)
 			buildUsersList(hashes)
@@ -42,6 +47,13 @@ class AyaDN
 		def showPostInfos(postId)
 			postHash = @hash['data']
 			buildPostInfo(postHash)
+		end
+		def buildDebugStream(postHash)
+			retString = ""
+			postHash.each do |k, v|
+				retString += "#{k}: #{v}\n\n"
+			end
+			return retString
 		end
 		def buildStream(postHash)
 			postString = ""
