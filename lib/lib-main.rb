@@ -124,7 +124,7 @@ class AyaDN
 	def ayadnPostInfos(action, postID)
 		puts @status.infosPost(postID)
 		@hash = @api.getPostInfos(action, postID)
-	    puts AyaDN::View.new(@hash).showPostInfos(postID)
+	    puts AyaDN::View.new(@hash).showPostInfos(postID, isMine = false)
 	end
 	def ayadnSendPost(text, reply_to = nil)
 		if text.empty? or text == nil
@@ -135,7 +135,7 @@ class AyaDN
 		callback = @api.httpSend(text, reply_to)
 		blob = JSON.parse(callback)
 		@hash = blob['data']
-		puts AyaDN::View.new(@hash).buildPostInfo(@hash)
+		puts AyaDN::View.new(@hash).buildPostInfo(@hash, isMine = true)
 		puts @status.postSent
 	end
 	def ayadnComposePost(reply_to = "", mentionsList = "", myUsername = "")

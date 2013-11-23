@@ -44,9 +44,9 @@ class AyaDN
 			adnData = @hash['data']
 			buildUserInfos(name, adnData)
 		end
-		def showPostInfos(postId)
+		def showPostInfos(postId, isMine)
 			postHash = @hash['data']
-			buildPostInfo(postHash)
+			buildPostInfo(postHash, isMine)
 		end
 		def buildDebugStream(postHash)
 			retString = ""
@@ -166,7 +166,7 @@ class AyaDN
 			end
 			return postString, pagination_array
 		end
-		def buildPostInfo(postHash)
+		def buildPostInfo(postHash, isMine)
 			thePostId = postHash['id']
 			postText = postHash['text']
 			userName = postHash['user']['username']
@@ -195,7 +195,7 @@ class AyaDN
 					postDetails += "\nLink: ".cyan + linkURL.brown
 				end
 			else
-				postDetails += "\n"
+				#postDetails += "\n"
 			end
 			postURL = postHash['canonical_url']
 
@@ -209,22 +209,27 @@ class AyaDN
 			sourceApp = postHash['source']['name']
 			locale = postHash['user']['locale']
 			timezone = postHash['user']['timezone']
-
-			postDetails += "\nReplies: ".cyan + numReplies.to_s.reddish
-			postDetails += "  Reposts: ".cyan + numReposts.to_s.reddish
-			postDetails += "  Stars: ".cyan + numStars.to_s.reddish
-
-			if youReposted == true
-				postDetails += "\nYou reposted this post.".cyan
+			#isReply = postHash['reply_to']
+			if isMine == false
+				postDetails += "\nReplies: ".cyan + numReplies.to_s.reddish
+				postDetails += "  Reposts: ".cyan + numReposts.to_s.reddish
+				postDetails += "  Stars: ".cyan + numStars.to_s.reddish
+				if youReposted == true
+					postDetails += "\nYou reposted this post.".cyan
+				end
+				if youStarred == true
+					postDetails += "\nYou starred this post.".cyan
+				end
+				postDetails += "\nPosted with: ".cyan + sourceApp.reddish
+				postDetails += "  Locale: ".cyan + locale.reddish
+				postDetails += "  Timezone: ".cyan + timezone.reddish
+			else
+				toRegex = postText.dup
+				withoutMarkdown = getMarkdownText(toRegex)
+				withoutBraces = withoutSquareBraces(withoutMarkdown)
+				actualLength = withoutBraces.length
+				postDetails += "\nLength: ".cyan + actualLength.to_s.reddish
 			end
-			if youStarred == true
-				postDetails += "\nYou starred this post.".cyan
-			end
-
-			postDetails += "\nPosted with: ".cyan + sourceApp.reddish
-			postDetails += "  Locale: ".cyan + locale.reddish
-			postDetails += "  Timezone: ".cyan + timezone.reddish
-
 			postDetails += "\n\n"
 		end
 		def buildUsersList(usersHash)

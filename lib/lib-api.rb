@@ -34,7 +34,8 @@ class AyaDN
 		def httpSend(text, replyto = nil)
 			@url = 'https://alpha-api.app.net/'
 			@url += 'stream/0/posts'
-			uri = URI("#{@url}")
+			anno = "?include_annotations=1"
+			uri = URI("#{@url}#{anno}")
 			https = Net::HTTP.new(uri.host,uri.port)
 			https.use_ssl = true
 			https.verify_mode = OpenSSL::SSL::VERIFY_NONE

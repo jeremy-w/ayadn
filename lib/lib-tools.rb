@@ -86,6 +86,15 @@ class AyaDN
             \)         # Literal closing parenthesis
           }x, '\1'
         end
+        def withoutSquareBraces(str)
+            str.gsub %r{
+            \[         # Literal opening bracket
+              (        # Capture what we find in here
+                [^\]]+ # One or more characters other than close bracket
+              )        # Stop capturing
+            \]         # Literal closing bracket
+          }x, ''
+        end
         def helpScreen
             help = ""
             help += "- " + "without options: display the Unified stream + your directed posts\n\n".magenta
