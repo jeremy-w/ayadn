@@ -286,6 +286,8 @@ ayadn.rb backup muted
 
 A JSON file containing the username and real name of your followings/followers/muted will be saved in `%USERDIR%/ayadn/data/lists`.
 
+The `muted` option only works for yourself (this is a limitation from the API).
+
 ### Post links
 
 - Write/paste a simple link:
