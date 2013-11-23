@@ -104,7 +104,7 @@ class AyaDN
             help += "ayadn.rb star 14805036 ".green + "(star post n°14805036)\n"
             help += "ayadn.rb checkins ".green + "(display the Checkins stream)\n"
             help += "ayadn.rb follow @ayadn ".green + "(follow user @ericd)\n"
-            help += "ayadn.rb list followings @ericd ".green + "(follow user @ericd)\n"
+            help += "ayadn.rb backup followings me ".green + "(backup my followings)\n"
             help += "ayadn.rb search ruby,json ".green + "(search for posts with these words)\n"
             help += "\n"
             return help
