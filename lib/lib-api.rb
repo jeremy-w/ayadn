@@ -41,7 +41,10 @@ class AyaDN
 			request = Net::HTTP::Post.new(uri.path)
 			request["Authorization"] = "Bearer #{@token}"
 			request["Content-Type"] = "application/json"
-			ent = { "parse_markdown_links" => true }
+			ent = { 
+				"parse_markdown_links" => true, 
+				"parse_links" => true
+			}
 			if replyto == nil
 				payload = {
 					"text" => "#{text}",

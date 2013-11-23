@@ -225,7 +225,7 @@ class AyaDN
 			postDetails += "  Locale: ".cyan + locale.reddish
 			postDetails += "  Timezone: ".cyan + timezone.reddish
 
-			postDetails += "\n\n\n"
+			postDetails += "\n\n"
 		end
 		def buildUsersList(usersHash)
 			usersString = ""
