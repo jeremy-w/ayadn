@@ -140,7 +140,6 @@ class AyaDN
 	end
 	def ayadnComposePost(reply_to = "", mentionsList = "", myUsername = "")
 		puts @status.writePost
-		$stdout.sync = true
 		maxChar = 256
 		charCount = maxChar - mentionsList.length
 		text = mentionsList
@@ -148,31 +147,22 @@ class AyaDN
 			text += " "
 			charCount -= 1
 		end
-		print "\n\r#{charCount}".brown + " -> " + "#{text}"
-		while charCount >= 0
-			input = STDIN.getch
-			text += input
-			charCount -= 1
-			print "\r#{charCount}".brown + " -> ".green + "#{text}"
-			if input == "\r"
-				#si touche entrée
-				puts "\n\n"
-				ayadnSendPost(text, reply_to)
-				exit
-			elsif input == "\e"
-				#si touche echapp
-				abort("\n\nCanceled.".reverse_color + " Your post hasn't been sent.\n\n".red)
-			elsif input == "\177"
-				#backspace counts as 1 character as well
-				text = text[0...-2]
-				charCount += 2
-				print "\n\r#{charCount}".brown + " -> ".green + "#{text}"
-			#elsif 
-				#fleches clavier et autres touches à ignorer	
-			end
+		print "\n#{text}"
+		begin
+			inputText = STDIN.gets.chomp
+		rescue Exception => e
+			abort("\n\nCanceled. Your post hasn't been sent.\n\n".red)
 		end
-		puts "error maxchars"
-		exit
+		postText = text + inputText
+		toRegex = postText.dup
+		withoutMarkdown = @tools.getMarkdownText(toRegex)
+		totalLength = charCount - withoutMarkdown.length
+		realLength = maxChar + totalLength.abs
+		if totalLength > 0
+			ayadnSendPost(postText, reply_to)
+		else
+			puts "\nError: your post is ".red + "#{realLength} ".brown + " characters long, please remove ".red + "#{realLength - maxChar} ".brown + "characters.\n\n".red
+		end
 	end
 	def ayadnReply(postID)
 		puts "Replying to post ".cyan + "#{postID}...\n".brown

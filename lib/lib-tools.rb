@@ -72,6 +72,20 @@ class AyaDN
 			end
 			coloredPost = content.join(" ")
 		end
+        def getMarkdownText(str)
+          str.gsub %r{
+            \[         # Literal opening bracket
+              (        # Capture what we find in here
+                [^\]]+ # One or more characters other than close bracket
+              )        # Stop capturing
+            \]         # Literal closing bracket
+            \(         # Literal opening parenthesis
+              (        # Capture what we find in here
+                [^)]+  # One or more characters other than close parenthesis
+              )        # Stop capturing
+            \)         # Literal closing parenthesis
+          }x, '\1'
+        end
         def helpScreen
             help = ""
             help += "- " + "without options: display the Unified stream + your directed posts\n\n".magenta
@@ -92,7 +106,7 @@ class AyaDN
             help += "- " + "follow/unfollow @username ".green + "to follow/unfollow a user\n"
             help += "- " + "mute/unmute @username ".green + "to mute/unmute a user\n"
             help += "- " + "save/load postID ".green + "to save/load a post locally\n"
-            help += "- " + "list/backup followings/followers/muted @username ".green + "to list/backup users you're following, who follow you, that you've muted\n"
+            help += "- " + "list/backup followings/followers/muted @username/me ".green + "to list/backup users you're following, who follow you, that you've muted\n"
             help += "- " + "help ".green + "to display this screen. See " + "https://github.com/ericdke/ayadn#how-to-use".magenta + " for detailed instructions, examples and tips." + "\n"
             help += "- some options have a one-letter shortcut: w(rite), r(eply), s(earch), p(osts), m(entions), t(ag), c(onvo), i(nfos), h(elp).\n\n"
             help += "Examples:\n".cyan
@@ -104,7 +118,6 @@ class AyaDN
             help += "ayadn.rb star 14805036 ".green + "(star post n°14805036)\n"
             help += "ayadn.rb checkins ".green + "(display the Checkins stream)\n"
             help += "ayadn.rb follow @ayadn ".green + "(follow user @ericd)\n"
-            help += "ayadn.rb backup followings me ".green + "(backup my followings)\n"
             help += "ayadn.rb search ruby,json ".green + "(search for posts with these words)\n"
             help += "\n"
             return help
@@ -243,7 +256,7 @@ class ClientStatus
         s = "\nLoading the conversation around post ".green + "#{arg}".brown + "...\n".green
     end
     def writePost
-        s = "\n256 characters max, validate with [Enter] or cancel with [esc].\n".green
+        s = "\n256 characters max, validate with [Enter] or cancel with [CTRL+C].\n".green
         s += "\nType your text: ".cyan
     end
     def writeReply(arg)
