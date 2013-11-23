@@ -36,6 +36,7 @@ class AyaDN
 			@url += 'stream/0/posts'
 			anno = "?include_annotations=1"
 			uri = URI("#{@url}#{anno}")
+			#uri = URI("#{@url}")
 			https = Net::HTTP.new(uri.host,uri.port)
 			https.use_ssl = true
 			https.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -46,18 +47,32 @@ class AyaDN
 				"parse_markdown_links" => true, 
 				"parse_links" => true
 			}
+			ayadnAnno = [{
+    			"type" => "com.ayadn.appinfo",
+				"value" => {
+        			"+net.app.core.user" => {
+            			"user_id" => "@ayadn",
+            			"format" => "full"
+        			}
+        		}
+			}]
 			if replyto == nil
 				payload = {
 					"text" => "#{text}",
-					"entities" => ent
+					"entities" => ent,
+					"annotations" => ayadnAnno
 				}.to_json
 			else
 				payload = {
 					"text" => "#{text}",
 					"reply_to" => "#{replyto}",
-					"entities" => ent
+					"entities" => ent,
+					"annotations" => ayadnAnno
 				}.to_json
 			end
+			# puts payload.to_s
+			# puts uri.to_s
+			# exit
 			response = https.request(request, payload)
 			callback = response.body
 		end
