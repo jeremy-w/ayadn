@@ -2,6 +2,29 @@
 # encoding: utf-8
 class AyaDN
 	class Tools
+        def initialize
+            
+        end
+        def fileOps(action, value, content = nil)
+            if action == "makedir"
+                unless Dir.exists?value
+                    FileUtils.mkdir_p value
+                end
+            elsif action == "getlastpageid"
+                if File.exists?(value)
+                    f = File.open(value, "r")
+                        lastPageID = f.gets
+                    f.close
+                else
+                    lastPageID = nil
+                end
+                return lastPageID
+            elsif action == "writelastpageid"
+                f = File.new(value, "w")
+                    f.puts(content)
+                f.close
+            end
+        end
 		def colorize(contentText)
 			content = Array.new
 			splitted = contentText.split(" ")

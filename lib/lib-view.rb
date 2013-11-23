@@ -18,7 +18,7 @@ class AyaDN
 		end
 		def showCheckinsStream
 			hashes = getData(@hash)
-			buildCheckinsStream(hashes)
+			stream, pagination_array = buildCheckinsStream(hashes)
 		end
 		def showDebugStream
 			hashes = getDataNormal(@hash)
@@ -87,7 +87,9 @@ class AyaDN
 		def buildCheckinsStream(postHash)
 			postString = ""
 			geoString = ""
+			pagination_array = []
 			postHash.each do |item|
+				pagination_array.push(item['pagination_id'])
 				postText = item['text']
 				if postText != nil
 					coloredPost = colorize(postText)
@@ -162,7 +164,7 @@ class AyaDN
 				end
 				postString += "\n"
 			end
-			return postString
+			return postString, pagination_array
 		end
 		def buildPostInfo(postHash)
 			thePostId = postHash['id']

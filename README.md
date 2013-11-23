@@ -45,7 +45,7 @@ AYADN
 
 - backup/display your lists of followings, followers, muted users...
 
-- Markdown links in your text
+- Create links with Markdown in your text
 
 
 ## TL;DR
@@ -138,9 +138,11 @@ Hit `Save` and you're done.
 
 **You type the name of the app + the action you want to do + the target of this action.**
 
-**If you don't provide any argument to the app, your personnalized stream is displayed.**
+If you don't provide any option to ayadn.rb, your personnalized stream is displayed.
 
-**If you provide the `write` command without text, you will enter the compose message feature.** *(recommended)*
+If you provide the `write` command without text, you will enter the compose message feature. *(recommended)*  
+
+By default, AyaDN displays only the new posts in the stream since your last visit.
 
 ### Through the Ruby interpreter
 
@@ -181,6 +183,7 @@ ayadn tag ruby
 ayadn mentions @timrowe
 ayadn reply 14579853
 ayadn unstar 14746446
+ayadn write "[New post](http://ericd.re-app.net) on my blog!"
 ```  
 
 ### As a local executable
@@ -282,6 +285,20 @@ ayadn.rb backup muted
 ```  
 
 A JSON file containing the username and real name of your followings/followers/muted will be saved in `%USERDIR%/ayadn/data/lists`.
+
+### Post links
+
+- Write/paste a simple link:
+
+```
+ayadn.rb write "Subscribe to the #AyaDN broadcast! https://app.net/c/2zqf"
+```  
+
+- Write/paste a markdown link to embed the link:
+
+```
+ayadn.rb write "[Subscribe](https://app.net/c/2zqf) to the #AyaDN broadcast!"
+```  
 
 ## Help
 

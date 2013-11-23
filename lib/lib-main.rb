@@ -5,14 +5,20 @@ class AyaDN
 		@token = token
 		@api = AyaDN::API.new(@token)
 		@status = ClientStatus.new
+		@tools = AyaDN::Tools.new
 		@ayadn_data_path = Dir.home + "/ayadn/data"
+		@ayadn_lastPageID_path = @ayadn_data_path + "/.pagination"
 	end
 
 	def stream
+		@tools.fileOps("makedir", @ayadn_lastPageID_path)
 	 	puts AyaDN::View.new(@hash).showStream
 	end
 	def checkinsStream
-	    puts AyaDN::View.new(@hash).showCheckinsStream
+		@tools.fileOps("makedir", @ayadn_lastPageID_path)
+	    stream, pagination_array = AyaDN::View.new(@hash).showCheckinsStream
+	    lastPageID = pagination_array.last
+		return stream, lastPageID
 	end
 	def debugStream
 		puts AyaDN::View.new(@hash).showDebugStream
@@ -25,15 +31,30 @@ class AyaDN
 		@hash = @api.getPostInfos("call", postID)
 		debugStream
 	end
+	def displayStream(stream)
+		if !stream.empty?
+			puts stream
+		else
+			puts "No new posts since your last visit.\n\n".red
+		end
+	end
 	def ayadnGlobal
+		fileURL = @ayadn_lastPageID_path + "/lastPageID-global"
+		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		puts @status.getGlobal
-		@hash = @api.getGlobal
-		checkinsStream
+		@hash = @api.getGlobal(lastPageID)
+		stream, lastPageID = checkinsStream
+		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
+		displayStream(stream)
 	end
 	def ayadnUnified
+		fileURL = @ayadn_lastPageID_path + "/lastPageID-unified"
+		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		puts @status.getUnified
-		@hash = @api.getUnified
-		checkinsStream
+		@hash = @api.getUnified(lastPageID)
+		stream, lastPageID = checkinsStream
+		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
+		displayStream(stream)
 	end
 	def ayadnHashtags(tag)
 		puts @status.getHashtags(tag)
@@ -41,19 +62,31 @@ class AyaDN
 		checkinsStream
 	end
 	def ayadnExplore(explore)
+		fileURL = @ayadn_lastPageID_path + "/lastPageID-#{explore}"
+		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		puts @status.getExplore(explore)
-		@hash = @api.getExplore(explore)
-		checkinsStream
+		@hash = @api.getExplore(explore, lastPageID)
+		stream, lastPageID = checkinsStream
+		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
+		displayStream(stream)
 	end
 	def ayadnUserMentions(name)
+		fileURL = @ayadn_lastPageID_path + "/lastPageID-mentions-#{name}"
+		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		puts @status.mentionsUser(name)
-		@hash = @api.getUserMentions(name)
-		checkinsStream
+		@hash = @api.getUserMentions(name, lastPageID)
+		stream, lastPageID = checkinsStream
+		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
+		displayStream(stream)
 	end
 	def ayadnUserPosts(name)
+		fileURL = @ayadn_lastPageID_path + "/lastPageID-posts-#{name}"
+		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		puts @status.postsUser(name)
-		@hash = @api.getUserPosts(name)
-		checkinsStream
+		@hash = @api.getUserPosts(name, lastPageID)
+		stream, lastPageID = checkinsStream
+		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
+		displayStream(stream)
 	end
 	def ayadnUserInfos(name)
 		puts @status.infosUser(name)

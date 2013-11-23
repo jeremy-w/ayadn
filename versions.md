@@ -4,7 +4,8 @@ AYADN
 AYADN is a learning exercise: while it's fully functional, it's alpha and it's not an official App.net application yet. That's why you have to log in with your Dev-Lite token. In a near future a real unique authentication system will be used, + the app will post in its own name. 
 
 ## 2013-11-23 v0.23
-- Markdown links 
+- Markdown links
+- AyaDN displays only the new posts in the stream since your last visit!
 
 ## 2013-11-21 v0.22
 - search for word(s) 

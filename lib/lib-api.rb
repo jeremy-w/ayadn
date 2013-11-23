@@ -166,30 +166,40 @@ class AyaDN
 
 			end
 		end
+		def checkLastPageID(lastPageID = nil)
+			if lastPageID != nil
+				@url += "&since_id=#{lastPageID}"
+			end
+			return @url
+		end
 
-
-		def getGlobal
+		def getGlobal(lastPageID = nil)
 			@url = makeStreamURL("global")
+			checkLastPageID(lastPageID)
 			getHash
 		end
-		def getUnified
+		def getUnified(lastPageID = nil)
 			@url = makeStreamURL("unified")
+			checkLastPageID(lastPageID)
 			getHash
 		end
 		def getHashtags(tag)
 			@url = makeStreamURL("tag", tag)
 			getHash
 		end
-		def getExplore(explore)
+		def getExplore(explore, lastPageID = nil)
 			@url = makeStreamURL(explore)
+			checkLastPageID(lastPageID)
 			getHash
 		end
-		def getUserMentions(name)
+		def getUserMentions(name, lastPageID = nil)
 			@url = makeStreamURL("mentions", name)
+			checkLastPageID(lastPageID)
 			getHash
 		end
-		def getUserPosts(name)
+		def getUserPosts(name, lastPageID = nil)
 			@url = makeStreamURL("posts", name)
+			checkLastPageID(lastPageID)
 			getHash
 		end
 		def getUserInfos(name)
