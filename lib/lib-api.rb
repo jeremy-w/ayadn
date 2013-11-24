@@ -89,32 +89,39 @@ class AyaDN
 				@url += 'stream/0/posts/stream/global?access_token='
 				@url += @token + '&include_deleted=0'
 				@url += '&include_html=0'
+				@url += '&count=100'
 			when stream == "unified"
 				@url += 'stream/0/posts/stream/unified?access_token='
 				@url += @token + '&include_deleted=0'
 				@url += '&include_html=0'
 				@url += '&include_directed_posts=1'
+				@url += '&count=100'
 			when stream == "checkins"
 				@url += 'stream/0/posts/stream/explore/'
 				@url += stream + "?access_token=#{@token}" + '&include_deleted=0&include_html=0&include_annotations=1'
+				@url += '&count=100'
 			when stream == "trending", stream == "conversations", stream == "photos"
 				@url += 'stream/0/posts/stream/explore/'
 				@url += "#{stream}" + "?access_token=#{@token}" + '&include_deleted=0&include_html=0'
+				@url += '&count=100'
 			when stream == "tag"
 				@url += 'stream/0/posts/tag/'
 				@url += "#{value}"
+				@url += '&count=200'
 			when stream == "mentions"
 				@url += 'stream/0/users/'
 				@url += "#{value}" 
 				@url += "/mentions"
 				@url += "/?access_token=#{@token}"
 				@url += '&include_html=0'
+				@url += '&count=100'
 			when stream == "posts"
 				@url += 'stream/0/users/'
 				@url += "#{value}" 
 				@url += "/posts"
 				@url += "/?access_token=#{@token}"
 				@url += '&include_deleted=1&include_html=0'
+				@url += '&count=200'
 			when stream == "userInfo"
 				@url += 'stream/0/users/'
 				@url += "#{value}" 
@@ -140,6 +147,7 @@ class AyaDN
 				@url += "/stars"
 				@url += "/?access_token=#{@token}"
 				@url += '&include_deleted=0&include_html=0'
+				@url += '&count=100'
 			when stream == "replies"
 				@url += 'stream/0/posts/'
 				@url += "#{value}" 
@@ -182,6 +190,7 @@ class AyaDN
 				@url += "?text=#{value}"
 				@url += "&include_annotations=1"
 				@url += "&access_token=#{@token}"
+				@url += '&count=200'
 
 			end
 		end

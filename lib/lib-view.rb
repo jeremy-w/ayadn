@@ -209,11 +209,21 @@ class AyaDN
 			sourceApp = postHash['source']['name']
 			locale = postHash['user']['locale']
 			timezone = postHash['user']['timezone']
-			#isReply = postHash['reply_to']
+			isReply = postHash['reply_to']
+			repostOf = postHash['repost_of']
+			if isReply != nil
+				postDetails += "\nThis post is a reply to post ".cyan + isReply.brown
+			end
+
 			if isMine == false
-				postDetails += "\nReplies: ".cyan + numReplies.to_s.reddish
-				postDetails += "  Reposts: ".cyan + numReposts.to_s.reddish
-				postDetails += "  Stars: ".cyan + numStars.to_s.reddish
+				if repostOf != nil
+					repostID = repostOf['id']
+					postDetails += "\nThis post is a repost of post ".cyan + repostID.brown
+				else
+					postDetails += "\nReplies: ".cyan + numReplies.to_s.reddish
+					postDetails += "  Reposts: ".cyan + numReposts.to_s.reddish
+					postDetails += "  Stars: ".cyan + numStars.to_s.reddish
+				end
 				if youReposted == true
 					postDetails += "\nYou reposted this post.".cyan
 				end
