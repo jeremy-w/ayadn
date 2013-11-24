@@ -7,3 +7,5 @@ counts:
     mentions: 100
     posts: 100
     starred: 100
+timeline:
+    downside: true

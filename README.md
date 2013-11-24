@@ -317,6 +317,10 @@ If AyaDN shows you "No recent posts in this stream" but you still want to see th
 (etc)
 ```  
 
+### Configuration
+
+You can modify the values (right hand) in the `config.yml` file but be very careful not to modify anything else: don't change the indentation or the name of the keys (left hand), don't add or remove quotes or special characters, etc,  otherwise it may break the Internets.
+
 ## Help
 
 Be aware of the way the console treats what you type.

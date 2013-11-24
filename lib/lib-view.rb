@@ -4,6 +4,7 @@ class AyaDN
 	class View < Tools
 		def initialize(hash)
 			@hash = hash
+			@configFileContents, @loaded = loadConfig
 		end
 		def getData(hash)
 			adnData = @hash['data']
@@ -13,11 +14,29 @@ class AyaDN
 			adnData = @hash['data']
 		end
 		def showStream
-			hashes = getData(@hash)
+			if @loaded
+				downsideTimeline = @configFileContents['timeline']['downside']
+				if downsideTimeline == true
+					hashes = getData(@hash)
+				else
+					hashes = getDataNormal(@hash)
+				end
+			else
+				hashes = getData(@hash)
+			end
 			buildStream(hashes)
 		end
 		def showCheckinsStream
-			hashes = getData(@hash)
+			if @loaded
+				downsideTimeline = @configFileContents['timeline']['downside']
+				if downsideTimeline == true
+					hashes = getData(@hash)
+				else
+					hashes = getDataNormal(@hash)
+				end
+			else
+				hashes = getData(@hash)
+			end
 			stream, pagination_array = buildCheckinsStream(hashes)
 		end
 		def showDebugStream
