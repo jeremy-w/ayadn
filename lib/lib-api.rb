@@ -7,6 +7,7 @@ class AyaDN
 			@token = token
 			@tools = AyaDN::Tools.new
 			@countGlobal, @countUnified, @countCheckins, @countExplore, @countMentions, @countPosts, @countStarred = 100
+			@configFileContents, @loaded = @tools.loadConfig
 		end
 		def getResponse(url)
 			begin
@@ -84,15 +85,14 @@ class AyaDN
 		end
 
 		def configAPI
-			configFileContents, loaded = @tools.loadConfig
-			if loaded
-				@countGlobal = configFileContents['counts']['global'].to_i
-				@countUnified = configFileContents['counts']['unified'].to_i
-				@countCheckins = configFileContents['counts']['checkins'].to_i
-				@countExplore = configFileContents['counts']['explore'].to_i
-				@countMentions = configFileContents['counts']['mentions'].to_i
-				@countPosts = configFileContents['counts']['posts'].to_i
-				@countStarred = configFileContents['counts']['starred'].to_i
+			if @loaded
+				@countGlobal = @configFileContents['counts']['global'].to_i
+				@countUnified = @configFileContents['counts']['unified'].to_i
+				@countCheckins = @configFileContents['counts']['checkins'].to_i
+				@countExplore = @configFileContents['counts']['explore'].to_i
+				@countMentions = @configFileContents['counts']['mentions'].to_i
+				@countPosts = @configFileContents['counts']['posts'].to_i
+				@countStarred = @configFileContents['counts']['starred'].to_i
 			end
 		end
 

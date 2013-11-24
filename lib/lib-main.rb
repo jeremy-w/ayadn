@@ -52,6 +52,7 @@ class AyaDN
 		fileURL = @ayadn_lastPageID_path + "/lastPageID-unified"
 		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		puts @status.getUnified
+		@api.configAPI
 		@hash = @api.getUnified(lastPageID)
 		stream, lastPageID = checkinsStream
 		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
@@ -67,6 +68,7 @@ class AyaDN
 		fileURL = @ayadn_lastPageID_path + "/lastPageID-#{explore}"
 		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		puts @status.getExplore(explore)
+		@api.configAPI
 		@hash = @api.getExplore(explore, lastPageID)
 		stream, lastPageID = checkinsStream
 		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
@@ -76,6 +78,7 @@ class AyaDN
 		fileURL = @ayadn_lastPageID_path + "/lastPageID-mentions-#{name}"
 		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		puts @status.mentionsUser(name)
+		@api.configAPI
 		@hash = @api.getUserMentions(name, lastPageID)
 		stream, lastPageID = checkinsStream
 		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
@@ -85,6 +88,7 @@ class AyaDN
 		fileURL = @ayadn_lastPageID_path + "/lastPageID-posts-#{name}"
 		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		puts @status.postsUser(name)
+		@api.configAPI
 		@hash = @api.getUserPosts(name, lastPageID)
 		stream, lastPageID = checkinsStream
 		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
@@ -115,6 +119,7 @@ class AyaDN
 	end
 	def ayadnStarredPosts(name)
 		puts @status.starsUser(name)
+		@api.configAPI
 		@hash = @api.getStarredPosts(name)
 		stream, lastPageID = checkinsStream
 		displayStream(stream)

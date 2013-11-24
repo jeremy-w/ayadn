@@ -1,9 +1,9 @@
 ---
 counts:
-    global: 200
+    global: 100
     unified: 100
     checkins: 100
-    explore: 200
+    explore: 100
     mentions: 100
-    posts: 200
-    starred: 200
+    posts: 100
+    starred: 100
