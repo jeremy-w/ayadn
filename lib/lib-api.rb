@@ -5,6 +5,8 @@ class AyaDN
 		def initialize(token)
 			@url = 'https://alpha-api.app.net/'
 			@token = token
+			@tools = AyaDN::Tools.new
+			@countGlobal, @countUnified, @countCheckins, @countExplore, @countMentions, @countPosts, @countStarred = 100
 		end
 		def getResponse(url)
 			begin
@@ -81,6 +83,18 @@ class AyaDN
 			theHash = JSON.parse(fromAppdotnet)
 		end
 
+		def configAPI
+			configFileContents, loaded = @tools.loadConfig
+			if loaded
+				@countGlobal = configFileContents['counts']['global'].to_i
+				@countUnified = configFileContents['counts']['unified'].to_i
+				@countCheckins = configFileContents['counts']['checkins'].to_i
+				@countExplore = configFileContents['counts']['explore'].to_i
+				@countMentions = configFileContents['counts']['mentions'].to_i
+				@countPosts = configFileContents['counts']['posts'].to_i
+				@countStarred = configFileContents['counts']['starred'].to_i
+			end
+		end
 
 		def makeStreamURL(stream, value = nil)
 			@url = "https://alpha-api.app.net/"
@@ -89,39 +103,38 @@ class AyaDN
 				@url += 'stream/0/posts/stream/global?access_token='
 				@url += @token + '&include_deleted=0'
 				@url += '&include_html=0'
-				@url += '&count=100'
+				@url += "&count=#{@countGlobal}"
 			when stream == "unified"
 				@url += 'stream/0/posts/stream/unified?access_token='
 				@url += @token + '&include_deleted=0'
 				@url += '&include_html=0'
 				@url += '&include_directed_posts=1'
-				@url += '&count=100'
+				@url += "&count=#{@countUnified}"
 			when stream == "checkins"
 				@url += 'stream/0/posts/stream/explore/'
 				@url += stream + "?access_token=#{@token}" + '&include_deleted=0&include_html=0&include_annotations=1'
-				@url += '&count=100'
+				@url += "&count=#{@countCheckins}"
 			when stream == "trending", stream == "conversations", stream == "photos"
 				@url += 'stream/0/posts/stream/explore/'
 				@url += "#{stream}" + "?access_token=#{@token}" + '&include_deleted=0&include_html=0'
-				@url += '&count=100'
+				@url += "&count=#{@countExplore}"
 			when stream == "tag"
 				@url += 'stream/0/posts/tag/'
 				@url += "#{value}"
-				@url += '&count=200'
 			when stream == "mentions"
 				@url += 'stream/0/users/'
 				@url += "#{value}" 
 				@url += "/mentions"
 				@url += "/?access_token=#{@token}"
 				@url += '&include_html=0'
-				@url += '&count=100'
+				@url += "&count=#{@countMentions}"
 			when stream == "posts"
 				@url += 'stream/0/users/'
 				@url += "#{value}" 
 				@url += "/posts"
 				@url += "/?access_token=#{@token}"
 				@url += '&include_deleted=1&include_html=0'
-				@url += '&count=200'
+				@url += "&count=#{@countPosts}"
 			when stream == "userInfo"
 				@url += 'stream/0/users/'
 				@url += "#{value}" 
@@ -147,7 +160,7 @@ class AyaDN
 				@url += "/stars"
 				@url += "/?access_token=#{@token}"
 				@url += '&include_deleted=0&include_html=0'
-				@url += '&count=100'
+				@url += "&count=#{@countStarred}"
 			when stream == "replies"
 				@url += 'stream/0/posts/'
 				@url += "#{value}" 
@@ -190,7 +203,6 @@ class AyaDN
 				@url += "?text=#{value}"
 				@url += "&include_annotations=1"
 				@url += "&access_token=#{@token}"
-				@url += '&count=200'
 
 			end
 		end

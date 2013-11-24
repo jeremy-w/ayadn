@@ -56,6 +56,16 @@ class AyaDN
                 end
             end
         end
+        def loadConfig
+            if File.exists?('./config.yml')
+                configFileContents = YAML::load_file('./config.yml')
+                loaded = true
+            else
+                configFileContents = {}
+                loaded = false
+            end
+            return configFileContents, loaded
+        end
 		def colorize(contentText)
 			content = Array.new
 			splitted = contentText.split(" ")

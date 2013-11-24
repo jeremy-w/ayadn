@@ -42,6 +42,7 @@ class AyaDN
 		fileURL = @ayadn_lastPageID_path + "/lastPageID-global"
 		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		puts @status.getGlobal
+		@api.configAPI
 		@hash = @api.getGlobal(lastPageID)
 		stream, lastPageID = checkinsStream
 		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
@@ -59,7 +60,8 @@ class AyaDN
 	def ayadnHashtags(tag)
 		puts @status.getHashtags(tag)
 		@hash = @api.getHashtags(tag)
-		checkinsStream
+		stream, lastPageID = checkinsStream
+		displayStream(stream)
 	end
 	def ayadnExplore(explore)
 		fileURL = @ayadn_lastPageID_path + "/lastPageID-#{explore}"
@@ -114,12 +116,14 @@ class AyaDN
 	def ayadnStarredPosts(name)
 		puts @status.starsUser(name)
 		@hash = @api.getStarredPosts(name)
-		checkinsStream
+		stream, lastPageID = checkinsStream
+		displayStream(stream)
 	end
 	def ayadnConversation(postID)
 		puts @status.getPostReplies(postID)
 		@hash = @api.getPostReplies(postID)
-		checkinsStream
+		stream, lastPageID = checkinsStream
+		displayStream(stream)
 	end
 	def ayadnPostInfos(action, postID)
 		puts @status.infosPost(postID)
@@ -325,7 +329,8 @@ class AyaDN
 
 	def ayadnSearch(value)
 		@hash = @api.getSearch(value)
-		checkinsStream
+		stream, lastPageID = checkinsStream
+		displayStream(stream)
 	end
 
 	def ayadnFollowing(action, name)
