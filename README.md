@@ -45,7 +45,9 @@ AYADN
 
 - backup/display your lists of followings, followers, muted users...
 
-- Create links with Markdown in your text
+- create links with Markdown in your text
+
+- and more!
 
 
 ## TL;DR
@@ -54,7 +56,7 @@ AYADN
 git clone https://github.com/ericdke/ayadn.git
 cd ayadn-master && chmod +x ayadn.rb
 bundle install
-[copy/paste your token from [Dev-Lite](http://dev-lite.jonathonduerig.com)]
+[copy/paste your authentication token]
 ./ayadn.rb write 'Posting to App.net with Ruby!'
 ``` 
 
@@ -155,17 +157,6 @@ If you've not made the app executable, use it through Ruby:
 ```
 ruby ayadn.rb
 ruby ayadn.rb write
-ruby ayadn.rb write 'Good morning ADN!!!'
-ruby ayadn.rb write '@ksniod Bonjour Laurent'
-ruby ayadn.rb reply 14579853
-ruby ayadn.rb tag music
-ruby ayadn.rb posts @ericd
-ruby ayadn.rb star 14760322
-ruby ayadn.rb starred @jws
-ruby ayadn.rb starred 14682795
-ruby ayadn.rb reposted 14805563
-ruby ayadn.rb infos 14582145
-ruby ayadn.rb convo 14638413
 ```
 
 ### As an executable in your PATH
@@ -173,21 +164,15 @@ ruby ayadn.rb convo 14638413
 If the app is executable and in your $PATH, just launch it:
 
 ```
-ayadn.rb help
+ayadn.rb
 ayadn.rb write 
-ayadn.rb write 'Posting from AyaDN in #Ruby!'
-ayadn.rb write '@davidby Salut David, comment va ?'
 ```
 
 ### If you made the symlink
 
 ```
-ayadn infos @fredvd
-ayadn tag ruby
-ayadn mentions @timrowe
-ayadn reply 14579853
-ayadn unstar 14746446
-ayadn write "[New post](http://ericd.re-app.net) on my blog!"
+ayadn
+ayadn write 
 ```  
 
 ### As a local executable
@@ -196,11 +181,7 @@ If the app is executable but not in your $PATH, then launch it locally:
 
 ```
 ./ayadn.rb
-./ayadn.rb w
-./ayadn.rb write '#Nowplaying some awesome music'
-./ayadn.rb checkins
-./ayadn.rb search ruby,json
-./ayadn.rb list followings @ericd
+./ayadn.rb write
 ```  
 
 ### With an alias (recommended)
@@ -221,31 +202,64 @@ Then it's easier to use, and very fast with the app's shortcuts:
 
 ```
 a 
-a h
 a w
-a w 'The power of #shortcuts!'
-a r 14579853
-a i @ksniod
-a i 14698777
-a p @ericd
-a m @nam3
-a c 14638413
-a t adnafterdark
-```  
-
-Want to be the ultimate geek?
-
-```
-alias p='ayadn.rb w '
-```  
-
-->
-
-```
-p 'Wohoo! Posting to App.net with a single keystroke! #AyaDN'
 ```  
 
 Enjoy!  
+
+## List of commands
+
+The first 5 lines include the `[PRESS ENTER KEY]` indication and a description but I don't continue after for obvious readability reasons.  
+
+```
+ayadn [PRESS ENTER KEY] *to display the unified stream*
+ayadn write [PRESS ENTER KEY] *then write your post*
+ayadn write '@ericd Good morning Eric!' [PRESS ENTER KEY] *(prefer the previous method, safer)*
+ayadn write "[Subscribe](https://app.net/c/2zqf) to the #AyaDN broadcast!" [PRESS ENTER KEY] *Markdown links are supported*
+ayadn reply 15723266 [PRESS ENTER KEY] *then write your post*
+ayadn global
+ayadn checkins
+ayadn trending
+ayadn photos
+ayadn conversations
+ayadn mentions @ericd
+ayadn mentions me
+ayadn posts @ericd
+ayadn posts me
+ayadn starred @ericd
+ayadn starred me
+ayadn starred 15723266
+ayadn reposted 15723266
+ayadn infos @ericd
+ayadn infos me
+ayadn infos 15723266
+ayadn convo 15726105
+ayadn tag nowplaying
+ayadn follow @ericd
+ayadn unfollow @ericd
+ayadn mute @ericd
+ayadn unmute @ericd
+ayadn list muted
+ayadn list followings @ericd
+ayadn list followings me
+ayadn list followers @ericd
+ayadn list followers me
+ayadn backup followings @ericd
+ayadn backup followings me
+ayadn backup followers @ericd
+ayadn backup followers me
+ayadn search ruby
+ayadn search ruby,json
+ayadn star 15723266
+ayadn unstar 15723266
+ayadn repost 15723266
+ayadn unrepost 15723266
+ayadn delete 12345678
+ayadn save 15723266
+ayadn load 15723266
+ayadn reset pagination
+```  
+
 
 ## Tips
 
@@ -272,13 +286,8 @@ On Mac OS X, you may have to answer `yes` if your computer asks you to download 
 
 ### "me"
 
-With some features like `infos`, `mentions` and more, you can replace `@username` by `me` if you want to check yourself.
+With some features like `infos`, `mentions` and more, you can replace `@username` by `me` if you want to check yourself.  
 
-```
-ayadn.rb mentions me
-ayadn.rb infos me
-ayadn.rb posts me
-```  
 
 ### Backup some data
 

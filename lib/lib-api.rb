@@ -138,16 +138,19 @@ class AyaDN
 				@url += 'stream/0/users/'
 				@url += "#{value}" 
 				@url += "/?access_token=#{@token}"
+				@url += '&include_html=0'
 			when stream == "whoReposted"
 				@url += 'stream/0/posts/'
 				@url += "#{value}" 
 				@url += "/reposters"
 				@url += "/?access_token=#{@token}"
+				@url += '&include_html=0'
 			when stream == "whoStarred"
 				@url += 'stream/0/posts/'
 				@url += "#{value}" 
 				@url += "/stars"
 				@url += "/?access_token=#{@token}"
+				@url += '&include_html=0'
 			when stream == "singlePost"
 				@url += 'stream/0/posts/'
 				@url += "#{value}" 
@@ -165,6 +168,7 @@ class AyaDN
 				@url += "#{value}" 
 				@url += "/replies"
 				@url += "/?access_token=#{@token}"
+				@url += '&include_html=0'
 			when stream == "star"
 				@url += 'stream/0/posts/'
 				@url += "/#{value}" + "/star" + "/?access_token=#{@token}"
@@ -181,16 +185,19 @@ class AyaDN
 				@url += "#{value}"
 				@url += "/following" 
 				@url += "/?access_token=#{@token}"
+				@url += '&include_html=0'
 			when stream == "followers"
 				@url += 'stream/0/users/'
 				@url += "#{value}"
 				@url += "/followers" 
 				@url += "/?access_token=#{@token}"
+				@url += '&include_html=0'
 			when stream == "muted"
 				@url += 'stream/0/users/'
 				@url += "#{value}"
 				@url += "/muted" 
 				@url += "/?access_token=#{@token}"
+				@url += '&include_html=0'
 			when stream == "mute"
 				@url += 'stream/0/users/'
 				@url += "#{value}"
@@ -202,6 +209,7 @@ class AyaDN
 				@url += "?text=#{value}"
 				@url += "&include_annotations=1"
 				@url += "&access_token=#{@token}"
+				@url += '&include_html=0'
 
 			end
 		end

@@ -1,5 +1,5 @@
 ---
-counts:
+counts: # number of elements retrieved by a stream on the first access, 200 max
     global: 100
     unified: 100
     checkins: 100
@@ -8,5 +8,7 @@ counts:
     posts: 100
     starred: 100
 timeline:
-    downside: true
+    # if true, the timeline is displayed from old to recent
+    downside: true 
+    # if true, the unified timeline includes directed posts
     directed: true

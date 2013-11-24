@@ -102,7 +102,7 @@ class AyaDN
 	def ayadnWhoReposted(postID)
 		puts @status.whoReposted(postID)
 		@hash = @api.getWhoReposted(postID)
-		if @hash.empty?
+		if @hash['data'].empty?
 			puts "\nThis post hasn't been reposted by anyone.\n\n".red
 			exit
 		end
@@ -111,7 +111,7 @@ class AyaDN
 	def ayadnWhoStarred(postID)
 		puts @status.whoStarred(postID)
 		@hash = @api.getWhoStarred(postID)
-		if @hash.empty?
+		if @hash['data'].empty?
 			puts "\nThis post hasn't been starred by anyone.\n\n".red
 			exit
 		end
