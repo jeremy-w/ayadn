@@ -135,7 +135,8 @@ class AyaDN
             help += "- " + "save/load postID ".green + "to save/load a post locally\n"
             help += "- " + "list/backup followings/followers/muted @username/me ".green + "to list/backup users you're following, who follow you, that you've muted\n"
             help += "- " + "help ".green + "to display this screen. See " + "https://github.com/ericdke/ayadn#how-to-use".magenta + " for detailed instructions, examples and tips." + "\n"
-            help += "- some options have a one-letter shortcut: w(rite), r(eply), s(earch), p(osts), m(entions), t(ag), c(onvo), i(nfos), h(elp).\n\n"
+            help += "- some options have a one-letter shortcut: w(rite), r(eply), s(earch), p(osts), m(entions), t(ag), c(onvo), i(nfos), h(elp)\n"
+            help += "- put 'scroll' before a stream to use the scrolling feature\n\n"
             help += "Examples:\n".cyan
             help += "ayadn.rb ".green + "(display your Unified stream)\n"
             help += "ayadn.rb write ".green + "(write a post with a compose window)\n"
@@ -146,6 +147,7 @@ class AyaDN
             help += "ayadn.rb checkins ".green + "(display the Checkins stream)\n"
             help += "ayadn.rb follow @ayadn ".green + "(follow user @ericd)\n"
             help += "ayadn.rb search ruby,json ".green + "(search for posts with these words)\n"
+            help += "ayadn.rb scroll global ".green + "(scroll the global stream)\n"
             help += "\n"
             return help
         end
