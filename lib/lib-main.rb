@@ -195,6 +195,12 @@ class AyaDN
 		@hash = blob['data']
 		puts AyaDN::View.new(@hash).buildPostInfo(@hash, isMine = true)
 		puts @status.postSent
+		@api.configAPI
+		fileURL = @ayadn_lastPageID_path + "/lastPageID-unified"
+		@hash = @api.getSimpleUnified
+		stream, lastPageID = checkinsStream
+		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
+		displayStream(stream)
 	end
 	def ayadnComposePost(reply_to = "", mentionsList = "", myUsername = "")
 		puts @status.writePost

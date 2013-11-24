@@ -93,6 +93,7 @@ class AyaDN
 				@countPosts = @configFileContents['counts']['posts'].to_i
 				@countStarred = @configFileContents['counts']['starred'].to_i
 				@directedPosts = @configFileContents['timeline']['directed']
+				@countStreamBack = @configFileContents['timeline']['streamback']
 			end
 		end
 
@@ -229,6 +230,15 @@ class AyaDN
 		def getUnified(lastPageID = nil)
 			@url = makeStreamURL("unified")
 			checkLastPageID(lastPageID)
+			getHash
+		end
+		def getSimpleUnified
+			@url = 'https://alpha-api.app.net/'
+			@url += 'stream/0/posts/stream/unified?access_token='
+			@url += @token + '&include_deleted=0'
+			@url += '&include_html=0'
+			@url += '&include_directed_posts=1' unless @directedPosts == false
+			@url += "&count=#{@countStreamBack}"
 			getHash
 		end
 		def getHashtags(tag)

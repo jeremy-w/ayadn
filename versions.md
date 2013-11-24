@@ -9,6 +9,7 @@ AYADN is a learning exercise: while it's fully functional, it's alpha and it's n
     - timeline order normal/inverse
     - directed posts
 - Scrolling streams!
+- show a few posts from the stream after posting
 
 ## 2013-11-23 v0.23
 - Markdown links

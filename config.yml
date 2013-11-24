@@ -12,3 +12,5 @@ timeline:
     downside: true 
     # if true, the unified timeline includes directed posts
     directed: true
+    # number of stream posts displayed after a successful post
+    streamback: 10
