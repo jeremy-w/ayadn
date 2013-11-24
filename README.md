@@ -5,7 +5,7 @@ AYADN
 
 ## Features
 
-- read your App.net personalized stream
+- read/scroll your App.net personalized stream
 
 - write a post
 
@@ -27,17 +27,17 @@ AYADN
 
 - get informations on a post/user
 
-- get posts from a user
+- read/scroll posts from a user
 
-- get posts mentioning a user
+- read/scroll posts mentioning a user
 
-- get posts starred by a user
+- read posts starred by a user
 
-- get posts reposted by a user
+- read posts reposted by a user
 
-- get users who starred/reposted a post
+- read users who starred/reposted a post
 
-- read other streams: Checkins, Global, Trending, Conversations
+- read/scroll other streams: Checkins, Global, Trending, Conversations
 
 - delete a post
 
@@ -213,19 +213,28 @@ The first lines include the `[PRESS ENTER KEY]` indication and a description but
 
 ```
 ayadn [PRESS ENTER KEY] *to display the unified stream*
-ayadn write [PRESS ENTER KEY] *then write your post*
+ayadn scroll [PRESS ENTER KEY] *to scroll the unified stream*
+ayadn write [PRESS ENTER KEY] *to write your post*
 ayadn write '@ericd Good morning Eric!' [PRESS ENTER KEY] *(prefer the previous method, safer)*
-ayadn write "[Subscribe](https://app.net/c/2zqf) to the #AyaDN broadcast!" [PRESS ENTER KEY]
-ayadn reply 15723266 [PRESS ENTER KEY] *then write your post*
+ayadn reply 15723266 [PRESS ENTER KEY] *to reply then write your post*
 ayadn global
+ayadn scroll global
 ayadn checkins
+ayadn scroll checkins
 ayadn trending
+ayadn scroll trending
 ayadn photos
+ayadn scroll photos
 ayadn conversations
+ayadn scroll conversations
 ayadn mentions @ericd
+ayadn scroll mentions @ericd
 ayadn mentions me
+ayadn scroll mentions me
 ayadn posts @ericd
+ayadn scroll posts @ericd
 ayadn posts me
+ayadn scroll posts me
 ayadn starred @ericd
 ayadn starred me
 ayadn starred 15723266

@@ -105,6 +105,14 @@ class AyaDN
             \]         # Literal closing bracket
           }x, ''
         end
+        def countdown(value)
+            t = value
+            t.times do |i|
+                print "\r#{t} sec... QUIT WITH [CTRL+C]".cyan
+                t -= 1
+                sleep 1
+            end
+        end
         def helpScreen
             help = ""
             help += "- " + "without options: display the Unified stream + your directed posts\n\n".magenta

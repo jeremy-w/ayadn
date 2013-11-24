@@ -8,6 +8,7 @@ AYADN is a learning exercise: while it's fully functional, it's alpha and it's n
     - number of elements in each stream
     - timeline order normal/inverse
     - directed posts
+- Scrolling streams!
 
 ## 2013-11-23 v0.23
 - Markdown links

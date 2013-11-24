@@ -38,11 +38,60 @@ class AyaDN
 			puts "No new posts since your last visit.\n\n".red
 		end
 	end
+	def displayScrollStream(stream)
+		if !stream.empty?
+			puts stream
+		else
+			print "\r"
+		end
+	end
+	def ayadnScroll(value, target)
+		value = "unified" if value == nil
+		@api.configAPI
+		if target == nil
+			fileURL = @ayadn_lastPageID_path + "/lastPageID-#{value}"
+		else
+			fileURL = @ayadn_lastPageID_path + "/lastPageID-#{value}-#{target}"
+		end
+		while true
+			begin
+				print "\r                                         "
+				print "\r"
+				lastPageID = @tools.fileOps("getlastpageid", fileURL)
+				if value == "global"
+					@hash = @api.getGlobal(lastPageID)
+				elsif value == "unified"
+					@hash = @api.getUnified(lastPageID)
+				elsif value == "checkins" or value == "photos" or value == "conversations" or value == "trending"
+					@hash = @api.getExplore(value, lastPageID)
+				elsif value == "mentions"
+					@hash = @api.getUserMentions(target, lastPageID)
+				elsif value == "posts"
+					@hash = @api.getUserPosts(target, lastPageID)
+				end
+				stream, lastPageID = checkinsStream
+				displayScrollStream(stream)
+				if lastPageID != nil
+					@tools.fileOps("writelastpageid", fileURL, lastPageID)
+					print "\r                                         "
+            		puts "\n\n"
+            		@tools.countdown(5)
+            	else
+        			print "\rNo new posts                ".red
+        			sleep 2
+        			@tools.countdown(18)
+        		end					
+			rescue Exception => e
+				puts "\nStopped.\n\n".red
+				exit
+			end
+		end
+	end
 	def ayadnGlobal
-		fileURL = @ayadn_lastPageID_path + "/lastPageID-global"
-		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		puts @status.getGlobal
 		@api.configAPI
+		fileURL = @ayadn_lastPageID_path + "/lastPageID-global"
+		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		@hash = @api.getGlobal(lastPageID)
 		stream, lastPageID = checkinsStream
 		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil

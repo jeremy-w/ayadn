@@ -15,6 +15,10 @@ status = ClientStatus.new
 arg1, arg2, arg3, arg4 = ARGV[0], ARGV[1], ARGV[2], ARGV[3]
 
 case arg1
+when "scroll"
+	run.ayadnScroll(arg2, arg3)
+	exit
+
 when nil, "flux", "stream", "uni", "unified"
 	# get unified
 	run.ayadnUnified

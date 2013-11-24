@@ -25,6 +25,7 @@ class AyaDN
 				abort("HTTP ERROR :\n".red + "#{e}\n".red)
 			end
 		end
+
 		def httpPost(url)
 			uri = URI("#{url}")
 			https = Net::HTTP.new(uri.host,uri.port)
@@ -35,12 +36,12 @@ class AyaDN
 			request["Content-Type"] = "application/json"
 			response = https.request(request)
 		end
+
 		def httpSend(text, replyto = nil)
 			@url = 'https://alpha-api.app.net/'
 			@url += 'stream/0/posts'
 			anno = "?include_annotations=1"
 			uri = URI("#{@url}#{anno}")
-			#uri = URI("#{@url}")
 			https = Net::HTTP.new(uri.host,uri.port)
 			https.use_ssl = true
 			https.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -224,7 +225,7 @@ class AyaDN
 			@url = makeStreamURL("global")
 			checkLastPageID(lastPageID)
 			getHash
-		end
+		end	
 		def getUnified(lastPageID = nil)
 			@url = makeStreamURL("unified")
 			checkLastPageID(lastPageID)
