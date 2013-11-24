@@ -7,6 +7,7 @@ class AyaDN
 			@token = token
 			@tools = AyaDN::Tools.new
 			@countGlobal, @countUnified, @countCheckins, @countExplore, @countMentions, @countPosts, @countStarred = 100
+			@directedPosts = true
 			@configFileContents, @loaded = @tools.loadConfig
 		end
 		def getResponse(url)
@@ -55,7 +56,7 @@ class AyaDN
 				"value" => {
         			"+net.app.core.user" => {
             			"user_id" => "@ayadn",
-            			"format" => "full"
+            			"format" => "basic"
         			}
         		}
 			}]
@@ -73,9 +74,6 @@ class AyaDN
 					"annotations" => ayadnAnno
 				}.to_json
 			end
-			# puts payload.to_s
-			# puts uri.to_s
-			# exit
 			response = https.request(request, payload)
 			callback = response.body
 		end
@@ -93,6 +91,7 @@ class AyaDN
 				@countMentions = @configFileContents['counts']['mentions'].to_i
 				@countPosts = @configFileContents['counts']['posts'].to_i
 				@countStarred = @configFileContents['counts']['starred'].to_i
+				@directedPosts = @configFileContents['timeline']['directed']
 			end
 		end
 
@@ -108,7 +107,7 @@ class AyaDN
 				@url += 'stream/0/posts/stream/unified?access_token='
 				@url += @token + '&include_deleted=0'
 				@url += '&include_html=0'
-				@url += '&include_directed_posts=1'
+				@url += '&include_directed_posts=1' unless @directedPosts == false
 				@url += "&count=#{@countUnified}"
 			when stream == "checkins"
 				@url += 'stream/0/posts/stream/explore/'

@@ -9,3 +9,4 @@ counts:
     starred: 100
 timeline:
     downside: true
+    directed: true
