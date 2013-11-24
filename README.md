@@ -47,7 +47,7 @@ AYADN
 
 - create links with Markdown in your text
 
-- and more!
+- and more! *([list of commands](https://github.com/ericdke/ayadn#list-of-commands))*
 
 
 ## TL;DR
