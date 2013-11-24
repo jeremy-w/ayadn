@@ -209,13 +209,13 @@ Enjoy!
 
 ## List of commands
 
-The first 5 lines include the `[PRESS ENTER KEY]` indication but I don't continue after for obvious readability reasons.  
+The first lines include the `[PRESS ENTER KEY]` indication and a description but I don't continue after for obvious readability reasons.  
 
 ```
 ayadn [PRESS ENTER KEY] *to display the unified stream*
 ayadn write [PRESS ENTER KEY] *then write your post*
 ayadn write '@ericd Good morning Eric!' [PRESS ENTER KEY] *(prefer the previous method, safer)*
-ayadn write "[Subscribe](https://app.net/c/2zqf) to the #AyaDN broadcast!" [PRESS ENTER KEY] *Markdown links are supported*
+ayadn write "[Subscribe](https://app.net/c/2zqf) to the #AyaDN broadcast!" [PRESS ENTER KEY]
 ayadn reply 15723266 [PRESS ENTER KEY] *then write your post*
 ayadn global
 ayadn checkins
