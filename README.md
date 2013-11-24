@@ -132,7 +132,7 @@ I haven't coded an interactive authentification system yet, so you **have to** c
     - Website: "http://ayadn-app.net"
     - Callback URL: leave it like it is
 
-then in `App settings` click on `Generate a user token for yourself`. Copy the code it gives you back, it's your unique authetification token for using AyaDN.
+then in `App settings` click on `Generate a user token for yourself`. Copy the code it gives you back, it's your unique authentication token for using AyaDN.
 
 - In any text editor, open the file `token.rb` and paste the token between the ticks:
 
@@ -209,7 +209,7 @@ Enjoy!
 
 ## List of commands
 
-The first 5 lines include the `[PRESS ENTER KEY]` indication and a description but I don't continue after for obvious readability reasons.  
+The first 5 lines include the `[PRESS ENTER KEY]` indication but I don't continue after for obvious readability reasons.  
 
 ```
 ayadn [PRESS ENTER KEY] *to display the unified stream*
