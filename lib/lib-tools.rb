@@ -3,9 +3,20 @@
 class AyaDN
 	class Tools
         def initialize
-            @ayadn_data_path = Dir.home + "/ayadn/data"
-            @ayadn_lastPageID_path = @ayadn_data_path + "/.pagination"
+            @configFileContents, @loaded = loadConfig
+            configTools
+            @ayadn_data_path = Dir.home + @ayadnFiles
+            @ayadn_lastPageID_path = @ayadn_data_path + "/#{@identityPrefix}/.pagination"
         end
+        def configTools
+            if @loaded
+                @ayadnFiles = @configFileContents['files']['ayadnfiles']
+                @identityPrefix = @configFileContents['identity']['prefix']
+                @ayadn_data_path = Dir.home + @ayadnFiles
+                @ayadn_lastPageID_path = @ayadn_data_path + "/#{@identityPrefix}/.pagination"
+            end
+        end
+
         def fileOps(action, value, content = nil, option = nil)
             if action == "makedir"
                 unless Dir.exists?value

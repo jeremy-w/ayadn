@@ -212,11 +212,22 @@ class AyaDN
 		@hash = blob['data']
 		puts AyaDN::View.new(@hash).buildPostInfo(@hash, isMine = true)
 		puts @status.postSent
-		fileURL = @ayadn_lastPageID_path + "/lastPageID-unified"
-		@hash = @api.getSimpleUnified
-		stream, lastPageID = checkinsStream
-		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
-		displayStream(stream)
+		# show end of the stream after posting
+		if reply_to == nil
+			#fileURL = @ayadn_lastPageID_path + "/lastPageID-unified"
+			@hash = @api.getSimpleUnified
+			stream, lastPageID = checkinsStream
+			#@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
+			displayStream(stream)
+		else
+			#fileURL = @ayadn_lastPageID_path + "/lastPageID-unified"
+			@hash1 = @api.getPostReplies(reply_to)
+			@hash2 = @api.getSimpleUnified
+			@hash = @hash2.merge!(@hash1)
+			stream, lastPageID = checkinsStream
+			#@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
+			displayStream(stream)
+		end
 	end
 	def ayadnComposePost(reply_to = "", mentionsList = "", myUsername = "")
 		puts @status.writePost

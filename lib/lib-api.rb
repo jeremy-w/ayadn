@@ -6,7 +6,6 @@ class AyaDN
 			@url = 'https://alpha-api.app.net/'
 			@token = token
 			@tools = AyaDN::Tools.new
-			#@countGlobal, @countUnified, @countCheckins, @countExplore, @countMentions, @countPosts, @countStarred = 100
 			@directedPosts = true
 			@configFileContents, @loaded = @tools.loadConfig
 		end
@@ -25,7 +24,6 @@ class AyaDN
 				abort("HTTP ERROR :\n".red + "#{e}\n".red)
 			end
 		end
-
 		def httpPost(url)
 			uri = URI("#{url}")
 			https = Net::HTTP.new(uri.host,uri.port)
@@ -36,7 +34,6 @@ class AyaDN
 			request["Content-Type"] = "application/json"
 			response = https.request(request)
 		end
-
 		def httpSend(text, replyto = nil)
 			@url = 'https://alpha-api.app.net/'
 			@url += 'stream/0/posts'
@@ -82,8 +79,6 @@ class AyaDN
 			fromAppdotnet = getResponse(@url)
 			theHash = JSON.parse(fromAppdotnet)
 		end
-
-
 		def configAPI
 			if @loaded
 				@countGlobal = @configFileContents['counts']['global'].to_i
@@ -94,10 +89,9 @@ class AyaDN
 				@countPosts = @configFileContents['counts']['posts'].to_i
 				@countStarred = @configFileContents['counts']['starred'].to_i
 				@directedPosts = @configFileContents['timeline']['directed']
-				@countStreamBack = @configFileContents['timeline']['streamback']
+				@countStreamBack = @configFileContents['timeline']['streamback'].to_i
 			end
 		end
-
 		def makeStreamURL(stream, value = nil)
 			@url = "https://alpha-api.app.net/"
 			case
@@ -222,7 +216,6 @@ class AyaDN
 			end
 			return @url
 		end
-
 		def getGlobal(lastPageID = nil)
 			configAPI
 			@url = makeStreamURL("global")

@@ -1,7 +1,7 @@
 AYADN
 =====
 
-AYADN is a learning exercise: while it's fully functional, it's alpha and it's not an official App.net application yet. That's why you have to log in with your Dev-Lite token. In a near future a real unique authentication system will be used, + the app will post in its own name. 
+AYADN is a learning exercise: while it's fully functional, it's alpha and it's not an official App.net application (yet).  
 
 ## 2013-11-25 v0.25
 - config bugfix
