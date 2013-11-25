@@ -326,10 +326,10 @@ ayadn.rb write "[Subscribe](https://app.net/c/2zqf) to the #AyaDN broadcast!"
 
 ### Reset pagination data
 
-If AyaDN shows you "No recent posts in this stream" but you still want to see the stream, you have to reset the pagination data first (without arguments: resets all pagination data).
+If AyaDN shows you "No recent posts in this stream" but you still want to see the stream, you have to reset the pagination data first (without arguments: resets all your pagination data).
 
 ```
-./ayadn.rb reset pagination
+./ayadn.rb reset
 ./ayadn.rb reset pagination unified
 ./ayadn.rb reset pagination mentions @ericd
 (etc)
@@ -337,10 +337,10 @@ If AyaDN shows you "No recent posts in this stream" but you still want to see th
 
 ### Running multiple accounts
 
-- first, run `ayadn reset` if you're already running AyaDN
+- first, do a `ayadn reset` if you're already running AyaDN
 - main idea: one AyaDN folder per account
 - change the name of the ayadn folder to @yourusername
-- replace "me" in `config.yml` by yourusername (without "@")
+- replace "me" in `config.yml` by your username (without "@")
 - of course, place each unique token in their respective files
 
 ### Configuration

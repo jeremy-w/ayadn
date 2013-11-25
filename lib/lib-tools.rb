@@ -5,8 +5,6 @@ class AyaDN
         def initialize
             @configFileContents, @loaded = loadConfig
             configTools
-            @ayadn_data_path = Dir.home + @ayadnFiles
-            @ayadn_lastPageID_path = @ayadn_data_path + "/#{@identityPrefix}/.pagination"
         end
         def configTools
             if @loaded
