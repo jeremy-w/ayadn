@@ -16,5 +16,5 @@ timeline:
     streamback: 10
 files:
     ayadnfiles: "/ayadn/data"
-identity: # change this in each folder for your username in you're using several ADN accounts
+identity: # change this in each folder for your username in you're using several ADN accounts (don't use "@")
     prefix: me
