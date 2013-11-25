@@ -14,3 +14,5 @@ timeline:
     directed: true
     # number of stream posts displayed after a successful post
     streamback: 10
+files:
+    ayadnfiles: "/ayadn/data"

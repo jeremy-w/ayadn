@@ -6,7 +6,7 @@ class AyaDN
 			@url = 'https://alpha-api.app.net/'
 			@token = token
 			@tools = AyaDN::Tools.new
-			@countGlobal, @countUnified, @countCheckins, @countExplore, @countMentions, @countPosts, @countStarred = 100
+			#@countGlobal, @countUnified, @countCheckins, @countExplore, @countMentions, @countPosts, @countStarred = 100
 			@directedPosts = true
 			@configFileContents, @loaded = @tools.loadConfig
 		end
@@ -83,6 +83,7 @@ class AyaDN
 			theHash = JSON.parse(fromAppdotnet)
 		end
 
+
 		def configAPI
 			if @loaded
 				@countGlobal = @configFileContents['counts']['global'].to_i
@@ -107,7 +108,7 @@ class AyaDN
 				@url += "&count=#{@countGlobal}"
 			when stream == "unified"
 				@url += 'stream/0/posts/stream/unified?access_token='
-				@url += @token + '&include_deleted=0'
+				@url += @token + '&include_deleted=1'
 				@url += '&include_html=0'
 				@url += '&include_directed_posts=1' unless @directedPosts == false
 				@url += "&count=#{@countUnified}"
@@ -223,16 +224,19 @@ class AyaDN
 		end
 
 		def getGlobal(lastPageID = nil)
+			configAPI
 			@url = makeStreamURL("global")
 			checkLastPageID(lastPageID)
 			getHash
 		end	
 		def getUnified(lastPageID = nil)
+			configAPI
 			@url = makeStreamURL("unified")
 			checkLastPageID(lastPageID)
 			getHash
 		end
 		def getSimpleUnified
+			configAPI
 			@url = 'https://alpha-api.app.net/'
 			@url += 'stream/0/posts/stream/unified?access_token='
 			@url += @token + '&include_deleted=0'
@@ -242,37 +246,45 @@ class AyaDN
 			getHash
 		end
 		def getHashtags(tag)
+			configAPI
 			@url = makeStreamURL("tag", tag)
 			getHash
 		end
 		def getExplore(explore, lastPageID = nil)
+			configAPI
 			@url = makeStreamURL(explore)
 			checkLastPageID(lastPageID)
 			getHash
 		end
 		def getUserMentions(name, lastPageID = nil)
+			configAPI
 			@url = makeStreamURL("mentions", name)
 			checkLastPageID(lastPageID)
 			getHash
 		end
 		def getUserPosts(name, lastPageID = nil)
+			configAPI
 			@url = makeStreamURL("posts", name)
 			checkLastPageID(lastPageID)
 			getHash
 		end
 		def getUserInfos(name)
+			configAPI
 			@url = makeStreamURL("userInfo", name)
 			getHash
 		end
 		def getWhoReposted(postID)
+			configAPI
 			@url = makeStreamURL("whoReposted", postID)
 			getHash
 		end
 		def getWhoStarred(postID)
+			configAPI
 			@url = makeStreamURL("whoStarred", postID)
 			getHash
 		end
 		def getPostInfos(action, postID)
+			configAPI
 			@url = makeStreamURL("singlePost", postID)
 			if action == "call"
 				getHash
@@ -288,18 +300,22 @@ class AyaDN
 			end
 		end
 		def getSinglePost(postID)
+			configAPI
 			@url = makeStreamURL("singlePost", postID)
 			getHash
 		end
 		def getStarredPosts(name)
+			configAPI
 			@url = makeStreamURL("starredPosts", name)
 			getHash
 		end
 		def getPostReplies(postID)
+			configAPI
 			@url = makeStreamURL("replies", postID)
 			getHash
 		end
 		def getPostMentions(postID)
+			configAPI
 			@url = makeStreamURL("singlePost", postID)
 			theHash = getHash
 			postInfo = theHash['data']
@@ -309,33 +325,40 @@ class AyaDN
 			return rawText, userName, isRepost
 		end
 		def getUserName(name)
+			configAPI
 			@url = makeStreamURL("userInfo", name)
 			theHash = getHash
 			userInfo = theHash['data']
 			userName = userInfo['username']
 		end
 		def goDelete(postID)
+			configAPI
 			@url = makeStreamURL("singlePost", postID)
 			isTherePost, isYours = ifExists(postID)
 			return isTherePost, isYours
 		end
 		def starPost(postID)
+			configAPI
 			@url = makeStreamURL("star", postID)
 			httpPost(@url)
 		end
 		def unstarPost(postID)
+			configAPI
 			@url = makeStreamURL("star", postID)
 			restDelete
 		end
 		def repostPost(postID)
+			configAPI
 			@url = makeStreamURL("repost", postID)
 			httpPost(@url)
 		end
 		def unrepostPost(postID)
+			configAPI
 			@url = makeStreamURL("repost", postID)
 			restDelete
 		end
 		def ifExists(postID)
+			configAPI
 			theHash = getHash
 			postInfo = theHash['data']
 			isTherePost = postInfo['text']
@@ -343,12 +366,14 @@ class AyaDN
 			return isTherePost, isYours
 		end
 		def getOriginalPost(postID)
+			configAPI
 			theHash = getHash
 			postInfo = theHash['data']
 			isRepost = postInfo['repost_of']
 			goToID = isRepost['id']
 		end
 		def getUserFollowInfo(name)
+			configAPI
 			@url = makeStreamURL("userInfo", name)
 			theHash = getHash
 			userInfo = theHash['data']
@@ -357,28 +382,34 @@ class AyaDN
 			return youFollow, followsYou
 		end
 		def getUserMuteInfo(name)
+			configAPI
 			@url = makeStreamURL("userInfo", name)
 			theHash = getHash
 			userInfo = theHash['data']
 			youMuted = userInfo['you_muted']
 		end
 		def muteUser(name)
+			configAPI
 			@url = makeStreamURL("mute", name)
 			httpPost(@url)
 		end
 		def unmuteUser(name)
+			configAPI
 			@url = makeStreamURL("mute", name)
 			restDelete
 		end
 		def followUser(name)
+			configAPI
 			@url = makeStreamURL("follow", name)
 			httpPost(@url)
 		end
 		def unfollowUser(name)
+			configAPI
 			@url = makeStreamURL("follow", name)
 			restDelete
 		end
 		def getFollowings(name, beforeID)
+			configAPI
 			@url = makeStreamURL("followings", name)
 			@url += "&count=200"
 			if beforeID != nil
@@ -387,6 +418,7 @@ class AyaDN
 			getHash
 		end
 		def getFollowers(name, beforeID)
+			configAPI
 			@url = makeStreamURL("followers", name)
 			if beforeID != nil
 				@url += "&before_id=#{beforeID}"
@@ -394,6 +426,7 @@ class AyaDN
 			getHash
 		end
 		def getMuted(name, beforeID)
+			configAPI
 			@url = makeStreamURL("muted", name)
 			if beforeID != nil
 				@url += "&before_id=#{beforeID}"
@@ -401,6 +434,7 @@ class AyaDN
 			getHash
 		end
 		def getSearch(value)
+			configAPI
 			@url = makeStreamURL("search", value)
 			getHash
 		end

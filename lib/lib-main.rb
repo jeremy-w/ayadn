@@ -8,6 +8,15 @@ class AyaDN
 		@tools = AyaDN::Tools.new
 		@ayadn_data_path = Dir.home + "/ayadn/data"
 		@ayadn_lastPageID_path = @ayadn_data_path + "/.pagination"
+		@configFileContents, @loaded = @tools.loadConfig
+	end
+
+	def configMain
+		if @loaded
+			@ayadnFiles = @configFileContents['files']['ayadnfiles']
+			@ayadn_data_path = Dir.home + @ayadnFiles
+			@ayadn_lastPageID_path = @ayadn_data_path + "/.pagination"
+		end
 	end
 
 	def stream
@@ -47,7 +56,7 @@ class AyaDN
 	end
 	def ayadnScroll(value, target)
 		value = "unified" if value == nil
-		@api.configAPI
+		configMain
 		if target == nil
 			fileURL = @ayadn_lastPageID_path + "/lastPageID-#{value}"
 		else
@@ -88,8 +97,8 @@ class AyaDN
 		end
 	end
 	def ayadnGlobal
+		configMain
 		puts @status.getGlobal
-		@api.configAPI
 		fileURL = @ayadn_lastPageID_path + "/lastPageID-global"
 		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		@hash = @api.getGlobal(lastPageID)
@@ -98,57 +107,60 @@ class AyaDN
 		displayStream(stream)
 	end
 	def ayadnUnified
+		configMain
 		fileURL = @ayadn_lastPageID_path + "/lastPageID-unified"
 		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		puts @status.getUnified
-		@api.configAPI
 		@hash = @api.getUnified(lastPageID)
 		stream, lastPageID = checkinsStream
 		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
 		displayStream(stream)
 	end
 	def ayadnHashtags(tag)
+		configMain
 		puts @status.getHashtags(tag)
 		@hash = @api.getHashtags(tag)
 		stream, lastPageID = checkinsStream
 		displayStream(stream)
 	end
 	def ayadnExplore(explore)
+		configMain
 		fileURL = @ayadn_lastPageID_path + "/lastPageID-#{explore}"
 		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		puts @status.getExplore(explore)
-		@api.configAPI
 		@hash = @api.getExplore(explore, lastPageID)
 		stream, lastPageID = checkinsStream
 		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
 		displayStream(stream)
 	end
 	def ayadnUserMentions(name)
+		configMain
 		fileURL = @ayadn_lastPageID_path + "/lastPageID-mentions-#{name}"
 		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		puts @status.mentionsUser(name)
-		@api.configAPI
 		@hash = @api.getUserMentions(name, lastPageID)
 		stream, lastPageID = checkinsStream
 		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
 		displayStream(stream)
 	end
 	def ayadnUserPosts(name)
+		configMain
 		fileURL = @ayadn_lastPageID_path + "/lastPageID-posts-#{name}"
 		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		puts @status.postsUser(name)
-		@api.configAPI
 		@hash = @api.getUserPosts(name, lastPageID)
 		stream, lastPageID = checkinsStream
 		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
 		displayStream(stream)
 	end
 	def ayadnUserInfos(name)
+		configMain
 		puts @status.infosUser(name)
 		@hash = @api.getUserInfos(name)
 	    puts AyaDN::View.new(@hash).showUsersInfos(name)
 	end
 	def ayadnWhoReposted(postID)
+		configMain
 		puts @status.whoReposted(postID)
 		@hash = @api.getWhoReposted(postID)
 		if @hash['data'].empty?
@@ -158,6 +170,7 @@ class AyaDN
 	    puts AyaDN::View.new(@hash).showUsersList()
 	end
 	def ayadnWhoStarred(postID)
+		configMain
 		puts @status.whoStarred(postID)
 		@hash = @api.getWhoStarred(postID)
 		if @hash['data'].empty?
@@ -167,24 +180,27 @@ class AyaDN
 	    puts AyaDN::View.new(@hash).showUsersList()
 	end
 	def ayadnStarredPosts(name)
+		configMain
 		puts @status.starsUser(name)
-		@api.configAPI
 		@hash = @api.getStarredPosts(name)
 		stream, lastPageID = checkinsStream
 		displayStream(stream)
 	end
 	def ayadnConversation(postID)
+		configMain
 		puts @status.getPostReplies(postID)
 		@hash = @api.getPostReplies(postID)
 		stream, lastPageID = checkinsStream
 		displayStream(stream)
 	end
 	def ayadnPostInfos(action, postID)
+		configMain
 		puts @status.infosPost(postID)
 		@hash = @api.getPostInfos(action, postID)
 	    puts AyaDN::View.new(@hash).showPostInfos(postID, isMine = false)
 	end
 	def ayadnSendPost(text, reply_to = nil)
+		configMain
 		if text.empty? or text == nil
 			puts @status.emptyPost
 			exit
@@ -195,7 +211,6 @@ class AyaDN
 		@hash = blob['data']
 		puts AyaDN::View.new(@hash).buildPostInfo(@hash, isMine = true)
 		puts @status.postSent
-		@api.configAPI
 		fileURL = @ayadn_lastPageID_path + "/lastPageID-unified"
 		@hash = @api.getSimpleUnified
 		stream, lastPageID = checkinsStream
@@ -262,6 +277,7 @@ class AyaDN
 		ayadnComposePost(postID, mentionsList)
 	end
 	def ayadnDeletePost(postID)
+		configMain
 		puts @status.deletePost(postID)
 		isTherePost, isYours = @api.goDelete(postID)
 		if isTherePost == nil
@@ -273,6 +289,7 @@ class AyaDN
 		end
 	end
 	def getList(list, name)
+		configMain
 		beforeID = nil
 		bigHash = {}
 		if list == "followers"
@@ -302,6 +319,7 @@ class AyaDN
 	end
 
 	def ayadnShowList(list, name)
+		configMain
 		puts "\nFetching the \'#{list}\' list. Please wait...\n\n".green
 		@hash = getList(list, name)
 		if list == "muted"
@@ -323,6 +341,7 @@ class AyaDN
 	end
 
 	def ayadnSaveList(list, name)
+		configMain
 		# to call with: var = ayadnSaveList("followers", "@ericd")
 		ayadn_lists_path = @ayadn_data_path + "/lists/"
 		# time = Time.new
@@ -359,6 +378,7 @@ class AyaDN
 	end
 
 	def ayadnSavePost(postID)
+		configMain
 		name = postID.to_s
 		ayadn_posts_path = @ayadn_data_path + "/posts/"
 		unless Dir.exists?ayadn_posts_path
@@ -383,17 +403,20 @@ class AyaDN
 
 	# will be used in many places
 	def ayadnGetOriginalPost(postID)
+		configMain
 		originalPostID = @api.getOriginalPost(postID)
 	end
 	#
 
 	def ayadnSearch(value)
+		configMain
 		@hash = @api.getSearch(value)
 		stream, lastPageID = checkinsStream
 		displayStream(stream)
 	end
 
 	def ayadnFollowing(action, name)
+		configMain
 		youFollow, followsYou = @api.getUserFollowInfo(name)
 		if action == "follow"
 			if youFollow == true
@@ -417,6 +440,7 @@ class AyaDN
 	end
 
 	def ayadnMuting(action, name)
+		configMain
 		youMuted = @api.getUserMuteInfo(name)
 		if action == "mute"
 			if youMuted == "true"
@@ -440,6 +464,7 @@ class AyaDN
 	end
 
 	def ayadnStarringPost(action, postID)
+		configMain
 		@hash = @api.getSinglePost(postID)
 		postInfo = @hash['data']
 		youStarred = postInfo['you_starred']
@@ -471,6 +496,7 @@ class AyaDN
 		end
 	end
 	def ayadnReposting(action, postID)
+		configMain
 		@hash = @api.getSinglePost(postID)
 		postInfo = @hash['data']
 		isRepost = postInfo['repost_of']
@@ -503,6 +529,7 @@ class AyaDN
 		end
 	end
 	def ayadnReset(target, content, option)
+		configMain
 		@tools.fileOps("reset", target, content, option)
 	end
 end

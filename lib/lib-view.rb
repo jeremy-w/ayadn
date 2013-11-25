@@ -120,9 +120,9 @@ class AyaDN
 				createdDay = createdAt[0...10]
 				createdHour = createdAt[11...19]
 				postId = item['id']
-				postString += "Post ID: ".cyan + postId.to_s.green
+				postString += "PostID: ".cyan + postId.to_s.green
 				postString += " - "
-				postString += createdDay.cyan + ' at ' + createdHour.cyan + ' by ' + "@".green + userName.green + "\n" + coloredPost + "\n"
+				postString += createdDay.cyan + ' at ' + createdHour.cyan + ' by ' + "@".reddish + userName.reddish + "\n" + coloredPost + "\n"
 				links = item['entities']['links']
 				sourceName = item['source']['name']
 				sourceLink = item['source']['link']
