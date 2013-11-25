@@ -11,8 +11,6 @@ puts "\nAYADN".red + " - " + "App.net command-line client\n".brown
 
 run = AyaDN.new(@token)
 status = ClientStatus.new
-#@configFileContents, @loaded = AyaDN::Tools.new.loadConfig
-#run.ayadnInit
 
 arg1, arg2, arg3, arg4 = ARGV[0], ARGV[1], ARGV[2], ARGV[3]
 

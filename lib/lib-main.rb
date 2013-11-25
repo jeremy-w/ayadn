@@ -6,16 +6,17 @@ class AyaDN
 		@api = AyaDN::API.new(@token)
 		@status = ClientStatus.new
 		@tools = AyaDN::Tools.new
-		@ayadn_data_path = Dir.home + "/ayadn/data"
-		@ayadn_lastPageID_path = @ayadn_data_path + "/.pagination"
+		# @ayadn_data_path = Dir.home + "/ayadn/data"
+		# @ayadn_lastPageID_path = @ayadn_data_path + "/.pagination"
 		@configFileContents, @loaded = @tools.loadConfig
 	end
 
 	def configMain
 		if @loaded
 			@ayadnFiles = @configFileContents['files']['ayadnfiles']
+			@identityPrefix = @configFileContents['identity']['prefix']
 			@ayadn_data_path = Dir.home + @ayadnFiles
-			@ayadn_lastPageID_path = @ayadn_data_path + "/.pagination"
+			@ayadn_lastPageID_path = @ayadn_data_path + "/#{@identityPrefix}/.pagination"
 		end
 	end
 
