@@ -335,6 +335,14 @@ If AyaDN shows you "No recent posts in this stream" but you still want to see th
 (etc)
 ```  
 
+### Running multiple accounts
+
+- first, run `ayadn reset` if you're already running AyaDN
+- main idea: one AyaDN folder per account
+- change the name of the ayadn folder to @yourusername
+- replace "me" in `config.yml` by yourusername (without "@")
+- of course, place each unique token in their respective files
+
 ### Configuration
 
 You can modify the values (right hand) in the `config.yml` file but be very careful not to modify anything else: don't change the indentation or the name of the keys (left hand), don't add or remove quotes or special characters, etc,  otherwise it may break the Internets.
