@@ -18,27 +18,21 @@ arg1, arg2, arg3, arg4 = ARGV[0], ARGV[1], ARGV[2], ARGV[3]
 case arg1
 when "scroll"
 	run.ayadnScroll(arg2, arg3)
-	exit
 
 when nil, "flux", "stream", "uni", "unified"
 	run.ayadnUnified
-	exit
 
 when "global", "g"
 	run.ayadnGlobal()
-	exit
 
 when "trending", "conversations", "checkins", "photos"
 	run.ayadnExplore(arg1)
-	exit
 
 when "mentions", "m"
 	(arg2 =~ /^@/ || arg2 == "me") ? run.ayadnUserMentions(arg2) : (puts status.errorUserID(arg2))
-	exit
 
 when "posts", "p"
 	(arg2 =~ /^@/ || arg2 == "me") ? run.ayadnUserPosts(arg2) : (puts status.errorUserID(arg2))
-	exit
 
 when "starred"
 	if arg2 =~ /^@/ || arg2 == "me"
@@ -48,11 +42,9 @@ when "starred"
 	else
 		puts status.errorUserID(arg2)
 	end
-	exit
 
 when "reposted"
 	arg2.is_integer? ? run.ayadnWhoReposted(arg2) : (puts status.errorPostID(arg2))
-	exit
 
 when "infos", "i"
 	if arg2 =~ /^@/ || arg2 == "me"
@@ -62,17 +54,14 @@ when "infos", "i"
 	else
 		puts status.errorInfos(arg2)
 	end
-	exit
 
 when "convo", "c"
 	arg2.is_integer? ? run.ayadnConversation(arg2) : (puts status.errorPostID(arg2))
-	exit
 
 when "tag", "t"
 	theTag = arg2.dup
 	theTag[0] = "" if theTag =~ /^#/
 	run.ayadnHashtags(theTag)
-	exit
 
 when "delete"
 	if arg2.is_integer?
@@ -82,15 +71,12 @@ when "delete"
 	else
 		puts status.errorPostID(arg2)
 	end
-	exit
 
 when "save"
 	arg2.is_integer? ? run.ayadnSavePost(arg2) : (puts status.errorPostID(arg2))
-	exit
 
 when "load"
 	arg2.is_integer? ? run.ayadnPostInfos("load", arg2) : (puts status.errorPostID(arg2))
-	exit
 
 when "backup"
 	if arg2 == "followings"
@@ -100,7 +86,6 @@ when "backup"
 	elsif arg2 == "muted"
 		run.ayadnSaveList("muted", "me")
 	end
-	exit
 
 when "list"
 	if arg2 == "followings"
@@ -112,39 +97,30 @@ when "list"
 	else
 		puts "\nSyntax error\n"
 	end
-	exit
 
 when "star"
 	arg2.is_integer? ? run.ayadnStarringPost("star", arg2) : (puts status.errorPostID(arg2))
-	exit
 
 when "unstar"
 	arg2.is_integer? ? run.ayadnStarringPost("unstar", arg2) : (puts status.errorPostID(arg2))
-	exit
 
 when "repost"
 	arg2.is_integer? ? run.ayadnReposting("repost", arg2) : (puts status.errorPostID(arg2))
-	exit
 
 when "unrepost"
 	arg2.is_integer? ? run.ayadnReposting("unrepost", arg2) : (puts status.errorPostID(arg2))
-	exit
 
 when "follow"
 	arg2 =~ /^@/ ? run.ayadnFollowing("follow", arg2) : (puts status.errorUserID(arg2))
-	exit
 
 when "unfollow"
 	arg2 =~ /^@/ ? run.ayadnFollowing("unfollow", arg2) : (puts status.errorUserID(arg2))
-	exit
 
 when "mute"
 	arg2 =~ /^@/ ? run.ayadnMuting("mute", arg2) : (puts status.errorUserID(arg2))
-	exit
 
 when "unmute"
 	arg2 =~ /^@/ ? run.ayadnMuting("unmute", arg2) : (puts status.errorUserID(arg2))
-	exit
 
 when "pm"
 	if arg3 != nil
@@ -153,16 +129,13 @@ when "pm"
 	else
 		run.ayadnComposeMessage(arg2)
 	end
-	exit
 
 when "messages"
 	# arg2 -> channel ID
 	run.ayadnGetMessages(arg2)
-	exit
 
 when "write", "w"
 	arg2 != nil ? run.ayadnSendPost(arg2, nil) : run.ayadnComposePost
-	exit
 
 when "reply", "r"
 	if arg2 != nil
@@ -170,15 +143,12 @@ when "reply", "r"
 	else
 		puts status.errorNoID
 	end
-	exit
 
 when "search", "s"
 	arg2 != nil ? run.ayadnSearch(arg2) : (puts "\nsyntax error\n")
-	exit
 
 when "help", "h"
 	puts tools.helpScreen()
-	exit
 
 when "debug"
 	if arg2 == nil
@@ -186,18 +156,20 @@ when "debug"
 	elsif arg2.is_integer?
 		run.ayadnDebugPost(arg2)
 	end
-	exit
+
 when "reset"
 	if arg2 == "pagination"
 		run.ayadnReset("pagination", arg3, arg4)
 	elsif arg2 == nil
 		run.ayadnReset("pagination", nil, nil)
 	end
-	exit
+
+else
+	# if not any known argument
+	option = ARGV
+	bad_option = option.join(" ")
+	puts "\nSyntax error: ".red + "#{bad_option} ".brown + "is not a valid option.\n\n".red
+	puts tools.helpScreen()
+
 end
 
-# if not any known argument
-option = ARGV
-bad_option = option.join(" ")
-puts "\nSyntax error: ".red + "#{bad_option} ".brown + "is not a valid option.\n\n".red
-puts tools.helpScreen()
