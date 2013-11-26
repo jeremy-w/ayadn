@@ -64,7 +64,7 @@ class AyaDN
 					@hash = @api.getGlobal(lastPageID)
 				elsif value == "unified"
 					@hash = @api.getUnified(lastPageID)
-				elsif value == "checkins" || value == "photos" || value == "conversations" || value == "trending"
+				elsif value == ("checkins" || "photos" || "conversations" || "trending")
 					@hash = @api.getExplore(value, lastPageID)
 				elsif value == "mentions"
 					@hash = @api.getUserMentions(target, lastPageID)
@@ -84,8 +84,7 @@ class AyaDN
         			@tools.countdown(18)
         		end					
 			rescue Exception => e
-				puts "\nStopped.\n\n".red
-				exit
+				abort("\nStopped.\n\n".red)
 			end
 		end
 	end
@@ -156,20 +155,14 @@ class AyaDN
 		configMain
 		puts @status.whoReposted(postID)
 		@hash = @api.getWhoReposted(postID)
-		if @hash['data'].empty?
-			puts "\nThis post hasn't been reposted by anyone.\n\n".red
-			exit
-		end
+		abort("\nThis post hasn't been reposted by anyone.\n\n".red) if @hash['data'].empty?
 	    puts @view.new(@hash).showUsersList()
 	end
 	def ayadnWhoStarred(postID)
 		configMain
 		puts @status.whoStarred(postID)
 		@hash = @api.getWhoStarred(postID)
-		if @hash['data'].empty?
-			puts "\nThis post hasn't been starred by anyone.\n\n".red
-			exit
-		end
+		abort("\nThis post hasn't been starred by anyone.\n\n".red) if @hash['data'].empty?
 	    puts @view.new(@hash).showUsersList()
 	end
 	def ayadnStarredPosts(name)
@@ -193,10 +186,7 @@ class AyaDN
 	    puts @view.new(@hash).showPostInfos(postID, isMine = false)
 	end
 	def ayadnSendMessage(target, text)
-		if text.empty? or text == nil
-			puts @status.emptyPost
-			exit
-		end
+		abort(@status.emptyPost) if (text.empty? || text == nil)
 		puts "\nSending private Message...\n".green
 		callback = @api.httpSendMessage(target, text)
 		blob = JSON.parse(callback)
@@ -221,10 +211,7 @@ class AyaDN
 	end
 	def ayadnSendPost(text, reply_to = nil)
 		configMain
-		if text.empty? or text == nil
-			puts @status.emptyPost
-			exit
-		end
+		abort(@status.emptyPost) if (text.empty? || text == nil)
 		puts @status.sendPost
 		callback = @api.httpSend(text, reply_to)
 		blob = JSON.parse(callback)
@@ -258,7 +245,7 @@ class AyaDN
 		if realLength < 2048
 			ayadnSendMessage(target, inputText)
 		else
-			puts "\nError: your message is ".red + "#{realLength} ".brown + " characters long, please remove ".red + "#{realLength - maxChar} ".brown + "characters.\n\n".red
+			abort("\nError: your message is ".red + "#{realLength} ".brown + " characters long, please remove ".red + "#{realLength - maxChar} ".brown + "characters.\n\n".red)
 		end
 	end
 	def ayadnComposePost(reply_to = "", mentionsList = "", myUsername = "")
@@ -284,17 +271,14 @@ class AyaDN
 		if totalLength > 0
 			ayadnSendPost(postText, reply_to)
 		else
-			puts "\nError: your post is ".red + "#{realLength} ".brown + " characters long, please remove ".red + "#{realLength - maxChar} ".brown + "characters.\n\n".red
+			abort("\nError: your post is ".red + "#{realLength} ".brown + " characters long, please remove ".red + "#{realLength - maxChar} ".brown + "characters.\n\n".red)
 		end
 	end
 	def ayadnReply(postID)
 		puts "Replying to post ".cyan + "#{postID}...\n".brown
 		puts "Extracting mentions...\n".cyan
 		rawMentionsText, replyingToThisUsername, isRepost = @api.getPostMentions(postID)
-		if isRepost != nil
-			puts "This post is a repost. Please reply to the parent post.\n\n".red
-			exit
-		end
+		abort("This post is a repost. Please reply to the parent post.\n\n".red) if isRepost != nil
 		content = Array.new
 		splitted = rawMentionsText.split(" ")
 		splitted.each do |word|
@@ -305,9 +289,8 @@ class AyaDN
 		myHandle = "@" + myUsername
 		replyingToHandle = "@" + replyingToThisUsername
 		newContent = Array.new
-		if replyingToThisUsername != myUsername # if I'm not answering myself
-			newContent.push(replyingToHandle) # add the @username of the replyee (?!)
-		end
+		# if I'm not answering myself, add the @username of the "replyee"
+		newContent.push(replyingToHandle) if replyingToThisUsername != myUsername 
 		content.each do |item|
 			# if I'm in the post's mentions, erase me, else insert the mention
 			item == myHandle ? newContent.push("") : newContent.push(item)
@@ -320,7 +303,7 @@ class AyaDN
 		puts @status.deletePost(postID)
 		isTherePost, isYours = @api.goDelete(postID)
 		if isTherePost == nil
-			puts "\nPost already deleted.\n\n".red
+			abort("\nPost already deleted.\n\n".red)
 		else
 			@api.restDelete()
 			puts "\nPost successfully deleted.\n\n".green
@@ -389,7 +372,7 @@ class AyaDN
 			puts "\nYou already saved this list.\n".red
 			puts "Delete the old one and replace with this one?\n".red + "(n/y) ".green 
 			input = STDIN.getch
-			abort("\nCanceled.\n\n".red) if (input == "n" || input == "N")
+			abort("\nCanceled.\n\n".red) if input == ("n" || "N")
 		end
 		if list == "muted"
 			puts "\nFetching your muted users list.\n".cyan
@@ -417,8 +400,7 @@ class AyaDN
 		file = "#{name}.post"
 		fileURL = ayadn_posts_path + file
 		if File.exists?(fileURL)
-			puts "\nYou already saved this post.\n\n".red
-			exit
+			abort("\nYou already saved this post.\n\n".red)
 		end
 		puts "\nLoading post ".green + "#{postID}".brown
 		@hash = @api.getSinglePost(postID)
@@ -449,22 +431,20 @@ class AyaDN
 		youFollow, followsYou = @api.getUserFollowInfo(name)
 		if action == "follow"
 			if youFollow == true
-				puts "You're already following this user.\n\n".red
-				exit
+				abort("You're already following this user.\n\n".red)
 			else
 				resp = @api.followUser(name)
 				puts "\nYou just followed user ".green + "#{name}".brown + "\n\n"
 			end
 		elsif action == "unfollow"
 			if youFollow == false
-				puts "You're already not following this user.\n\n".red
-				exit
+				abort("You're already not following this user.\n\n".red)
 			else
 				resp = @api.unfollowUser(name)
 				puts "\nYou just unfollowed user ".green + "#{name}".brown + "\n\n"
 			end
 		else
-			puts "\nsyntax error\n"
+			abort("\nsyntax error\n")
 		end
 	end
 
@@ -473,22 +453,20 @@ class AyaDN
 		youMuted = @api.getUserMuteInfo(name)
 		if action == "mute"
 			if youMuted == "true"
-				puts "You've already muted this user.\n\n".red
-				exit
+				abort("You've already muted this user.\n\n".red)
 			else
 				resp = @api.muteUser(name)
 				puts "\nYou just muted user ".green + "#{name}".brown + "\n\n"
 			end
 		elsif action == "unmute"
 			if youMuted == "false"
-				puts "This user is not muted.\n\n".red
-				exit
+				abort("This user is not muted.\n\n".red)
 			else
 				resp = @api.unmuteUser(name)
 				puts "\nYou just unmuted user ".green + "#{name}".brown + "\n\n"
 			end
 		else
-			puts "\nsyntax error\n"
+			abort("\nsyntax error\n")
 		end
 	end
 
@@ -500,8 +478,7 @@ class AyaDN
 		isRepost = postInfo['repost_of']
 		if isRepost != nil
 			# todo: implement automatic get original post
-			puts "\nThis post is a repost. Please star the parent post.\n\n".red
-			exit
+			abort("\nThis post is a repost. Please star the parent post.\n\n".red)
 		end
 		if action == "star"
 			if youStarred == false
@@ -509,19 +486,15 @@ class AyaDN
 				resp = @api.starPost(postID)
 				puts "\nSuccessfully starred the post.\n\n".green
 			else
-				puts "Canceled: the post is already starred.\n\n".red
-				exit
+				abort("Canceled: the post is already starred.\n\n".red)
 			end
 		elsif action == "unstar"
-			if youStarred == false
-				puts "Canceled: the post wasn't already starred.\n\n".red
-				exit
-			end
+			abort("Canceled: the post wasn't already starred.\n\n".red) if youStarred == false
 			puts "\nUnstarring post ".green + "#{postID}\n".brown
 			resp = @api.unstarPost(postID)
 			puts "\nSuccessfully unstarred the post.\n\n".green
 		else
-			puts "\nsyntax error\n".red
+			abort("\nsyntax error\n".red)
 		end
 	end
 	def ayadnReposting(action, postID)
@@ -532,8 +505,7 @@ class AyaDN
 		youReposted = postInfo['you_reposted']
 		if isRepost != nil
 			# todo: implement automatic get original post
-			puts "\nThis post is a repost. Please star the parent post.\n\n".red
-			exit
+			abort("\nThis post is a repost. Please star the parent post.\n\n".red)
 		end
 		if action == "repost"
 			if youReposted == false
@@ -541,8 +513,7 @@ class AyaDN
 				resp = @api.repostPost(postID)
 				puts "\nSuccessfully reposted the post.\n\n".green
 			else
-				puts "Canceled: you already reposted this post.\n\n".red
-				exit
+				abort("Canceled: you already reposted this post.\n\n".red)
 			end
 		elsif action == "unrepost"
 			if youReposted == true
@@ -550,11 +521,10 @@ class AyaDN
 				resp = @api.unrepostPost(postID)
 				puts "\nSuccessfully unreposted the post.\n\n".green
 			else
-				puts "Canceled: this post wasn't reposted.\n\n".red
-				exit
+				abort("Canceled: this post wasn't reposted.\n\n".red)
 			end
 		else
-			puts "\nsyntax error\n".red
+			abort("\nsyntax error\n".red)
 		end
 	end
 	def ayadnReset(target, content, option)

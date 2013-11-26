@@ -14,43 +14,40 @@ class AyaDN
 			adnData = @hash['data']
 		end
 		def showMessagesFromChannel
-			messagesStream = getData(@hash)
-			buildMessages(messagesStream)
+			buildMessages(getData(@hash))
 		end
 		def showStream
 			if @loaded
 				downsideTimeline = @configFileContents['timeline']['downside']
 				if downsideTimeline == true
-					hashes = getData(@hash)
+					theHash = getData(@hash)
 				else
-					hashes = getDataNormal(@hash)
+					theHash = getDataNormal(@hash)
 				end
 			else
-				hashes = getData(@hash)
+				theHash = getData(@hash)
 			end
-			buildStream(hashes)
+			buildStream(theHash)
 		end
 		def showCompleteStream
 			if @loaded
 				downsideTimeline = @configFileContents['timeline']['downside']
 				if downsideTimeline == true
-					hashes = getData(@hash)
+					theHash = getData(@hash)
 				else
-					hashes = getDataNormal(@hash)
+					theHash = getDataNormal(@hash)
 				end
 			else
-				hashes = getData(@hash)
+				theHash = getData(@hash)
 			end
-			stream, pagination_array = buildCompleteStream(hashes)
+			stream, pagination_array = buildCompleteStream(theHash)
 		end
 		def showDebugStream
-			hashes = getDataNormal(@hash)
-			buildDebugStream(hashes)
+			buildDebugStream(getDataNormal(@hash))
 		end
 
 		def showUsersList
-			hashes = getData(@hash)
-			buildUsersList(hashes)
+			buildUsersList(getDataNormal(@hash))
 		end
 
 		def showUsers
@@ -82,11 +79,7 @@ class AyaDN
 			postString = ""
 			postHash.each do |item|
 				postText = item['text']
-				if postText != nil
-					coloredPost = colorize(postText)
-				else
-					coloredPost = "--Post deleted--".red
-				end
+				postText != nil ? (coloredPost = colorize(postText)) : (coloredPost = "--Post deleted--".red)
 				userName = item['user']['username']
 				createdAt = item['created_at']
 				createdDay = createdAt[0...10]

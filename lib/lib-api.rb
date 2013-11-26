@@ -109,8 +109,7 @@ class AyaDN
 			callback = response.body
 		end
 		def getHash
-			fromAppdotnet = getResponse(@url)
-			theHash = JSON.parse(fromAppdotnet)
+			theHash = JSON.parse(getResponse(@url))
 		end
 		def configAPI
 			if @loaded
@@ -127,6 +126,7 @@ class AyaDN
 		end
 		def makeStreamURL(stream, value = nil)
 			@url = "https://alpha-api.app.net/"
+			configAPI
 			case
 			when stream == "global"
 				@url += 'stream/0/posts/stream/global?access_token='
@@ -244,19 +244,14 @@ class AyaDN
 			end
 		end
 		def checkLastPageID(lastPageID = nil)
-			if lastPageID != nil
-				@url += "&since_id=#{lastPageID}"
-			end
-			return @url
+			@url += "&since_id=#{lastPageID}" if lastPageID != nil
 		end
 		def getMessages(channel)
 			configAPI
 			url = "https://alpha-api.app.net/stream/0/channels/#{channel}/messages?access_token=#{@token}"
 			begin
 				response = RestClient.get(url)
-				body = response.body
-				theHash = JSON.parse(body)
-				return theHash
+				theHash = JSON.parse(response.body)
 			rescue => e
 				abort("HTTP ERROR :\n".red + "#{e}\n".red)
 			end
@@ -327,14 +322,13 @@ class AyaDN
 			if action == "call"
 				getHash
 			elsif action == "load"
-				fileContent = Hash.new
+				fileContent = {}
 				File.open("/data/posts/#{postID}.post", "r") do |f|
 					fileContent = f.gets
 				end
 				theHash = eval(fileContent)
 			else
-				puts "syntax error".red
-				exit
+				abort("\nSyntax error\n".red)
 			end
 		end
 		def getSinglePost(postID)
@@ -450,25 +444,19 @@ class AyaDN
 			configAPI
 			@url = makeStreamURL("followings", name)
 			@url += "&count=200"
-			if beforeID != nil
-				@url += "&before_id=#{beforeID}"
-			end
+			@url += "&before_id=#{beforeID}" if beforeID != nil
 			getHash
 		end
 		def getFollowers(name, beforeID)
 			configAPI
 			@url = makeStreamURL("followers", name)
-			if beforeID != nil
-				@url += "&before_id=#{beforeID}"
-			end
+			@url += "&before_id=#{beforeID}" if beforeID != nil
 			getHash
 		end
 		def getMuted(name, beforeID)
 			configAPI
 			@url = makeStreamURL("muted", name)
-			if beforeID != nil
-				@url += "&before_id=#{beforeID}"
-			end
+			@url += "&before_id=#{beforeID}" if beforeID != nil
 			getHash
 		end
 		def getSearch(value)
