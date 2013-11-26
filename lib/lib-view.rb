@@ -30,7 +30,7 @@ class AyaDN
 			end
 			buildStream(hashes)
 		end
-		def showCheckinsStream
+		def showCompleteStream
 			if @loaded
 				downsideTimeline = @configFileContents['timeline']['downside']
 				if downsideTimeline == true
@@ -41,7 +41,7 @@ class AyaDN
 			else
 				hashes = getData(@hash)
 			end
-			stream, pagination_array = buildCheckinsStream(hashes)
+			stream, pagination_array = buildCompleteStream(hashes)
 		end
 		def showDebugStream
 			hashes = getDataNormal(@hash)
@@ -136,7 +136,7 @@ class AyaDN
 			end
 			return messagesString
 		end
-		def buildCheckinsStream(postHash)
+		def buildCompleteStream(postHash)
 			postString = ""
 			geoString = ""
 			pagination_array = []

@@ -6,6 +6,7 @@ class AyaDN
 		@api = AyaDN::API.new(@token)
 		@status = AyaDN::ClientStatus.new
 		@tools = AyaDN::Tools.new
+		@view = AyaDN::View
 		@configFileContents, @loaded = @tools.loadConfig
 	end
 
@@ -21,16 +22,16 @@ class AyaDN
 
 	def stream
 		@tools.fileOps("makedir", @ayadn_lastPageID_path)
-	 	puts AyaDN::View.new(@hash).showStream
+	 	puts @view.new(@hash).showStream
 	end
-	def checkinsStream
+	def completeStream
 		@tools.fileOps("makedir", @ayadn_lastPageID_path)
-	    stream, pagination_array = AyaDN::View.new(@hash).showCheckinsStream
+	    stream, pagination_array = @view.new(@hash).showCompleteStream
 	    lastPageID = pagination_array.last
 		return stream, lastPageID
 	end
 	def debugStream
-		puts AyaDN::View.new(@hash).showDebugStream
+		puts @view.new(@hash).showDebugStream
 	end
 	def ayadnDebugStream
 		@hash = @api.getUnified
@@ -78,7 +79,7 @@ class AyaDN
 				elsif value == "posts"
 					@hash = @api.getUserPosts(target, lastPageID)
 				end
-				stream, lastPageID = checkinsStream
+				stream, lastPageID = completeStream
 				displayScrollStream(stream)
 				if lastPageID != nil
 					@tools.fileOps("writelastpageid", fileURL, lastPageID)
@@ -102,7 +103,7 @@ class AyaDN
 		fileURL = @ayadn_lastPageID_path + "/lastPageID-global"
 		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		@hash = @api.getGlobal(lastPageID)
-		stream, lastPageID = checkinsStream
+		stream, lastPageID = completeStream
 		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
 		displayStream(stream)
 	end
@@ -112,7 +113,7 @@ class AyaDN
 		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		puts @status.getUnified
 		@hash = @api.getUnified(lastPageID)
-		stream, lastPageID = checkinsStream
+		stream, lastPageID = completeStream
 		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
 		displayStream(stream)
 	end
@@ -120,7 +121,7 @@ class AyaDN
 		configMain
 		puts @status.getHashtags(tag)
 		@hash = @api.getHashtags(tag)
-		stream, lastPageID = checkinsStream
+		stream, lastPageID = completeStream
 		displayStream(stream)
 	end
 	def ayadnExplore(explore)
@@ -129,7 +130,7 @@ class AyaDN
 		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		puts @status.getExplore(explore)
 		@hash = @api.getExplore(explore, lastPageID)
-		stream, lastPageID = checkinsStream
+		stream, lastPageID = completeStream
 		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
 		displayStream(stream)
 	end
@@ -139,7 +140,7 @@ class AyaDN
 		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		puts @status.mentionsUser(name)
 		@hash = @api.getUserMentions(name, lastPageID)
-		stream, lastPageID = checkinsStream
+		stream, lastPageID = completeStream
 		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
 		displayStream(stream)
 	end
@@ -149,7 +150,7 @@ class AyaDN
 		lastPageID = @tools.fileOps("getlastpageid", fileURL)
 		puts @status.postsUser(name)
 		@hash = @api.getUserPosts(name, lastPageID)
-		stream, lastPageID = checkinsStream
+		stream, lastPageID = completeStream
 		@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
 		displayStream(stream)
 	end
@@ -157,7 +158,7 @@ class AyaDN
 		configMain
 		puts @status.infosUser(name)
 		@hash = @api.getUserInfos(name)
-	    puts AyaDN::View.new(@hash).showUsersInfos(name)
+	    puts @view.new(@hash).showUsersInfos(name)
 	end
 	def ayadnWhoReposted(postID)
 		configMain
@@ -167,7 +168,7 @@ class AyaDN
 			puts "\nThis post hasn't been reposted by anyone.\n\n".red
 			exit
 		end
-	    puts AyaDN::View.new(@hash).showUsersList()
+	    puts @view.new(@hash).showUsersList()
 	end
 	def ayadnWhoStarred(postID)
 		configMain
@@ -177,27 +178,27 @@ class AyaDN
 			puts "\nThis post hasn't been starred by anyone.\n\n".red
 			exit
 		end
-	    puts AyaDN::View.new(@hash).showUsersList()
+	    puts @view.new(@hash).showUsersList()
 	end
 	def ayadnStarredPosts(name)
 		configMain
 		puts @status.starsUser(name)
 		@hash = @api.getStarredPosts(name)
-		stream, lastPageID = checkinsStream
+		stream, lastPageID = completeStream
 		displayStream(stream)
 	end
 	def ayadnConversation(postID)
 		configMain
 		puts @status.getPostReplies(postID)
 		@hash = @api.getPostReplies(postID)
-		stream, lastPageID = checkinsStream
+		stream, lastPageID = completeStream
 		displayStream(stream)
 	end
 	def ayadnPostInfos(action, postID)
 		configMain
 		puts @status.infosPost(postID)
 		@hash = @api.getPostInfos(action, postID)
-	    puts AyaDN::View.new(@hash).showPostInfos(postID, isMine = false)
+	    puts @view.new(@hash).showPostInfos(postID, isMine = false)
 	end
 	def ayadnSendMessage(target, text)
 		if text.empty? or text == nil
@@ -222,7 +223,7 @@ class AyaDN
 			configMain
 			# puts status
 			@hash = @api.getMessages(target)
-			puts AyaDN::View.new(@hash).showMessagesFromChannel
+			puts @view.new(@hash).showMessagesFromChannel
 		else
 			#list channels?
 		end
@@ -237,13 +238,13 @@ class AyaDN
 		callback = @api.httpSend(text, reply_to)
 		blob = JSON.parse(callback)
 		@hash = blob['data']
-		puts AyaDN::View.new(@hash).buildPostInfo(@hash, isMine = true)
+		puts @view.new(@hash).buildPostInfo(@hash, isMine = true)
 		puts @status.postSent
 		# show end of the stream after posting
 		if reply_to.empty?
 			#fileURL = @ayadn_lastPageID_path + "/lastPageID-unified"
 			@hash = @api.getSimpleUnified
-			stream, lastPageID = checkinsStream
+			stream, lastPageID = completeStream
 			#@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
 			displayStream(stream)
 		else
@@ -251,7 +252,7 @@ class AyaDN
 			@hash1 = @api.getPostReplies(reply_to)
 			@hash2 = @api.getSimpleUnified
 			@hash = @hash1.merge!(@hash2)
-			stream, lastPageID = checkinsStream
+			stream, lastPageID = completeStream
 			#@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
 			displayStream(stream)
 		end
@@ -355,7 +356,7 @@ class AyaDN
 		elsif list == "muted"
 			@hash = @api.getMuted(name, beforeID)
 		end
-		usersHash, pagination_array = AyaDN::View.new(@hash).buildFollowList()
+		usersHash, pagination_array = @view.new(@hash).buildFollowList()
 	    bigHash.merge!(usersHash)
 	    beforeID = pagination_array.last
 	    while pagination_array != nil
@@ -366,7 +367,7 @@ class AyaDN
 			elsif list == "muted"
 				@hash = @api.getMuted(name, beforeID)
 			end
-		    usersHash, pagination_array = AyaDN::View.new(@hash).buildFollowList()
+		    usersHash, pagination_array = @view.new(@hash).buildFollowList()
 		    bigHash.merge!(usersHash)
 	    	break if pagination_array.first == nil
 	    	beforeID = pagination_array.last
@@ -380,17 +381,17 @@ class AyaDN
 		@hash = getList(list, name)
 		if list == "muted"
 			puts "Your list of muted users:\n\n".green
-			users, number = AyaDN::View.new(@hash).showUsers()
+			users, number = @view.new(@hash).showUsers()
 			puts users
 			puts "Number of users: ".green + " #{number}\n".brown
 		elsif list == "followings"
 			puts "List of users you're following:\n".green
-			users, number = AyaDN::View.new(@hash).showUsers()
+			users, number = @view.new(@hash).showUsers()
 			puts users
 			puts "Number of users: ".green + " #{number}\n".brown
 		elsif list == "followers"
 			puts "List of users following you:\n".green
-			users, number = AyaDN::View.new(@hash).showUsers()
+			users, number = @view.new(@hash).showUsers()
 			puts users
 			puts "Number of users: ".green + " #{number}\n".brown
 		end
@@ -467,7 +468,7 @@ class AyaDN
 	def ayadnSearch(value)
 		configMain
 		@hash = @api.getSearch(value)
-		stream, lastPageID = checkinsStream
+		stream, lastPageID = completeStream
 		displayStream(stream)
 	end
 

@@ -11,6 +11,7 @@ puts "\nAYADN".red + " - " + "App.net command-line client\n".brown
 
 run = AyaDN.new(@token)
 status = AyaDN::ClientStatus.new
+tools = AyaDN::Tools.new
 
 arg1, arg2, arg3, arg4 = ARGV[0], ARGV[1], ARGV[2], ARGV[3]
 
@@ -69,9 +70,7 @@ when "convo", "c"
 
 when "tag", "t"
 	theTag = arg2.dup
-	if theTag =~ /^#/
-		theTag[0] = ""
-	end
+	theTag[0] = "" if theTag =~ /^#/
 	run.ayadnHashtags(theTag)
 	exit
 
@@ -104,14 +103,14 @@ when "backup"
 	exit
 
 when "list"
-	if arg2 == "muted"
-		puts run.ayadnShowList("muted", "me")
-	end
 	if arg2 == "followings"
 		(arg3 =~ /^@/ || arg3 == "me") ? run.ayadnShowList("followings", arg3) : (puts "syntax error")
-	end
-	if arg2 == "followers"
+	elsif arg2 == "followers"
 		(arg3 =~ /^@/ || arg3 == "me") ? run.ayadnShowList("followers", arg3) : (puts "syntax error")
+	elsif arg2 == "muted"
+		run.ayadnShowList("muted", "me")
+	else
+		puts "\nSyntax error\n"
 	end
 	exit
 
@@ -178,7 +177,7 @@ when "search", "s"
 	exit
 
 when "help", "h"
-	puts AyaDN::Tools.new.helpScreen()
+	puts tools.helpScreen()
 	exit
 
 when "debug"
@@ -201,4 +200,4 @@ end
 option = ARGV
 bad_option = option.join(" ")
 puts "\nSyntax error: ".red + "#{bad_option} ".brown + "is not a valid option.\n\n".red
-puts AyaDN::Tools.new.helpScreen()
+puts tools.helpScreen()
