@@ -42,18 +42,10 @@ class AyaDN
 		debugStream
 	end
 	def displayStream(stream)
-		if !stream.empty?
-			puts stream
-		else
-			puts "No new posts since your last visit.\n\n".red
-		end
+		!stream.empty? ? (puts stream) : (puts "No new posts since your last visit.\n\n".red)
 	end
 	def displayScrollStream(stream)
-		if !stream.empty?
-			puts stream
-		else
-			print "\r"
-		end
+		!stream.empty? ? (puts stream) : (print "\r")
 	end
 	def ayadnScroll(value, target)
 		value = "unified" if value == nil
@@ -72,7 +64,7 @@ class AyaDN
 					@hash = @api.getGlobal(lastPageID)
 				elsif value == "unified"
 					@hash = @api.getUnified(lastPageID)
-				elsif value == "checkins" or value == "photos" or value == "conversations" or value == "trending"
+				elsif value == "checkins" || value == "photos" || value == "conversations" || value == "trending"
 					@hash = @api.getExplore(value, lastPageID)
 				elsif value == "mentions"
 					@hash = @api.getUserMentions(target, lastPageID)
@@ -221,7 +213,6 @@ class AyaDN
 	def ayadnGetMessages(target)
 		if target != nil
 			configMain
-			# puts status
 			@hash = @api.getMessages(target)
 			puts @view.new(@hash).showMessagesFromChannel
 		else
@@ -242,18 +233,14 @@ class AyaDN
 		puts @status.postSent
 		# show end of the stream after posting
 		if reply_to.empty?
-			#fileURL = @ayadn_lastPageID_path + "/lastPageID-unified"
 			@hash = @api.getSimpleUnified
 			stream, lastPageID = completeStream
-			#@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
 			displayStream(stream)
 		else
-			#fileURL = @ayadn_lastPageID_path + "/lastPageID-unified"
 			@hash1 = @api.getPostReplies(reply_to)
 			@hash2 = @api.getSimpleUnified
 			@hash = @hash1.merge!(@hash2)
 			stream, lastPageID = completeStream
-			#@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
 			displayStream(stream)
 		end
 	end
@@ -311,24 +298,19 @@ class AyaDN
 		content = Array.new
 		splitted = rawMentionsText.split(" ")
 		splitted.each do |word|
-			if word =~ /^@/
-				content.push(word)
-			end
+			content.push(word) if word =~ /^@/
 		end
-		# detecte si mentions contiennent soi-même
+		# detect if mentions include myself
 		myUsername = @api.getUserName("me")
 		myHandle = "@" + myUsername
 		replyingToHandle = "@" + replyingToThisUsername
 		newContent = Array.new
-		if replyingToThisUsername != myUsername #si je ne suis pas en train de me répondre
-			newContent.push(replyingToHandle) #rajouter le @username de à qui je réponds
+		if replyingToThisUsername != myUsername # if I'm not answering myself
+			newContent.push(replyingToHandle) # add the @username of the replyee (?!)
 		end
 		content.each do |item|
-			if item == myHandle #si je suis dans les mentions du post, m'effacer
-				newContent.push("")
-			else #sinon, garder la mention en question
-				newContent.push(item)
-			end
+			# if I'm in the post's mentions, erase me, else insert the mention
+			item == myHandle ? newContent.push("") : newContent.push(item)
 		end
 		mentionsList = newContent.join(" ")
 		ayadnComposePost(postID, mentionsList)
@@ -380,26 +362,19 @@ class AyaDN
 		puts "\nFetching the \'#{list}\' list. Please wait...\n\n".green
 		@hash = getList(list, name)
 		if list == "muted"
-			puts "Your list of muted users:\n\n".green
-			users, number = @view.new(@hash).showUsers()
-			puts users
-			puts "Number of users: ".green + " #{number}\n".brown
+			puts "Your list of muted users:\n".green
 		elsif list == "followings"
 			puts "List of users you're following:\n".green
-			users, number = @view.new(@hash).showUsers()
-			puts users
-			puts "Number of users: ".green + " #{number}\n".brown
 		elsif list == "followers"
 			puts "List of users following you:\n".green
-			users, number = @view.new(@hash).showUsers()
-			puts users
-			puts "Number of users: ".green + " #{number}\n".brown
 		end
+		users, number = @view.new(@hash).showUsers()
+		puts users
+		puts "Number of users: ".green + " #{number}\n".brown
 	end
 
-	def ayadnSaveList(list, name)
+	def ayadnSaveList(list, name) # to be called with: var = ayadnSaveList("followers", "@ericd")
 		configMain
-		# to call with: var = ayadnSaveList("followers", "@ericd")
 		ayadn_lists_path = @ayadn_data_path + "/lists/"
 		# time = Time.new
 		# fileTime = time.strftime("%Y%m%d%H%M%S")
@@ -407,17 +382,14 @@ class AyaDN
 		file = "#{name}-#{list}.json"
 		fileURL = ayadn_lists_path + file
 		unless Dir.exists?ayadn_lists_path
-			puts "Creating lists directory in ".green + "#{ayadn_data_path}".brown + "\n"
+			puts "Creating lists directory in ".green + "#{@ayadn_data_path}".brown + "\n"
 			FileUtils.mkdir_p ayadn_lists_path
 		end
 		if File.exists?(fileURL)
 			puts "\nYou already saved this list.\n".red
 			puts "Delete the old one and replace with this one?\n".red + "(n/y) ".green 
 			input = STDIN.getch
-			unless input == "y" or input == "Y"
-				puts "\nCanceled.\n\n".red
-				exit
-			end
+			abort("\nCanceled.\n\n".red) if (input == "n" || input == "N")
 		end
 		if list == "muted"
 			puts "\nFetching your muted users list.\n".cyan
