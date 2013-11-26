@@ -4,7 +4,7 @@ class AyaDN
 	def initialize(token)
 		@token = token
 		@api = AyaDN::API.new(@token)
-		@status = ClientStatus.new
+		@status = AyaDN::ClientStatus.new
 		@tools = AyaDN::Tools.new
 		@configFileContents, @loaded = @tools.loadConfig
 	end
@@ -212,7 +212,6 @@ class AyaDN
 		privateMessageThreadID = @hash['thread_id']
 		privateMessageID = @hash['id']
 		configMain
-		#@ayadn_messages_path += "/#{privateMessageChannelID}"
 		@tools.fileOps("makedir", @ayadn_messages_path)
 		puts "Channel ID: ".cyan + privateMessageChannelID.brown + " Message ID: ".cyan + privateMessageID.brown + "\n\n"
 		puts @status.postSent
@@ -225,7 +224,7 @@ class AyaDN
 			@hash = @api.getMessages(target)
 			puts AyaDN::View.new(@hash).showMessagesFromChannel
 		else
-			#?
+			#list channels?
 		end
 	end
 	def ayadnSendPost(text, reply_to = nil)
@@ -251,7 +250,7 @@ class AyaDN
 			#fileURL = @ayadn_lastPageID_path + "/lastPageID-unified"
 			@hash1 = @api.getPostReplies(reply_to)
 			@hash2 = @api.getSimpleUnified
-			@hash = @hash2.merge!(@hash1)
+			@hash = @hash1.merge!(@hash2)
 			stream, lastPageID = checkinsStream
 			#@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
 			displayStream(stream)

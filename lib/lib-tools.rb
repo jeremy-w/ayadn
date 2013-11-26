@@ -42,11 +42,8 @@ class AyaDN
                         f.puts(newPrivateChannel.to_json)
                     f.close
                 else
-                    f = File.new(filePath, "r")
-                        oldJson = f.gets
-                    f.close
-                    oldParsed = JSON.parse(oldJson)
-                    oldHash = oldParsed.to_hash
+                    oldJson = JSON.parse( IO.read(filePath) )
+                    oldHash = oldJson.to_hash
                     oldHash.merge!(newPrivateChannel)
                     newJson = oldHash.to_json
                     f = File.new(filePath, "w")
@@ -181,6 +178,87 @@ class AyaDN
             return help
         end
 	end
+    class ClientStatus
+        def errorNoID
+            s = "\nError -> you must give a post ID to reply to.\n\n".red
+        end
+        def emptyPost
+            s = "\nError -> there was no text to post.\n\n".red
+        end
+        def errorInfos(arg)
+            s = "\nError -> ".red + "#{arg}".brown + " isn't a @username or a Post ID\n\n".red
+        end
+        def errorUserID(arg)
+            s = "\nError -> ".red + "#{arg}".brown + " is not a @username\n\n".red
+        end
+        def errorPostID(arg)
+            s = "\nError -> ".red + "#{arg}".brown + " is not a Post ID\n\n".red
+        end
+        def getUnified
+            s = "\nLoading the ".green + "unified ".brown + "Stream...\n".green
+        end
+        def getExplore(explore)
+            s = "\nLoading the ".green + "#{explore}".brown + " stream.".green
+        end
+        def getGlobal
+            s = "\nLoading the ".green + "global ".brown + "Stream...\n".green
+        end
+        def whoReposted(arg)
+            s = "\nLoading informations on post ".green + "#{arg}".brown + "...\n ".green
+            s += "\nReposted by: \n".cyan
+        end
+        def whoStarred(arg)
+            s = "\nLoading informations on post ".green + "#{arg}".brown + "...\n".green
+            s += "\nStarred by: \n".cyan
+        end
+        def infosUser(arg)
+            s = "\nLoading informations on user ".green + "#{arg}".brown + "...\n".green
+        end
+        def infosPost(arg)
+            s = "\nLoading informations on post ".green + "#{arg}".brown + "...\n".green
+        end
+        def postsUser(arg)
+            s = "\nLoading posts of ".green + "#{arg}".brown + "...\n".green
+        end
+        def mentionsUser(arg)
+            s = "\nLoading posts mentionning ".green + "#{arg}".brown + "...\n".green
+        end
+        def starsUser(arg)
+            s = "\nLoading ".green + "#{arg}".reddish + "'s favorite posts...\n".green
+        end
+        def starsPost(arg)
+            s = "\nLoading users who starred post ".green + "#{arg}".reddish + "...\n" .green
+        end
+        def getHashtags(arg)
+            s = "\nLoading posts containing ".green + "##{arg}".pink + "...\n".green
+        end
+        def sendPost
+            s = "\nSending post...\n".green
+        end
+        def postSent
+            s = "Successfully posted.\n".green
+        end
+        def deletePost(postID)
+            s = "\nDeleting post ".green + "#{postID}".brown + "...\n".green
+        end
+        def getPostReplies(arg)
+            s = "\nLoading the conversation around post ".green + "#{arg}".brown + "...\n".green
+        end
+        def writePost
+            s = "\n256 characters max, validate with [Enter] or cancel with [CTRL+C].\n".green
+            s += "\nType your text: ".cyan
+        end
+        def writeMessage
+            s = "\n2048 characters max, validate with [Enter] or cancel with [CTRL+C].\n".green
+            s += "\nType your text: ".cyan + "\n\n"
+        end
+        def writeReply(arg)
+            s = "\nLoading informations of post " + "#{arg}".brown + "...\n".green
+        end
+        def savingFile(name, path, file)
+            s = "\nSaving ".green + "#{name} ".brown + "in ".green + "#{path}#{file}".magenta
+        end
+    end
 end
 class String
     def is_integer?
@@ -245,86 +323,5 @@ class String
     end
     def reverse_color;  
         "\033[7m#{self}\033[27m" 
-    end
-end
-class ClientStatus
-    def errorNoID
-        s = "\nError -> you must give a post ID to reply to.\n\n".red
-    end
-    def emptyPost
-        s = "\nError -> there was no text to post.\n\n".red
-    end
-    def errorInfos(arg)
-        s = "\nError -> ".red + "#{arg}".brown + " isn't a @username or a Post ID\n\n".red
-    end
-    def errorUserID(arg)
-        s = "\nError -> ".red + "#{arg}".brown + " is not a @username\n\n".red
-    end
-    def errorPostID(arg)
-        s = "\nError -> ".red + "#{arg}".brown + " is not a Post ID\n\n".red
-    end
-    def getUnified
-        s = "\nLoading the ".green + "unified ".brown + "Stream...\n".green
-    end
-    def getExplore(explore)
-        s = "\nLoading the ".green + "#{explore}".brown + " stream.".green
-    end
-    def getGlobal
-        s = "\nLoading the ".green + "global ".brown + "Stream...\n".green
-    end
-    def whoReposted(arg)
-        s = "\nLoading informations on post ".green + "#{arg}".brown + "...\n ".green
-        s += "\nReposted by: \n".cyan
-    end
-    def whoStarred(arg)
-        s = "\nLoading informations on post ".green + "#{arg}".brown + "...\n".green
-        s += "\nStarred by: \n".cyan
-    end
-    def infosUser(arg)
-        s = "\nLoading informations on user ".green + "#{arg}".brown + "...\n".green
-    end
-    def infosPost(arg)
-        s = "\nLoading informations on post ".green + "#{arg}".brown + "...\n".green
-    end
-    def postsUser(arg)
-        s = "\nLoading posts of ".green + "#{arg}".brown + "...\n".green
-    end
-    def mentionsUser(arg)
-        s = "\nLoading posts mentionning ".green + "#{arg}".brown + "...\n".green
-    end
-    def starsUser(arg)
-        s = "\nLoading ".green + "#{arg}".reddish + "'s favorite posts...\n".green
-    end
-    def starsPost(arg)
-        s = "\nLoading users who starred post ".green + "#{arg}".reddish + "...\n" .green
-    end
-    def getHashtags(arg)
-        s = "\nLoading posts containing ".green + "##{arg}".pink + "...\n".green
-    end
-    def sendPost
-        s = "\nSending post...\n".green
-    end
-    def postSent
-        s = "Successfully posted.\n".green
-    end
-    def deletePost(postID)
-        s = "\nDeleting post ".green + "#{postID}".brown + "...\n".green
-    end
-    def getPostReplies(arg)
-        s = "\nLoading the conversation around post ".green + "#{arg}".brown + "...\n".green
-    end
-    def writePost
-        s = "\n256 characters max, validate with [Enter] or cancel with [CTRL+C].\n".green
-        s += "\nType your text: ".cyan
-    end
-    def writeMessage
-        s = "\n2048 characters max, validate with [Enter] or cancel with [CTRL+C].\n".green
-        s += "\nType your text: ".cyan + "\n\n"
-    end
-    def writeReply(arg)
-        s = "\nLoading informations of post " + "#{arg}".brown + "...\n".green
-    end
-    def savingFile(name, path, file)
-        s = "\nSaving ".green + "#{name} ".brown + "in ".green + "#{path}#{file}".magenta
     end
 end
