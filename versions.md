@@ -3,6 +3,9 @@ AYADN
 
 AYADN is a learning exercise: while it's fully functional, it's alpha and it's not an official App.net application (yet).  
 
+## 2013-11-26 v0.26
+- Private messages!
+
 ## 2013-11-25 v0.25
 - config bugfix
 - multiple accounts

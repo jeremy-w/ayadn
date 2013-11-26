@@ -203,6 +203,21 @@ when "unmute"
 		puts status.errorUserID(arg2)
 	end
 	exit
+	
+when "pm"
+	if arg3 != nil
+		# ayadn pm @ericd "hello!"
+		run.ayadnSendMessage(arg2, arg3)
+	else
+		run.ayadnComposeMessage(arg2)
+	end
+	exit
+
+when "messages"
+	# arg2 -> channel ID
+	run.ayadnGetMessages(arg2)
+	exit
+
 when "write", "w"
 	if arg2 != nil
 		run.ayadnSendPost(arg2, nil)

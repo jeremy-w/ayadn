@@ -6,8 +6,6 @@ class AyaDN
 		@api = AyaDN::API.new(@token)
 		@status = ClientStatus.new
 		@tools = AyaDN::Tools.new
-		# @ayadn_data_path = Dir.home + "/ayadn/data"
-		# @ayadn_lastPageID_path = @ayadn_data_path + "/.pagination"
 		@configFileContents, @loaded = @tools.loadConfig
 	end
 
@@ -17,6 +15,7 @@ class AyaDN
 			@identityPrefix = @configFileContents['identity']['prefix']
 			@ayadn_data_path = Dir.home + @ayadnFiles
 			@ayadn_lastPageID_path = @ayadn_data_path + "/#{@identityPrefix}/.pagination"
+			@ayadn_messages_path = @ayadn_data_path + "/#{@identityPrefix}/messages"
 		end
 	end
 
@@ -200,6 +199,35 @@ class AyaDN
 		@hash = @api.getPostInfos(action, postID)
 	    puts AyaDN::View.new(@hash).showPostInfos(postID, isMine = false)
 	end
+	def ayadnSendMessage(target, text)
+		if text.empty? or text == nil
+			puts @status.emptyPost
+			exit
+		end
+		puts "\nSending private Message...\n".green
+		callback = @api.httpSendMessage(target, text)
+		blob = JSON.parse(callback)
+		@hash = blob['data']
+		privateMessageChannelID = @hash['channel_id']
+		privateMessageThreadID = @hash['thread_id']
+		privateMessageID = @hash['id']
+		configMain
+		#@ayadn_messages_path += "/#{privateMessageChannelID}"
+		@tools.fileOps("makedir", @ayadn_messages_path)
+		puts "Channel ID: ".cyan + privateMessageChannelID.brown + " Message ID: ".cyan + privateMessageID.brown + "\n\n"
+		puts @status.postSent
+		@tools.fileOps("savechannelid", privateMessageChannelID, target)
+	end
+	def ayadnGetMessages(target)
+		if target != nil
+			configMain
+			# puts status
+			@hash = @api.getMessages(target)
+			puts AyaDN::View.new(@hash).showMessagesFromChannel
+		else
+			#?
+		end
+	end
 	def ayadnSendPost(text, reply_to = nil)
 		configMain
 		if text.empty? or text == nil
@@ -213,7 +241,7 @@ class AyaDN
 		puts AyaDN::View.new(@hash).buildPostInfo(@hash, isMine = true)
 		puts @status.postSent
 		# show end of the stream after posting
-		if reply_to == nil
+		if reply_to.empty?
 			#fileURL = @ayadn_lastPageID_path + "/lastPageID-unified"
 			@hash = @api.getSimpleUnified
 			stream, lastPageID = checkinsStream
@@ -227,6 +255,23 @@ class AyaDN
 			stream, lastPageID = checkinsStream
 			#@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
 			displayStream(stream)
+		end
+	end
+	def ayadnComposeMessage(target)
+		puts @status.writeMessage
+		maxChar = 2048
+		begin
+			inputText = STDIN.gets.chomp
+		rescue Exception => e
+			abort("\n\nCanceled. Your message hasn't been sent.\n\n".red)
+		end
+		toRegex = inputText.dup
+		withoutMarkdown = @tools.getMarkdownText(toRegex)
+		realLength = withoutMarkdown.length
+		if realLength < 2048
+			ayadnSendMessage(target, inputText)
+		else
+			puts "\nError: your message is ".red + "#{realLength} ".brown + " characters long, please remove ".red + "#{realLength - maxChar} ".brown + "characters.\n\n".red
 		end
 	end
 	def ayadnComposePost(reply_to = "", mentionsList = "", myUsername = "")

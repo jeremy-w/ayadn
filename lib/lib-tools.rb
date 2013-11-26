@@ -12,6 +12,7 @@ class AyaDN
                 @identityPrefix = @configFileContents['identity']['prefix']
                 @ayadn_data_path = Dir.home + @ayadnFiles
                 @ayadn_lastPageID_path = @ayadn_data_path + "/#{@identityPrefix}/.pagination"
+                @ayadn_messages_path = @ayadn_data_path + "/#{@identityPrefix}/messages"
             end
         end
 
@@ -33,6 +34,25 @@ class AyaDN
                 f = File.new(value, "w")
                     f.puts(content)
                 f.close
+            elsif action == "savechannelid"
+                filePath = @ayadn_messages_path + "/pm-channels.json"
+                newPrivateChannel = { "#{value}" => "#{content}" }
+                if !File.exists?filePath
+                    f = File.new(filePath, "w")
+                        f.puts(newPrivateChannel.to_json)
+                    f.close
+                else
+                    f = File.new(filePath, "r")
+                        oldJson = f.gets
+                    f.close
+                    oldParsed = JSON.parse(oldJson)
+                    oldHash = oldParsed.to_hash
+                    oldHash.merge!(newPrivateChannel)
+                    newJson = oldHash.to_json
+                    f = File.new(filePath, "w")
+                        f.puts(newJson)
+                    f.close
+                end
             elsif action == "reset"
                 if value == "pagination"
                     if content != nil
@@ -296,6 +316,10 @@ class ClientStatus
     def writePost
         s = "\n256 characters max, validate with [Enter] or cancel with [CTRL+C].\n".green
         s += "\nType your text: ".cyan
+    end
+    def writeMessage
+        s = "\n2048 characters max, validate with [Enter] or cancel with [CTRL+C].\n".green
+        s += "\nType your text: ".cyan + "\n\n"
     end
     def writeReply(arg)
         s = "\nLoading informations of post " + "#{arg}".brown + "...\n".green

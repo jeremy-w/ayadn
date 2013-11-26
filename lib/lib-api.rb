@@ -34,6 +34,39 @@ class AyaDN
 			request["Content-Type"] = "application/json"
 			response = https.request(request)
 		end
+		def httpSendMessage(target, text)
+			@url = 'https://alpha-api.app.net/stream/0/channels/pm/messages'
+			anno = "?include_annotations=1"
+			uri = URI("#{@url}#{anno}")
+			https = Net::HTTP.new(uri.host,uri.port)
+			https.use_ssl = true
+			https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+			request = Net::HTTP::Post.new(uri.path)
+			request["Authorization"] = "Bearer #{@token}"
+			request["Content-Type"] = "application/json"
+			ent = { 
+				"parse_markdown_links" => true, 
+				"parse_links" => true
+			}
+			ayadnAnno = [{
+			    			"type" => "com.ayadn.appinfo",
+							"value" => {
+			        			"+net.app.core.user" => {
+			            			"user_id" => "@ayadn",
+			            			"format" => "basic"
+			        			}
+			        		}
+						}]
+			destinations = []
+			payload = {
+				"text" => "#{text}",
+				"destinations" => destinations.push(target),
+				"entities" => ent,
+				"annotations" => ayadnAnno
+			}.to_json
+			response = https.request(request, payload)
+			callback = response.body
+		end
 		def httpSend(text, replyto = nil)
 			@url = 'https://alpha-api.app.net/'
 			@url += 'stream/0/posts'
@@ -215,6 +248,18 @@ class AyaDN
 				@url += "&since_id=#{lastPageID}"
 			end
 			return @url
+		end
+		def getMessages(channel)
+			configAPI
+			url = "https://alpha-api.app.net/stream/0/channels/#{channel}/messages?access_token=#{@token}"
+			begin
+				response = RestClient.get(url)
+				body = response.body
+				theHash = JSON.parse(body)
+				return theHash
+			rescue => e
+				abort("HTTP ERROR :\n".red + "#{e}\n".red)
+			end
 		end
 		def getGlobal(lastPageID = nil)
 			configAPI

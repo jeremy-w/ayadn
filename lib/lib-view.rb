@@ -13,6 +13,10 @@ class AyaDN
 		def getDataNormal(hash)
 			adnData = @hash['data']
 		end
+		def showMessagesFromChannel
+			messagesStream = getData(@hash)
+			buildMessages(messagesStream)
+		end
 		def showStream
 			if @loaded
 				downsideTimeline = @configFileContents['timeline']['downside']
@@ -102,6 +106,35 @@ class AyaDN
 				postString += "\n\n"
 			end
 			return postString
+		end
+		def buildMessages(messagesStream)
+			messagesString = ""
+			messagesStream.each do |item|
+				messageText = item['text']
+				if messageText != nil
+					coloredPost = colorize(messageText)
+				else
+					coloredPost = "--Message deleted--".red
+				end
+				createdAt = item['created_at']
+				createdDay = createdAt[0...10]
+				createdHour = createdAt[11...19]
+				links = item['entities']['links']
+				userName = item['user']['username']
+				postId = item['id']
+				messagesString += "Post ID: ".cyan + postId.to_s.green
+				messagesString += " - "
+				messagesString += createdDay.cyan + ' ' + createdHour.cyan + " by " + "@".green + userName.green + "\n" + coloredPost + "\n"
+				if !links.empty?
+					messagesString += "Link: ".cyan
+					links.each do |link|
+						linkURL = link['url']
+						messagesString += linkURL.brown + " \n"
+					end
+				end
+				messagesString += "\n"
+			end
+			return messagesString
 		end
 		def buildCheckinsStream(postHash)
 			postString = ""
