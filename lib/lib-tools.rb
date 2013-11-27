@@ -13,15 +13,17 @@ class AyaDN
                 @ayadn_data_path = Dir.home + @ayadnFiles
                 @ayadn_lastPageID_path = @ayadn_data_path + "/#{@identityPrefix}/.pagination"
                 @ayadn_messages_path = @ayadn_data_path + "/#{@identityPrefix}/messages"
+                @ayadn_authorization_path = @ayadn_data_path + "/#{@identityPrefix}/.auth"
             end
         end
 
         def fileOps(action, value, content = nil, option = nil)
-            if action == "makedir"
+            case action
+            when "makedir"
                 unless Dir.exists?value
                     FileUtils.mkdir_p value
                 end
-            elsif action == "getlastpageid"
+            when "getlastpageid"
                 if File.exists?(value)
                     f = File.open(value, "r")
                         lastPageID = f.gets
@@ -30,11 +32,11 @@ class AyaDN
                     lastPageID = nil
                 end
                 return lastPageID
-            elsif action == "writelastpageid"
+            when "writelastpageid"
                 f = File.new(value, "w")
                     f.puts(content)
                 f.close
-            elsif action == "savechannelid"
+            when "savechannelid"
                 filePath = @ayadn_messages_path + "/pm-channels.json"
                 newPrivateChannel = { "#{value}" => "#{content}" }
                 if !File.exists?filePath
@@ -42,7 +44,7 @@ class AyaDN
                         f.puts(newPrivateChannel.to_json)
                     f.close
                 else
-                    oldJson = JSON.parse( IO.read(filePath) )
+                    oldJson = JSON.parse(IO.read(filePath))
                     oldHash = oldJson.to_hash
                     oldHash.merge!(newPrivateChannel)
                     newJson = oldHash.to_json
@@ -50,7 +52,19 @@ class AyaDN
                         f.puts(newJson)
                     f.close
                 end
-            elsif action == "reset"
+            when "loadchannels"
+                filePath = @ayadn_messages_path + "/pm-channels.json"
+                channels = JSON.load(IO.read(filePath)) if File.exists?filePath
+            when "auth"
+                filePath = @ayadn_authorization_path + "/token"
+                if value == "read"
+                    token = IO.read(filePath) if File.exists?filePath
+                elsif value == "write"
+                    f = File.new(filePath, "w")
+                        f.puts(content)
+                    f.close
+                end 
+            when "reset"
                 if value == "pagination"
                     if content != nil
                         if option != nil
@@ -138,6 +152,16 @@ class AyaDN
                 t -= 1
                 sleep 1
             end
+        end
+        def startBrowser(url)
+            command = case RbConfig::CONFIG['host_os']
+              when /mswin|mingw|cygwin/ then "start '#{url}'"
+              when /darwin/ then "open '#{url}'"
+              when /linux/ then "xdg-open '#{url}'"
+            end
+            command = "sleep 1; #{command}"
+            pid = spawn(command)
+            Process.detach(pid)
         end
         def helpScreen
             help = ""

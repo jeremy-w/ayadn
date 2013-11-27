@@ -17,6 +17,7 @@ class AyaDN
 			@ayadn_data_path = Dir.home + @ayadnFiles
 			@ayadn_lastPageID_path = @ayadn_data_path + "/#{@identityPrefix}/.pagination"
 			@ayadn_messages_path = @ayadn_data_path + "/#{@identityPrefix}/messages"
+			@ayadn_authorization_path = @ayadn_data_path + "/#{@identityPrefix}/.auth"
 		end
 	end
 
@@ -41,6 +42,21 @@ class AyaDN
 		@hash = @api.getPostInfos("call", postID)
 		debugStream
 	end
+
+	def ayadnAuthorize
+		configMain
+		@tools.fileOps("makedir", @ayadn_authorization_path)
+		auth_token = @tools.fileOps("auth", "read")
+		if auth_token == nil
+			url = @api.makeAuthorizeURL
+			@tools.startBrowser(url)
+			puts "\nAyaDN opened a browser to help you authorize via App.net very easily. Just login in this page then copy the code it will give you and paste it here, then press [ENTER]. Paste authorization code: ".green
+			auth_token = STDIN.gets
+			@tools.fileOps("auth", "write", auth_token)
+			puts "DEBUG: #{auth_token}"
+		end
+	end
+
 	def displayStream(stream)
 		!stream.empty? ? (puts stream) : (puts "No new posts since your last visit.\n\n".red)
 	end
@@ -201,12 +217,21 @@ class AyaDN
 		@tools.fileOps("savechannelid", privateMessageChannelID, target)
 	end
 	def ayadnGetMessages(target)
+		configMain
 		if target != nil
-			configMain
 			@hash = @api.getMessages(target)
 			puts @view.new(@hash).showMessagesFromChannel
 		else
-			#list channels?
+			#list channels
+			# channels_list = @tools.fileOps("loadchannels", nil)
+			# abort("\nError: no channels found in the file.\n".red) if channels_list == nil
+			# puts "Name:".ljust(20) + "Channel:\n\n"
+			# channels_list.each do |k,v|
+			# 	puts v.ljust(20) + k
+			# end
+			# todo: get already accessed channels from file
+			@hash = @api.getChannels
+			puts @view.new(@hash).showChannels
 		end
 	end
 	def ayadnSendPost(text, reply_to = nil)

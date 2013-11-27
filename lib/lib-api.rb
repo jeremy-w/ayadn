@@ -8,6 +8,12 @@ class AyaDN
 			@tools = AyaDN::Tools.new
 			@directedPosts = true
 			@configFileContents, @loaded = @tools.loadConfig
+			@ayadnClientID = "hFsCGArAjgJkYBHTHbZnUvzTmL4vaLHL"
+			@ayadnCallbackURL = "http://aya.io/ayadn/auth.html"
+			@authorizeURL = "https://account.app.net/oauth/authenticate?client_id=#{@ayadnClientID}&response_type=token&redirect_uri=#{@ayadnCallbackURL}&scope=basic stream write_post follow public_messages messages"
+		end
+		def makeAuthorizeURL
+			@authorizeURL
 		end
 		def getResponse(url)
 			begin
@@ -248,7 +254,17 @@ class AyaDN
 		end
 		def getMessages(channel)
 			configAPI
-			url = "https://alpha-api.app.net/stream/0/channels/#{channel}/messages?access_token=#{@token}"
+			url = @url + "stream/0/channels/#{channel}/messages?access_token=#{@token}"
+			begin
+				response = RestClient.get(url)
+				theHash = JSON.parse(response.body)
+			rescue => e
+				abort("HTTP ERROR :\n".red + "#{e}\n".red)
+			end
+		end
+		def getChannels
+			configAPI
+			url = @url + "stream/0/channels?access_token=#{@token}"
 			begin
 				response = RestClient.get(url)
 				theHash = JSON.parse(response.body)

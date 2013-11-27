@@ -42,6 +42,9 @@ class AyaDN
 			end
 			stream, pagination_array = buildCompleteStream(theHash)
 		end
+		def showChannels
+			stream, pagination_array = buildChannelsInfos(@hash)
+		end
 		def showDebugStream
 			buildDebugStream(getDataNormal(@hash))
 		end
@@ -311,6 +314,56 @@ class AyaDN
 				usersHash[userHandle] = userRealName
 			end
 			return usersHash, pagination_array
+		end
+		def buildChannelsInfos(hash)
+			meta = hash['meta']
+			unreadMessages = meta['unread_counts']['net.app.core.pm']
+			data = hash['data']
+			theChannels = ""
+			data.each do |item|
+				channelID = item['id']
+				total_messages = item['counts']['messages']
+				owner = "@" + item['owner']['username']
+				writers = item['writers']['user_ids']
+				readers = item['readers']['user_ids']
+				you_write = item['writers']['you']
+				you_read = item['readers']['you']
+				the_writers, the_readers = [], []
+				writers.each do |writer|
+					if writer != nil
+						puts "Getting user info about n°#{writer}...".green
+						user = AyaDN::API.new(@token).getUserInfos(writer)
+						name = user['data']['username']
+						the_writers.push("@" + name)
+						#the_writers.push(writer) 
+					end
+				end
+				if readers != nil
+					readers.each do |reader|
+						the_readers.push(reader) 
+					end
+				end
+				# if you_write
+				# 	the_writers.push("yourself")
+				# end
+				theChannels += "\nChannel ID: ".cyan + "#{channelID}\n".brown
+				theChannels += "Creator: ".cyan + owner.magenta + "\n"
+				#theChannels += "Writers: ".cyan + the_writers.join(", ").brown + "\n"
+				theChannels += "Authorized: ".cyan + the_writers.join(", ").brown + "\n"
+				if readers != nil
+					theChannels += "Readers: ".cyan + the_readers.join(", ").brown + "\n"
+				else
+					theChannels += "Readers: ".cyan + "yourself\n".brown
+				end
+				if unreadMessages > 0
+					theChannels += "Unread messages: ".cyan + unreadMessages.to_s.reddish + "\n"
+				else
+					theChannels += "Unread messages: ".cyan + unreadMessages.to_s.green + "\n"
+				end
+				# theChannels += "You can do ".pink + "ayadn pm #{owner} ".brown + "to send a private message.\n\n".pink
+			end
+			theChannels += "\n"
+			return theChannels
 		end
 		def buildUserInfos(name, adnData)
 			userName = adnData['username']

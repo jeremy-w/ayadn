@@ -16,6 +16,10 @@ tools = AyaDN::Tools.new
 arg1, arg2, arg3, arg4 = ARGV[0], ARGV[1], ARGV[2], ARGV[3]
 
 case arg1
+
+when "authorize", "login"
+	run.ayadnAuthorize
+
 when "scroll"
 	run.ayadnScroll(arg2, arg3)
 
@@ -131,7 +135,9 @@ when "pm"
 	end
 
 when "messages"
-	# arg2 -> channel ID
+	# arg2 is integer -> display channel stream
+	# arg2 == "list" -> get a list of your previously used channels
+	# else we get channel ID from @username (if already accessed)
 	run.ayadnGetMessages(arg2)
 
 when "write", "w"
