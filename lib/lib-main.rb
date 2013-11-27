@@ -43,17 +43,23 @@ class AyaDN
 		debugStream
 	end
 
-	def ayadnAuthorize
+	def ayadnAuthorize(action)
 		configMain
 		@tools.fileOps("makedir", @ayadn_authorization_path)
+		if action == "reset"
+			@tools.fileOps("reset", "credentials")
+		end
 		auth_token = @tools.fileOps("auth", "read")
 		if auth_token == nil
 			url = @api.makeAuthorizeURL
 			@tools.startBrowser(url)
-			puts "\nAyaDN opened a browser to help you authorize via App.net very easily. Just login in this page then copy the code it will give you and paste it here, then press [ENTER]. Paste authorization code: ".green
-			auth_token = STDIN.gets
+			puts "\nAyaDN opened a browser to authorize via App.net very easily. Just login with your App.net account, then copy the code it will give you, paste it here then press [ENTER].".pink + " Paste authorization code: \n\n".brown
+			auth_token = STDIN.gets.chomp()
 			@tools.fileOps("auth", "write", auth_token)
-			puts "DEBUG: #{auth_token}"
+			puts "\nThank you for authorizing AyaDN. You won't need to do this anymore.\n\n".green
+			sleep 3
+			puts @tools.helpScreen
+			puts "Enjoy!\n".cyan
 		end
 	end
 

@@ -59,6 +59,9 @@ class AyaDN
                 filePath = @ayadn_authorization_path + "/token"
                 if value == "read"
                     token = IO.read(filePath) if File.exists?filePath
+                    if token != nil
+                        return token.chomp()
+                    end
                 elsif value == "write"
                     f = File.new(filePath, "w")
                         f.puts(content)
@@ -92,6 +95,11 @@ class AyaDN
                             FileUtils.rm_rf file
                         end
                         puts "\nDone!\n\n".green
+                    end
+                elsif value == "credentials"
+                    filePath = @ayadn_authorization_path + "/token"
+                    if File.exists?(filePath)
+                         FileUtils.rm_rf(filePath)
                     end
                 end
             end
@@ -154,8 +162,9 @@ class AyaDN
             end
         end
         def startBrowser(url)
+            # thanks to https://github.com/veenstra
             command = case RbConfig::CONFIG['host_os']
-              when /mswin|mingw|cygwin/ then "start '#{url}'"
+              when /mswin|mingw|mingw32|cygwin/ then "start '#{url}'"
               when /darwin/ then "open '#{url}'"
               when /linux/ then "xdg-open '#{url}'"
             end

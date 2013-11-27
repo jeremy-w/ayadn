@@ -56,15 +56,15 @@ AYADN
 git clone https://github.com/ericdke/ayadn.git
 cd ayadn-master && chmod +x ayadn.rb
 bundle install
-[copy/paste your authentication token]
+./ayadn.rb
 ./ayadn.rb write 'Posting to App.net with Ruby!'
 ``` 
 
 ## Instructions
 
-Mac OS X + Linux = it just works.
+**Mac OS X, Linux = it just works.**
 
-Windows = install Ruby with [http://rubyinstaller.org](http://rubyinstaller.org), it will automatically install Rubygems.
+Windows = install Ruby with [http://rubyinstaller.org](http://rubyinstaller.org), it will also install Rubygems.
 
 ### Step 1
 
@@ -76,12 +76,14 @@ git clone https://github.com/ericdke/ayadn.git
 
 ### Step 2
 
-#### With Bundler
+#### With Bundler 
 
-If you already have [bundler](http://bundler.io) installed, you just have to enter the app folder and run `bundle install`:
+Mac OS X, Linux: if you already have [bundler](http://bundler.io), you should just enter the `ayadn-master` folder and run `bundle install`.
+
+For example, if you downloaded or cloned AyaDN in your downloads folder:
 
 ```
-cd ayadn-master
+cd ~/Downloads/ayadn-master
 bundle install
 ```  
 
@@ -124,21 +126,13 @@ source ~/.bashrc
 
 ### Step 4
 
-I haven't coded an interactive authentification system yet, so you **have to** copy/paste your own unique token into the `token.rb` file.
+You have to authorize AyaDN to use your App.net credentials.
 
-- Connect to your app.net page, go to `settings`, go to `Manage apps` and in `Your app` create a new app with these characteristics: 
+**Just run AyaDN to start the process!**
 
-    - Application Name: "AyaDN"
-    - Website: "http://ayadn-app.net"
-    - Callback URL: leave it like it is
+If you already used AyaDN before with a token generated from your App.net account, connect to your app.net page, go to `settings`, go to `Manage apps` and in `Your app` erase the settings for the old versions of AyaDN. This is optional but recommended.
 
-then in `App settings` click on `Generate a user token for yourself`. Copy the code it gives you back, it's your unique authentication token for using AyaDN.
-
-- In any text editor, open the file `token.rb` and paste the token between the ticks:
-
-![Paste your token in the file](https://www.evernote.com/shard/s89/sh/f7a5778c-f3db-4be8-9d95-0e9f14234899/3c061a327822a7a1a9e0bf1bcd70488f/deep/0/token.png)
-
-Hit `Save` and you're done.
+In case of errors when running multiple accounts, you can force a new authorization process with: `ayadn.rb authorize`.
 
 ## How to use
 
@@ -276,23 +270,6 @@ ayadn reset pagination
 
 Some commands like *delete a post* don't have a shortcut, reducing the risk of accidental manipulation.
 
-### GCC
-
-If you've got an error while installing or cloning regarding `gcc`
-not found, just type:
-
-```
-which gcc
-```  
-
-It should give you the location of your `gcc`, typically `/usr/bin/gcc`. Then make a symlink:
-
-```
-sudo ln -s /usr/bin/gcc /usr/bin/gcc-4.2
-```  
-
-On Mac OS X, you may have to answer `yes` if your computer asks you to download and install the "developer tools".  
-
 ### "me"
 
 With some features like `infos`, `mentions` and more, you can replace `@username` by `me` if you want to check yourself.  
@@ -326,7 +303,7 @@ ayadn.rb write "[Subscribe](https://app.net/c/2zqf) to the #AyaDN broadcast!"
 
 ### Reset pagination data
 
-If AyaDN shows you "No recent posts in this stream" but you still want to see the stream, you have to reset the pagination data first (without arguments: resets all your pagination data).
+If AyaDN shows you "No recent posts in this stream" but you still want to see the stream again, you have to reset the pagination data first.
 
 ```
 ./ayadn.rb reset
@@ -335,17 +312,35 @@ If AyaDN shows you "No recent posts in this stream" but you still want to see th
 (etc)
 ```  
 
+Without arguments: resets all your pagination data.  
+
 ### Running multiple accounts
 
-- first, do a `ayadn reset` if you're already running AyaDN
 - main idea: one AyaDN folder per account
 - change the name of the ayadn folder to @yourusername
 - replace "me" in `config.yml` by your username (without "@")
-- of course, place each unique token in their respective files
+- do `ayadn authorize` to force a new process (you may have to log off your browser (or delete cookies) first if you want to change accounts)
 
 ### Configuration
 
 You can modify the values (right hand) in the `config.yml` file but be very careful not to modify anything else: don't change the indentation or the name of the keys (left hand), don't add or remove quotes or special characters, etc,  otherwise it may break the Internets.
+
+### GCC
+
+If you've got an error while installing or cloning regarding `gcc`
+not found, just type:
+
+```
+which gcc
+```  
+
+It should give you the location of your `gcc`, typically `/usr/bin/gcc`. Then make a symlink:
+
+```
+sudo ln -s /usr/bin/gcc /usr/bin/gcc-4.2
+```  
+
+On Mac OS X, you may have to answer `yes` if your computer asks you to download and install the "developer tools".  
 
 ## Help
 

@@ -5,4 +5,6 @@ Do whatever you want with this app and its code, including modifying and distrib
 
 You don't *have to* include this copyright, but it's cool if you do.
 
+Be careful to not distribute credentials, like the Client ID, etc.
+
 That's all, have fun.

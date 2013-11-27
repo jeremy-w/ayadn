@@ -1,7 +1,10 @@
 AYADN
 =====
 
-AYADN is a learning exercise: while it's fully functional, it's alpha and it's not an official App.net application (yet).  
+AYADN is a learning exercise: while it's fully functional, it's still very alpha.  
+
+## 2013-11-28 v0.30
+- Authorize with your App.net account in AyaDN! (no more `token.rb`)
 
 ## 2013-11-26 v0.26
 - Private messages!

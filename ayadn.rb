@@ -9,16 +9,24 @@ require_relative 'requires'
 
 puts "\nAYADN".red + " - " + "App.net command-line client\n".brown
 
-run = AyaDN.new(@token)
 status = AyaDN::ClientStatus.new
 tools = AyaDN::Tools.new
+@token = tools.fileOps("auth", "read")
+if @token != nil
+	run = AyaDN.new(@token)
+else
+	puts "\nYou haven't authorized AyaDN yet.\n\n".red
+	AyaDN.new(nil).ayadnAuthorize(nil)
+	exit
+end
+
 
 arg1, arg2, arg3, arg4 = ARGV[0], ARGV[1], ARGV[2], ARGV[3]
 
 case arg1
 
 when "authorize", "login"
-	run.ayadnAuthorize
+	AyaDN.new(nil).ayadnAuthorize("reset")
 
 when "scroll"
 	run.ayadnScroll(arg2, arg3)
