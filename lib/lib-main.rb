@@ -237,7 +237,15 @@ class AyaDN
 			# end
 			# todo: get already accessed channels from file
 			@hash = @api.getChannels
-			puts @view.new(@hash).showChannels
+			theChannels, channels_list = @view.new(@hash).showChannels
+			puts theChannels
+			puts "\nDo ".green + "ayadn messages CHANNEL_ID ".brown + "to read this channel's messages.\n\n".green
+			# puts "\nLast messages from each channel: \n".cyan
+			# channels_list.each do |id|
+			# 	puts "\n\nChannel ID: ".cyan + " #{id}\n".brown
+			# 	@hash = @api.getMessages(id)
+			# 	puts @view.new(@hash).showMessagesFromChannel
+			# end
 		end
 	end
 	def ayadnSendPost(text, reply_to = nil)

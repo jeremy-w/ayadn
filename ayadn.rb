@@ -144,8 +144,7 @@ when "pm"
 
 when "messages"
 	# arg2 is integer -> display channel stream
-	# arg2 == "list" -> get a list of your previously used channels
-	# else we get channel ID from @username (if already accessed)
+	# arg2 is nil -> get a list of your previously used channels
 	run.ayadnGetMessages(arg2)
 
 when "write", "w"
