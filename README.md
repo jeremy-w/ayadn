@@ -300,13 +300,13 @@ The `muted` option only works for yourself (this is a limitation from the API).
 - Write/paste a simple link:
 
 ```
-ayadn.rb write "Subscribe to the #AyaDN broadcast! https://app.net/c/2zqf"
+ayadn.rb write 'Subscribe to the #AyaDN broadcast! https://app.net/c/2zqf'
 ```  
 
 - Write/paste a markdown link to embed the link:
 
 ```
-ayadn.rb write "[Subscribe](https://app.net/c/2zqf) to the #AyaDN broadcast!"
+ayadn.rb write '[Subscribe](https://app.net/c/2zqf) to the #AyaDN broadcast!'
 ```  
 
 ### Reset pagination data
