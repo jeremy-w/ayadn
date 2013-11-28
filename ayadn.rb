@@ -163,6 +163,10 @@ when "search", "s"
 when "help", "h"
 	puts tools.helpScreen()
 
+when "webhelp"
+	puts tools.helpScreen()	
+	tools.startBrowser("https://github.com/ericdke/ayadn#ayadn")
+
 when "debug"
 	if arg2 == nil
 		run.ayadnDebugStream

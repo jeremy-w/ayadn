@@ -195,7 +195,7 @@ class AyaDN
             help += "- " + "mute/unmute @username ".green + "to mute/unmute a user\n"
             #help += "- " + "save/load postID ".green + "to save/load a post locally\n"
             #help += "- " + "list/backup followings/followers/muted @username/me ".green + "to list/backup users you're following, who follow you, that you've muted\n"
-            help += "- " + "help ".green + "to display this screen. See " + "https://github.com/ericdke/ayadn#list-of-commands".magenta + " for more commands, detailed instructions, examples..." + "\n\n"
+            help += "- " + "help ".green + "to display this screen, " + "webhelp ".green + "for more commands, detailed instructions, examples..." + "\n\n"
             #help += "- some options have a one-letter shortcut: w(rite), r(eply), s(earch), p(osts), m(entions), t(ag), c(onvo), i(nfos), h(elp)\n"
             help += "- tip: put 'scroll' before a stream to use the scrolling feature\n\n"
             help += "Examples:\n".cyan
