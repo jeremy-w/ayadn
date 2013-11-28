@@ -5,7 +5,7 @@ AYADN
 
 ## Features
 
-- read/scroll your App.net personalized stream
+- read/scroll your App.net stream
 
 - write a post
 
@@ -16,6 +16,8 @@ AYADN
 - star/unstar a post
 
 - repost/unrepost a post
+
+- send a private message
 
 - follow/unfollow a user
 
@@ -35,13 +37,13 @@ AYADN
 
 - read posts reposted by a user
 
-- read users who starred/reposted a post
+- see users who starred/reposted a post
 
-- read/scroll other streams: Checkins, Global, Trending, Conversations
+- read/scroll other streams: "checkins", "global", "trending", "conversations"
 
 - delete a post
 
-- save/load a post
+- save/load a post locally
 
 - backup/display your lists of followings, followers, muted users...
 
@@ -203,14 +205,15 @@ Enjoy!
 
 ## List of commands
 
-The first lines include the `[PRESS ENTER KEY]` indication and a description but I don't continue after for obvious readability reasons.  
+*Only the first lines include the `[PRESS ENTER KEY]` indication and a description for obvious readability reasons.*
 
 ```
 ayadn [PRESS ENTER KEY] *to display the unified stream*
 ayadn scroll [PRESS ENTER KEY] *to scroll the unified stream*
 ayadn write [PRESS ENTER KEY] *to write your post*
 ayadn write '@ericd Good morning Eric!' [PRESS ENTER KEY] *(prefer the previous method, safer)*
-ayadn reply 15723266 [PRESS ENTER KEY] *to reply then write your post*
+ayadn reply 15723266 [PRESS ENTER KEY] *to reply, then write your post*
+ayadn pm @ericd [PRESS ENTER KEY] *to send a private message to @ericd*
 ayadn global
 ayadn scroll global
 ayadn checkins
@@ -247,6 +250,7 @@ ayadn list followings @ericd
 ayadn list followings me
 ayadn list followers @ericd
 ayadn list followers me
+ayadn backup muted
 ayadn backup followings @ericd
 ayadn backup followings me
 ayadn backup followers @ericd
@@ -260,7 +264,11 @@ ayadn unrepost 15723266
 ayadn delete 12345678
 ayadn save 15723266
 ayadn load 15723266
+ayadn messages
+ayadn messages 12345
 ayadn reset pagination
+ayadn help
+ayadn webhelp
 ```  
 
 

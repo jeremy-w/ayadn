@@ -201,7 +201,7 @@ class AyaDN
             help += "Examples:\n".cyan
             help += "ayadn.rb ".green + "(display your Unified stream)\n"
             help += "ayadn.rb write ".green + "(write a post with a compose window)\n"
-            help += "ayadn.rb write \"@ericd Good morning Eric\" ".green + "(write a post instantly between double quotes)\n"
+            help += "ayadn.rb write \'@ericd Good morning Eric!\' ".green + "(write a post instantly between double quotes)\n"
             help += "ayadn.rb reply 14805036 ".green + "(reply to post n°14805036 with a compose window)\n"
             help += "ayadn.rb tag nowplaying ".green + "(search for hashtag #nowplaying)\n"
             help += "ayadn.rb star 14805036 ".green + "(star post n°14805036)\n"
