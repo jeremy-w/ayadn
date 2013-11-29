@@ -161,11 +161,14 @@ when "reply", "r"
 when "search", "s"
 	arg2 != nil ? run.ayadnSearch(arg2) : (puts "\nsyntax error\n")
 
+when "inter", "interactions", "events"
+	run.ayadnInteractions
+
 when "help", "h"
-	puts tools.helpScreen()
+	puts tools.helpScreen
 
 when "webhelp"
-	puts tools.helpScreen()	
+	puts tools.helpScreen
 	tools.startBrowser("https://github.com/ericdke/ayadn#ayadn")
 
 when "debug"
@@ -187,7 +190,7 @@ else
 	option = ARGV
 	bad_option = option.join(" ")
 	puts "\nSyntax error: ".red + "#{bad_option} ".brown + "is not a valid option.\n\n".red
-	puts tools.helpScreen()
+	puts tools.helpScreen
 
 end
 

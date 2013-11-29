@@ -246,6 +246,11 @@ class AyaDN
 				@url += "&include_annotations=1"
 				@url += "&access_token=#{@token}"
 				@url += '&include_html=0'
+			when stream == "interactions"
+				@url += 'stream/0/users/'
+				@url += "me/interactions?"
+				@url += "&access_token=#{@token}"
+				#@url += '&include_html=0'
 
 			end
 		end
@@ -293,6 +298,12 @@ class AyaDN
 			@url += '&include_html=0'
 			@url += '&include_directed_posts=1' unless @directedPosts == false
 			@url += "&count=#{@countStreamBack}"
+			getHash
+		end
+		def getInteractions
+			configAPI
+			@url = makeStreamURL("interactions")
+			#checkLastPageID(lastPageID)
 			getHash
 		end
 		def getHashtags(tag)

@@ -110,6 +110,17 @@ class AyaDN
 			end
 		end
 	end
+	def ayadnInteractions
+		configMain
+		puts @status.getInteractions
+		#@tools.fileOps("makedir", @ayadn_lastPageID_path)
+		#fileURL = @ayadn_lastPageID_path + "/lastPageID-interactions"
+		#lastPageID = @tools.fileOps("getlastpageid", fileURL)
+		@hash = @api.getInteractions
+		#@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
+		stream, lastPageID = @view.new(@hash).showInteractions
+		puts stream + "\n\n"
+	end
 	def ayadnGlobal
 		configMain
 		puts @status.getGlobal

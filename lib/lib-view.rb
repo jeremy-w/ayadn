@@ -52,6 +52,9 @@ class AyaDN
 		def showUsersList
 			buildUsersList(getDataNormal(@hash))
 		end
+		def showInteractions
+			buildInteractions(getData(@hash))
+		end
 
 		def showUsers
 			users = ""
@@ -77,6 +80,64 @@ class AyaDN
 				retString += "#{k}: #{v}\n\n"
 			end
 			return retString
+		end
+		def buildInteractions(hash)
+			inter_string = ""
+			hash.each do |item|
+				action = item['action']
+				event_date = item['event_date']
+				createdDay = event_date[0...10]
+				createdHour = event_date[11...19]
+				objects_names, users_list, post_ids, post_text = [], [], [], []
+				objects = item['objects']
+				obj_has_names = false
+				objects.each do |o|
+					case action
+					when "follow", "unfollow", "mute", "unmute"
+						object_user_names = "@" + o['username']
+						objects_names.push(object_user_names)
+					when "star", "unstar", "repost", "unrepost", "reply"
+						postID = o['id']
+						post_ids.push(postID)
+						#text = o['text']
+						post_info = buildPostInfo(o, false)
+						post_text.push(post_info.chomp("\n\n"))
+					end
+				end
+				users = item['users']
+				users.each do |u|
+					if u != nil
+						user_name = "@" + u['username']
+						users_list.push(user_name)
+					end
+				end
+				inter_string += "-----\n\n".blue
+				inter_string += "Date: ".green + "#{createdDay} #{createdHour}\n".cyan
+				# inter_string += "Subject: ".green + users_list.join(", ") + "\n"
+				# inter_string += "Action: ".green + action.brown + "\n"
+				#(inter_string += "Object: ".green + "post n° ".green + postID + "\n") if obj_has_names == false
+				case action
+				when "follow", "unfollow"
+					inter_string += "#{users_list.join(", ")} ".green + "#{action}ed ".magenta + "you\n".brown
+				when "mute", "unmute"
+					inter_string += "#{users_list.join(", ")} ".green + "#{action}d ".magenta + "#{objects_names.join(", ")}\n".brown
+				when "repost", "unrepost"
+					inter_string += "#{users_list.join(", ")} ".green + "#{action}ed:\n".magenta
+					inter_string += "#{post_text.join(" ")}"
+				when "star", "unstar"
+					inter_string += "#{users_list.join(", ")} ".green + "#{action}red:\n".magenta
+					inter_string += "#{post_text.join(" ")}"
+				when "reply"
+					inter_string += "#{users_list.join(", ")} ".green + "#{action}ed to:\n".magenta
+					inter_string += "#{post_text.join(" ")}"
+				when "welcome"
+					inter_string += "App.net ".green + "welcomed ".magenta + "you.\n".green
+				else
+					inter_string += "Unknown data.\n".red
+				end
+				inter_string += "\n"
+			end
+			return inter_string
 		end
 		def buildStream(postHash)
 			postString = ""
@@ -290,7 +351,7 @@ class AyaDN
 				actualLength = withoutBraces.length
 				postDetails += "\nLength: ".cyan + actualLength.to_s.reddish
 			end
-			postDetails += "\n\n"
+			postDetails += "\n\n\n"
 		end
 		def buildUsersList(usersHash)
 			usersString = ""

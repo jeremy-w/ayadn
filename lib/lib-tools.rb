@@ -214,6 +214,9 @@ class AyaDN
         end
 	end
     class ClientStatus
+        def getInteractions
+            s = "\nLoading the ".green + "interactions ".brown + "informations.\n\n".green
+        end
         def errorNoID
             s = "\nError -> you must give a post ID to reply to.\n\n".red
         end
