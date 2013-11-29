@@ -234,16 +234,16 @@ ayadn reposted 15723266
 ayadn infos @ericd
 ayadn infos 15723266
 ayadn convo 15726105
-ayadn tag nowplaying *(don't write the "#")*
+ayadn tag nowplaying
 ayadn follow @ericd
 ayadn unfollow @ericd
 ayadn mute @ericd
 ayadn unmute @ericd
-ayadn messages *(lists your private messaging channels)*
-ayadn messages 12345 *(view the messages in this channel)*
-ayadn messages 12345 all *(ignores pagination)*
+ayadn messages
+ayadn messages 12345
+ayadn messages 12345 all
 ayadn search ruby
-ayadn search ruby,json *(don't put spaces between words, use commas)*
+ayadn search ruby,json
 ayadn star 15723266
 ayadn unstar 15723266
 ayadn repost 15723266
