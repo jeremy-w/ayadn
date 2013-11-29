@@ -226,18 +226,12 @@ ayadn conversations
 ayadn scroll conversations
 ayadn mentions @ericd
 ayadn scroll mentions @ericd
-ayadn mentions me
-ayadn scroll mentions me
 ayadn posts @ericd
 ayadn scroll posts @ericd
-ayadn posts me
-ayadn scroll posts me
 ayadn starred @ericd
-ayadn starred me
 ayadn starred 15723266
 ayadn reposted 15723266
 ayadn infos @ericd
-ayadn infos me
 ayadn infos 15723266
 ayadn convo 15726105
 ayadn tag nowplaying *(don't write the "#")*
@@ -245,16 +239,9 @@ ayadn follow @ericd
 ayadn unfollow @ericd
 ayadn mute @ericd
 ayadn unmute @ericd
-ayadn list muted
-ayadn list followings @ericd
-ayadn list followings me
-ayadn list followers @ericd
-ayadn list followers me
-ayadn backup muted
-ayadn backup followings @ericd
-ayadn backup followings me
-ayadn backup followers @ericd
-ayadn backup followers me
+ayadn messages *(lists your private messaging channels)*
+ayadn messages 12345 *(view the messages in this channel)*
+ayadn messages 12345 all *(ignores pagination)*
 ayadn search ruby
 ayadn search ruby,json *(don't put spaces between words, use commas)*
 ayadn star 15723266
@@ -262,11 +249,14 @@ ayadn unstar 15723266
 ayadn repost 15723266
 ayadn unrepost 15723266
 ayadn delete 12345678
+ayadn list muted
+ayadn list followings @ericd
+ayadn list followers @ericd
+ayadn backup muted
+ayadn backup followings @ericd
+ayadn backup followers @ericd
 ayadn save 15723266
 ayadn load 15723266
-ayadn messages
-ayadn messages 12345
-ayadn messages 12345 all *(ignores pagination)*
 ayadn reset pagination
 ayadn help
 ayadn webhelp
@@ -277,7 +267,17 @@ ayadn webhelp
 
 ### "me"
 
-With some features like `infos`, `mentions` and more, you can replace `@username` by `me` if you want to check yourself.  
+With some features you can replace `@username` by `me` if you want to check yourself:
+
+```
+ayadn mentions me
+ayadn scroll mentions me
+ayadn posts me
+ayadn starred me
+ayadn infos me
+ayadn list followings me
+(etc)
+```  
 
 
 ### Backup some data
