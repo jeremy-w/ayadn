@@ -41,6 +41,8 @@ AYADN
 
 - read/scroll other streams: "checkins", "global", "trending", "conversations"
 
+- read a timeline of your interactions
+
 - delete a post
 
 - save/load a post locally
