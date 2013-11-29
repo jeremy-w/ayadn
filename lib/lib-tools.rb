@@ -190,6 +190,7 @@ class AyaDN
             help += "- " + "mentions @username ".green + "to display posts mentionning a user\n"
             help += "- " + "starred @username/postID ".green + "to display a user's starred posts / who starred a post\n"
             help += "- " + "reposted postID ".green + "to display who reposted a post\n"
+            help += "- " + "interactions ".green + "to display a stream of your interactions\n"
             help += "- " + "global/trending/checkins/conversations ".green + "to display one of these streams\n"
             help += "- " + "follow/unfollow @username ".green + "to follow/unfollow a user\n"
             help += "- " + "mute/unmute @username ".green + "to mute/unmute a user\n"

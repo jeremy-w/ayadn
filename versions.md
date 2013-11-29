@@ -3,6 +3,9 @@ AYADN
 
 AYADN is a learning exercise: while it's fully functional, it's still very alpha.  
 
+## 2013-11-29 v0.31
+- Interactions!
+
 ## 2013-11-28 v0.30
 - Authorize with your App.net account in AyaDN! (no more `token.rb`)
 

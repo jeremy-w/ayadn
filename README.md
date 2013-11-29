@@ -239,6 +239,7 @@ ayadn follow @ericd
 ayadn unfollow @ericd
 ayadn mute @ericd
 ayadn unmute @ericd
+ayadn interactions
 ayadn messages
 ayadn messages 12345
 ayadn messages 12345 all
