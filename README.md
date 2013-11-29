@@ -240,7 +240,7 @@ ayadn infos @ericd
 ayadn infos me
 ayadn infos 15723266
 ayadn convo 15726105
-ayadn tag nowplaying
+ayadn tag nowplaying *(don't write the "#")*
 ayadn follow @ericd
 ayadn unfollow @ericd
 ayadn mute @ericd
@@ -256,7 +256,7 @@ ayadn backup followings me
 ayadn backup followers @ericd
 ayadn backup followers me
 ayadn search ruby
-ayadn search ruby,json
+ayadn search ruby,json *(don't put spaces between words, use commas)*
 ayadn star 15723266
 ayadn unstar 15723266
 ayadn repost 15723266
@@ -266,18 +266,14 @@ ayadn save 15723266
 ayadn load 15723266
 ayadn messages
 ayadn messages 12345
-ayadn messages 12345 all
+ayadn messages 12345 all *(ignores pagination)*
 ayadn reset pagination
 ayadn help
 ayadn webhelp
 ```  
 
 
-## Tips
-
-### Unsafe commands
-
-Some commands like *delete a post* don't have a shortcut, reducing the risk of accidental manipulation.
+## Tips  
 
 ### "me"
 
@@ -323,6 +319,8 @@ If AyaDN shows you "No recent posts in this stream" but you still want to see th
 
 Without arguments: resets all your pagination data.  
 
+*Note: AyaDN doesn't use Stream Markers. This is because it's meant as an independent tool that shouldn't modify your mobile/desktop experience of ADN. Example: if AyaDN used Stream Markers, and you let it scrolling a stream on your Mac, then you couldn't sync this stream properly on your smartphone with another app.*  
+
 ### Running multiple accounts
 
 - main idea: one AyaDN folder per account
@@ -333,6 +331,32 @@ Without arguments: resets all your pagination data.
 ### Configuration
 
 You can modify the values (right hand) in the `config.yml` file but be very careful not to modify anything else: don't change the indentation or the name of the keys (left hand), don't add or remove quotes or special characters, etc,  otherwise it may break the Internets.
+
+### Shortcuts
+
+Some commands have shortcuts:  
+
+- write: w
+- reply: r
+- mentions: m
+- posts: p
+- infos: i
+- convo: c
+- tag: t
+- search: s
+- help: h
+
+Examples:  
+
+```
+ayadn w
+ayadn r 12345678
+ayadn m @ericd
+ayadn t ruby
+```  
+
+*Other commands don't have a shortcut, reducing the risk of accidental manipulation.*
+
 
 ### GCC
 
@@ -349,7 +373,7 @@ It should give you the location of your `gcc`, typically `/usr/bin/gcc`. Then ma
 sudo ln -s /usr/bin/gcc /usr/bin/gcc-4.2
 ```  
 
-On Mac OS X, you may have to answer `yes` if your computer asks you to download and install the "developer tools".  
+On Mac OS X, you may have to answer `yes` if your computer asks you to download and install the "developer tools".   
 
 ## Help
 
