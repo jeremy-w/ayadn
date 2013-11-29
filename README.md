@@ -361,6 +361,16 @@ ayadn t ruby
 *Other commands don't have a shortcut, reducing the risk of accidental manipulation.*
 
 
+### Ruby 1.9.3
+
+Ruby 1.9.3 is mandatory. If you're running any other version, including 2.0, you need to install 1.9.3 with "rvm":
+
+```
+\curl -L https://get.rvm.io | bash -s stable --ruby=1.9.3
+```  
+
+*Windows: well, I have no idea...*  
+
 ### GCC
 
 If you've got an error while installing or cloning regarding `gcc`
