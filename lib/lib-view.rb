@@ -130,7 +130,9 @@ class AyaDN
 				end
 				messagesString += "\n"
 			end
-			return messagesString
+			lastViewed = messagesStream.last
+			lastID = lastViewed['pagination_id'] unless lastViewed == nil
+			return messagesString, lastID
 		end
 		def buildCompleteStream(postHash)
 			postString = ""
@@ -360,11 +362,11 @@ class AyaDN
 					# else
 					# 	theChannels += "Readers: ".cyan + "yourself\n".brown
 					# end
-					if unreadMessages > 0
-						theChannels += "Unread messages: ".cyan + unreadMessages.to_s.reddish + "\n"
-					else
-						theChannels += "Unread messages: ".cyan + unreadMessages.to_s.green + "\n"
-					end
+					# if unreadMessages > 0
+					# 	theChannels += "Unread messages: ".cyan + unreadMessages.to_s.reddish + "\n"
+					# else
+					# 	theChannels += "Unread messages: ".cyan + unreadMessages.to_s.green + "\n"
+					# end
 					# theChannels += "You can do ".pink + "ayadn pm #{owner} ".brown + "to send a private message.\n\n".pink
 				end
 			end

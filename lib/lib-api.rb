@@ -10,7 +10,7 @@ class AyaDN
 			@configFileContents, @loaded = @tools.loadConfig
 			@ayadnClientID = "hFsCGArAjgJkYBHTHbZnUvzTmL4vaLHL"
 			@ayadnCallbackURL = "http://aya.io/ayadn/auth.html"
-			@authorizeURL = "https://account.app.net/oauth/authenticate?client_id=#{@ayadnClientID}&response_type=token&redirect_uri=#{@ayadnCallbackURL}&scope=basic stream write_post follow public_messages messages"
+			@authorizeURL = "https://account.app.net/oauth/authenticate?client_id=#{@ayadnClientID}&response_type=token&redirect_uri=#{@ayadnCallbackURL}&scope=basic stream write_post follow public_messages messages&include_marker=1"
 		end
 		def makeAuthorizeURL
 			@authorizeURL
@@ -252,11 +252,12 @@ class AyaDN
 		def checkLastPageID(lastPageID = nil)
 			@url += "&since_id=#{lastPageID}" if lastPageID != nil
 		end
-		def getMessages(channel)
+		def getMessages(channel, lastPageID)
 			configAPI
-			url = @url + "stream/0/channels/#{channel}/messages?access_token=#{@token}"
+			@url += "stream/0/channels/#{channel}/messages?access_token=#{@token}"
+			checkLastPageID(lastPageID)
 			begin
-				response = RestClient.get(url)
+				response = RestClient.get(@url)
 				theHash = JSON.parse(response.body)
 			rescue => e
 				abort("HTTP ERROR :\n".red + "#{e}\n".red)

@@ -145,7 +145,8 @@ when "pm"
 when "messages"
 	# arg2 is integer -> display channel stream
 	# arg2 is nil -> get a list of your previously used channels
-	run.ayadnGetMessages(arg2)
+	# arg3 == nil = with pagination, arg3 == "all" = no pagination
+	run.ayadnGetMessages(arg2, arg3)
 
 when "write", "w"
 	arg2 != nil ? run.ayadnSendPost(arg2, nil) : run.ayadnComposePost

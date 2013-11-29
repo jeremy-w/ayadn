@@ -266,6 +266,7 @@ ayadn save 15723266
 ayadn load 15723266
 ayadn messages
 ayadn messages 12345
+ayadn messages 12345 all
 ayadn reset pagination
 ayadn help
 ayadn webhelp
@@ -379,9 +380,11 @@ A few screencaps [here](http://ericd.re-app.net).
 
 ## Contact
 
-Contact me on ADN [(@ericd)](http://alpha.app.net/ericd) if you have questions, ideas, if you've found bugs, or... if you know Ruby and you want to help a newbie to code better. ;)
+Contact me on ADN [(@ericd)](http://alpha.app.net/ericd) if you have questions, ideas, or... if you know Ruby and you want to help a newbie to code better. ;)
 
-Don't bother with @ayaio or @aya_tests, they are bots. The handle for the app itself is [@ayadn](http://alpha.app.net/ayadn).
+The handle for the app itself is [@ayadn](http://alpha.app.net/ayadn) and will be used for support, bug report, etc.
+
+Don't bother with @ayaio or @aya_tests, they are bots. 
 
 ## Credits
 

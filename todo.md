@@ -1,5 +1,5 @@
 - replace mentions/links/hashtags text detection by accessing actual *entities* in the posts
 - check every error scenario possible on the user + API side
 - learn to run simulated tests like the big boys do
-- replace the custom compose window by something like *curses*
+- replace the compose window by something like *curses*
 - implement a ton of features (but that's another list...)

@@ -173,40 +173,7 @@ class AyaDN
 		@hash = @api.getUserInfos(name)
 	    puts @view.new(@hash).showUsersInfos(name)
 	end
-	def ayadnWhoReposted(postID)
-		configMain
-		puts @status.whoReposted(postID)
-		@hash = @api.getWhoReposted(postID)
-		abort("\nThis post hasn't been reposted by anyone.\n\n".red) if @hash['data'].empty?
-	    puts @view.new(@hash).showUsersList()
-	end
-	def ayadnWhoStarred(postID)
-		configMain
-		puts @status.whoStarred(postID)
-		@hash = @api.getWhoStarred(postID)
-		abort("\nThis post hasn't been starred by anyone.\n\n".red) if @hash['data'].empty?
-	    puts @view.new(@hash).showUsersList()
-	end
-	def ayadnStarredPosts(name)
-		configMain
-		puts @status.starsUser(name)
-		@hash = @api.getStarredPosts(name)
-		stream, lastPageID = completeStream
-		displayStream(stream)
-	end
-	def ayadnConversation(postID)
-		configMain
-		puts @status.getPostReplies(postID)
-		@hash = @api.getPostReplies(postID)
-		stream, lastPageID = completeStream
-		displayStream(stream)
-	end
-	def ayadnPostInfos(action, postID)
-		configMain
-		puts @status.infosPost(postID)
-		@hash = @api.getPostInfos(action, postID)
-	    puts @view.new(@hash).showPostInfos(postID, isMine = false)
-	end
+	
 	def ayadnSendMessage(target, text)
 		abort(@status.emptyPost) if (text.empty? || text == nil)
 		puts "\nSending private Message...\n".green
@@ -222,11 +189,15 @@ class AyaDN
 		puts @status.postSent
 		@tools.fileOps("savechannelid", privateMessageChannelID, target)
 	end
-	def ayadnGetMessages(target)
+	def ayadnGetMessages(target, action = nil)
 		configMain
 		if target != nil
-			@hash = @api.getMessages(target)
-			puts @view.new(@hash).showMessagesFromChannel
+			fileURL = @ayadn_lastPageID_path + "/lastPageID-channels-#{target}"
+			lastPageID = @tools.fileOps("getlastpageid", fileURL) unless action == "all"
+			@hash = @api.getMessages(target, lastPageID)
+			messagesString, lastPageID = @view.new(@hash).showMessagesFromChannel
+			@tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
+			displayStream(messagesString)
 		else
 			#list channels
 			# channels_list = @tools.fileOps("loadchannels", nil)
@@ -239,7 +210,7 @@ class AyaDN
 			@hash = @api.getChannels
 			theChannels, channels_list = @view.new(@hash).showChannels
 			puts theChannels
-			puts "\nDo ".green + "ayadn messages CHANNEL_ID ".brown + "to read this channel's messages.\n\n".green
+			#puts "\nDo ".green + "ayadn messages CHANNEL_ID ".brown + "to read this channel's messages.\n\n".green
 			# puts "\nLast messages from each channel: \n".cyan
 			# channels_list.each do |id|
 			# 	puts "\n\nChannel ID: ".cyan + " #{id}\n".brown
@@ -348,6 +319,40 @@ class AyaDN
 			puts "\nPost successfully deleted.\n\n".green
 			exit
 		end
+	end
+	def ayadnWhoReposted(postID)
+		configMain
+		puts @status.whoReposted(postID)
+		@hash = @api.getWhoReposted(postID)
+		abort("\nThis post hasn't been reposted by anyone.\n\n".red) if @hash['data'].empty?
+	    puts @view.new(@hash).showUsersList()
+	end
+	def ayadnWhoStarred(postID)
+		configMain
+		puts @status.whoStarred(postID)
+		@hash = @api.getWhoStarred(postID)
+		abort("\nThis post hasn't been starred by anyone.\n\n".red) if @hash['data'].empty?
+	    puts @view.new(@hash).showUsersList()
+	end
+	def ayadnStarredPosts(name)
+		configMain
+		puts @status.starsUser(name)
+		@hash = @api.getStarredPosts(name)
+		stream, lastPageID = completeStream
+		displayStream(stream)
+	end
+	def ayadnConversation(postID)
+		configMain
+		puts @status.getPostReplies(postID)
+		@hash = @api.getPostReplies(postID)
+		stream, lastPageID = completeStream
+		displayStream(stream)
+	end
+	def ayadnPostInfos(action, postID)
+		configMain
+		puts @status.infosPost(postID)
+		@hash = @api.getPostInfos(action, postID)
+	    puts @view.new(@hash).showPostInfos(postID, isMine = false)
 	end
 	def getList(list, name)
 		configMain
