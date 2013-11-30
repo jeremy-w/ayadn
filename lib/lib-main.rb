@@ -4,7 +4,6 @@ class AyaDN
 	def initialize(token)
 		@token = token
 		@api = AyaDN::API.new(@token)
-		@status = AyaDN::ClientStatus.new
 		@view = AyaDN::View
 	end
 
@@ -96,7 +95,7 @@ class AyaDN
 		end
 	end
 	def ayadnInteractions
-		puts @status.getInteractions
+		puts $status.getInteractions
 		#$tools.fileOps("makedir", $ayadn_lastPageID_path)
 		#fileURL = $ayadn_lastPageID_path + "/lastPageID-interactions"
 		#lastPageID = $tools.fileOps("getlastpageid", fileURL)
@@ -106,7 +105,7 @@ class AyaDN
 		puts stream + "\n\n"
 	end
 	def ayadnGlobal
-		puts @status.getGlobal
+		puts $status.getGlobal
 		fileURL = $ayadn_lastPageID_path + "/lastPageID-global"
 		lastPageID = $tools.fileOps("getlastpageid", fileURL)
 		@hash = @api.getGlobal(lastPageID)
@@ -117,14 +116,14 @@ class AyaDN
 	def ayadnUnified
 		fileURL = $ayadn_lastPageID_path + "/lastPageID-unified"
 		lastPageID = $tools.fileOps("getlastpageid", fileURL)
-		puts @status.getUnified
+		puts $status.getUnified
 		@hash = @api.getUnified(lastPageID)
 		stream, lastPageID = completeStream
 		$tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
 		displayStream(stream)
 	end
 	def ayadnHashtags(tag)
-		puts @status.getHashtags(tag)
+		puts $status.getHashtags(tag)
 		@hash = @api.getHashtags(tag)
 		stream, lastPageID = completeStream
 		displayStream(stream)
@@ -132,7 +131,7 @@ class AyaDN
 	def ayadnExplore(explore)
 		fileURL = $ayadn_lastPageID_path + "/lastPageID-#{explore}"
 		lastPageID = $tools.fileOps("getlastpageid", fileURL)
-		puts @status.getExplore(explore)
+		puts $status.getExplore(explore)
 		@hash = @api.getExplore(explore, lastPageID)
 		stream, lastPageID = completeStream
 		$tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
@@ -141,7 +140,7 @@ class AyaDN
 	def ayadnUserMentions(name)
 		fileURL = $ayadn_lastPageID_path + "/lastPageID-mentions-#{name}"
 		lastPageID = $tools.fileOps("getlastpageid", fileURL)
-		puts @status.mentionsUser(name)
+		puts $status.mentionsUser(name)
 		@hash = @api.getUserMentions(name, lastPageID)
 		stream, lastPageID = completeStream
 		$tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
@@ -150,20 +149,20 @@ class AyaDN
 	def ayadnUserPosts(name)
 		fileURL = $ayadn_lastPageID_path + "/lastPageID-posts-#{name}"
 		lastPageID = $tools.fileOps("getlastpageid", fileURL)
-		puts @status.postsUser(name)
+		puts $status.postsUser(name)
 		@hash = @api.getUserPosts(name, lastPageID)
 		stream, lastPageID = completeStream
 		$tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
 		displayStream(stream)
 	end
 	def ayadnUserInfos(name)
-		puts @status.infosUser(name)
+		puts $status.infosUser(name)
 		@hash = @api.getUserInfos(name)
 	    puts @view.new(@hash).showUsersInfos(name)
 	end
 	
 	def ayadnSendMessage(target, text)
-		abort(@status.emptyPost) if (text.empty? || text == nil)
+		abort($status.emptyPost) if (text.empty? || text == nil)
 		puts "\nSending private Message...\n".green
 		callback = @api.httpSendMessage(target, text)
 		blob = JSON.parse(callback)
@@ -173,7 +172,7 @@ class AyaDN
 		privateMessageID = @hash['id']
 		$tools.fileOps("makedir", $ayadn_messages_path)
 		puts "Channel ID: ".cyan + privateMessageChannelID.brown + " Message ID: ".cyan + privateMessageID.brown + "\n\n"
-		puts @status.postSent
+		puts $status.postSent
 		$tools.fileOps("savechannelid", privateMessageChannelID, target)
 	end
 	def ayadnGetMessages(target, action = nil)
@@ -206,13 +205,13 @@ class AyaDN
 		end
 	end
 	def ayadnSendPost(text, reply_to = nil)
-		abort(@status.emptyPost) if (text.empty? || text == nil)
-		puts @status.sendPost
+		abort($status.emptyPost) if (text.empty? || text == nil)
+		puts $status.sendPost
 		callback = @api.httpSend(text, reply_to)
 		blob = JSON.parse(callback)
 		@hash = blob['data']
 		puts @view.new(@hash).buildPostInfo(@hash, isMine = true)
-		puts @status.postSent
+		puts $status.postSent
 		# show end of the stream after posting
 		if reply_to.empty?
 			@hash = @api.getSimpleUnified
@@ -227,7 +226,7 @@ class AyaDN
 		end
 	end
 	def ayadnComposeMessage(target)
-		puts @status.writeMessage
+		puts $status.writeMessage
 		maxChar = 2048
 		begin
 			inputText = STDIN.gets.chomp
@@ -244,7 +243,7 @@ class AyaDN
 		end
 	end
 	def ayadnComposePost(reply_to = "", mentionsList = "", myUsername = "")
-		puts @status.writePost
+		puts $status.writePost
 		maxChar = 256
 		charCount = maxChar - mentionsList.length
 		text = mentionsList
@@ -294,7 +293,7 @@ class AyaDN
 		ayadnComposePost(postID, mentionsList)
 	end
 	def ayadnDeletePost(postID)
-		puts @status.deletePost(postID)
+		puts $status.deletePost(postID)
 		isTherePost, isYours = @api.goDelete(postID)
 		if isTherePost == nil
 			abort("\nPost already deleted.\n\n".red)
@@ -305,31 +304,31 @@ class AyaDN
 		end
 	end
 	def ayadnWhoReposted(postID)
-		puts @status.whoReposted(postID)
+		puts $status.whoReposted(postID)
 		@hash = @api.getWhoReposted(postID)
 		abort("\nThis post hasn't been reposted by anyone.\n\n".red) if @hash['data'].empty?
 	    puts @view.new(@hash).showUsersList()
 	end
 	def ayadnWhoStarred(postID)
-		puts @status.whoStarred(postID)
+		puts $status.whoStarred(postID)
 		@hash = @api.getWhoStarred(postID)
 		abort("\nThis post hasn't been starred by anyone.\n\n".red) if @hash['data'].empty?
 	    puts @view.new(@hash).showUsersList()
 	end
 	def ayadnStarredPosts(name)
-		puts @status.starsUser(name)
+		puts $status.starsUser(name)
 		@hash = @api.getStarredPosts(name)
 		stream, lastPageID = completeStream
 		displayStream(stream)
 	end
 	def ayadnConversation(postID)
-		puts @status.getPostReplies(postID)
+		puts $status.getPostReplies(postID)
 		@hash = @api.getPostReplies(postID)
 		stream, lastPageID = completeStream
 		displayStream(stream)
 	end
 	def ayadnPostInfos(action, postID)
-		puts @status.infosPost(postID)
+		puts $status.infosPost(postID)
 		@hash = @api.getPostInfos(action, postID)
 	    puts @view.new(@hash).showPostInfos(postID, isMine = false)
 	end
@@ -421,7 +420,7 @@ class AyaDN
 		end
 		puts "\nLoading post ".green + "#{postID}".brown
 		@hash = @api.getSinglePost(postID)
-		puts @status.savingFile(name, $ayadn_posts_path, file)
+		puts $status.savingFile(name, $ayadn_posts_path, file)
 		f = File.new(fileURL, "w")
 			f.puts(@hash)
 		f.close

@@ -10,7 +10,7 @@ AYADN_CALLBACK_URL = "http://aya.io/ayadn/auth.html"
 
 puts "\nAYADN".red + " - " + "App.net command-line client\n".brown
 
-status = AyaDN::ClientStatus.new
+$status = AyaDN::ClientStatus.new
 $tools = AyaDN::Tools.new
 @token = $tools.fileOps("auth", "read")
 if @token != nil
@@ -42,10 +42,10 @@ when "trending", "conversations", "checkins", "photos"
 	run.ayadnExplore(arg1)
 
 when "mentions", "m"
-	(arg2 =~ /^@/ || arg2 == "me") ? run.ayadnUserMentions(arg2) : (puts status.errorUserID(arg2))
+	(arg2 =~ /^@/ || arg2 == "me") ? run.ayadnUserMentions(arg2) : (puts $status.errorUserID(arg2))
 
 when "posts", "p"
-	(arg2 =~ /^@/ || arg2 == "me") ? run.ayadnUserPosts(arg2) : (puts status.errorUserID(arg2))
+	(arg2 =~ /^@/ || arg2 == "me") ? run.ayadnUserPosts(arg2) : (puts $status.errorUserID(arg2))
 
 when "starred"
 	if arg2 =~ /^@/ || arg2 == "me"
@@ -53,11 +53,11 @@ when "starred"
 	elsif arg2.is_integer?
 		run.ayadnWhoStarred(arg2)
 	else
-		puts status.errorUserID(arg2)
+		puts $status.errorUserID(arg2)
 	end
 
 when "reposted"
-	arg2.is_integer? ? run.ayadnWhoReposted(arg2) : (puts status.errorPostID(arg2))
+	arg2.is_integer? ? run.ayadnWhoReposted(arg2) : (puts $status.errorPostID(arg2))
 
 when "infos", "i"
 	if arg2 =~ /^@/ || arg2 == "me"
@@ -65,11 +65,11 @@ when "infos", "i"
 	elsif arg2.is_integer?
 		run.ayadnPostInfos("call", arg2)
 	else
-		puts status.errorInfos(arg2)
+		puts $status.errorInfos(arg2)
 	end
 
 when "convo", "c"
-	arg2.is_integer? ? run.ayadnConversation(arg2) : (puts status.errorPostID(arg2))
+	arg2.is_integer? ? run.ayadnConversation(arg2) : (puts $status.errorPostID(arg2))
 
 when "tag", "t"
 	theTag = arg2.dup
@@ -82,14 +82,14 @@ when "delete"
 		input = STDIN.getch
 		(input == "y" || input == "Y") ? run.ayadnDeletePost(arg2) : (puts "\nCanceled.\n\n".red)
 	else
-		puts status.errorPostID(arg2)
+		puts $status.errorPostID(arg2)
 	end
 
 when "save"
-	arg2.is_integer? ? run.ayadnSavePost(arg2) : (puts status.errorPostID(arg2))
+	arg2.is_integer? ? run.ayadnSavePost(arg2) : (puts $status.errorPostID(arg2))
 
 when "load"
-	arg2.is_integer? ? run.ayadnPostInfos("load", arg2) : (puts status.errorPostID(arg2))
+	arg2.is_integer? ? run.ayadnPostInfos("load", arg2) : (puts $status.errorPostID(arg2))
 
 when "backup"
 	if arg2 == "followings"
@@ -112,28 +112,28 @@ when "list"
 	end
 
 when "star"
-	arg2.is_integer? ? run.ayadnStarringPost("star", arg2) : (puts status.errorPostID(arg2))
+	arg2.is_integer? ? run.ayadnStarringPost("star", arg2) : (puts $status.errorPostID(arg2))
 
 when "unstar"
-	arg2.is_integer? ? run.ayadnStarringPost("unstar", arg2) : (puts status.errorPostID(arg2))
+	arg2.is_integer? ? run.ayadnStarringPost("unstar", arg2) : (puts $status.errorPostID(arg2))
 
 when "repost"
-	arg2.is_integer? ? run.ayadnReposting("repost", arg2) : (puts status.errorPostID(arg2))
+	arg2.is_integer? ? run.ayadnReposting("repost", arg2) : (puts $status.errorPostID(arg2))
 
 when "unrepost"
-	arg2.is_integer? ? run.ayadnReposting("unrepost", arg2) : (puts status.errorPostID(arg2))
+	arg2.is_integer? ? run.ayadnReposting("unrepost", arg2) : (puts $status.errorPostID(arg2))
 
 when "follow"
-	arg2 =~ /^@/ ? run.ayadnFollowing("follow", arg2) : (puts status.errorUserID(arg2))
+	arg2 =~ /^@/ ? run.ayadnFollowing("follow", arg2) : (puts $status.errorUserID(arg2))
 
 when "unfollow"
-	arg2 =~ /^@/ ? run.ayadnFollowing("unfollow", arg2) : (puts status.errorUserID(arg2))
+	arg2 =~ /^@/ ? run.ayadnFollowing("unfollow", arg2) : (puts $status.errorUserID(arg2))
 
 when "mute"
-	arg2 =~ /^@/ ? run.ayadnMuting("mute", arg2) : (puts status.errorUserID(arg2))
+	arg2 =~ /^@/ ? run.ayadnMuting("mute", arg2) : (puts $status.errorUserID(arg2))
 
 when "unmute"
-	arg2 =~ /^@/ ? run.ayadnMuting("unmute", arg2) : (puts status.errorUserID(arg2))
+	arg2 =~ /^@/ ? run.ayadnMuting("unmute", arg2) : (puts $status.errorUserID(arg2))
 
 when "pm"
 	if arg3 != nil
@@ -154,9 +154,9 @@ when "write", "w"
 
 when "reply", "r"
 	if arg2 != nil
-		arg2.is_integer? ? run.ayadnReply(arg2) : (puts status.errorPostID(arg2))
+		arg2.is_integer? ? run.ayadnReply(arg2) : (puts $status.errorPostID(arg2))
 	else
-		puts status.errorNoID
+		puts $status.errorNoID
 	end
 
 when "search", "s"
