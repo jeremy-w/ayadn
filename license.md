@@ -1,10 +1,12 @@
 **AYADN**
 *2013, copyright Eric Dejonckheere*
 
-Do whatever you want with this app and its code, including modifying and distributing, as long as you keep it Open Source.
+Be careful to not distribute credentials, like the Client ID. 
 
-You don't *have to* include this copyright, but it's cool if you do.
+Remember to build your own callback page (don't use mine).
 
-Be careful to not distribute credentials, like the Client ID, etc.
+If you're using significant chunks of this code in your app, please mention this copyright.
+
+Other than that, do whatever you want with this app and its code, including modifying and distributing, as long as you keep it Open Source.
 
 That's all, have fun.
