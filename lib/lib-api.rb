@@ -5,19 +5,15 @@ class AyaDN
 		def initialize(token)
 			@url = 'https://alpha-api.app.net/'
 			@token = token
-			@tools = AyaDN::Tools.new
-			@directedPosts = true
-			@configFileContents, @loaded = @tools.loadConfig
-			@ayadnClientID = "hFsCGArAjgJkYBHTHbZnUvzTmL4vaLHL"
-			@ayadnCallbackURL = "http://aya.io/ayadn/auth.html"
-			@authorizeURL = "https://account.app.net/oauth/authenticate?client_id=#{@ayadnClientID}&response_type=token&redirect_uri=#{@ayadnCallbackURL}&scope=basic stream write_post follow public_messages messages&include_marker=1"
+			$directedPosts = true
+			@authorizeURL = "https://account.app.net/oauth/authenticate?client_id=#{AYADN_CLIENT_ID}&response_type=token&redirect_uri=#{AYADN_CALLBACK_URL}&scope=basic stream write_post follow public_messages messages&include_marker=1"
 		end
 		def makeAuthorizeURL
 			@authorizeURL
 		end
 		def getResponse(url)
 			begin
-				response = RestClient.get(@url)
+				response = RestClient.get(url)
 				return response.body
 			rescue => e
 				abort("HTTP ERROR :\n".red + "#{e}\n".red)
@@ -42,8 +38,8 @@ class AyaDN
 		end
 		def httpSendMessage(target, text)
 			@url = 'https://alpha-api.app.net/stream/0/channels/pm/messages'
-			anno = "?include_annotations=1"
-			uri = URI("#{@url}#{anno}")
+			@url += "?include_annotations=1"
+			uri = URI("#{@url}")
 			https = Net::HTTP.new(uri.host,uri.port)
 			https.use_ssl = true
 			https.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -74,10 +70,9 @@ class AyaDN
 			callback = response.body
 		end
 		def httpSend(text, replyto = nil)
-			@url = 'https://alpha-api.app.net/'
-			@url += 'stream/0/posts'
-			anno = "?include_annotations=1"
-			uri = URI("#{@url}#{anno}")
+			@url = 'https://alpha-api.app.net/stream/0/posts'
+			@url += "?include_annotations=1"
+			uri = URI("#{@url}")
 			https = Net::HTTP.new(uri.host,uri.port)
 			https.use_ssl = true
 			https.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -117,42 +112,28 @@ class AyaDN
 		def getHash
 			theHash = JSON.parse(getResponse(@url))
 		end
-		def configAPI
-			if @loaded
-				@countGlobal = @configFileContents['counts']['global'].to_i
-				@countUnified = @configFileContents['counts']['unified'].to_i
-				@countCheckins = @configFileContents['counts']['checkins'].to_i
-				@countExplore = @configFileContents['counts']['explore'].to_i
-				@countMentions = @configFileContents['counts']['mentions'].to_i
-				@countPosts = @configFileContents['counts']['posts'].to_i
-				@countStarred = @configFileContents['counts']['starred'].to_i
-				@directedPosts = @configFileContents['timeline']['directed']
-				@countStreamBack = @configFileContents['timeline']['streamback'].to_i
-			end
-		end
 		def makeStreamURL(stream, value = nil)
 			@url = "https://alpha-api.app.net/"
-			configAPI
 			case
 			when stream == "global"
 				@url += 'stream/0/posts/stream/global?access_token='
 				@url += @token + '&include_deleted=0'
 				@url += '&include_html=0'
-				@url += "&count=#{@countGlobal}"
+				@url += "&count=#{$countGlobal}"
 			when stream == "unified"
 				@url += 'stream/0/posts/stream/unified?access_token='
 				@url += @token + '&include_deleted=1'
 				@url += '&include_html=0'
-				@url += '&include_directed_posts=1' unless @directedPosts == false
-				@url += "&count=#{@countUnified}"
+				@url += '&include_directed_posts=1' unless $directedPosts == false
+				@url += "&count=#{$countUnified}"
 			when stream == "checkins"
 				@url += 'stream/0/posts/stream/explore/'
 				@url += stream + "?access_token=#{@token}" + '&include_deleted=0&include_html=0&include_annotations=1'
-				@url += "&count=#{@countCheckins}"
+				@url += "&count=#{$countCheckins}"
 			when stream == "trending", stream == "conversations", stream == "photos"
 				@url += 'stream/0/posts/stream/explore/'
 				@url += "#{stream}" + "?access_token=#{@token}" + '&include_deleted=0&include_html=0'
-				@url += "&count=#{@countExplore}"
+				@url += "&count=#{$countExplore}"
 			when stream == "tag"
 				@url += 'stream/0/posts/tag/'
 				@url += "#{value}"
@@ -162,14 +143,14 @@ class AyaDN
 				@url += "/mentions"
 				@url += "/?access_token=#{@token}"
 				@url += '&include_html=0'
-				@url += "&count=#{@countMentions}"
+				@url += "&count=#{$countMentions}"
 			when stream == "posts"
 				@url += 'stream/0/users/'
 				@url += "#{value}" 
 				@url += "/posts"
 				@url += "/?access_token=#{@token}"
 				@url += '&include_deleted=1&include_html=0'
-				@url += "&count=#{@countPosts}"
+				@url += "&count=#{$countPosts}"
 			when stream == "userInfo"
 				@url += 'stream/0/users/'
 				@url += "#{value}" 
@@ -198,7 +179,7 @@ class AyaDN
 				@url += "/stars"
 				@url += "/?access_token=#{@token}"
 				@url += '&include_deleted=0&include_html=0'
-				@url += "&count=#{@countStarred}"
+				@url += "&count=#{$countStarred}"
 			when stream == "replies"
 				@url += 'stream/0/posts/'
 				@url += "#{value}" 
@@ -250,7 +231,9 @@ class AyaDN
 				@url += 'stream/0/users/'
 				@url += "me/interactions?"
 				@url += "&access_token=#{@token}"
-				#@url += '&include_html=0'
+			when stream == "channels"
+				@url += "stream/0/channels"
+				@url += "?access_token=#{@token}"
 
 			end
 		end
@@ -258,100 +241,76 @@ class AyaDN
 			@url += "&since_id=#{lastPageID}" if lastPageID != nil
 		end
 		def getMessages(channel, lastPageID)
-			configAPI
-			@url += "stream/0/channels/#{channel}/messages?access_token=#{@token}"
+			@url += "stream/0/channels/#{channel}/messages?access_token=#{@token}&count=100"
 			checkLastPageID(lastPageID)
-			begin
-				response = RestClient.get(@url)
-				theHash = JSON.parse(response.body)
-			rescue => e
-				abort("HTTP ERROR :\n".red + "#{e}\n".red)
-			end
+			getHash
 		end
 		def getChannels
-			configAPI
-			url = @url + "stream/0/channels?access_token=#{@token}"
-			begin
-				response = RestClient.get(url)
-				theHash = JSON.parse(response.body)
-			rescue => e
-				abort("HTTP ERROR :\n".red + "#{e}\n".red)
-			end
+			@url = makeStreamURL("channels")
+			getHash
 		end
 		def getGlobal(lastPageID = nil)
-			configAPI
 			@url = makeStreamURL("global")
 			checkLastPageID(lastPageID)
 			getHash
 		end	
 		def getUnified(lastPageID = nil)
-			configAPI
 			@url = makeStreamURL("unified")
 			checkLastPageID(lastPageID)
 			getHash
 		end
 		def getSimpleUnified
-			configAPI
 			@url = 'https://alpha-api.app.net/'
 			@url += 'stream/0/posts/stream/unified?access_token='
 			@url += @token + '&include_deleted=0'
 			@url += '&include_html=0'
-			@url += '&include_directed_posts=1' unless @directedPosts == false
-			@url += "&count=#{@countStreamBack}"
+			@url += '&include_directed_posts=1' unless $directedPosts == false
+			@url += "&count=#{$countStreamBack}"
 			getHash
 		end
 		def getInteractions
-			configAPI
 			@url = makeStreamURL("interactions")
 			#checkLastPageID(lastPageID)
 			getHash
 		end
 		def getHashtags(tag)
-			configAPI
 			@url = makeStreamURL("tag", tag)
 			getHash
 		end
 		def getExplore(explore, lastPageID = nil)
-			configAPI
 			@url = makeStreamURL(explore)
 			checkLastPageID(lastPageID)
 			getHash
 		end
 		def getUserMentions(name, lastPageID = nil)
-			configAPI
 			@url = makeStreamURL("mentions", name)
 			checkLastPageID(lastPageID)
 			getHash
 		end
 		def getUserPosts(name, lastPageID = nil)
-			configAPI
 			@url = makeStreamURL("posts", name)
 			checkLastPageID(lastPageID)
 			getHash
 		end
 		def getUserInfos(name)
-			configAPI
 			@url = makeStreamURL("userInfo", name)
 			getHash
 		end
 		def getWhoReposted(postID)
-			configAPI
 			@url = makeStreamURL("whoReposted", postID)
 			getHash
 		end
 		def getWhoStarred(postID)
-			configAPI
 			@url = makeStreamURL("whoStarred", postID)
 			getHash
 		end
 		def getPostInfos(action, postID)
-			configAPI
 			@url = makeStreamURL("singlePost", postID)
 			if action == "call"
 				getHash
 			elsif action == "load"
 				fileContent = {}
-				File.open("/data/posts/#{postID}.post", "r") do |f|
+				File.open("#{$ayadn_posts_path}/#{postID}.post", "r") do |f|
 					fileContent = f.gets
 				end
 				theHash = eval(fileContent)
@@ -360,22 +319,18 @@ class AyaDN
 			end
 		end
 		def getSinglePost(postID)
-			configAPI
 			@url = makeStreamURL("singlePost", postID)
 			getHash
 		end
 		def getStarredPosts(name)
-			configAPI
 			@url = makeStreamURL("starredPosts", name)
 			getHash
 		end
 		def getPostReplies(postID)
-			configAPI
 			@url = makeStreamURL("replies", postID)
 			getHash
 		end
 		def getPostMentions(postID)
-			configAPI
 			@url = makeStreamURL("singlePost", postID)
 			theHash = getHash
 			postInfo = theHash['data']
@@ -385,40 +340,33 @@ class AyaDN
 			return rawText, userName, isRepost
 		end
 		def getUserName(name)
-			configAPI
 			@url = makeStreamURL("userInfo", name)
 			theHash = getHash
 			userInfo = theHash['data']
 			userName = userInfo['username']
 		end
 		def goDelete(postID)
-			configAPI
 			@url = makeStreamURL("singlePost", postID)
 			isTherePost, isYours = ifExists(postID)
 			return isTherePost, isYours
 		end
 		def starPost(postID)
-			configAPI
 			@url = makeStreamURL("star", postID)
 			httpPost(@url)
 		end
 		def unstarPost(postID)
-			configAPI
 			@url = makeStreamURL("star", postID)
 			restDelete
 		end
 		def repostPost(postID)
-			configAPI
 			@url = makeStreamURL("repost", postID)
 			httpPost(@url)
 		end
 		def unrepostPost(postID)
-			configAPI
 			@url = makeStreamURL("repost", postID)
 			restDelete
 		end
 		def ifExists(postID)
-			configAPI
 			theHash = getHash
 			postInfo = theHash['data']
 			isTherePost = postInfo['text']
@@ -426,14 +374,12 @@ class AyaDN
 			return isTherePost, isYours
 		end
 		def getOriginalPost(postID)
-			configAPI
 			theHash = getHash
 			postInfo = theHash['data']
 			isRepost = postInfo['repost_of']
 			goToID = isRepost['id']
 		end
 		def getUserFollowInfo(name)
-			configAPI
 			@url = makeStreamURL("userInfo", name)
 			theHash = getHash
 			userInfo = theHash['data']
@@ -442,53 +388,44 @@ class AyaDN
 			return youFollow, followsYou
 		end
 		def getUserMuteInfo(name)
-			configAPI
 			@url = makeStreamURL("userInfo", name)
 			theHash = getHash
 			userInfo = theHash['data']
 			youMuted = userInfo['you_muted']
 		end
 		def muteUser(name)
-			configAPI
 			@url = makeStreamURL("mute", name)
 			httpPost(@url)
 		end
 		def unmuteUser(name)
-			configAPI
 			@url = makeStreamURL("mute", name)
 			restDelete
 		end
 		def followUser(name)
-			configAPI
 			@url = makeStreamURL("follow", name)
 			httpPost(@url)
 		end
 		def unfollowUser(name)
-			configAPI
 			@url = makeStreamURL("follow", name)
 			restDelete
 		end
 		def getFollowings(name, beforeID)
-			configAPI
 			@url = makeStreamURL("followings", name)
 			@url += "&count=200"
 			@url += "&before_id=#{beforeID}" if beforeID != nil
 			getHash
 		end
 		def getFollowers(name, beforeID)
-			configAPI
 			@url = makeStreamURL("followers", name)
 			@url += "&before_id=#{beforeID}" if beforeID != nil
 			getHash
 		end
 		def getMuted(name, beforeID)
-			configAPI
 			@url = makeStreamURL("muted", name)
 			@url += "&before_id=#{beforeID}" if beforeID != nil
 			getHash
 		end
 		def getSearch(value)
-			configAPI
 			@url = makeStreamURL("search", value)
 			getHash
 		end

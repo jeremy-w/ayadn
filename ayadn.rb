@@ -4,14 +4,15 @@
 # by Eric Dejonckheere
 # http://alpha.app.net/ericd
 # © 2013
-
 require_relative 'requires'
+AYADN_CLIENT_ID = "hFsCGArAjgJkYBHTHbZnUvzTmL4vaLHL"
+AYADN_CALLBACK_URL = "http://aya.io/ayadn/auth.html"
 
 puts "\nAYADN".red + " - " + "App.net command-line client\n".brown
 
 status = AyaDN::ClientStatus.new
-tools = AyaDN::Tools.new
-@token = tools.fileOps("auth", "read")
+$tools = AyaDN::Tools.new
+@token = $tools.fileOps("auth", "read")
 if @token != nil
 	run = AyaDN.new(@token)
 else
@@ -165,11 +166,11 @@ when "inter", "interactions", "events"
 	run.ayadnInteractions
 
 when "help", "h"
-	puts tools.helpScreen
+	puts $tools.helpScreen
 
 when "webhelp"
-	puts tools.helpScreen
-	tools.startBrowser("https://github.com/ericdke/ayadn#ayadn")
+	puts $tools.helpScreen
+	$tools.startBrowser("https://github.com/ericdke/ayadn#ayadn")
 
 when "debug"
 	if arg2 == nil
@@ -190,7 +191,7 @@ else
 	option = ARGV
 	bad_option = option.join(" ")
 	puts "\nSyntax error: ".red + "#{bad_option} ".brown + "is not a valid option.\n\n".red
-	puts tools.helpScreen
+	puts $tools.helpScreen
 
 end
 

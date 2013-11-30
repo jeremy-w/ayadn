@@ -1,10 +1,9 @@
 #!/usr/bin/ruby
 # encoding: utf-8
 class AyaDN
-	class View < Tools
+	class View
 		def initialize(hash)
 			@hash = hash
-			@configFileContents, @loaded = loadConfig
 		end
 		def getData(hash)
 			adnData = @hash['data']
@@ -17,9 +16,8 @@ class AyaDN
 			buildMessages(getData(@hash))
 		end
 		def showStream
-			if @loaded
-				downsideTimeline = @configFileContents['timeline']['downside']
-				if downsideTimeline == true
+			if $loaded
+				if $downsideTimeline == true
 					theHash = getData(@hash)
 				else
 					theHash = getDataNormal(@hash)
@@ -30,9 +28,8 @@ class AyaDN
 			buildStream(theHash)
 		end
 		def showCompleteStream
-			if @loaded
-				downsideTimeline = @configFileContents['timeline']['downside']
-				if downsideTimeline == true
+			if $loaded
+				if $downsideTimeline == true
 					theHash = getData(@hash)
 				else
 					theHash = getDataNormal(@hash)
@@ -113,9 +110,6 @@ class AyaDN
 				end
 				inter_string += "-----\n\n".blue
 				inter_string += "Date: ".green + "#{createdDay} #{createdHour}\n".cyan
-				# inter_string += "Subject: ".green + users_list.join(", ") + "\n"
-				# inter_string += "Action: ".green + action.brown + "\n"
-				#(inter_string += "Object: ".green + "post n° ".green + postID + "\n") if obj_has_names == false
 				case action
 				when "follow", "unfollow"
 					inter_string += "#{users_list.join(", ")} ".green + "#{action}ed ".magenta + "you\n".brown
@@ -143,7 +137,7 @@ class AyaDN
 			postString = ""
 			postHash.each do |item|
 				postText = item['text']
-				postText != nil ? (coloredPost = colorize(postText)) : (coloredPost = "--Post deleted--".red)
+				postText != nil ? (coloredPost = $tools.colorize(postText)) : (coloredPost = "--Post deleted--".red)
 				userName = item['user']['username']
 				createdAt = item['created_at']
 				createdDay = createdAt[0...10]
@@ -169,7 +163,7 @@ class AyaDN
 			messagesStream.each do |item|
 				messageText = item['text']
 				if messageText != nil
-					coloredPost = colorize(messageText)
+					coloredPost = $tools.colorize(messageText)
 				else
 					coloredPost = "--Message deleted--".red
 				end
@@ -203,7 +197,7 @@ class AyaDN
 				pagination_array.push(item['pagination_id'])
 				postText = item['text']
 				if postText != nil
-					coloredPost = colorize(postText)
+					coloredPost = $tools.colorize(postText)
 				else
 					coloredPost = "--Post deleted--".red
 				end
@@ -212,16 +206,14 @@ class AyaDN
 				createdDay = createdAt[0...10]
 				createdHour = createdAt[11...19]
 				postId = item['id']
-				postString += "PostID: ".cyan + postId.to_s.green
+				postString += "Post ID: ".cyan + postId.to_s.green
 				postString += " - "
 				postString += createdDay.cyan + ' at ' + createdHour.cyan + ' by ' + "@".reddish + userName.reddish + "\n" + coloredPost + "\n"
 				links = item['entities']['links']
 				sourceName = item['source']['name']
 				sourceLink = item['source']['link']
-				# plusieurs annotations par post, dont checkin
 				annoList = item['annotations']
 				xxx = 0
-				#if annoList.length > 0
 				if annoList != nil
 					annoList.each do |it|
 						annoType = annoList[xxx]['type']
@@ -256,17 +248,12 @@ class AyaDN
 							unless sourceName.nil?
 								postString += "\nPosted with: ".cyan + "#{sourceName} [#{sourceLink}]".green + " "
 							end
-							#if !links.empty?
 							postString += "\n"
-							#end
-							#todo:
-							#chCategories
 						end
 						xxx += 1
 					end
 				end
 				if !links.empty?
-					#postString += "\n"
 					links.each do |link|
 						linkURL = link['url']
 						postString += "Link: ".cyan + linkURL.brown + " "
@@ -286,7 +273,7 @@ class AyaDN
 			userFollows = postHash['follows_you']
 			userFollowed = postHash['you_follow']
 			
-			coloredPost = colorize(postText)
+			coloredPost = $tools.colorize(postText)
 
 			createdAt = postHash['created_at']
 			createdDay = createdAt[0...10]
@@ -346,8 +333,8 @@ class AyaDN
 				postDetails += "  Timezone: ".cyan + timezone.reddish
 			else
 				toRegex = postText.dup
-				withoutMarkdown = getMarkdownText(toRegex)
-				withoutBraces = withoutSquareBraces(withoutMarkdown)
+				withoutMarkdown = $tools.getMarkdownText(toRegex)
+				withoutBraces = $tools.withoutSquareBraces(withoutMarkdown)
 				actualLength = withoutBraces.length
 				postDetails += "\nLength: ".cyan + actualLength.to_s.reddish
 			end
@@ -360,8 +347,6 @@ class AyaDN
 				userRealName = item['name']
 				userHandle = "@" + userName
 				usersString += userHandle.green + " #{userRealName}\n".cyan
-				# pagi = item['pagination_id']
-				# usersString += pagi + "\n"
 			end
 			usersString += "\n\n"
 		end

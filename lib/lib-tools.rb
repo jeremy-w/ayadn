@@ -3,17 +3,45 @@
 class AyaDN
 	class Tools
         def initialize
-            @configFileContents, @loaded = loadConfig
-            configTools
+            $configFileContents, $loaded = loadConfig
+            @default_ayadn_data_path = Dir.home + "/ayadn/data"
+            config
         end
-        def configTools
-            if @loaded
-                @ayadnFiles = @configFileContents['files']['ayadnfiles']
-                @identityPrefix = @configFileContents['identity']['prefix']
-                @ayadn_data_path = Dir.home + @ayadnFiles
-                @ayadn_lastPageID_path = @ayadn_data_path + "/#{@identityPrefix}/.pagination"
-                @ayadn_messages_path = @ayadn_data_path + "/#{@identityPrefix}/messages"
-                @ayadn_authorization_path = @ayadn_data_path + "/#{@identityPrefix}/.auth"
+        def loadConfig
+            
+
+            
+            if File.exists?('./config.yml')
+                configFileContents = YAML::load_file('./config.yml')
+                loaded = true
+            else
+                configFileContents = {}
+                loaded = false
+            end
+            return configFileContents, loaded
+        end
+        def config
+            if $loaded
+                $ayadnFiles = $configFileContents['files']['ayadnfiles']
+                $identityPrefix = $configFileContents['identity']['prefix']
+                $ayadn_data_path = Dir.home + $ayadnFiles
+                $ayadn_posts_path = $ayadn_data_path + "/#{$identityPrefix}/posts"
+                $ayadn_lists_path = $ayadn_data_path + "/#{$identityPrefix}/lists"
+                $ayadn_lastPageID_path = $ayadn_data_path + "/#{$identityPrefix}/.pagination"
+                $ayadn_messages_path = $ayadn_data_path + "/#{$identityPrefix}/messages"
+                $ayadn_authorization_path = $ayadn_data_path + "/#{$identityPrefix}/.auth"
+                $countGlobal = $configFileContents['counts']['global'].to_i
+                $countUnified = $configFileContents['counts']['unified'].to_i
+                $countCheckins = $configFileContents['counts']['checkins'].to_i
+                $countExplore = $configFileContents['counts']['explore'].to_i
+                $countMentions = $configFileContents['counts']['mentions'].to_i
+                $countPosts = $configFileContents['counts']['posts'].to_i
+                $countStarred = $configFileContents['counts']['starred'].to_i
+                $directedPosts = $configFileContents['timeline']['directed']
+                $countStreamBack = $configFileContents['timeline']['streamback'].to_i
+                $countdown_1 = $configFileContents['timeline']['countdown_1'].to_i
+                $countdown_2 = $configFileContents['timeline']['countdown_2'].to_i
+                $downsideTimeline = $configFileContents['timeline']['downside']
             end
         end
 
@@ -37,7 +65,7 @@ class AyaDN
                     f.puts(content)
                 f.close
             when "savechannelid"
-                filePath = @ayadn_messages_path + "/pm-channels.json"
+                filePath = $ayadn_messages_path + "/pm-channels.json"
                 newPrivateChannel = { "#{value}" => "#{content}" }
                 if !File.exists?filePath
                     f = File.new(filePath, "w")
@@ -53,10 +81,10 @@ class AyaDN
                     f.close
                 end
             when "loadchannels"
-                filePath = @ayadn_messages_path + "/pm-channels.json"
+                filePath = $ayadn_messages_path + "/pm-channels.json"
                 channels = JSON.load(IO.read(filePath)) if File.exists?filePath
             when "auth"
-                filePath = @ayadn_authorization_path + "/token"
+                filePath = $ayadn_authorization_path + "/token"
                 if value == "read"
                     token = IO.read(filePath) if File.exists?filePath
                     if token != nil
@@ -72,7 +100,7 @@ class AyaDN
                     if content != nil
                         if option != nil
                             puts "\nResetting #{content} pagination for #{option}.\n".red
-                            filePath = @ayadn_lastPageID_path + "/lastPageID-#{content}-#{option}"
+                            filePath = $ayadn_lastPageID_path + "/lastPageID-#{content}-#{option}"
                             if File.exists?(filePath)
                                 FileUtils.rm_rf(filePath)
                                 puts "\nDone!\n\n".green
@@ -81,7 +109,7 @@ class AyaDN
                             end
                         else
                             puts "\nResetting the pagination for #{content}.\n".red
-                            filePath = @ayadn_lastPageID_path + "/lastPageID-#{content}"
+                            filePath = $ayadn_lastPageID_path + "/lastPageID-#{content}"
                             if File.exists?(filePath)
                                 FileUtils.rm_rf(filePath)
                                 puts "\nDone!\n\n".green
@@ -91,36 +119,27 @@ class AyaDN
                         end
                     else
                         puts "\nResetting all pagination data.\n".red
-                        Dir["#{@ayadn_lastPageID_path}/*"].each do |file|
+                        Dir["#{$ayadn_lastPageID_path}/*"].each do |file|
                             FileUtils.rm_rf file
                         end
                         puts "\nDone!\n\n".green
                     end
                 elsif value == "credentials"
-                    filePath = @ayadn_authorization_path + "/token"
+                    filePath = $ayadn_authorization_path + "/token"
                     if File.exists?(filePath)
                          FileUtils.rm_rf(filePath)
                     end
                 end
             end
         end
-        def loadConfig
-            if File.exists?('./config.yml')
-                configFileContents = YAML::load_file('./config.yml')
-                loaded = true
-            else
-                configFileContents = {}
-                loaded = false
-            end
-            return configFileContents, loaded
-        end
+
 		def colorize(contentText)
 			content = Array.new
 			splitted = contentText.split(" ")
 			splitted.each do |word|
-				if word =~ /^#/
+				if word =~ /^#\w/
 					content.push(word.pink)
-				elsif word =~ /^@/
+				elsif word =~ /^@\w/
 					content.push(word.red)
 				elsif word =~ /^http/ or word =~ /^photos.app.net/ or word =~ /^files.app.net/ or word =~ /^chimp.li/ or word =~ /^bli.ms/
 					content.push(word.magenta)
@@ -156,7 +175,8 @@ class AyaDN
         def countdown(value)
             t = value
             t.times do |i|
-                print "\r#{t} sec... QUIT WITH [CTRL+C]".cyan
+                ct = sprintf("%02d", t)
+                print "\r#{ct} sec... QUIT WITH [CTRL+C]".cyan
                 t -= 1
                 sleep 1
             end
