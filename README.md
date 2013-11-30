@@ -324,16 +324,27 @@ Without arguments: resets all your pagination data.
 
 *Note: AyaDN doesn't use Stream Markers. This is because it's meant as an independent tool that shouldn't modify your mobile/desktop experience of ADN. Example: if AyaDN used Stream Markers, and you let it scrolling a stream on your Mac, then you couldn't sync this stream properly on your smartphone with another app.*  
 
+### Configuration
+
+Unless you're planning on using multiple accounts (see next chapter), you should install the configuration file in the permanent AyaDN folder:
+
+```
+ayadn install config
+```  
+
+Now you can securely edit your preferences in `%USERDIR%/ayadn/data/config.yml` without losing anything when updating AyaDN.
+
+You can modify the values (right hand) in the file but be very careful not to modify anything else: don't change the indentation or the name of the keys (left hand), don't add or remove quotes or special characters, etc.
+
+If a new version of AyaDN offers new configuration options and you've installed the config and modified it already, then you should run this command again *after having backed up your file*, then replace the default values by yours. Or just copy/paste the new fields in the old file... :p There's no way I can automatically merge the files because of some defaults values that might change.
+
 ### Running multiple accounts
 
 - main idea: one AyaDN folder per account
 - change the name of the ayadn folder to @yourusername
 - replace "me" in `config.yml` by your username (without "@")
 - do `ayadn authorize` to force a new process (you may have to log off your browser (or delete cookies) first if you want to change accounts)
-
-### Configuration
-
-You can modify the values (right hand) in the `config.yml` file but be very careful not to modify anything else: don't change the indentation or the name of the keys (left hand), don't add or remove quotes or special characters, etc,  otherwise it may break the Internets.
+- don't ever run "ayadn install config" or AyaDN will ignore your multiple settings
 
 ### Shortcuts
 

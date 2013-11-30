@@ -29,6 +29,13 @@ case arg1
 when "authorize", "login"
 	AyaDN.new(nil).ayadnAuthorize("reset")
 
+when "install"
+	if arg2 == "config"
+		$tools.installConfig
+	else
+		puts "\nSyntax error.\n\n".red
+	end
+
 when "scroll"
 	run.ayadnScroll(arg2, arg3)
 

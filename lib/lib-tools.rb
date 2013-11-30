@@ -3,15 +3,17 @@
 class AyaDN
 	class Tools
         def initialize
-            $configFileContents, $loaded = loadConfig
             @default_ayadn_data_path = Dir.home + "/ayadn/data"
+            @installed_config_path = "#{@default_ayadn_data_path}/config.yml"
+            $configFileContents, $loaded = loadConfig
             config
         end
         def loadConfig
-            
-
-            
-            if File.exists?('./config.yml')
+            if File.exists?(@installed_config_path)
+                configFileContents = YAML::load_file(@installed_config_path)
+                puts "exists"
+                loaded = true
+            elsif File.exists?('./config.yml')
                 configFileContents = YAML::load_file('./config.yml')
                 loaded = true
             else
@@ -43,6 +45,23 @@ class AyaDN
                 $countdown_2 = $configFileContents['timeline']['countdown_2'].to_i
                 $downsideTimeline = $configFileContents['timeline']['downside']
             end
+        end
+        def installConfig
+            if File.exists?(@installed_config_path)
+                puts "\nInstalled config file already exists. Replace with the new one? (N/y) ".red
+                input = STDIN.getch
+                if input == ("y" || "Y")
+                    copyConfigFromMaster
+                else
+                    abort("\nCanceled.\n\n".red)
+                end
+            else
+                copyConfigFromMaster
+            end
+        end
+        def copyConfigFromMaster
+            FileUtils.cp('./config.yml', @installed_config_path)
+            puts "\nDone.\n\n".green
         end
 
         def fileOps(action, value, content = nil, option = nil)
