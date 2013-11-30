@@ -68,7 +68,7 @@ bundle install
 
 **Mac OS X, Linux = it just works.**
 
-Windows = install Ruby with [http://rubyinstaller.org](http://rubyinstaller.org), it will also install Rubygems.
+AyaDN is also somewhat compatible with Windows (install Ruby with Rubygems at [http://rubyinstaller.org](http://rubyinstaller.org)).
 
 ### Step 1
 

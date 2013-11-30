@@ -3,6 +3,11 @@ AYADN
 
 AYADN is a learning exercise: while it's fully functional, it's still very alpha.  
 
+## 2013-11-30 v0.32
+- Refactoring
+- Local permanent config!
+- Auto redirect to original post when replying, (un)reposting and (un)starring!
+
 ## 2013-11-29 v0.31
 - Interactions!
 
