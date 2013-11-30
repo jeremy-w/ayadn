@@ -184,24 +184,9 @@ class AyaDN
 			$tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
 			displayStream(messagesString)
 		else
-			#list channels
-			# channels_list = $tools.fileOps("loadchannels", nil)
-			# abort("\nError: no channels found in the file.\n".red) if channels_list == nil
-			# puts "Name:".ljust(20) + "Channel:\n\n"
-			# channels_list.each do |k,v|
-			# 	puts v.ljust(20) + k
-			# end
-			# todo: get already accessed channels from file
 			@hash = @api.getChannels
 			theChannels, channels_list = @view.new(@hash).showChannels
 			puts theChannels
-			#puts "\nDo ".green + "ayadn messages CHANNEL_ID ".brown + "to read this channel's messages.\n\n".green
-			# puts "\nLast messages from each channel: \n".cyan
-			# channels_list.each do |id|
-			# 	puts "\n\nChannel ID: ".cyan + " #{id}\n".brown
-			# 	@hash = @api.getMessages(id)
-			# 	puts @view.new(@hash).showMessagesFromChannel
-			# end
 		end
 	end
 	def ayadnSendPost(text, reply_to = nil)
@@ -270,9 +255,13 @@ class AyaDN
 	end
 	def ayadnReply(postID)
 		puts "Replying to post ".cyan + "#{postID}...\n".brown
-		puts "Extracting mentions...\n".cyan
-		rawMentionsText, replyingToThisUsername, isRepost = @api.getPostMentions(postID)
-		abort("This post is a repost. Please reply to the parent post.\n\n".red) if isRepost != nil
+		rawMentionsText, replyingToThisUsername, isRepost = @api.getPostMentions(postID) 
+		if isRepost != nil
+			puts "\n#{postID} ".brown + " is a repost.\n".red
+			postID = isRepost['id']
+			puts "Redirecting to the original post: ".cyan + "#{postID}\n".brown
+			rawMentionsText, replyingToThisUsername, isRepost = @api.getPostMentions(postID) 
+		end
 		content = Array.new
 		splitted = rawMentionsText.split(" ")
 		splitted.each do |word|
@@ -425,7 +414,7 @@ class AyaDN
 		exit
 	end
 
-	# will be used in many places
+	# could be used in many places if needed
 	def ayadnGetOriginalPost(postID)
 		originalPostID = @api.getOriginalPost(postID)
 	end
