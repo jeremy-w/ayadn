@@ -307,7 +307,7 @@ ayadn.rb write '[Subscribe](https://app.net/c/2zqf) to the #AyaDN broadcast!'
 
 ### Reset pagination data
 
-If AyaDN shows you "No recent posts in this stream" but you still want to see the stream again, you have to reset the pagination data first.
+If AyaDN shows you "No recent posts" but you still want to see the stream again, you have to reset the pagination data first.
 
 ```
 ./ayadn.rb reset
@@ -374,7 +374,7 @@ ayadn t ruby
 
 ### Ruby 1.9.3
 
-Ruby 1.9.3 is mandatory. If you're running any other version, including 2.0, you need to install 1.9.3 with "rvm":
+Ruby 1.9.3 is mandatory. If you're running any other version, including 2.0, you need to install 1.9.3, with "rvm" for example:
 
 ```
 \curl -L https://get.rvm.io | bash -s stable --ruby=1.9.3

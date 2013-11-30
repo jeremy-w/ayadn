@@ -377,9 +377,6 @@ class AyaDN
 	end
 
 	def ayadnSaveList(list, name) # to be called with: var = ayadnSaveList("followers", "@ericd")
-		# time = Time.new
-		# fileTime = time.strftime("%Y%m%d%H%M%S")
-		# file = "#{name}-#{list}-#{fileTime}.json"
 		file = "/#{name}-#{list}.json"
 		fileURL = $ayadn_lists_path + file
 		unless Dir.exists?$ayadn_lists_path
@@ -488,8 +485,10 @@ class AyaDN
 		youStarred = postInfo['you_starred']
 		isRepost = postInfo['repost_of']
 		if isRepost != nil
-			# todo: implement automatic get original post
-			abort("\nThis post is a repost. Please star the parent post.\n\n".red)
+			puts "\n#{postID} ".brown + " is a repost.\n".red
+			puts "Redirecting to the original post.\n".cyan
+			postID = isRepost['id']
+			youStarred = isRepost['you_starred']
 		end
 		if action == "star"
 			if youStarred == false
@@ -500,10 +499,13 @@ class AyaDN
 				abort("Canceled: the post is already starred.\n\n".red)
 			end
 		elsif action == "unstar"
-			abort("Canceled: the post wasn't already starred.\n\n".red) if youStarred == false
-			puts "\nUnstarring post ".green + "#{postID}\n".brown
-			resp = @api.unstarPost(postID)
-			puts "\nSuccessfully unstarred the post.\n\n".green
+			if youStarred == false
+				abort("Canceled: the post wasn't already starred.\n\n".red)
+			else
+				puts "\nUnstarring post ".green + "#{postID}\n".brown
+				resp = @api.unstarPost(postID)
+				puts "\nSuccessfully unstarred the post.\n\n".green
+			end
 		else
 			abort("\nsyntax error\n".red)
 		end
