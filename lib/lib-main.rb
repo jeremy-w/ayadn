@@ -515,9 +515,11 @@ class AyaDN
 		postInfo = @hash['data']
 		isRepost = postInfo['repost_of']
 		youReposted = postInfo['you_reposted']
-		if isRepost != nil
-			# todo: implement automatic get original post
-			abort("\nThis post is a repost. Please star the parent post.\n\n".red)
+		if isRepost != nil && youReposted == false
+			puts "\n#{postID} ".brown + " is a repost (but not by you).\n".red
+			puts "Redirecting to the original post.\n".cyan
+			postID = isRepost['id']
+			youReposted = isRepost['you_reposted']
 		end
 		if action == "repost"
 			if youReposted == false
@@ -533,7 +535,7 @@ class AyaDN
 				resp = @api.unrepostPost(postID)
 				puts "\nSuccessfully unreposted the post.\n\n".green
 			else
-				abort("Canceled: this post wasn't reposted.\n\n".red)
+				abort("Canceled: this post wasn't reposted by you.\n\n".red)
 			end
 		else
 			abort("\nsyntax error\n".red)
