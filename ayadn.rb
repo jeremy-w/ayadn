@@ -16,7 +16,7 @@ $tools = AyaDN::Tools.new
 if @token != nil
 	run = AyaDN.new(@token)
 else
-	puts "\nYou haven't authorized AyaDN yet.\n\n".red
+	puts $status.errorNotAuthorized
 	AyaDN.new(nil).ayadnAuthorize(nil)
 	exit
 end
@@ -33,7 +33,7 @@ when "install"
 	if arg2 == "config"
 		$tools.installConfig
 	else
-		puts "\nSyntax error.\n\n".red
+		puts $status.errorSyntax
 	end
 
 when "scroll"
@@ -100,22 +100,22 @@ when "load"
 
 when "backup"
 	if arg2 == "followings"
-		(arg3 =~ /^@/ || arg3 == "me") ? run.ayadnSaveList("followings", arg3) : (puts "syntax error")
+		(arg3 =~ /^@/ || arg3 == "me") ? run.ayadnSaveList("followings", arg3) : (puts $status.errorSyntax)
 	elsif arg2 == "followers"
-		(arg3 =~ /^@/ || arg3 == "me") ? run.ayadnSaveList("followers", arg3) : (puts "syntax error")
+		(arg3 =~ /^@/ || arg3 == "me") ? run.ayadnSaveList("followers", arg3) : (puts $status.errorSyntax)
 	elsif arg2 == "muted"
 		run.ayadnSaveList("muted", "me")
 	end
 
 when "list"
 	if arg2 == "followings"
-		(arg3 =~ /^@/ || arg3 == "me") ? run.ayadnShowList("followings", arg3) : (puts "syntax error")
+		(arg3 =~ /^@/ || arg3 == "me") ? run.ayadnShowList("followings", arg3) : (puts $status.errorSyntax)
 	elsif arg2 == "followers"
-		(arg3 =~ /^@/ || arg3 == "me") ? run.ayadnShowList("followers", arg3) : (puts "syntax error")
+		(arg3 =~ /^@/ || arg3 == "me") ? run.ayadnShowList("followers", arg3) : (puts $status.errorSyntax)
 	elsif arg2 == "muted"
 		run.ayadnShowList("muted", "me")
 	else
-		puts "\nSyntax error\n"
+		puts $status.errorSyntax
 	end
 
 when "star"
@@ -167,7 +167,7 @@ when "reply", "r"
 	end
 
 when "search", "s"
-	arg2 != nil ? run.ayadnSearch(arg2) : (puts "\nsyntax error\n")
+	arg2 != nil ? run.ayadnSearch(arg2) : (puts $status.errorSyntax)
 
 when "inter", "interactions", "events"
 	run.ayadnInteractions
@@ -197,7 +197,8 @@ else
 	# if not any known argument
 	option = ARGV
 	bad_option = option.join(" ")
-	puts "\nSyntax error: ".red + "#{bad_option} ".brown + "is not a valid option.\n\n".red
+	puts $status.errorSyntax
+	puts "#{bad_option} ".brown + "is not a valid option.\n\n".red
 	puts $tools.helpScreen
 
 end

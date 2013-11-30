@@ -38,10 +38,10 @@ class AyaDN
 		if auth_token == nil
 			url = @api.makeAuthorizeURL
 			$tools.startBrowser(url)
-			puts "\nAyaDN opened a browser to authorize via App.net very easily. Just login with your App.net account, then copy the code it will give you, paste it here then press [ENTER].".pink + " Paste authorization code: \n\n".brown
+			puts $status.launchAuthorization
 			auth_token = STDIN.gets.chomp()
 			$tools.fileOps("auth", "write", auth_token)
-			puts "\nThank you for authorizing AyaDN. You won't need to do this anymore.\n\n".green
+			puts $status.authorized
 			sleep 3
 			puts $tools.helpScreen
 			puts "Enjoy!\n".cyan
@@ -49,7 +49,7 @@ class AyaDN
 	end
 
 	def displayStream(stream)
-		!stream.empty? ? (puts stream) : (puts "No new posts since your last visit.\n\n".red)
+		!stream.empty? ? (puts stream) : (puts $status.noNewPosts)
 	end
 	def displayScrollStream(stream)
 		!stream.empty? ? (puts stream) : (print "\r")
@@ -63,8 +63,7 @@ class AyaDN
 		end
 		while true
 			begin
-				print "\r                                         "
-				print "\r"
+				print "\r                                         \r"
 				lastPageID = $tools.fileOps("getlastpageid", fileURL)
 				if value == "global"
 					@hash = @api.getGlobal(lastPageID)
@@ -90,7 +89,7 @@ class AyaDN
         			$tools.countdown($countdown_2)
         		end					
 			rescue Exception => e
-				abort("\nStopped.\n\n".red)
+				abort($status.stopped)
 			end
 		end
 	end
@@ -163,7 +162,7 @@ class AyaDN
 	
 	def ayadnSendMessage(target, text)
 		abort($status.emptyPost) if (text.empty? || text == nil)
-		puts "\nSending private Message...\n".green
+		puts $status.sendMessage
 		callback = @api.httpSendMessage(target, text)
 		blob = JSON.parse(callback)
 		@hash = blob['data']
@@ -216,7 +215,7 @@ class AyaDN
 		begin
 			inputText = STDIN.gets.chomp
 		rescue Exception => e
-			abort("\n\nCanceled. Your message hasn't been sent.\n\n".red)
+			abort($status.errorMessageNotSent)
 		end
 		toRegex = inputText.dup
 		withoutMarkdown = $tools.getMarkdownText(toRegex)
@@ -224,7 +223,8 @@ class AyaDN
 		if realLength < 2048
 			ayadnSendMessage(target, inputText)
 		else
-			abort("\nError: your message is ".red + "#{realLength} ".brown + " characters long, please remove ".red + "#{realLength - maxChar} ".brown + "characters.\n\n".red)
+			to_remove = realLength - maxChar
+			abort($status.errorMessageTooLong(realLength, to_remove))
 		end
 	end
 	def ayadnComposePost(reply_to = "", mentionsList = "", myUsername = "")
@@ -240,7 +240,7 @@ class AyaDN
 		begin
 			inputText = STDIN.gets.chomp
 		rescue Exception => e
-			abort("\n\nCanceled. Your post hasn't been sent.\n\n".red)
+			abort($status.errorPostNotSent)
 		end
 		postText = text + inputText
 		toRegex = postText.dup
@@ -250,16 +250,17 @@ class AyaDN
 		if totalLength > 0
 			ayadnSendPost(postText, reply_to)
 		else
-			abort("\nError: your post is ".red + "#{realLength} ".brown + " characters long, please remove ".red + "#{realLength - maxChar} ".brown + "characters.\n\n".red)
+			to_remove = realLength - maxChar
+			abort($status.errorPostTooLong(realLength, to_remove))
 		end
 	end
 	def ayadnReply(postID)
-		puts "Replying to post ".cyan + "#{postID}...\n".brown
+		puts $status.replyingToPost(postID)
 		rawMentionsText, replyingToThisUsername, isRepost = @api.getPostMentions(postID) 
 		if isRepost != nil
-			puts "\n#{postID} ".brown + " is a repost.\n".red
+			puts $status.errorIsRepost(postID)
 			postID = isRepost['id']
-			puts "Redirecting to the original post: ".cyan + "#{postID}\n".brown
+			puts $status.redirectingToOriginal(postID)
 			rawMentionsText, replyingToThisUsername, isRepost = @api.getPostMentions(postID) 
 		end
 		content = Array.new
@@ -285,23 +286,23 @@ class AyaDN
 		puts $status.deletePost(postID)
 		isTherePost, isYours = @api.goDelete(postID)
 		if isTherePost == nil
-			abort("\nPost already deleted.\n\n".red)
+			abort($status.errorAlreadyDeleted)
 		else
 			@api.restDelete()
-			puts "\nPost successfully deleted.\n\n".green
+			puts $status.postDeleted
 			exit
 		end
 	end
 	def ayadnWhoReposted(postID)
 		puts $status.whoReposted(postID)
 		@hash = @api.getWhoReposted(postID)
-		abort("\nThis post hasn't been reposted by anyone.\n\n".red) if @hash['data'].empty?
+		abort($status.errorNobodyReposted) if @hash['data'].empty?
 	    puts @view.new(@hash).showUsersList()
 	end
 	def ayadnWhoStarred(postID)
 		puts $status.whoStarred(postID)
 		@hash = @api.getWhoStarred(postID)
-		abort("\nThis post hasn't been starred by anyone.\n\n".red) if @hash['data'].empty?
+		abort($status.errorNobodyStarred) if @hash['data'].empty?
 	    puts @view.new(@hash).showUsersList()
 	end
 	def ayadnStarredPosts(name)
@@ -351,7 +352,7 @@ class AyaDN
 	end
 
 	def ayadnShowList(list, name)
-		puts "\nFetching the \'#{list}\' list. Please wait...\n\n".green
+		puts $status.fetchingList(list)
 		@hash = getList(list, name)
 		if list == "muted"
 			puts "Your list of muted users:\n".green
@@ -374,9 +375,9 @@ class AyaDN
 		end
 		if File.exists?(fileURL)
 			puts "\nYou already saved this list.\n".red
-			puts "Delete the old one and replace with this one?\n".red + "(n/y) ".green 
+			puts "Delete the old one and replace with this one? (n/y)\n".red
 			input = STDIN.getch
-			abort("\nCanceled.\n\n".red) if input == ("n" || "N")
+			abort("\nCanceled.\n\n".red) unless input == ("y" || "Y")
 		end
 		if list == "muted"
 			puts "\nFetching your muted users list.\n".cyan
@@ -443,7 +444,7 @@ class AyaDN
 				puts "\nYou just unfollowed user ".green + "#{name}".brown + "\n\n"
 			end
 		else
-			abort("\nsyntax error\n")
+			abort($status.errorSyntax)
 		end
 	end
 
@@ -464,7 +465,7 @@ class AyaDN
 				puts "\nYou just unmuted user ".green + "#{name}".brown + "\n\n"
 			end
 		else
-			abort("\nsyntax error\n")
+			abort($status.errorSyntax)
 		end
 	end
 
@@ -474,7 +475,7 @@ class AyaDN
 		youStarred = postInfo['you_starred']
 		isRepost = postInfo['repost_of']
 		if isRepost != nil
-			puts "\n#{postID} ".brown + " is a repost.\n".red
+			puts $status.errorIsRepost(postID)
 			puts "Redirecting to the original post.\n".cyan
 			postID = isRepost['id']
 			youStarred = isRepost['you_starred']
@@ -505,7 +506,7 @@ class AyaDN
 		isRepost = postInfo['repost_of']
 		youReposted = postInfo['you_reposted']
 		if isRepost != nil && youReposted == false
-			puts "\n#{postID} ".brown + " is a repost (but not by you).\n".red
+			puts $status.errorIsRepost(postID)
 			puts "Redirecting to the original post.\n".cyan
 			postID = isRepost['id']
 			youReposted = isRepost['you_reposted']
@@ -527,7 +528,7 @@ class AyaDN
 				abort("Canceled: this post wasn't reposted by you.\n\n".red)
 			end
 		else
-			abort("\nsyntax error\n".red)
+			abort($status.errorSyntax)
 		end
 	end
 	def ayadnReset(target, content, option)
