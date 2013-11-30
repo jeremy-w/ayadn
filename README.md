@@ -132,17 +132,13 @@ source ~/.bashrc
 
 You have to authorize AyaDN to use your App.net credentials.
 
-**Just run AyaDN to start the process!**
-
-If you already used AyaDN before with a token generated from your App.net account, connect to your app.net page, go to `settings`, go to `Manage apps` and in `Your app` erase the settings for the old versions of AyaDN. This is optional but recommended.
-
-In case of errors when running multiple accounts, you can force a new authorization process with: `ayadn.rb authorize`.
+**Just run AyaDN to start the process!**  
 
 ## How to use
 
-**You type the name of the app + the action you want to do + the target of this action.**
+**You type `ayadn` + the optional action you want to do + the optional target of this action.**
 
-If you don't provide any option to ayadn.rb, your personnalized stream is displayed.
+If you don't provide any option to AyaDN, your personnalized stream is displayed.
 
 If you provide the `write` command without text, you will enter the compose message feature. *(recommended)*  
 
@@ -344,7 +340,11 @@ If a new version of AyaDN offers new configuration options and you've installed 
 - change the name of the ayadn folder to @yourusername
 - replace "me" in `config.yml` by your username (without "@")
 - do `ayadn authorize` to force a new process (you may have to log off your browser (or delete cookies) first if you want to change accounts)
-- don't ever run "ayadn install config" or AyaDN will ignore your multiple settings
+- don't ever run "ayadn install config" or AyaDN will ignore your multiple settings  
+
+### Old version
+
+If you already used AyaDN before with a token generated from your App.net account, connect to your app.net page, go to `settings`, go to `Manage apps` and in `Your app` erase the settings for the old versions of AyaDN. This is optional but recommended.
 
 ### Shortcuts
 
