@@ -237,7 +237,7 @@ class AyaDN
 			@hash = hash1.merge!(hash2)
 			stream, lastPageID = completeStream
 			stream.sub!(/#{reply_to}/, reply_to.to_s.red.reverse_color) if first_of_unified_id.to_i < reply_to.to_i
-			stream.sub!(/#{my_post_id}/, reply_to.to_s.green.reverse_color)
+			stream.sub!(/#{my_post_id}/, my_post_id.to_s.green.reverse_color)
 			displayStream(stream)
 		end
 	end
