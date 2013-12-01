@@ -189,12 +189,32 @@ class AyaDN
 		end
 	end
 
+	# def _DEBUGREPLY(reply_to)
+	# 	hash1 = @api.getPostReplies(reply_to)
+	# 	hash_data = hash1['data']
+	# 	last_of_hash = hash_data.last
+	# 	original_post = @view.new(nil).buildSimplePost(last_of_hash)
+	# 	hash2 = @api.getSimpleUnified
+	# 	unified_data = hash2['data']
+	# 	first_of_unified = unified_data.last # because adnData.reverse in API
+	# 	first_of_unified_id = first_of_unified['id']
+	# 	if first_of_unified_id.to_i > reply_to
+	# 		puts original_post
+	# 	end
+	# 	@hash = hash1.merge!(hash2)
+	# 	stream, lastPageID = completeStream
+	# 	stream.sub!(/#{reply_to}/, reply_to.to_s.red.reverse_color) if first_of_unified_id.to_i < reply_to
+	# 	stream.sub!(/#{my_post_id}/, reply_to.to_s.green.reverse_color)
+	# 	displayStream(stream)
+	# end
+
 	def ayadnSendPost(text, reply_to = nil)
 		abort($status.emptyPost) if (text.empty? || text == nil)
 		puts $status.sendPost
 		callback = @api.httpSend(text, reply_to)
 		blob = JSON.parse(callback)
 		@hash = blob['data']
+		my_post_id = @hash['id']
 		puts @view.new(@hash).buildPostInfo(@hash, isMine = true)
 		puts $status.postSent
 		# show end of the stream after posting
@@ -203,11 +223,21 @@ class AyaDN
 			stream, lastPageID = completeStream
 			displayStream(stream)
 		else
-			@hash1 = @api.getPostReplies(reply_to)
-			@hash2 = @api.getSimpleUnified
-			@hash = @hash1.merge!(@hash2)
+			hash1 = @api.getPostReplies(reply_to)
+			hash_data = hash1['data']
+			last_of_hash = hash_data.last
+			original_post = @view.new(nil).buildSimplePost(last_of_hash)
+			hash2 = @api.getSimpleUnified
+			unified_data = hash2['data']
+			first_of_unified = unified_data.last # because adnData.reverse in API
+			first_of_unified_id = first_of_unified['id']
+			if first_of_unified_id.to_i > reply_to.to_i
+				puts original_post
+			end
+			@hash = hash1.merge!(hash2)
 			stream, lastPageID = completeStream
-			stream.sub!(/#{reply_to}/, reply_to.to_s.reverse_color)
+			stream.sub!(/#{reply_to}/, reply_to.to_s.red.reverse_color) if first_of_unified_id.to_i < reply_to.to_i
+			stream.sub!(/#{my_post_id}/, reply_to.to_s.green.reverse_color)
 			displayStream(stream)
 		end
 	end
@@ -233,7 +263,8 @@ class AyaDN
 		puts $status.writePost
 		maxChar = 256
 		charCount = maxChar - mentionsList.length
-		text = mentionsList.red
+		# be careful to not color escape mentionsList or text
+		text = mentionsList
 		if !mentionsList.empty?
 			text += " "
 			charCount -= 1

@@ -264,6 +264,33 @@ class AyaDN
 			end
 			return postString, pagination_array
 		end
+		def buildSimplePost(postHash)
+			postText = postHash['text']
+			if postText != nil
+				coloredPost = $tools.colorize(postText)
+			else
+				coloredPost = "--Post deleted--".red
+			end
+			userName = postHash['user']['username']
+			createdAt = postHash['created_at']
+			createdDay = createdAt[0...10]
+			createdHour = createdAt[11...19]
+			postId = postHash['id']
+			postString = "Post ID: ".cyan + postId.to_s.red.reverse_color
+			postString += " - "
+			postString += createdDay.cyan + ' at ' + createdHour.cyan + ' by ' + "@".reddish + userName.reddish + "\n" + coloredPost + "\n"
+			links = postHash['entities']['links']
+			sourceName = postHash['source']['name']
+			sourceLink = postHash['source']['link']
+			if !links.empty?
+				links.each do |link|
+					linkURL = link['url']
+					postString += "Link: ".cyan + linkURL.brown + " "
+				end
+				postString += "\n"
+			end
+			postString += "\n"
+		end
 		def buildPostInfo(postHash, isMine)
 			thePostId = postHash['id']
 			postText = postHash['text']

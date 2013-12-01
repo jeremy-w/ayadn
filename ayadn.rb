@@ -184,8 +184,8 @@ when "debug"
 		run.ayadnDebugStream
 	elsif arg2.is_integer?
 		run.ayadnDebugPost(arg2)
-	elsif arg2 == "colors"
-		run._DEBUGCOLORS(16287662)
+	elsif arg2 == "reply"
+		run._DEBUGREPLY(16247559)
 	end
 
 when "reset"
