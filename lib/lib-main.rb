@@ -188,6 +188,7 @@ class AyaDN
 			puts theChannels
 		end
 	end
+
 	def ayadnSendPost(text, reply_to = nil)
 		abort($status.emptyPost) if (text.empty? || text == nil)
 		puts $status.sendPost
@@ -206,6 +207,7 @@ class AyaDN
 			@hash2 = @api.getSimpleUnified
 			@hash = @hash1.merge!(@hash2)
 			stream, lastPageID = completeStream
+			stream.sub!(/#{reply_to}/, reply_to.to_s.reverse_color)
 			displayStream(stream)
 		end
 	end
