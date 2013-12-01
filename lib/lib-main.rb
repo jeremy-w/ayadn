@@ -271,7 +271,9 @@ class AyaDN
 		newContent.push(replyingToHandle) if replyingToThisUsername != myUsername 
 		postMentionsArray.each do |item|
 			# if I'm in the post's mentions, erase me, else insert the mention
-			if item != myHandle then newContent.push("@" + item) end
+			if item != myUsername
+				newContent.push("@" + item)
+			end
 		end
 		mentionsList = newContent.join(" ")
 		ayadnComposePost(postID, mentionsList)
