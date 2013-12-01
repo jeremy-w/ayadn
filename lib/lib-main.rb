@@ -61,7 +61,7 @@ class AyaDN
 		else
 			fileURL = $ayadn_lastPageID_path + "/lastPageID-#{value}-#{target}"
 		end
-		while true
+		loop do
 			begin
 				print "\r                                         \r"
 				lastPageID = $tools.fileOps("getlastpageid", fileURL)
@@ -231,7 +231,7 @@ class AyaDN
 		puts $status.writePost
 		maxChar = 256
 		charCount = maxChar - mentionsList.length
-		text = mentionsList
+		text = mentionsList.red
 		if !mentionsList.empty?
 			text += " "
 			charCount -= 1
@@ -256,28 +256,22 @@ class AyaDN
 	end
 	def ayadnReply(postID)
 		puts $status.replyingToPost(postID)
-		rawMentionsText, replyingToThisUsername, isRepost = @api.getPostMentions(postID) 
+		postMentionsArray, replyingToThisUsername, isRepost = @api.getPostMentions(postID) 
 		if isRepost != nil
 			puts $status.errorIsRepost(postID)
 			postID = isRepost['id']
 			puts $status.redirectingToOriginal(postID)
-			rawMentionsText, replyingToThisUsername, isRepost = @api.getPostMentions(postID) 
+			postMentionsArray, replyingToThisUsername, isRepost = @api.getPostMentions(postID) 
 		end
-		content = Array.new
-		splitted = rawMentionsText.split(" ")
-		splitted.each do |word|
-			content.push(word) if word =~ /^@/
-		end
-		# detect if mentions include myself
 		myUsername = @api.getUserName("me")
 		myHandle = "@" + myUsername
 		replyingToHandle = "@" + replyingToThisUsername
 		newContent = Array.new
 		# if I'm not answering myself, add the @username of the "replyee"
 		newContent.push(replyingToHandle) if replyingToThisUsername != myUsername 
-		content.each do |item|
+		postMentionsArray.each do |item|
 			# if I'm in the post's mentions, erase me, else insert the mention
-			item == myHandle ? newContent.push("") : newContent.push(item)
+			if item != myHandle then newContent.push("@" + item) end
 		end
 		mentionsList = newContent.join(" ")
 		ayadnComposePost(postID, mentionsList)

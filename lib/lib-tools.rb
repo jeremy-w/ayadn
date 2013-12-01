@@ -192,11 +192,8 @@ class AyaDN
           }x, ''
         end
         def countdown(value)
-            t = value
-            t.times do |i|
-                ct = sprintf("%02d", t)
-                print "\r#{ct} sec... QUIT WITH [CTRL+C]".cyan
-                t -= 1
+            value.downto(1) do |i|
+                print "\r#{sprintf("%02d", i)} sec... QUIT WITH [CTRL+C]".cyan
                 sleep 1
             end
         end
@@ -391,7 +388,7 @@ class AyaDN
             s = "\nSaving ".green + "#{name} ".brown + "in ".green + "#{path}#{file}".magenta
         end
         def stopped
-            s = "\nStopped.\n\n".red
+            s = "\n\nStopped.\n\n".red
         end
     end
 end

@@ -335,9 +335,14 @@ class AyaDN
 			theHash = getHash
 			postInfo = theHash['data']
 			userName = postInfo['user']['username']
-			rawText = postInfo['text']
+			#rawText = postInfo['text']
 			isRepost = postInfo['repost_of']
-			return rawText, userName, isRepost
+			entitiesMentions = postInfo['entities']['mentions']
+			postMentionsArray = []
+			entitiesMentions.each do |item|
+				postMentionsArray.push(item['name'])
+			end
+			return postMentionsArray, userName, isRepost
 		end
 		def getUserName(name)
 			@url = makeStreamURL("userInfo", name)
