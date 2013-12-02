@@ -587,7 +587,7 @@ class AyaDN
 			puts "New skipped sources: ".green + $configFileContents['skipped']['sources'].join(", ").red + "\n\n"
 			$tools.saveConfig
 		else
-			puts $status.errorSyntax
+			puts "Current skipped sources: ".green + $skipped_sources.join(", ").red + "\n\n"
 		end
  	end
 end
