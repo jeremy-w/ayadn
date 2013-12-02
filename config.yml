@@ -19,4 +19,4 @@ files:
 identity: # change this prefix in each folder for your username in you're using several ADN accounts (don't use "@")
     prefix: me
 skipped: # posts matching these values won't show up
-    sources:
+    sources: []

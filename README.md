@@ -51,7 +51,7 @@ AYADN
 
 - create links with Markdown in your text
 
-- skip posts from a client (like IFTTT, PourOver, etc)
+- skip posts from specific clients (like IFTTT, PourOver, etc)
 
 - and more! *([list of commands](https://github.com/ericdke/ayadn#list-of-commands))*
 
