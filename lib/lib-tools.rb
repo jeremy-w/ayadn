@@ -184,9 +184,11 @@ class AyaDN
 			splitted = contentText.split(" ")
 			splitted.each do |word|
 				if word =~ /^#\w/
-					content.push(word.pink)
+                    new_word = removeEndCharIfSpecial(word, "pink")
+                    content.push(new_word)
 				elsif word =~ /^@\w/
-					content.push(word.red)
+                    new_word = removeEndCharIfSpecial(word, "red")
+					content.push(new_word)
 				elsif word =~ /^http/ or word =~ /^photos.app.net/ or word =~ /^files.app.net/ or word =~ /^chimp.li/ or word =~ /^bli.ms/
 					content.push(word.magenta)
 				else
@@ -195,6 +197,28 @@ class AyaDN
 			end
 			coloredPost = content.join(" ")
 		end
+        def removeEndCharIfSpecial(word, color)
+            word_array = word.chars.to_a
+            last_char = word_array.last
+            if last_char =~ /[.,:;?!-'`&"()\/]/
+                word_array.pop
+                word_without_special_char = word_array.join("")
+                if color == "red"
+                    word_colored = word_without_special_char.red
+                elsif color == "pink"
+                    word_colored = word_without_special_char.pink
+                end
+                new_array = word_colored.chars.to_a
+                new_array.push(last_char)
+                word = new_array.join("")
+            else
+                if color == "red"
+                    word = word.red
+                elsif color == "pink"
+                    word = word.pink
+                end
+            end
+        end
 
         def getMarkdownText(str)
           str.gsub %r{
