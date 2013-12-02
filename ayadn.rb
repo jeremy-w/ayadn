@@ -188,6 +188,9 @@ when "debug"
 		run._DEBUGREPLY(16247559)
 	end
 
+when "skiplist"
+	run.ayadnSkipSource(arg2, arg3)
+
 when "reset"
 	if arg2 == "pagination"
 		run.ayadnReset("pagination", arg3, arg4)

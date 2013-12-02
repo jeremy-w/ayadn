@@ -51,6 +51,8 @@ AYADN
 
 - create links with Markdown in your text
 
+- skip posts from a client (like IFTTT, PourOver, etc)
+
 - and more! *([list of commands](https://github.com/ericdke/ayadn#list-of-commands))*
 
 
@@ -256,6 +258,8 @@ ayadn backup followings @ericd
 ayadn backup followers @ericd
 ayadn save 15723266
 ayadn load 15723266
+ayadn skiplist add IFTTT
+ayadn skiplist remove IFTTT
 ayadn reset pagination
 ayadn help
 ayadn webhelp
@@ -277,7 +281,6 @@ ayadn infos me
 ayadn list followings me
 (etc)
 ```  
-
 
 ### Backup some data
 
@@ -313,6 +316,7 @@ If AyaDN shows you "No recent posts" but you still want to see the stream again,
 ./ayadn.rb reset
 ./ayadn.rb reset pagination unified
 ./ayadn.rb reset pagination mentions @ericd
+./ayadn.rb reset pagination posts @ericd
 (etc)
 ```  
 
@@ -332,7 +336,7 @@ Now you can securely edit your preferences in `%USERDIR%/ayadn/data/config.yml` 
 
 You can modify the values (right hand) in the file but be very careful not to modify anything else: don't change the indentation or the name of the keys (left hand), don't add or remove quotes or special characters, etc.
 
-If a new version of AyaDN offers new configuration options and you've installed the config and modified it already, then you should run this command again *after having backed up your file*, then replace the default values by yours. Or just copy/paste the new fields in the old file... :p There's no way I can automatically merge the files because of some defaults values that might change.
+If a new version of AyaDN offers new configuration options and you've installed the config and modified it already, then you should run this command again *after having backed up your file*.
 
 ### Running multiple accounts
 
@@ -341,6 +345,20 @@ If a new version of AyaDN offers new configuration options and you've installed 
 - replace "me" in `config.yml` by your username (without "@")
 - do `ayadn authorize` to force a new process (you may have to log off your browser (or delete cookies) first if you want to change accounts)
 - don't ever run "ayadn install config" or AyaDN will ignore your multiple settings  
+
+### Skip specific clients
+
+App.net already gives you the "mute" command to mute a user. But what if you want to mute a *client*, like IFTTT or PourOver?
+
+Easy: `ayadn skiplist add IFTTT`. 
+
+Want to mute another one? Go on: `ayadn skiplist add PourOver`. Etc.
+
+Change of mind? `ayadn skiplist remove IFTTT`, `ayadn skiplist remove PourOver`, etc.
+
+You can discover what client was used to post a post with `ayadn infos POSTNUMBER`.  
+
+There's basically no verification with this feature, so be careful to not add misspelled or non-existent clients.
 
 ### Old version
 

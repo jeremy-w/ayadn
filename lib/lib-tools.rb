@@ -11,7 +11,6 @@ class AyaDN
         def loadConfig
             if File.exists?(@installed_config_path)
                 configFileContents = YAML::load_file(@installed_config_path)
-                puts "exists"
                 loaded = true
             elsif File.exists?('./config.yml')
                 configFileContents = YAML::load_file('./config.yml')
@@ -21,6 +20,34 @@ class AyaDN
                 loaded = false
             end
             return configFileContents, loaded
+        end
+        def saveConfig
+            if File.exists?(@installed_config_path)
+                File.open(@installed_config_path, 'w') {|f| f.write $configFileContents.to_yaml }
+                puts "\nDone!\n\n".green
+            elsif File.exists?('./config.yml')
+                File.open('./config.yml', 'w') {|f| f.write $configFileContents.to_yaml }
+                puts "\nDone!\n\n".green
+            else
+                abort("ERROR FILE NOT FOUND".red)
+            end
+        end
+        def installConfig
+            if File.exists?(@installed_config_path)
+                puts "\nInstalled config file already exists. Replace with the new one? (N/y) ".red
+                input = STDIN.getch
+                if input == ("y" || "Y")
+                    copyConfigFromMaster
+                else
+                    abort("\nCanceled.\n\n".red)
+                end
+            else
+                copyConfigFromMaster
+            end
+        end
+        def copyConfigFromMaster
+            FileUtils.cp('./config.yml', @installed_config_path)
+            puts "\nDone.\n\n".green
         end
         def config
             if $loaded
@@ -44,24 +71,24 @@ class AyaDN
                 $countdown_1 = $configFileContents['timeline']['countdown_1'].to_i
                 $countdown_2 = $configFileContents['timeline']['countdown_2'].to_i
                 $downsideTimeline = $configFileContents['timeline']['downside']
-            end
-        end
-        def installConfig
-            if File.exists?(@installed_config_path)
-                puts "\nInstalled config file already exists. Replace with the new one? (N/y) ".red
-                input = STDIN.getch
-                if input == ("y" || "Y")
-                    copyConfigFromMaster
-                else
-                    abort("\nCanceled.\n\n".red)
-                end
+                $skipped_sources = $configFileContents['skipped']['sources']
             else
-                copyConfigFromMaster
+                # defaults
+                $ayadn_data_path = Dir.home + "/ayadn/data"
+                $identityPrefix = "me"
+                $ayadn_posts_path = $ayadn_data_path + "/#{$identityPrefix}/posts"
+                $ayadn_lists_path = $ayadn_data_path + "/#{$identityPrefix}/lists"
+                $ayadn_lastPageID_path = $ayadn_data_path + "/#{$identityPrefix}/.pagination"
+                $ayadn_messages_path = $ayadn_data_path + "/#{$identityPrefix}/messages"
+                $ayadn_authorization_path = $ayadn_data_path + "/#{$identityPrefix}/.auth"
+                $countGlobal = $countUnified = $countCheckins = $countExplore = $countMentions = $countStarred = 100
+                $directedPosts = true
+                $countStreamBack = 10
+                $countdown_1 = 5
+                $countdown_2 = 15
+                $downsideTimeline = true
+                $skipped_sources = []
             end
-        end
-        def copyConfigFromMaster
-            FileUtils.cp('./config.yml', @installed_config_path)
-            puts "\nDone.\n\n".green
         end
 
         def fileOps(action, value, content = nil, option = nil)
@@ -168,6 +195,7 @@ class AyaDN
 			end
 			coloredPost = content.join(" ")
 		end
+
         def getMarkdownText(str)
           str.gsub %r{
             \[         # Literal opening bracket

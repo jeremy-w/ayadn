@@ -76,6 +76,7 @@ class AyaDN
 				elsif value == "posts"
 					@hash = @api.getUserPosts(target, lastPageID)
 				end
+				# todo: whiten post id if I'm mentioned
 				stream, lastPageID = completeStream
 				displayScrollStream(stream)
 				if lastPageID != nil
@@ -166,26 +167,26 @@ class AyaDN
 		callback = @api.httpSendMessage(target, text)
 		blob = JSON.parse(callback)
 		@hash = blob['data']
-		privateMessageChannelID = @hash['channel_id']
-		privateMessageThreadID = @hash['thread_id']
-		privateMessageID = @hash['id']
+		private_message_channel_ID = @hash['channel_id']
+		private_message_thread_ID = @hash['thread_id']
+		private_message_ID = @hash['id']
 		$tools.fileOps("makedir", $ayadn_messages_path)
-		puts "Channel ID: ".cyan + privateMessageChannelID.brown + " Message ID: ".cyan + privateMessageID.brown + "\n\n"
+		puts "Channel ID: ".cyan + private_message_channel_ID.brown + " Message ID: ".cyan + private_message_ID.brown + "\n\n"
 		puts $status.postSent
-		$tools.fileOps("savechannelid", privateMessageChannelID, target)
+		$tools.fileOps("savechannelid", private_message_channel_ID, target)
 	end
 	def ayadnGetMessages(target, action = nil)
 		if target != nil
 			fileURL = $ayadn_lastPageID_path + "/lastPageID-channels-#{target}"
 			lastPageID = $tools.fileOps("getlastpageid", fileURL) unless action == "all"
 			@hash = @api.getMessages(target, lastPageID)
-			messagesString, lastPageID = @view.new(@hash).showMessagesFromChannel
+			messages_string, lastPageID = @view.new(@hash).showMessagesFromChannel
 			$tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
-			displayStream(messagesString)
+			displayStream(messages_string)
 		else
 			@hash = @api.getChannels
-			theChannels, channels_list = @view.new(@hash).showChannels
-			puts theChannels
+			the_channels, channels_list = @view.new(@hash).showChannels
+			puts the_channels
 		end
 	end
 
@@ -243,78 +244,78 @@ class AyaDN
 	end
 	def ayadnComposeMessage(target)
 		puts $status.writeMessage
-		maxChar = 2048
+		max_char = 2048
 		begin
-			inputText = STDIN.gets.chomp
+			input_text = STDIN.gets.chomp
 		rescue Exception => e
 			abort($status.errorMessageNotSent)
 		end
-		toRegex = inputText.dup
-		withoutMarkdown = $tools.getMarkdownText(toRegex)
-		realLength = withoutMarkdown.length
-		if realLength < 2048
-			ayadnSendMessage(target, inputText)
+		to_regex = input_text.dup
+		without_markdown = $tools.getMarkdownText(to_regex)
+		real_length = without_markdown.length
+		if real_length < 2048
+			ayadnSendMessage(target, input_text)
 		else
-			to_remove = realLength - maxChar
-			abort($status.errorMessageTooLong(realLength, to_remove))
+			to_remove = real_length - max_char
+			abort($status.errorMessageTooLong(real_length, to_remove))
 		end
 	end
-	def ayadnComposePost(reply_to = "", mentionsList = "", myUsername = "")
+	def ayadnComposePost(reply_to = "", mentions_list = "", my_username = "")
 		puts $status.writePost
-		maxChar = 256
-		charCount = maxChar - mentionsList.length
-		# be careful to not color escape mentionsList or text
-		text = mentionsList
-		if !mentionsList.empty?
+		max_char = 256
+		char_count = max_char - mentions_list.length
+		# be careful to not color escape mentions_list or text
+		text = mentions_list
+		if !mentions_list.empty?
 			text += " "
-			charCount -= 1
+			char_count -= 1
 		end
 		print "\n#{text}"
 		begin
-			inputText = STDIN.gets.chomp
+			input_text = STDIN.gets.chomp
 		rescue Exception => e
 			abort($status.errorPostNotSent)
 		end
-		postText = text + inputText
-		toRegex = postText.dup
-		withoutMarkdown = $tools.getMarkdownText(toRegex)
-		totalLength = charCount - withoutMarkdown.length
-		realLength = maxChar + totalLength.abs
-		if totalLength > 0
-			ayadnSendPost(postText, reply_to)
+		post_text = text + input_text
+		to_regex = post_text.dup
+		without_markdown = $tools.getMarkdownText(to_regex)
+		total_length = char_count - without_markdown.length
+		real_length = max_char + total_length.abs
+		if total_length > 0
+			ayadnSendPost(post_text, reply_to)
 		else
-			to_remove = realLength - maxChar
-			abort($status.errorPostTooLong(realLength, to_remove))
+			to_remove = real_length - max_char
+			abort($status.errorPostTooLong(real_length, to_remove))
 		end
 	end
 	def ayadnReply(postID)
 		puts $status.replyingToPost(postID)
-		postMentionsArray, replyingToThisUsername, isRepost = @api.getPostMentions(postID) 
-		if isRepost != nil
+		post_mentions_array, replying_to_this_username, is_repost = @api.getPostMentions(postID) 
+		if is_repost != nil
 			puts $status.errorIsRepost(postID)
-			postID = isRepost['id']
+			postID = is_repost['id']
 			puts $status.redirectingToOriginal(postID)
-			postMentionsArray, replyingToThisUsername, isRepost = @api.getPostMentions(postID) 
+			post_mentions_array, replying_to_this_username, is_repost = @api.getPostMentions(postID) 
 		end
-		myUsername = @api.getUserName("me")
-		myHandle = "@" + myUsername
-		replyingToHandle = "@" + replyingToThisUsername
-		newContent = Array.new
+		my_username = @api.getUserName("me")
+		#my_handle = "@" + my_username
+		replying_to_handle = "@" + replying_to_this_username
+		new_content = Array.new
 		# if I'm not answering myself, add the @username of the "replyee"
-		newContent.push(replyingToHandle) if replyingToThisUsername != myUsername 
-		postMentionsArray.each do |item|
+		new_content.push(replying_to_handle) if replying_to_this_username != my_username 
+		post_mentions_array.each do |item|
 			# if I'm in the post's mentions, erase me, else insert the mention
-			if item != myUsername
-				newContent.push("@" + item)
+			if item != my_username
+				new_content.push("@" + item)
 			end
 		end
-		mentionsList = newContent.join(" ")
-		ayadnComposePost(postID, mentionsList)
+		mentions_list = new_content.join(" ")
+		ayadnComposePost(postID, mentions_list)
 	end
 	def ayadnDeletePost(postID)
 		puts $status.deletePost(postID)
-		isTherePost, isYours = @api.goDelete(postID)
-		if isTherePost == nil
+		is_there_post, is_yours = @api.goDelete(postID)
+		if is_there_post == nil
 			abort($status.errorAlreadyDeleted)
 		else
 			@api.restDelete()
@@ -353,7 +354,7 @@ class AyaDN
 	end
 	def getList(list, name)
 		beforeID = nil
-		bigHash = {}
+		big_hash = {}
 		if list == "followers"
 			@hash = @api.getFollowers(name, beforeID)
 		elsif list == "followings"
@@ -361,8 +362,8 @@ class AyaDN
 		elsif list == "muted"
 			@hash = @api.getMuted(name, beforeID)
 		end
-		usersHash, pagination_array = @view.new(@hash).buildFollowList()
-	    bigHash.merge!(usersHash)
+		users_hash, pagination_array = @view.new(@hash).buildFollowList()
+	    big_hash.merge!(users_hash)
 	    beforeID = pagination_array.last
 	    while pagination_array != nil
 			if list == "followers"
@@ -372,12 +373,12 @@ class AyaDN
 			elsif list == "muted"
 				@hash = @api.getMuted(name, beforeID)
 			end
-		    usersHash, pagination_array = @view.new(@hash).buildFollowList()
-		    bigHash.merge!(usersHash)
+		    users_hash, pagination_array = @view.new(@hash).buildFollowList()
+		    big_hash.merge!(users_hash)
 	    	break if pagination_array.first == nil
 	    	beforeID = pagination_array.last
 		end
-	    return bigHash
+	    return big_hash
 	end
 
 	def ayadnShowList(list, name)
@@ -414,10 +415,10 @@ class AyaDN
 			puts "\nFetching ".cyan + "#{name}".brown + "'s list of #{list}.\n".cyan
 		end
 		puts "Please wait...\n".green
-		followList = getList(list, name)
+		follow_list = getList(list, name)
 		puts "Saving the list...\n".green
 		f = File.new(fileURL, "w")
-			f.puts(followList.to_json)
+			f.puts(follow_list.to_json)
 		f.close
 		puts "\nSuccessfully saved the list.\n\n".green
 		exit
@@ -446,7 +447,7 @@ class AyaDN
 
 	# could be used in many places if needed
 	def ayadnGetOriginalPost(postID)
-		originalPostID = @api.getOriginalPost(postID)
+		original_post_ID = @api.getOriginalPost(postID)
 	end
 	#
 
@@ -457,16 +458,16 @@ class AyaDN
 	end
 
 	def ayadnFollowing(action, name)
-		youFollow, followsYou = @api.getUserFollowInfo(name)
+		you_follow, follows_you = @api.getUserFollowInfo(name)
 		if action == "follow"
-			if youFollow == true
+			if you_follow == true
 				abort("You're already following this user.\n\n".red)
 			else
 				resp = @api.followUser(name)
 				puts "\nYou just followed user ".green + "#{name}".brown + "\n\n"
 			end
 		elsif action == "unfollow"
-			if youFollow == false
+			if you_follow == false
 				abort("You're already not following this user.\n\n".red)
 			else
 				resp = @api.unfollowUser(name)
@@ -478,16 +479,16 @@ class AyaDN
 	end
 
 	def ayadnMuting(action, name)
-		youMuted = @api.getUserMuteInfo(name)
+		you_muted = @api.getUserMuteInfo(name)
 		if action == "mute"
-			if youMuted == "true"
+			if you_muted == "true"
 				abort("You've already muted this user.\n\n".red)
 			else
 				resp = @api.muteUser(name)
 				puts "\nYou just muted user ".green + "#{name}".brown + "\n\n"
 			end
 		elsif action == "unmute"
-			if youMuted == "false"
+			if you_muted == "false"
 				abort("This user is not muted.\n\n".red)
 			else
 				resp = @api.unmuteUser(name)
@@ -500,17 +501,17 @@ class AyaDN
 
 	def ayadnStarringPost(action, postID)
 		@hash = @api.getSinglePost(postID)
-		postInfo = @hash['data']
-		youStarred = postInfo['you_starred']
-		isRepost = postInfo['repost_of']
-		if isRepost != nil
+		post_data = @hash['data']
+		you_starred = post_data['you_starred']
+		is_repost = post_data['repost_of']
+		if is_repost != nil
 			puts $status.errorIsRepost(postID)
 			puts "Redirecting to the original post.\n".cyan
-			postID = isRepost['id']
-			youStarred = isRepost['you_starred']
+			postID = is_repost['id']
+			you_starred = is_repost['you_starred']
 		end
 		if action == "star"
-			if youStarred == false
+			if you_starred == false
 				puts "\nStarring post ".green + "#{postID}\n".brown
 				resp = @api.starPost(postID)
 				puts "\nSuccessfully starred the post.\n\n".green
@@ -518,7 +519,7 @@ class AyaDN
 				abort("Canceled: the post is already starred.\n\n".red)
 			end
 		elsif action == "unstar"
-			if youStarred == false
+			if you_starred == false
 				abort("Canceled: the post wasn't already starred.\n\n".red)
 			else
 				puts "\nUnstarring post ".green + "#{postID}\n".brown
@@ -531,17 +532,17 @@ class AyaDN
 	end
 	def ayadnReposting(action, postID)
 		@hash = @api.getSinglePost(postID)
-		postInfo = @hash['data']
-		isRepost = postInfo['repost_of']
-		youReposted = postInfo['you_reposted']
-		if isRepost != nil && youReposted == false
+		post_data = @hash['data']
+		is_repost = post_data['repost_of']
+		you_reposted = post_data['you_reposted']
+		if is_repost != nil && you_reposted == false
 			puts $status.errorIsRepost(postID)
 			puts "Redirecting to the original post.\n".cyan
-			postID = isRepost['id']
-			youReposted = isRepost['you_reposted']
+			postID = is_repost['id']
+			you_reposted = is_repost['you_reposted']
 		end
 		if action == "repost"
-			if youReposted == false
+			if you_reposted == false
 				puts "\nReposting post ".green + "#{postID}\n".brown
 				resp = @api.repostPost(postID)
 				puts "\nSuccessfully reposted the post.\n\n".green
@@ -549,7 +550,7 @@ class AyaDN
 				abort("Canceled: you already reposted this post.\n\n".red)
 			end
 		elsif action == "unrepost"
-			if youReposted == true
+			if you_reposted == true
 				puts "\nUnreposting post ".green + "#{postID}\n".brown
 				resp = @api.unrepostPost(postID)
 				puts "\nSuccessfully unreposted the post.\n\n".green
@@ -563,6 +564,32 @@ class AyaDN
 	def ayadnReset(target, content, option)
 		$tools.fileOps("reset", target, content, option)
 	end
+	def ayadnSkipSource(action, source)
+		puts "Current skipped sources: ".green + $skipped_sources.join(", ").red + "\n"
+		if action == "add"
+			puts "Adding ".green + source.red + " to the skipped sources.".green + "\n"
+			$configFileContents['skipped']['sources'].each do |config_sources|
+				if config_sources == source
+					puts "#{source}".red + " is already skipped.\n\n".green
+					exit
+				end
+			end
+			$configFileContents['skipped']['sources'].push(source)
+			puts "New skipped sources: ".green + $configFileContents['skipped']['sources'].join(", ").red + "\n\n"
+			$tools.saveConfig
+		elsif action == "remove"
+			puts "Removing ".green + source.red + " from the skipped sources.".green + "\n"
+			$configFileContents['skipped']['sources'].each do |config_sources|
+				if config_sources == source
+					$configFileContents['skipped']['sources'].delete(config_sources)
+				end
+			end
+			puts "New skipped sources: ".green + $configFileContents['skipped']['sources'].join(", ").red + "\n\n"
+			$tools.saveConfig
+		else
+			puts $status.errorSyntax
+		end
+ 	end
 end
 
 

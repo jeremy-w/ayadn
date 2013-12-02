@@ -196,6 +196,19 @@ class AyaDN
 			postHash.each do |item|
 				pagination_array.push(item['pagination_id'])
 				postText = item['text']
+				postId = item['id']
+				sourceName = item['source']['name']
+
+				# Skip sources
+				case sourceName
+				when *$skipped_sources
+					# postString += "Post ID: ".cyan + postId.to_s.green
+					# postString += " -" + " SKIPPED".cyan
+					# matched = $skipped_sources.index(sourceName)
+					# postString += " \"#{$skipped_sources[matched]}\"\n\n".cyan
+					next
+				end
+
 				if postText != nil
 					coloredPost = $tools.colorize(postText)
 				else
@@ -205,12 +218,11 @@ class AyaDN
 				createdAt = item['created_at']
 				createdDay = createdAt[0...10]
 				createdHour = createdAt[11...19]
-				postId = item['id']
 				postString += "Post ID: ".cyan + postId.to_s.green
 				postString += " - "
 				postString += createdDay.cyan + ' at ' + createdHour.cyan + ' by ' + "@".reddish + userName.reddish + "\n" + coloredPost + "\n"
 				links = item['entities']['links']
-				sourceName = item['source']['name']
+
 				sourceLink = item['source']['link']
 				annoList = item['annotations']
 				xxx = 0

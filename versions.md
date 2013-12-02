@@ -3,6 +3,9 @@ AYADN
 
 AYADN is a learning exercise: while it's fully functional, it's still very alpha.  
 
+## 2013-12-02 v0.33
+- Skip specific clients!
+
 ## 2013-11-30 v0.32
 - Refactoring
 - Local permanent config!
