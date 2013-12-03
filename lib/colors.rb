@@ -1,7 +1,4 @@
 class String
-    def is_integer?
-      self.to_i.to_s == self
-    end
     def reddish;
         "\033[1;31m#{self}\033[0m"
     end
