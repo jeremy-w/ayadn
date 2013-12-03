@@ -25,7 +25,7 @@ class AyaDN
 				abort("HTTP ERROR :\n".red + "#{e}\n".red)
 			end
 		end
-		def httpPost(url)
+		def connectWithHTTP(url)
 			uri = URI("#{url}")
 			https = Net::HTTP.new(uri.host,uri.port)
 			https.use_ssl = true
@@ -33,56 +33,59 @@ class AyaDN
 			request = Net::HTTP::Post.new(uri.path)
 			request["Authorization"] = "Bearer #{@token}"
 			request["Content-Type"] = "application/json"
+			return https, request
+		end
+		def httpPost(url)
+			https, request = connectWithHTTP(url)
 			response = https.request(request)
 		end
 		def httpSendMessage(target, text)
-			@url = 'https://alpha-api.app.net/stream/0/channels/pm/messages'
-			@url += "?include_annotations=1"
-			uri = URI("#{@url}")
-			https = Net::HTTP.new(uri.host,uri.port)
-			https.use_ssl = true
-			https.verify_mode = OpenSSL::SSL::VERIFY_NONE
-			request = Net::HTTP::Post.new(uri.path)
-			request["Authorization"] = "Bearer #{@token}"
-			request["Content-Type"] = "application/json"
-			ent = { 
+			url = 'https://alpha-api.app.net/stream/0/channels/pm/messages'
+			url += "?include_annotations=1"
+			https, request = connectWithHTTP(url)
+			entities_content = { 
 				"parse_markdown_links" => true, 
 				"parse_links" => true
 			}
-			ayadnAnno = [{
-			    			"type" => "com.ayadn.appinfo",
-							"value" => {
-			        			"+net.app.core.user" => {
-			            			"user_id" => "@ayadn",
-			            			"format" => "basic"
-			        			}
-			        		}
-						}]
+			ayadnAnno = clientAnnotations
 			destinations = []
 			payload = {
 				"text" => "#{text}",
 				"destinations" => destinations.push(target),
-				"entities" => ent,
+				"entities" => entities_content,
 				"annotations" => ayadnAnno
 			}.to_json
 			response = https.request(request, payload)
 			callback = response.body
 		end
 		def httpSend(text, replyto = nil)
-			@url = 'https://alpha-api.app.net/stream/0/posts'
-			@url += "?include_annotations=1"
-			uri = URI("#{@url}")
-			https = Net::HTTP.new(uri.host,uri.port)
-			https.use_ssl = true
-			https.verify_mode = OpenSSL::SSL::VERIFY_NONE
-			request = Net::HTTP::Post.new(uri.path)
-			request["Authorization"] = "Bearer #{@token}"
-			request["Content-Type"] = "application/json"
-			ent = { 
+			url = 'https://alpha-api.app.net/stream/0/posts'
+			url += "?include_annotations=1"
+			https, request = connectWithHTTP(url)
+			entities_content = { 
 					"parse_markdown_links" => true, 
 					"parse_links" => true
 				}
-			ayadnAnno = [{
+			ayadnAnno = clientAnnotations
+			if replyto == nil
+				payload = {
+							"text" => "#{text}",
+							"entities" => entities_content,
+							"annotations" => ayadnAnno
+						}.to_json
+			else
+				payload = {
+							"text" => "#{text}",
+							"reply_to" => "#{replyto}",
+							"entities" => entities_content,
+							"annotations" => ayadnAnno
+						}.to_json
+			end
+			response = https.request(request, payload)
+			callback = response.body
+		end
+		def clientAnnotations
+			ayadn_annotations = [{
     			"type" => "com.ayadn.client",
 				"value" => {
 		        			"+net.app.core.user" => {
@@ -94,22 +97,7 @@ class AyaDN
     			"type" => "com.ayadn.client",
 				"value" => { "url" => "http://ayadn-app.net" }
 				}]
-			if replyto == nil
-				payload = {
-							"text" => "#{text}",
-							"entities" => ent,
-							"annotations" => ayadnAnno
-						}.to_json
-			else
-				payload = {
-							"text" => "#{text}",
-							"reply_to" => "#{replyto}",
-							"entities" => ent,
-							"annotations" => ayadnAnno
-						}.to_json
-			end
-			response = https.request(request, payload)
-			callback = response.body
+			return ayadn_annotations
 		end
 		def getHash
 			theHash = JSON.parse(getResponse(@url))
