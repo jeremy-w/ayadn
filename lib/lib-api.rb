@@ -79,31 +79,34 @@ class AyaDN
 			request["Authorization"] = "Bearer #{@token}"
 			request["Content-Type"] = "application/json"
 			ent = { 
-				"parse_markdown_links" => true, 
-				"parse_links" => true
-			}
+					"parse_markdown_links" => true, 
+					"parse_links" => true
+				}
 			ayadnAnno = [{
-    			"type" => "com.ayadn.appinfo",
+    			"type" => "com.ayadn.client",
 				"value" => {
-        			"+net.app.core.user" => {
-            			"user_id" => "@ayadn",
-            			"format" => "basic"
-        			}
-        		}
-			}]
+		        			"+net.app.core.user" => {
+		            			"user_id" => "@ayadn",
+		            			"format" => "basic"
+			        			}
+			        		}
+				},{
+    			"type" => "com.ayadn.client",
+				"value" => { "url" => "http://ayadn-app.net" }
+				}]
 			if replyto == nil
 				payload = {
-					"text" => "#{text}",
-					"entities" => ent,
-					"annotations" => ayadnAnno
-				}.to_json
+							"text" => "#{text}",
+							"entities" => ent,
+							"annotations" => ayadnAnno
+						}.to_json
 			else
 				payload = {
-					"text" => "#{text}",
-					"reply_to" => "#{replyto}",
-					"entities" => ent,
-					"annotations" => ayadnAnno
-				}.to_json
+							"text" => "#{text}",
+							"reply_to" => "#{replyto}",
+							"entities" => ent,
+							"annotations" => ayadnAnno
+						}.to_json
 			end
 			response = https.request(request, payload)
 			callback = response.body
