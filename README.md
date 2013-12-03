@@ -53,8 +53,9 @@ AYADN
 
 - skip posts from specific clients (like IFTTT, PourOver, etc)
 
-- and more! *([list of commands](https://github.com/ericdke/ayadn#list-of-commands))*
+- and more! *([list of commands](https://github.com/ericdke/ayadn#list-of-commands))*  
 
+![AyaDN displaying @ericd's unified stream](http://dl.dropboxusercontent.com/s/7frr1666lmsdzu7/2013-12-03%20at%2018.14.png)  
 
 ## TL;DR
 
@@ -417,6 +418,10 @@ sudo ln -s /usr/bin/gcc /usr/bin/gcc-4.2
 
 On Mac OS X, you may have to answer `yes` if your computer asks you to download and install the "developer tools".   
 
+### Just for fun
+
+`ayadn random`  
+
 ## Help
 
 Be aware of the way the console treats what you type.
@@ -436,6 +441,7 @@ ayadn.rb write "Here's an escaped exclamation mark \! and a normal simple quote 
 **To avoid any problem, post with the compose feature, that is to say without providing arguments:** 
 
 `ayadn.rb write`  
+
 
 
 ## Demo

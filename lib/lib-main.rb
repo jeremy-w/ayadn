@@ -76,7 +76,7 @@ class AyaDN
 				elsif value == "posts"
 					@hash = @api.getUserPosts(target, lastPageID)
 				end
-				# todo: whiten post id if I'm mentioned
+				# todo: color post id if I'm mentioned
 				stream, lastPageID = completeStream
 				displayScrollStream(stream)
 				if lastPageID != nil
@@ -189,25 +189,6 @@ class AyaDN
 			puts the_channels
 		end
 	end
-
-	# def _DEBUGREPLY(reply_to)
-	# 	hash1 = @api.getPostReplies(reply_to)
-	# 	hash_data = hash1['data']
-	# 	last_of_hash = hash_data.last
-	# 	original_post = @view.new(nil).buildSimplePost(last_of_hash)
-	# 	hash2 = @api.getSimpleUnified
-	# 	unified_data = hash2['data']
-	# 	first_of_unified = unified_data.last # because adnData.reverse in API
-	# 	first_of_unified_id = first_of_unified['id']
-	# 	if first_of_unified_id.to_i > reply_to
-	# 		puts original_post
-	# 	end
-	# 	@hash = hash1.merge!(hash2)
-	# 	stream, lastPageID = completeStream
-	# 	stream.sub!(/#{reply_to}/, reply_to.to_s.red.reverse_color) if first_of_unified_id.to_i < reply_to
-	# 	stream.sub!(/#{my_post_id}/, reply_to.to_s.green.reverse_color)
-	# 	displayStream(stream)
-	# end
 
 	def ayadnSendPost(text, reply_to = nil)
 		abort($status.emptyPost) if (text.empty? || text == nil)

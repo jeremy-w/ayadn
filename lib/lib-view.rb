@@ -200,14 +200,14 @@ class AyaDN
 				sourceName = item['source']['name']
 
 				# Skip sources
-				case sourceName
-				when *$skipped_sources
+				# case sourceName
+				# when *$skipped_sources
 					# postString += "Post ID: ".cyan + postId.to_s.green
 					# postString += " -" + " SKIPPED".cyan
 					# matched = $skipped_sources.index(sourceName)
 					# postString += " \"#{$skipped_sources[matched]}\"\n\n".cyan
-					next
-				end
+				# 	next
+				# end
 
 				if postText != nil
 					coloredPost = $tools.colorize(postText)
@@ -302,6 +302,22 @@ class AyaDN
 				postString += "\n"
 			end
 			postString += "\n"
+		end
+		def buildSimplePostView(postHash)
+			thePostId = postHash['id']
+			postText = postHash['text']
+			userName = postHash['user']['username']
+			realName = postHash['user']['name']
+			theName = "@" + userName
+			coloredPost = $tools.colorize(postText)
+			createdAt = postHash['created_at']
+			createdDay = createdAt[0...10]
+			createdHour = createdAt[11...19]
+			postDetails = createdDay.cyan + " " + thePostId.green + " " + theName.brown
+			if !realName.empty?
+				postDetails += " #{realName}".pink
+			end
+			postDetails += "\n" + coloredPost + "\n\n"
 		end
 		def buildPostInfo(postHash, isMine)
 			thePostId = postHash['id']
