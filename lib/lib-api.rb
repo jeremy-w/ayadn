@@ -8,6 +8,7 @@ class AyaDN
 			@authorizeURL = "https://account.app.net/oauth/authenticate?client_id=#{AYADN_CLIENT_ID}&response_type=token&redirect_uri=#{AYADN_CALLBACK_URL}&scope=basic stream write_post follow public_messages messages&include_marker=1"
 		end
 		def makeAuthorizeURL
+			# maybe advanced features later
 			@authorizeURL
 		end
 		def getResponse(url)

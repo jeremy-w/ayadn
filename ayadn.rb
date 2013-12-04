@@ -186,6 +186,8 @@ when "debug"
 		client.ayadnDebugPost(arg2)
 	elsif arg2 == "reply"
 		client._DEBUGREPLY(16247559)
+	elsif arg2 == "spawn"
+		$tools.startBrowser("http://aya.io")
 	end
 
 when "skiplist"

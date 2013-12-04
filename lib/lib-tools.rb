@@ -262,7 +262,7 @@ class AyaDN
               when /linux/ then "xdg-open '#{url}'"
             end
             command = "sleep 1; #{command}"
-            pid = spawn(command)
+            pid = Process.spawn(command)
             Process.detach(pid)
         end
         def helpScreen
