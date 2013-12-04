@@ -40,6 +40,18 @@ class AyaDN
 			https, request = connectWithHTTP(url)
 			response = https.request(request)
 		end
+		def httpCreateDraftsChannel
+			url = "https://alpha-api.app.net/stream/0/channels"
+			user_id = [$identityPrefix]
+			payload = {
+				"type" => "com.ayadn.drafts",
+				"writers" => {
+					"user_ids" => user_id
+				}
+			}.to_json
+			https, request = connectWithHTTP(url)
+			response = https.request(request, payload)
+		end
 		def httpSendMessage(target, text)
 			url = 'https://alpha-api.app.net/stream/0/channels/pm/messages'
 			url += "?include_annotations=1"

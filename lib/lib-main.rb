@@ -43,8 +43,8 @@ class AyaDN
 			when /linux/
 				puts $status.launchAuthorization("linux")
 			else
-				$tools.startBrowser(url)
 				puts $status.launchAuthorization("osx")
+				$tools.startBrowser(url)
 			end
 			auth_token = STDIN.gets.chomp()
 			$tools.fileOps("auth", "write", auth_token)
@@ -206,6 +206,10 @@ class AyaDN
 			end
 			@hash = @api.getChannels
 			the_channels, channels_list = @view.new(@hash).showChannels
+			if $drafts != nil
+				private_message_channel_ID = $drafts
+				$tools.fileOps("savechannelid", private_message_channel_ID, "drafts")
+			end
 			puts the_channels
 		end
 	end
@@ -590,6 +594,58 @@ class AyaDN
 		else
 			puts "Current skipped sources: ".green + $skipped_sources.join(", ").red + "\n\n"
 		end
+ 	end
+
+ 	# WHAT FOLLOWS IS AN EXPERIMENT AND A WORK IN PROGRESS
+ 	def ayadnDrafts(*args)
+ 		action = args[0][1]
+ 		target = args[0][2]
+ 		case action
+ 		when "init"
+ 			# test if already created
+ 			# locally
+ 			drafts_channel = nil
+ 			loaded_channels = $tools.fileOps("loadchannels", nil)
+ 			if loaded_channels != nil
+ 				loaded_channels.each do |k,v|
+ 					if v == "drafts"
+ 						drafts_channel = k
+ 						puts "\nDrafts channel already exists: ".green + drafts_channel.to_s.brown + "\n\n"
+ 						exit
+ 					end
+ 				end
+ 				# drafts channel not locally saved
+ 				puts "\nDrafts channel not saved locally, searching in your channels online...\n\n".green
+ 				ayadnGetMessages(nil)
+ 				exit
+ 			else
+ 				# nothing locally saved
+ 				puts "\nDrafts channel not saved locally, searching in your channels online...\n\n".green
+ 				ayadnGetMessages(nil)
+ 				exit
+ 			end
+ 			resp = @api.httpCreateDraftsChannel if drafts_channel == nil
+ 			puts resp.body.reverse_color + "\n"
+ 		when "list"
+ 			# last 20 or all
+
+ 		when "read"
+ 			# read a draft
+
+ 		when "post"
+ 			# post a draft
+ 			# ask if sure or edit
+
+ 		when "edit"
+ 			# edit a draft
+ 			# means: load the draft, delete the draft from ADN (only after successful writing), create a new one with the new text
+ 			# see the draft back with its ID
+
+ 		when "create", "write"
+ 			# write a draft then post it in the channel
+ 			# see the draft back with its ID
+ 			
+ 		end
  	end
 end
 

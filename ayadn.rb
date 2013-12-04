@@ -200,6 +200,10 @@ when "reset"
 		client.ayadnReset("pagination", nil, nil)
 	end
 
+when "drafts"
+	# many options later, I'm experimenting for now
+	client.ayadnDrafts(ARGV)
+
 when "random"
 	# just for fun :)
 	api = AyaDN::API.new(token)

@@ -470,6 +470,11 @@ class AyaDN
 					# end
 					# theChannels += "You can do ".pink + "ayadn pm #{owner} ".brown + "to send a private message.\n\n".pink
 				end
+				if channel_type == "com.ayadn.drafts"
+					$drafts = channelID
+					channels_list.push(channelID)
+					theChannels += "\nChannel ID: ".cyan + "#{channelID}\n".brown + " -> " + "your AyaDN Drafts channel\n".green
+				end
 			end
 			theChannels += "\n"
 			return theChannels, channels_list
