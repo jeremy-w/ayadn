@@ -184,6 +184,19 @@ class AyaDN
 			$tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
 			displayStream(messages_string)
 		else
+			loaded_channels = $tools.fileOps("loadchannels", nil)
+			if loaded_channels != nil
+				puts "Backed-up list of your active channels:\n".green
+				loaded_channels.each do |k,v|
+					puts "Channel: ".cyan + k.brown
+					puts "Interlocutor: ".cyan + v.brown
+					puts "\n"
+				end
+				puts "Do you want to see if you have more channels activated? (Y/n)".green
+				input = STDIN.getch
+				abort("\nCanceled.\n\n".red) unless input == ("y" || "Y")
+				puts "\n"
+			end
 			@hash = @api.getChannels
 			the_channels, channels_list = @view.new(@hash).showChannels
 			puts the_channels
