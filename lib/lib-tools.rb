@@ -258,7 +258,6 @@ class AyaDN
             # thanks to https://github.com/veenstra
             command = case RbConfig::CONFIG['host_os'] 
               when /darwin/ then "open '#{url}'"
-              when /linux/ then "xdg-open '#{url}'"
             end
             command = "sleep 1; #{command}"
             pid = Process.spawn(command)

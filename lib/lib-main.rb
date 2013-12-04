@@ -40,9 +40,11 @@ class AyaDN
 			case RbConfig::CONFIG['host_os']
 			when /mswin|mingw|mingw32|cygwin/
 				puts $status.launchAuthorization("win")
+			when /linux/
+				puts $status.launchAuthorization("linux")
 			else
 				$tools.startBrowser(url)
-				puts $status.launchAuthorization("nix")
+				puts $status.launchAuthorization("osx")
 			end
 			auth_token = STDIN.gets.chomp()
 			$tools.fileOps("auth", "write", auth_token)

@@ -4,7 +4,7 @@ class AyaDN
             s = "\nLoading the ".green + "interactions ".brown + "informations.\n\n".green
         end
         def launchAuthorization(os)
-            if os == "nix"
+            if os == "osx"
                 s = "\nAyaDN opened a browser to authorize via App.net very easily. Just login with your App.net account, then copy the code it will give you, paste it here then press [ENTER].".pink + " Paste authorization code: \n\n".brown
             else
                 s = "\nPlease open a browser and paste this URL: \n\n".brown
