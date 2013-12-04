@@ -37,8 +37,13 @@ class AyaDN
 		auth_token = $tools.fileOps("auth", "read")
 		if auth_token == nil
 			url = @api.makeAuthorizeURL
-			$tools.startBrowser(url)
-			puts $status.launchAuthorization
+			case RbConfig::CONFIG['host_os']
+			when /mswin|mingw|mingw32|cygwin/
+				puts $status.launchAuthorization("win")
+			else
+				$tools.startBrowser(url)
+				puts $status.launchAuthorization("nix")
+			end
 			auth_token = STDIN.gets.chomp()
 			$tools.fileOps("auth", "write", auth_token)
 			puts $status.authorized
@@ -189,7 +194,7 @@ class AyaDN
 				puts "Backed-up list of your active channels:\n".green
 				loaded_channels.each do |k,v|
 					puts "Channel: ".cyan + k.brown
-					puts "Interlocutor: ".cyan + v.brown
+					puts "Interlocutor: ".cyan + v.magenta
 					puts "\n"
 				end
 				puts "Do you want to see if you have more channels activated? (Y/n)".green

@@ -3,8 +3,14 @@ class AyaDN
         def getInteractions
             s = "\nLoading the ".green + "interactions ".brown + "informations.\n\n".green
         end
-        def launchAuthorization
-            s = "\nAyaDN opened a browser to authorize via App.net very easily. Just login with your App.net account, then copy the code it will give you, paste it here then press [ENTER].".pink + " Paste authorization code: \n\n".brown
+        def launchAuthorization(os)
+            if os == "nix"
+                s = "\nAyaDN opened a browser to authorize via App.net very easily. Just login with your App.net account, then copy the code it will give you, paste it here then press [ENTER].".pink + " Paste authorization code: \n\n".brown
+            else
+                s = "\nPlease open a browser and paste this URL: \n\n".brown
+                s += "https://account.app.net/oauth/authenticate?client_id=hFsCGArAjgJkYBHTHbZnUvzTmL4vaLHL&response_type=token&redirect_uri=http://aya.io/ayadn/auth.html&scope=basic stream write_post follow public_messages messages&include_marker=1"
+                s += "\n\nOn this page, login with your App.net account, then copy the code it will give you, paste it here then press [ENTER].".pink + " Paste authorization code: \n\n".brown
+            end
         end
         def authorized
             s = "\nThank you for authorizing AyaDN. You won't need to do this anymore.\n\n".green

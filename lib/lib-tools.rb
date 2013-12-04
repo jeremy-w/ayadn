@@ -256,8 +256,7 @@ class AyaDN
         end
         def startBrowser(url)
             # thanks to https://github.com/veenstra
-            command = case RbConfig::CONFIG['host_os']
-              when /mswin|mingw|mingw32|cygwin/ then "start '#{url}'"
+            command = case RbConfig::CONFIG['host_os'] 
               when /darwin/ then "open '#{url}'"
               when /linux/ then "xdg-open '#{url}'"
             end
