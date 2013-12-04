@@ -1,5 +1,8 @@
 class AyaDN
     class ClientStatus
+        def draftsChannelNotSaved
+            s = "\nDrafts channel not saved locally, searching in your channels online...\n\n".green
+        end
         def getInteractions
             s = "\nLoading the ".green + "interactions ".brown + "informations.\n\n".green
         end

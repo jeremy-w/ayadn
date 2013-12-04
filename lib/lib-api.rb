@@ -52,6 +52,9 @@ class AyaDN
 			https, request = connectWithHTTP(url)
 			response = https.request(request, payload)
 		end
+		def createAyadnDraft(channel, draft)
+			
+		end
 		def httpSendMessage(target, text)
 			url = 'https://alpha-api.app.net/stream/0/channels/pm/messages'
 			url += "?include_annotations=1"

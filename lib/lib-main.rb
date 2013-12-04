@@ -72,15 +72,16 @@ class AyaDN
 			begin
 				print "\r                                         \r"
 				lastPageID = $tools.fileOps("getlastpageid", fileURL)
-				if value == "global"
+				case value
+				when "global"
 					@hash = @api.getGlobal(lastPageID)
-				elsif value == "unified"
+				when "unified"
 					@hash = @api.getUnified(lastPageID)
-				elsif value == ("checkins" || "photos" || "conversations" || "trending")
+				when "checkins", "photos", "conversations", "trending"
 					@hash = @api.getExplore(value, lastPageID)
-				elsif value == "mentions"
+				when "mentions"
 					@hash = @api.getUserMentions(target, lastPageID)
-				elsif value == "posts"
+				when "posts"
 					@hash = @api.getUserPosts(target, lastPageID)
 				end
 				# todo: color post id if I'm mentioned
@@ -600,32 +601,38 @@ class AyaDN
  	def ayadnDrafts(*args)
  		action = args[0][1]
  		target = args[0][2]
+ 		drafts_channel = nil
+ 		loaded_channels = $tools.fileOps("loadchannels", nil)
+ 		if loaded_channels != nil
+			loaded_channels.each do |k,v|
+				if v == "drafts"
+					drafts_channel = k
+				end
+			end
+		end
  		case action
  		when "init"
  			# test if already created
  			# locally
- 			drafts_channel = nil
- 			loaded_channels = $tools.fileOps("loadchannels", nil)
  			if loaded_channels != nil
- 				loaded_channels.each do |k,v|
- 					if v == "drafts"
- 						drafts_channel = k
- 						puts "\nDrafts channel already exists: ".green + drafts_channel.to_s.brown + "\n\n"
- 						exit
- 					end
+ 				if drafts_channel != nil
+ 					puts "\nDrafts channel already exists: ".green + drafts_channel.to_s.brown + "\n\n"
+ 					exit
  				end
  				# drafts channel not locally saved
- 				puts "\nDrafts channel not saved locally, searching in your channels online...\n\n".green
+ 				puts $status.draftsChannelNotSaved
  				ayadnGetMessages(nil)
  				exit
  			else
  				# nothing locally saved
- 				puts "\nDrafts channel not saved locally, searching in your channels online...\n\n".green
+ 				puts $status.draftsChannelNotSaved
  				ayadnGetMessages(nil)
  				exit
  			end
- 			resp = @api.httpCreateDraftsChannel if drafts_channel == nil
- 			puts resp.body.reverse_color + "\n"
+ 			if drafts_channel == nil
+ 				resp = @api.httpCreateDraftsChannel 
+ 				puts resp.body.brown + "\n"
+ 			end
  		when "list"
  			# last 20 or all
 
@@ -644,7 +651,14 @@ class AyaDN
  		when "create", "write"
  			# write a draft then post it in the channel
  			# see the draft back with its ID
- 			
+ 			# write it with an external editor
+
+ 			# create the draft text here
+
+ 			# post the draft to the drafts channel
+ 			@api.createAyadnDraft(channel, draft)
+
+ 			#
  		end
  	end
 end
