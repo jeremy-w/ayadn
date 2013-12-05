@@ -182,12 +182,13 @@ when "webhelp"
 when "debug"
 	if arg2 == nil
 		client.ayadnDebugStream
-	elsif arg2.is_integer?
-		client.ayadnDebugPost(arg2)
-	elsif arg2 == "reply"
-		client._DEBUGREPLY(16247559)
-	elsif arg2 == "spawn"
-		$tools.startBrowser("http://aya.io")
+	elsif arg3.is_integer?
+		if arg2 == "post"
+			client.ayadnDebugPost(arg3)
+		elsif arg2 == "message"
+			# channel_id, message_id
+			client.ayadnDebugMessage(arg3, arg4)
+		end
 	end
 
 when "skiplist"
@@ -200,9 +201,9 @@ when "reset"
 		client.ayadnReset("pagination", nil, nil)
 	end
 
-when "drafts"
-	# many options later, I'm experimenting for now
-	client.ayadnDrafts(ARGV)
+when "deactivate"
+	# deactivate a user channel (WIP)
+	client.ayadnDeactivateChannel(arg2)
 
 when "random"
 	# just for fun :)

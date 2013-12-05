@@ -40,21 +40,17 @@ class AyaDN
 			https, request = connectWithHTTP(url)
 			response = https.request(request)
 		end
-		def httpCreateDraftsChannel
-			url = "https://alpha-api.app.net/stream/0/channels"
-			user_id = [$identityPrefix]
-			payload = {
-				"type" => "com.ayadn.drafts",
-				"writers" => {
-					"user_ids" => user_id
-				}
-			}.to_json
-			https, request = connectWithHTTP(url)
-			response = https.request(request, payload)
+		def deleteMessage(channel_id, message_id)
+			@url = "https://alpha-api.app.net/stream/0/channels/#{channel_id}/messages/#{message_id}"
+			@url += "?access_token=#{@token}"
+			restDelete
 		end
-		def createAyadnDraft(channel, draft)
-			
+		def deactivateChannel(channel_id)
+			@url = "https://alpha-api.app.net/stream/0/channels/#{channel_id}"
+			@url += "?access_token=#{@token}"
+			restDelete
 		end
+		
 		def httpSendMessage(target, text)
 			url = 'https://alpha-api.app.net/stream/0/channels/pm/messages'
 			url += "?include_annotations=1"
@@ -246,8 +242,14 @@ class AyaDN
 		def checkLastPageID(lastPageID = nil)
 			@url += "&since_id=#{lastPageID}" if lastPageID != nil
 		end
+		def getUniqueMessage(channel_id, message_id)
+			@url = "https://alpha-api.app.net/stream/0/channels/#{channel_id}/messages/#{message_id}?access_token=#{@token}"
+			@url += "&include_annotations=1"
+			getHash
+		end
 		def getMessages(channel, lastPageID)
 			@url += "stream/0/channels/#{channel}/messages?access_token=#{@token}&count=100"
+			@url += "&include_annotations=1"
 			checkLastPageID(lastPageID)
 			getHash
 		end

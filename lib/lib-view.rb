@@ -166,6 +166,7 @@ class AyaDN
 					coloredPost = $tools.colorize(messageText)
 				else
 					coloredPost = "--Message deleted--".red
+					#next
 				end
 				createdAt = item['created_at']
 				createdDay = createdAt[0...10]

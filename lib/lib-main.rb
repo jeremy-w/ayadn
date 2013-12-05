@@ -6,7 +6,6 @@ class AyaDN
 		@api = AyaDN::API.new(@token)
 		@view = AyaDN::View
 	end
-
 	def stream
 		$tools.fileOps("makedir", $ayadn_lastPageID_path)
 	 	puts @view.new(@hash).showStream
@@ -26,6 +25,10 @@ class AyaDN
 	end
 	def ayadnDebugPost(postID)
 		@hash = @api.getPostInfos("call", postID)
+		debugStream
+	end
+	def ayadnDebugMessage(channel_id, message_id)
+		@hash = @api.getUniqueMessage(channel_id, message_id)
 		debugStream
 	end
 
@@ -329,6 +332,10 @@ class AyaDN
 			exit
 		end
 	end
+	def ayadnDeactivateChannel(channel_id)
+ 		resp = @api.deactivateChannel(channel_id)
+ 		puts resp
+ 	end
 	def ayadnWhoReposted(postID)
 		puts $status.whoReposted(postID)
 		@hash = @api.getWhoReposted(postID)
@@ -595,71 +602,6 @@ class AyaDN
 		else
 			puts "Current skipped sources: ".green + $skipped_sources.join(", ").red + "\n\n"
 		end
- 	end
-
- 	# WHAT FOLLOWS IS AN EXPERIMENT AND A WORK IN PROGRESS
- 	def ayadnDrafts(*args)
- 		action = args[0][1]
- 		target = args[0][2]
- 		drafts_channel = nil
- 		loaded_channels = $tools.fileOps("loadchannels", nil)
- 		if loaded_channels != nil
-			loaded_channels.each do |k,v|
-				if v == "drafts"
-					drafts_channel = k
-				end
-			end
-		end
- 		case action
- 		when "init"
- 			# test if already created
- 			# locally
- 			if loaded_channels != nil
- 				if drafts_channel != nil
- 					puts "\nDrafts channel already exists: ".green + drafts_channel.to_s.brown + "\n\n"
- 					exit
- 				end
- 				# drafts channel not locally saved
- 				puts $status.draftsChannelNotSaved
- 				ayadnGetMessages(nil)
- 				exit
- 			else
- 				# nothing locally saved
- 				puts $status.draftsChannelNotSaved
- 				ayadnGetMessages(nil)
- 				exit
- 			end
- 			if drafts_channel == nil
- 				resp = @api.httpCreateDraftsChannel 
- 				puts resp.body.brown + "\n"
- 			end
- 		when "list"
- 			# last 20 or all
-
- 		when "read"
- 			# read a draft
-
- 		when "post"
- 			# post a draft
- 			# ask if sure or edit
-
- 		when "edit"
- 			# edit a draft
- 			# means: load the draft, delete the draft from ADN (only after successful writing), create a new one with the new text
- 			# see the draft back with its ID
-
- 		when "create", "write"
- 			# write a draft then post it in the channel
- 			# see the draft back with its ID
- 			# write it with an external editor
-
- 			# create the draft text here
-
- 			# post the draft to the drafts channel
- 			@api.createAyadnDraft(channel, draft)
-
- 			#
- 		end
  	end
 end
 
