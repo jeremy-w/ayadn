@@ -612,14 +612,34 @@ class AyaDN
  	end
 
 
- 	def ayadnFiles(action, target)
+ 	def ayadnFiles(action, target, value)
  		case action
  		when "list"
+			big_view = ""
  			with_url = false
- 			puts "\nGetting the list of your recent files...\n\n".green
- 			@hash = @api.getFilesList
- 			view, file_url = @view.new(@hash).showFilesList(with_url)
- 			puts view
+ 			if value == "all"
+ 				puts "\nGetting the list of all your files...\n".green
+ 				beforeID = nil
+ 				pagination_array = []
+ 				reverse = true
+		    	loop do
+		    		@hash = @api.getFilesList(beforeID)
+		    		view, file_url, pagination_array = @view.new(@hash).showFilesList(with_url, reverse)
+		    		beforeID = pagination_array.last
+		    		break if beforeID == nil
+		    		print "\rPlease wait, fetching page (".cyan + "#{beforeID}".pink + ")...\n".cyan unless beforeID == nil
+	 				#big_view += view
+	 				puts view
+				end
+				puts "\n"
+			else
+				puts "\nGetting the list of your recent files...\n".green
+				@hash = @api.getFilesList(nil)
+				reverse = false
+				view, file_url, pagination_array = @view.new(@hash).showFilesList(with_url, reverse)
+				big_view += view
+			end
+ 			puts big_view
  		when "download"
  			if !target.is_integer?
  				puts $status.errorSyntax

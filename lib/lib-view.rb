@@ -468,11 +468,17 @@ class AyaDN
 			list_string += "\n\n"
 			return list_string, file_url, file_name
 		end
-		def showFilesList(with_url)
-			resp_hash = getData(@hash)
+		def showFilesList(with_url, reverse)
+			if reverse == false
+				resp_hash = getData(@hash)
+			else
+				resp_hash = getDataNormal(@hash)
+			end
 			list_string = ""
 			file_url = nil
+			pagination_array = []
 			resp_hash.each do |item|
+				pagination_array.push(item['pagination_id'])
 				file_name = item['name']
 				file_token = item['file_token']
 				file_source_name = item['source']['name']
@@ -517,7 +523,7 @@ class AyaDN
 				list_string += "\n"
 			end
 			list_string += "\n"
-			return list_string, file_url
+			return list_string, file_url, pagination_array
 		end
 		def buildChannelsInfos(hash)
 			meta = hash['meta']

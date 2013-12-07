@@ -115,7 +115,7 @@ when "list"
 	elsif arg2 == "muted"
 		client.ayadnShowList("muted", "me")
 	elsif arg2 == "files"
-		client.ayadnFiles("list", nil)
+		client.ayadnFiles("list", nil, arg3)
 	else
 		puts $status.errorSyntax
 	end
@@ -236,7 +236,7 @@ when "upload"
 	client.ayadnFileUpload(arg2)
 
 when "download"
-	client.ayadnFiles(arg1, arg2)
+	client.ayadnFiles(arg1, arg2, nil)
 
 else
 	# if not any known argument

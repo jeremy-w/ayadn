@@ -488,8 +488,9 @@ class AyaDN
 			@url = makeStreamURL("search", value)
 			getHash
 		end
-		def getFilesList
+		def getFilesList(beforeID)
 			@url = makeStreamURL("files_list")
+			@url += "&before_id=#{beforeID}" if beforeID != nil
 			getHash
 		end
 		def getSingleFile(file_id)
