@@ -621,7 +621,7 @@ class AyaDN
  	def ayadnFiles(action, target)
  		case action
  		when "list"
- 			puts "\nGetting the complete list of your files...\n\n".green
+ 			puts "\nGetting the list of your recent files...\n\n".green
  			@hash = @api.getFilesList
  			view = @view.new(@hash).showFilesList
  			puts view

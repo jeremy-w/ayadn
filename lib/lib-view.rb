@@ -437,30 +437,32 @@ class AyaDN
 				file_public = item['public']
 				file_url_expires = item['url_expires']
 				derived_files = item['derived_files']
+				list_string += "\nID: ".cyan + file_id.brown
 				list_string += "\nName: ".cyan + file_name.green
-				list_string += "\nKind: ".cyan + file_kind.pink + " ID: ".cyan + file_id.brown + " Size: ".cyan + file_size_converted.reddish
+				list_string += "\nKind: ".cyan + file_kind.pink + " Size: ".cyan + file_size_converted.reddish
 				list_string += "\nDate: ".cyan + created_day.green + " " + created_hour.green
 				list_string += "\nSource: ".cyan + file_source_name.brown
 				if file_public == true
-					list_string += "\nThis file is public.".green
+					list_string += "\nThis file is ".cyan + "public.".blue
 				else
-					list_string += "\nThis file is private.".reddish
+					list_string += "\nThis file is ".cyan + "private.".red
 				end
-				list_string += "\nURL: ".cyan + file_url.brown
-				if derived_files != nil
-					if derived_files['image_thumb_960r'] != nil
-						file_derived_bigthumb_name = derived_files['image_thumb_960r']['name']
-						file_derived_bigthumb_url = derived_files['image_thumb_960r']['url']
-					end
-					if derived_files['image_thumb_200s'] != nil
-						file_derived_smallthumb_name = derived_files['image_thumb_200s']['name']
-						file_derived_smallthumb_url = derived_files['image_thumb_200s']['url']
-					end
-				end
-				list_string += "\nBig thumbnail: ".cyan + file_derived_bigthumb_url unless file_derived_bigthumb_url == nil
-				list_string += "\nSmall thumbnail: ".cyan + file_derived_smallthumb_url unless file_derived_smallthumb_url == nil
+				# list_string += "\nURL: ".cyan + file_url.brown
+				# if derived_files != nil
+				# 	if derived_files['image_thumb_960r'] != nil
+				# 		file_derived_bigthumb_name = derived_files['image_thumb_960r']['name']
+				# 		file_derived_bigthumb_url = derived_files['image_thumb_960r']['url']
+				# 	end
+				# 	if derived_files['image_thumb_200s'] != nil
+				# 		file_derived_smallthumb_name = derived_files['image_thumb_200s']['name']
+				# 		file_derived_smallthumb_url = derived_files['image_thumb_200s']['url']
+				# 	end
+				# end
+				# list_string += "\nBig thumbnail: ".cyan + file_derived_bigthumb_url unless file_derived_bigthumb_url == nil
+				# list_string += "\nSmall thumbnail: ".cyan + file_derived_smallthumb_url unless file_derived_smallthumb_url == nil
 				list_string += "\n"
 			end
+			list_string += "\n"
 			return list_string
 		end
 		def buildChannelsInfos(hash)
