@@ -623,8 +623,17 @@ class AyaDN
  		when "list"
  			puts "\nGetting the list of your recent files...\n\n".green
  			@hash = @api.getFilesList
- 			view = @view.new(@hash).showFilesList
+ 			view, file_url = @view.new(@hash).showFilesList
  			puts view
+ 		when "download"
+ 			puts "\nDownloading file ".green + target.to_s.brown
+ 			@hash = @api.getSingleFile(target)
+ 			view, file_url = @view.new(@hash).showFilesList(with_url = true)
+ 			puts view
+
+ 			# save image
+
+ 			# puts "\nFile downloaded in ".green + 
  		end
  	end
 end

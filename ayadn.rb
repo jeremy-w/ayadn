@@ -235,6 +235,9 @@ when "random"
 when "upload"
 	client.ayadnFileUpload(arg2)
 
+when "download"
+	client.ayadnFiles(arg1, arg2)
+
 else
 	# if not any known argument
 	option = ARGV

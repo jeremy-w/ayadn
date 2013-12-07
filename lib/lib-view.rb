@@ -419,51 +419,60 @@ class AyaDN
 			end
 			return usersHash, pagination_array
 		end
-		def showFilesList
-			resp_hash = getData(@hash)
+		def showFilesList(with_url = false)
+			if with_url == false
+				resp_hash = getData(@hash)
+			else
+				resp_hash = getDataNormal(@hash)
+			end
 			list_string = ""
+			file_url = nil
 			resp_hash.each do |item|
 				file_name = item['name']
-				file_url = item['url']
 				file_token = item['file_token']
 				file_source_name = item['source']['name']
+				file_source_url = item['source']['link']
 				file_created_at = item['created_at']
 				created_day = file_created_at[0...10]
 				created_hour = file_created_at[11...19]
 				file_kind = item['kind']
 				file_id = item['id']
 				file_size = item['size']
-				file_size_converted = file_size.to_filesize
+				file_size_converted = file_size.to_filesize unless file_size == nil
 				file_public = item['public']
 				file_url_expires = item['url_expires']
 				derived_files = item['derived_files']
 				list_string += "\nID: ".cyan + file_id.brown
 				list_string += "\nName: ".cyan + file_name.green
-				list_string += "\nKind: ".cyan + file_kind.pink + " Size: ".cyan + file_size_converted.reddish
+				list_string += "\nKind: ".cyan + file_kind.pink
+				list_string += " Size: ".cyan + file_size_converted.reddish unless file_size == nil
 				list_string += "\nDate: ".cyan + created_day.green + " " + created_hour.green
-				list_string += "\nSource: ".cyan + file_source_name.brown
+				list_string += "\nSource: ".cyan + file_source_name.brown + " - #{file_source_url}".brown
 				if file_public == true
-					list_string += "\nThis file is ".cyan + "public.".blue
+					list_string += "\nThis file is ".cyan + "public".blue
 				else
-					list_string += "\nThis file is ".cyan + "private.".red
+					list_string += "\nThis file is ".cyan + "private".red
 				end
-				# list_string += "\nURL: ".cyan + file_url.brown
-				# if derived_files != nil
-				# 	if derived_files['image_thumb_960r'] != nil
-				# 		file_derived_bigthumb_name = derived_files['image_thumb_960r']['name']
-				# 		file_derived_bigthumb_url = derived_files['image_thumb_960r']['url']
-				# 	end
-				# 	if derived_files['image_thumb_200s'] != nil
-				# 		file_derived_smallthumb_name = derived_files['image_thumb_200s']['name']
-				# 		file_derived_smallthumb_url = derived_files['image_thumb_200s']['url']
-				# 	end
-				# end
-				# list_string += "\nBig thumbnail: ".cyan + file_derived_bigthumb_url unless file_derived_bigthumb_url == nil
-				# list_string += "\nSmall thumbnail: ".cyan + file_derived_smallthumb_url unless file_derived_smallthumb_url == nil
+				if with_url == true
+					file_url = item['url_permanent']
+					list_string += "\nURL: ".cyan + file_url.brown
+					# if derived_files != nil
+					# 	if derived_files['image_thumb_960r'] != nil
+					# 		file_derived_bigthumb_name = derived_files['image_thumb_960r']['name']
+					# 		file_derived_bigthumb_url = derived_files['image_thumb_960r']['url']
+					# 	end
+					# 	if derived_files['image_thumb_200s'] != nil
+					# 		file_derived_smallthumb_name = derived_files['image_thumb_200s']['name']
+					# 		file_derived_smallthumb_url = derived_files['image_thumb_200s']['url']
+					# 	end
+					# 	list_string += "\nBig thumbnail: ".cyan + file_derived_bigthumb_url unless file_derived_bigthumb_url == nil
+					# 	list_string += "\nSmall thumbnail: ".cyan + file_derived_smallthumb_url unless file_derived_smallthumb_url == nil
+					# end
+				end
 				list_string += "\n"
 			end
 			list_string += "\n"
-			return list_string
+			return list_string, file_url
 		end
 		def buildChannelsInfos(hash)
 			meta = hash['meta']

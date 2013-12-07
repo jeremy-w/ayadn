@@ -5,7 +5,7 @@ class AyaDN
 		def initialize(token)
 			@url = 'https://alpha-api.app.net/'
 			@token = token
-			@authorizeURL = "https://account.app.net/oauth/authenticate?client_id=#{AYADN_CLIENT_ID}&response_type=token&redirect_uri=#{AYADN_CALLBACK_URL}&scope=basic stream write_post follow public_messages messages&include_marker=1"
+			@authorizeURL = "https://account.app.net/oauth/authenticate?client_id=#{AYADN_CLIENT_ID}&response_type=token&redirect_uri=#{AYADN_CALLBACK_URL}&scope=basic stream write_post follow public_messages messages files&include_marker=1"
 		end
 		def makeAuthorizeURL
 			# maybe advanced features later
@@ -278,6 +278,10 @@ class AyaDN
 			when stream == "files_list"
 				@url += "stream/0/users/me/files"
 				@url += "?access_token=#{@token}"
+			when stream == "get_file"
+				@url += "stream/0/files/"
+				@url += "#{value}"
+				@url += "?access_token=#{@token}"
 
 			end
 		end
@@ -486,6 +490,10 @@ class AyaDN
 		end
 		def getFilesList
 			@url = makeStreamURL("files_list")
+			getHash
+		end
+		def getSingleFile(file_id)
+			@url = makeStreamURL("get_file", file_id)
 			getHash
 		end
 	end
