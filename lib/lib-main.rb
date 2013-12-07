@@ -7,14 +7,14 @@ class AyaDN
 		@view = AyaDN::View
 	end
 	def stream
-		$tools.fileOps("makedir", $ayadn_lastPageID_path)
+		$tools.fileOps("makedir", $ayadn_last_page_ID_path)
 	 	puts @view.new(@hash).showStream
 	end
 	def completeStream
-		$tools.fileOps("makedir", $ayadn_lastPageID_path)
+		$tools.fileOps("makedir", $ayadn_last_page_ID_path)
 	    stream, pagination_array = @view.new(@hash).showCompleteStream
-	    lastPageID = pagination_array.last
-		return stream, lastPageID
+	    last_page_ID = pagination_array.last
+		return stream, last_page_ID
 	end
 	def debugStream
 		puts @view.new(@hash).showDebugStream
@@ -67,31 +67,31 @@ class AyaDN
 	def ayadnScroll(value, target)
 		value = "unified" if value == nil
 		if target == nil
-			fileURL = $ayadn_lastPageID_path + "/lastPageID-#{value}"
+			fileURL = $ayadn_last_page_ID_path + "/last_page_ID-#{value}"
 		else
-			fileURL = $ayadn_lastPageID_path + "/lastPageID-#{value}-#{target}"
+			fileURL = $ayadn_last_page_ID_path + "/last_page_ID-#{value}-#{target}"
 		end
 		loop do
 			begin
 				print "\r                                         \r"
-				lastPageID = $tools.fileOps("getlastpageid", fileURL)
+				last_page_ID = $tools.fileOps("getlastpageid", fileURL)
 				case value
 				when "global"
-					@hash = @api.getGlobal(lastPageID)
+					@hash = @api.getGlobal(last_page_ID)
 				when "unified"
-					@hash = @api.getUnified(lastPageID)
+					@hash = @api.getUnified(last_page_ID)
 				when "checkins", "photos", "conversations", "trending"
-					@hash = @api.getExplore(value, lastPageID)
+					@hash = @api.getExplore(value, last_page_ID)
 				when "mentions"
-					@hash = @api.getUserMentions(target, lastPageID)
+					@hash = @api.getUserMentions(target, last_page_ID)
 				when "posts"
-					@hash = @api.getUserPosts(target, lastPageID)
+					@hash = @api.getUserPosts(target, last_page_ID)
 				end
 				# todo: color post id if I'm mentioned
-				stream, lastPageID = completeStream
+				stream, last_page_ID = completeStream
 				displayScrollStream(stream)
-				if lastPageID != nil
-					$tools.fileOps("writelastpageid", fileURL, lastPageID)
+				if last_page_ID != nil
+					$tools.fileOps("writelastpageid", fileURL, last_page_ID)
 					print "\r                                         "
             		puts "\n\n"
             		$tools.countdown($countdown_1)
@@ -107,63 +107,63 @@ class AyaDN
 	end
 	def ayadnInteractions
 		puts $status.getInteractions
-		#$tools.fileOps("makedir", $ayadn_lastPageID_path)
-		#fileURL = $ayadn_lastPageID_path + "/lastPageID-interactions"
-		#lastPageID = $tools.fileOps("getlastpageid", fileURL)
+		#$tools.fileOps("makedir", $ayadn_last_page_ID_path)
+		#fileURL = $ayadn_last_page_ID_path + "/last_page_ID-interactions"
+		#last_page_ID = $tools.fileOps("getlastpageid", fileURL)
 		@hash = @api.getInteractions
-		#$tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
-		stream, lastPageID = @view.new(@hash).showInteractions
+		#$tools.fileOps("writelastpageid", fileURL, last_page_ID) unless last_page_ID == nil
+		stream, last_page_ID = @view.new(@hash).showInteractions
 		puts stream + "\n\n"
 	end
 	def ayadnGlobal
 		puts $status.getGlobal
-		fileURL = $ayadn_lastPageID_path + "/lastPageID-global"
-		lastPageID = $tools.fileOps("getlastpageid", fileURL)
-		@hash = @api.getGlobal(lastPageID)
-		stream, lastPageID = completeStream
-		$tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
+		fileURL = $ayadn_last_page_ID_path + "/last_page_ID-global"
+		last_page_ID = $tools.fileOps("getlastpageid", fileURL)
+		@hash = @api.getGlobal(last_page_ID)
+		stream, last_page_ID = completeStream
+		$tools.fileOps("writelastpageid", fileURL, last_page_ID) unless last_page_ID == nil
 		displayStream(stream)
 	end
 	def ayadnUnified
-		fileURL = $ayadn_lastPageID_path + "/lastPageID-unified"
-		lastPageID = $tools.fileOps("getlastpageid", fileURL)
+		fileURL = $ayadn_last_page_ID_path + "/last_page_ID-unified"
+		last_page_ID = $tools.fileOps("getlastpageid", fileURL)
 		puts $status.getUnified
-		@hash = @api.getUnified(lastPageID)
-		stream, lastPageID = completeStream
-		$tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
+		@hash = @api.getUnified(last_page_ID)
+		stream, last_page_ID = completeStream
+		$tools.fileOps("writelastpageid", fileURL, last_page_ID) unless last_page_ID == nil
 		displayStream(stream)
 	end
 	def ayadnHashtags(tag)
 		puts $status.getHashtags(tag)
 		@hash = @api.getHashtags(tag)
-		stream, lastPageID = completeStream
+		stream, last_page_ID = completeStream
 		displayStream(stream)
 	end
 	def ayadnExplore(explore)
-		fileURL = $ayadn_lastPageID_path + "/lastPageID-#{explore}"
-		lastPageID = $tools.fileOps("getlastpageid", fileURL)
+		fileURL = $ayadn_last_page_ID_path + "/last_page_ID-#{explore}"
+		last_page_ID = $tools.fileOps("getlastpageid", fileURL)
 		puts $status.getExplore(explore)
-		@hash = @api.getExplore(explore, lastPageID)
-		stream, lastPageID = completeStream
-		$tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
+		@hash = @api.getExplore(explore, last_page_ID)
+		stream, last_page_ID = completeStream
+		$tools.fileOps("writelastpageid", fileURL, last_page_ID) unless last_page_ID == nil
 		displayStream(stream)
 	end
 	def ayadnUserMentions(name)
-		fileURL = $ayadn_lastPageID_path + "/lastPageID-mentions-#{name}"
-		lastPageID = $tools.fileOps("getlastpageid", fileURL)
+		fileURL = $ayadn_last_page_ID_path + "/last_page_ID-mentions-#{name}"
+		last_page_ID = $tools.fileOps("getlastpageid", fileURL)
 		puts $status.mentionsUser(name)
-		@hash = @api.getUserMentions(name, lastPageID)
-		stream, lastPageID = completeStream
-		$tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
+		@hash = @api.getUserMentions(name, last_page_ID)
+		stream, last_page_ID = completeStream
+		$tools.fileOps("writelastpageid", fileURL, last_page_ID) unless last_page_ID == nil
 		displayStream(stream)
 	end
 	def ayadnUserPosts(name)
-		fileURL = $ayadn_lastPageID_path + "/lastPageID-posts-#{name}"
-		lastPageID = $tools.fileOps("getlastpageid", fileURL)
+		fileURL = $ayadn_last_page_ID_path + "/last_page_ID-posts-#{name}"
+		last_page_ID = $tools.fileOps("getlastpageid", fileURL)
 		puts $status.postsUser(name)
-		@hash = @api.getUserPosts(name, lastPageID)
-		stream, lastPageID = completeStream
-		$tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
+		@hash = @api.getUserPosts(name, last_page_ID)
+		stream, last_page_ID = completeStream
+		$tools.fileOps("writelastpageid", fileURL, last_page_ID) unless last_page_ID == nil
 		displayStream(stream)
 	end
 	def ayadnUserInfos(name)
@@ -188,11 +188,11 @@ class AyaDN
 	end
 	def ayadnGetMessages(target, action = nil)
 		if target != nil
-			fileURL = $ayadn_lastPageID_path + "/lastPageID-channels-#{target}"
-			lastPageID = $tools.fileOps("getlastpageid", fileURL) unless action == "all"
-			@hash = @api.getMessages(target, lastPageID)
-			messages_string, lastPageID = @view.new(@hash).showMessagesFromChannel
-			$tools.fileOps("writelastpageid", fileURL, lastPageID) unless lastPageID == nil
+			fileURL = $ayadn_last_page_ID_path + "/last_page_ID-channels-#{target}"
+			last_page_ID = $tools.fileOps("getlastpageid", fileURL) unless action == "all"
+			@hash = @api.getMessages(target, last_page_ID)
+			messages_string, last_page_ID = @view.new(@hash).showMessagesFromChannel
+			$tools.fileOps("writelastpageid", fileURL, last_page_ID) unless last_page_ID == nil
 			displayStream(messages_string)
 		else
 			loaded_channels = $tools.fileOps("loadchannels", nil)
@@ -230,7 +230,7 @@ class AyaDN
 		# show end of the stream after posting
 		if reply_to == nil
 			@hash = @api.getSimpleUnified
-			stream, lastPageID = completeStream
+			stream, last_page_ID = completeStream
 			displayStream(stream)
 		else
 			hash1 = @api.getPostReplies(reply_to)
@@ -245,7 +245,7 @@ class AyaDN
 				puts original_post
 			end
 			@hash = hash1.merge!(hash2)
-			stream, lastPageID = completeStream
+			stream, last_page_ID = completeStream
 			stream.sub!(/#{reply_to}/, reply_to.to_s.red.reverse_color) if first_of_unified_id.to_i < reply_to.to_i
 			stream.sub!(/#{my_post_id}/, my_post_id.to_s.green.reverse_color)
 			displayStream(stream)
@@ -351,13 +351,13 @@ class AyaDN
 	def ayadnStarredPosts(name)
 		puts $status.starsUser(name)
 		@hash = @api.getStarredPosts(name)
-		stream, lastPageID = completeStream
+		stream, last_page_ID = completeStream
 		displayStream(stream)
 	end
 	def ayadnConversation(postID)
 		puts $status.getPostReplies(postID)
 		@hash = @api.getPostReplies(postID)
-		stream, lastPageID = completeStream
+		stream, last_page_ID = completeStream
 		displayStream(stream)
 	end
 	def ayadnPostInfos(action, postID)
@@ -466,7 +466,7 @@ class AyaDN
 
 	def ayadnSearch(value)
 		@hash = @api.getSearch(value)
-		stream, lastPageID = completeStream
+		stream, last_page_ID = completeStream
 		displayStream(stream)
 	end
 

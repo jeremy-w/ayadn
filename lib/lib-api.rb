@@ -155,162 +155,162 @@ class AyaDN
 		end
 		def makeStreamURL(stream, value = nil)
 			@url = "https://alpha-api.app.net/"
-			case
-			when stream == "global"
+			case stream
+			when "global"
 				@url += 'stream/0/posts/stream/global?access_token='
 				@url += @token + '&include_deleted=0'
 				@url += '&include_html=0'
 				@url += "&count=#{$countGlobal}"
-			when stream == "unified"
+			when "unified"
 				@url += 'stream/0/posts/stream/unified?access_token='
 				@url += @token + '&include_deleted=1'
 				@url += '&include_html=0'
 				@url += '&include_directed_posts=1' unless $directedPosts == false
 				@url += "&count=#{$countUnified}"
-			when stream == "checkins"
+			when "checkins"
 				@url += 'stream/0/posts/stream/explore/'
-				@url += stream + "?access_token=#{@token}" + '&include_deleted=0&include_html=0&include_annotations=1'
+				@url += "#{stream}" + "?access_token=#{@token}" + '&include_deleted=0&include_html=0&include_annotations=1'
 				@url += "&count=#{$countCheckins}"
-			when stream == "trending", stream == "conversations", stream == "photos"
+			when "trending", "conversations", "photos"
 				@url += 'stream/0/posts/stream/explore/'
 				@url += "#{stream}" + "?access_token=#{@token}" + '&include_deleted=0&include_html=0'
 				@url += "&count=#{$countExplore}"
-			when stream == "tag"
+			when "tag"
 				@url += 'stream/0/posts/tag/'
 				@url += "#{value}"
-			when stream == "mentions"
+			when "mentions"
 				@url += 'stream/0/users/'
 				@url += "#{value}" 
 				@url += "/mentions"
 				@url += "/?access_token=#{@token}"
 				@url += '&include_html=0'
 				@url += "&count=#{$countMentions}"
-			when stream == "posts"
+			when "posts"
 				@url += 'stream/0/users/'
 				@url += "#{value}" 
 				@url += "/posts"
 				@url += "/?access_token=#{@token}"
 				@url += '&include_deleted=1&include_html=0'
 				@url += "&count=#{$countPosts}"
-			when stream == "userInfo"
+			when "userInfo"
 				@url += 'stream/0/users/'
 				@url += "#{value}" 
 				@url += "/?access_token=#{@token}"
 				@url += '&include_html=0'
-			when stream == "whoReposted"
+			when "whoReposted"
 				@url += 'stream/0/posts/'
 				@url += "#{value}" 
 				@url += "/reposters"
 				@url += "/?access_token=#{@token}"
 				@url += '&include_html=0'
-			when stream == "whoStarred"
+			when "whoStarred"
 				@url += 'stream/0/posts/'
 				@url += "#{value}" 
 				@url += "/stars"
 				@url += "/?access_token=#{@token}"
 				@url += '&include_html=0'
-			when stream == "singlePost"
+			when "singlePost"
 				@url += 'stream/0/posts/'
 				@url += "#{value}" 
 				@url += "/?access_token=#{@token}"
 				@url += "&include_annotations=1&include_html=0"
-			when stream == "starredPosts"
+			when "starredPosts"
 				@url += 'stream/0/users/'
 				@url += "#{value}" 
 				@url += "/stars"
 				@url += "/?access_token=#{@token}"
 				@url += '&include_deleted=0&include_html=0'
 				@url += "&count=#{$countStarred}"
-			when stream == "replies"
+			when "replies"
 				@url += 'stream/0/posts/'
 				@url += "#{value}" 
 				@url += "/replies"
 				@url += "/?access_token=#{@token}"
 				@url += '&include_html=0'
-			when stream == "star"
+			when "star"
 				@url += 'stream/0/posts/'
 				@url += "/#{value}" + "/star" + "/?access_token=#{@token}"
-			when stream == "repost"
+			when "repost"
 				@url += 'stream/0/posts/'
 				@url += "/#{value}" + "/repost"  + "/?access_token=#{@token}"
-			when stream == "follow"
+			when "follow"
 				@url += 'stream/0/users/'
 				@url += "#{value}"
 				@url += "/follow" 
 				@url += "/?access_token=#{@token}"
-			when stream == "followings"
+			when "followings"
 				@url += 'stream/0/users/'
 				@url += "#{value}"
 				@url += "/following" 
 				@url += "/?access_token=#{@token}"
 				@url += '&include_html=0'
-			when stream == "followers"
+			when "followers"
 				@url += 'stream/0/users/'
 				@url += "#{value}"
 				@url += "/followers" 
 				@url += "/?access_token=#{@token}"
 				@url += '&include_html=0'
-			when stream == "muted"
+			when "muted"
 				@url += 'stream/0/users/'
 				@url += "#{value}"
 				@url += "/muted" 
 				@url += "/?access_token=#{@token}"
 				@url += '&include_html=0'
-			when stream == "mute"
+			when "mute"
 				@url += 'stream/0/users/'
 				@url += "#{value}"
 				@url += "/mute" 
 				@url += "/?access_token=#{@token}"
-			when stream == "search"
+			when "search"
 				@url += 'stream/0/posts/'
 				@url += "search"
 				@url += "?text=#{value}"
 				@url += "&include_annotations=1"
 				@url += "&access_token=#{@token}"
 				@url += '&include_html=0'
-			when stream == "interactions"
+			when "interactions"
 				@url += 'stream/0/users/'
 				@url += "me/interactions?"
 				@url += "&access_token=#{@token}"
-			when stream == "channels"
+			when "channels"
 				@url += "stream/0/channels"
 				@url += "?access_token=#{@token}"
-			when stream == "files_list"
+			when "files_list"
 				@url += "stream/0/users/me/files"
 				@url += "?access_token=#{@token}"
-			when stream == "get_file"
+			when "get_file"
 				@url += "stream/0/files/"
 				@url += "#{value}"
 				@url += "?access_token=#{@token}"
 
 			end
 		end
-		def checkLastPageID(lastPageID = nil)
-			@url += "&since_id=#{lastPageID}" if lastPageID != nil
+		def checkLastPageID(last_page_ID = nil)
+			@url += "&since_id=#{last_page_ID}" if last_page_ID != nil
 		end
 		def getUniqueMessage(channel_id, message_id)
 			@url = "https://alpha-api.app.net/stream/0/channels/#{channel_id}/messages/#{message_id}?access_token=#{@token}"
 			@url += "&include_annotations=1"
 			getHash
 		end
-		def getMessages(channel, lastPageID)
+		def getMessages(channel, last_page_ID)
 			@url += "stream/0/channels/#{channel}/messages?access_token=#{@token}&count=100"
 			@url += "&include_annotations=1"
-			checkLastPageID(lastPageID)
+			checkLastPageID(last_page_ID)
 			getHash
 		end
 		def getChannels
 			@url = makeStreamURL("channels")
 			getHash
 		end
-		def getGlobal(lastPageID = nil)
+		def getGlobal(last_page_ID = nil)
 			@url = makeStreamURL("global")
-			checkLastPageID(lastPageID)
+			checkLastPageID(last_page_ID)
 			getHash
 		end	
-		def getUnified(lastPageID = nil)
+		def getUnified(last_page_ID = nil)
 			@url = makeStreamURL("unified")
-			checkLastPageID(lastPageID)
+			checkLastPageID(last_page_ID)
 			getHash
 		end
 		def getSimpleUnified
@@ -324,26 +324,26 @@ class AyaDN
 		end
 		def getInteractions
 			@url = makeStreamURL("interactions")
-			#checkLastPageID(lastPageID)
+			#checkLastPageID(last_page_ID)
 			getHash
 		end
 		def getHashtags(tag)
 			@url = makeStreamURL("tag", tag)
 			getHash
 		end
-		def getExplore(explore, lastPageID = nil)
+		def getExplore(explore, last_page_ID = nil)
 			@url = makeStreamURL(explore)
-			checkLastPageID(lastPageID)
+			checkLastPageID(last_page_ID)
 			getHash
 		end
-		def getUserMentions(name, lastPageID = nil)
+		def getUserMentions(name, last_page_ID = nil)
 			@url = makeStreamURL("mentions", name)
-			checkLastPageID(lastPageID)
+			checkLastPageID(last_page_ID)
 			getHash
 		end
-		def getUserPosts(name, lastPageID = nil)
+		def getUserPosts(name, last_page_ID = nil)
 			@url = makeStreamURL("posts", name)
-			checkLastPageID(lastPageID)
+			checkLastPageID(last_page_ID)
 			getHash
 		end
 		def getUserInfos(name)
