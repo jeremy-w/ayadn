@@ -1,7 +1,7 @@
 AYADN
 =====
 
-[App.net](http://app.net) command-line client written in Ruby.
+[App.net](http://app.net) command-line client developed in Ruby.
 
 ## Features
 
@@ -53,9 +53,9 @@ AYADN
 
 - skip posts from specific clients (like IFTTT, PourOver, etc)
 
-- and more! *([list of commands](https://github.com/ericdke/ayadn#list-of-commands))*  
+- [and more!](https://github.com/ericdke/ayadn#list-of-commands)
 
-![AyaDN displaying @ericd's unified stream](http://dl.dropboxusercontent.com/s/7frr1666lmsdzu7/2013-12-03%20at%2018.14.png)  
+*See the [AyaDN page](http://ayadn-app.net) for screenshots.*  
 
 ## TL;DR
 
