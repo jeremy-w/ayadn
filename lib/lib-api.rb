@@ -275,6 +275,9 @@ class AyaDN
 			when stream == "channels"
 				@url += "stream/0/channels"
 				@url += "?access_token=#{@token}"
+			when stream == "files_list"
+				@url += "stream/0/users/me/files"
+				@url += "?access_token=#{@token}"
 
 			end
 		end
@@ -479,6 +482,10 @@ class AyaDN
 		end
 		def getSearch(value)
 			@url = makeStreamURL("search", value)
+			getHash
+		end
+		def getFilesList
+			@url = makeStreamURL("files_list")
 			getHash
 		end
 	end

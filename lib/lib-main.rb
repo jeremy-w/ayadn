@@ -616,6 +616,17 @@ class AyaDN
  		resp = @api.setFileContentUpload(file_id, file_name, file_token)
  		puts resp.inspect
  	end
+
+
+ 	def ayadnFiles(action, target)
+ 		case action
+ 		when "list"
+ 			puts "\nGetting the complete list of your files...\n\n".green
+ 			@hash = @api.getFilesList
+ 			view = @view.new(@hash).showFilesList
+ 			puts view
+ 		end
+ 	end
 end
 
 

@@ -114,6 +114,8 @@ when "list"
 		(arg3 =~ /^@/ || arg3 == "me") ? client.ayadnShowList("followers", arg3) : (puts $status.errorSyntax)
 	elsif arg2 == "muted"
 		client.ayadnShowList("muted", "me")
+	elsif arg2 == "files"
+		client.ayadnFiles("list", nil)
 	else
 		puts $status.errorSyntax
 	end
