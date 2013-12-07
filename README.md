@@ -53,6 +53,10 @@ AYADN
 
 - skip posts from specific clients (like IFTTT, PourOver, etc)
 
+- list your files stored on your ADN account
+
+- download a file from your ADN account
+
 - [and more!](https://github.com/ericdke/ayadn#list-of-commands)
 
 *See the [AyaDN page](http://ayadn-app.net) for screenshots.*  
@@ -241,6 +245,8 @@ ayadn unfollow @ericd
 ayadn mute @ericd
 ayadn unmute @ericd
 ayadn interactions
+ayadn list files
+ayadn download 286458
 ayadn messages
 ayadn messages 12345
 ayadn messages 12345 all

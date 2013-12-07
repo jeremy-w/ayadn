@@ -1,7 +1,14 @@
 AYADN
 =====
 
-AYADN is a learning exercise: while it's fully functional, it's still very alpha.  
+AYADN is a learning exercise: while it's fully functional, it's still very alpha (remember I'm a beginner with Ruby).  
+
+## 2013-12-07 v0.34
+- List your ADN files!
+- Download a file from your ADN account!
+- authorization bugfix
+- explore streams bugfix
+- various bugfixes and improvements
 
 ## 2013-12-02 v0.33
 - Skip specific clients!

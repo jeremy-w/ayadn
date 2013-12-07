@@ -621,19 +621,29 @@ class AyaDN
  	def ayadnFiles(action, target)
  		case action
  		when "list"
+ 			with_url = false
  			puts "\nGetting the list of your recent files...\n\n".green
  			@hash = @api.getFilesList
- 			view, file_url = @view.new(@hash).showFilesList
+ 			view, file_url = @view.new(@hash).showFilesList(with_url)
  			puts view
  		when "download"
- 			puts "\nDownloading file ".green + target.to_s.brown
+ 			with_url = true
  			@hash = @api.getSingleFile(target)
- 			view, file_url = @view.new(@hash).showFilesList(with_url = true)
+ 			view, file_url, file_name = @view.new(@hash).showFileInfo(with_url)
+ 			puts "\nDownloading file ".green + target.to_s.brown
  			puts view
-
- 			# save image
-
- 			# puts "\nFile downloaded in ".green + 
+ 			$tools.fileOps("makedir", $ayadn_files_path)
+ 			new_file_name = "#{target}_#{file_name}"
+ 			download_file_path = $ayadn_files_path + "/#{new_file_name}"
+ 			if !File.exists?download_file_path
+ 				the_file = @api.getResponse(file_url)
+	 			f = File.new(download_file_path, "wb")
+	 				f.puts(the_file)
+	 			f.close
+	 			puts "File downloaded in ".green + $ayadn_files_path.pink + "/#{new_file_name}".brown + "\n\n"
+	 		else
+	 			puts "\nERROR: file already exists in ".red + "#{$ayadn_files_path}".brown
+ 			end
  		end
  	end
 end

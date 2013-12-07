@@ -72,6 +72,7 @@ class AyaDN
                 $ayadn_data_path = Dir.home + $ayadnFiles
                 $ayadn_posts_path = $ayadn_data_path + "/#{$identityPrefix}/posts"
                 $ayadn_lists_path = $ayadn_data_path + "/#{$identityPrefix}/lists"
+                $ayadn_files_path = $ayadn_data_path + "/#{$identityPrefix}/files"
                 $ayadn_lastPageID_path = $ayadn_data_path + "/#{$identityPrefix}/.pagination"
                 $ayadn_messages_path = $ayadn_data_path + "/#{$identityPrefix}/messages"
                 $ayadn_authorization_path = $ayadn_data_path + "/#{$identityPrefix}/.auth"
@@ -94,6 +95,7 @@ class AyaDN
                 $identityPrefix = "me"
                 $ayadn_posts_path = $ayadn_data_path + "/#{$identityPrefix}/posts"
                 $ayadn_lists_path = $ayadn_data_path + "/#{$identityPrefix}/lists"
+                $ayadn_files_path = $ayadn_data_path + "/#{$identityPrefix}/files"
                 $ayadn_lastPageID_path = $ayadn_data_path + "/#{$identityPrefix}/.pagination"
                 $ayadn_messages_path = $ayadn_data_path + "/#{$identityPrefix}/messages"
                 $ayadn_authorization_path = $ayadn_data_path + "/#{$identityPrefix}/.auth"

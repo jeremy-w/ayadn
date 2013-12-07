@@ -419,12 +419,57 @@ class AyaDN
 			end
 			return usersHash, pagination_array
 		end
-		def showFilesList(with_url = false)
-			if with_url == false
-				resp_hash = getData(@hash)
+		def showFileInfo(with_url)
+			list_string = ""
+			file_url = nil
+			resp_hash = getDataNormal(@hash)
+			file_name = resp_hash['name']
+			file_token = resp_hash['file_token']
+			file_source_name = resp_hash['source']['name']
+			file_source_url = resp_hash['source']['link']
+			file_created_at = resp_hash['created_at']
+			created_day = file_created_at[0...10]
+			created_hour = file_created_at[11...19]
+			file_kind = resp_hash['kind']
+			file_id = resp_hash['id']
+			file_size = resp_hash['size']
+			file_size_converted = file_size.to_filesize unless file_size == nil
+			file_public = resp_hash['public']
+			file_url_expires = resp_hash['url_expires']
+			derived_files = resp_hash['derived_files']
+			# list_string += "\nID: ".cyan + file_id.brown
+			list_string += "\nName: ".cyan + file_name.green
+			list_string += "\nKind: ".cyan + file_kind.pink
+			list_string += "\nSize: ".cyan + file_size_converted.reddish unless file_size == nil
+			list_string += "\nDate: ".cyan + created_day.green + " " + created_hour.green
+			list_string += "\nSource: ".cyan + file_source_name.brown + " - #{file_source_url}".brown
+			if file_public == true
+				list_string += "\nThis file is ".cyan + "public".blue
+				file_url = resp_hash['url_permanent']
 			else
-				resp_hash = getDataNormal(@hash)
+				list_string += "\nThis file is ".cyan + "private".red
+				file_url = resp_hash['url']
 			end
+			if with_url == true
+				list_string += "\nURL: ".cyan + file_url
+				# if derived_files != nil
+				# 	if derived_files['image_thumb_960r'] != nil
+				# 		file_derived_bigthumb_name = derived_files['image_thumb_960r']['name']
+				# 		file_derived_bigthumb_url = derived_files['image_thumb_960r']['url']
+				# 	end
+				# 	if derived_files['image_thumb_200s'] != nil
+				# 		file_derived_smallthumb_name = derived_files['image_thumb_200s']['name']
+				# 		file_derived_smallthumb_url = derived_files['image_thumb_200s']['url']
+				# 	end
+				# 	list_string += "\nBig thumbnail: ".cyan + file_derived_bigthumb_url unless file_derived_bigthumb_url == nil
+				# 	list_string += "\nSmall thumbnail: ".cyan + file_derived_smallthumb_url unless file_derived_smallthumb_url == nil
+				# end
+			end
+			list_string += "\n\n"
+			return list_string, file_url, file_name
+		end
+		def showFilesList(with_url)
+			resp_hash = getData(@hash)
 			list_string = ""
 			file_url = nil
 			resp_hash.each do |item|
