@@ -609,12 +609,6 @@ class AyaDN
  		# puts "\nUploading ".green + file_name.brown + "\n"
  		# response = @api.createIncompleteFileUpload(file_name)
  		# puts response.inspect        #SUCCESS
- 		file_token = "atJjQCEDcmlIelT8-otW4wRR01uGuFfkPbchKmYgn0fwH1HtjAAakGadM6BiH0IsyfaHEfcpQpmGy0kigz49N4vxLgi8_jBN_nJ9FUhU2QGEBd4VLkjXDyFXxzHeT_ma9eWa_TslM5oJ-wbACZ6IAej3OkiXK48Z6M8fTXHsuY0z-hebAiXnlNTKdnJUvv4Gp"
- 		file_token_read = "afs842f_6D8x62InBHB4lWLA7htIIGWjs7KwisrIWk21db7ByUyV6Z-aJAGAxsjw07ezMepytgglgOJFhdZxHzcXR8WHE1jP5CaxcxP5r47NAg_xSVT_60o0rJnkyiFGXIIu98hjlEZNMVm_8g7Eq8EtdN-g6mvvfcC66bgWjEfxUtLcs6pNiOD7D8r6J6CmL"
- 		file_permanent_url = "https://files.app.net/1/282439/afs842f_6D8x62InBHB4lWLA7htIIGWjs7KwisrIWk21db7ByUyV6Z-aJAGAxsjw07ezMepytgglgOJFhdZxHzcXR8WHE1jP5CaxcxP5r47NAg_xSVT_60o0rJnkyiFGXIIu98hjlEZNMVm_8g7Eq8EtdN-g6mvvfcC66bgWjEfxUtLcs6pNiOD7D8r6J6CmL"
- 		file_id = "282439"
- 		resp = @api.setFileContentUpload(file_id, file_name, file_token)
- 		puts resp.inspect
  	end
 
 
@@ -627,6 +621,10 @@ class AyaDN
  			view, file_url = @view.new(@hash).showFilesList(with_url)
  			puts view
  		when "download"
+ 			if !target.is_integer?
+ 				puts $status.errorSyntax
+ 				exit
+ 			end
  			with_url = true
  			@hash = @api.getSingleFile(target)
  			view, file_url, file_name = @view.new(@hash).showFileInfo(with_url)
@@ -642,10 +640,11 @@ class AyaDN
 	 			f.close
 	 			puts "File downloaded in ".green + $ayadn_files_path.pink + "/#{new_file_name}".brown + "\n\n"
 	 		else
-	 			puts "\nERROR: file already exists in ".red + "#{$ayadn_files_path}".brown
+	 			puts "ERROR: ".red + "#{new_file_name} ".pink + "already exists in ".red + "#{$ayadn_files_path}".brown + "\n\n"
  			end
  		end
  	end
+
 end
 
 
