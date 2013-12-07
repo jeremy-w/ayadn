@@ -229,6 +229,10 @@ when "random"
 		end
 	end
 
+# experimenting
+when "upload"
+	client.ayadnFileUpload(arg2)
+
 else
 	# if not any known argument
 	option = ARGV

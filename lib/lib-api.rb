@@ -26,6 +26,45 @@ class AyaDN
 				abort("HTTP ERROR :\n".red + "#{e}\n".red)
 			end
 		end
+
+		# experimenting
+		def createIncompleteFileUpload(file_name) #this part works
+			url = "https://alpha-api.app.net/stream/0/files"
+			https, request = connectWithHTTP(url)
+			payload = {
+				"kind" => "image",
+				"type" => "com.ayadn.files",
+				"name" => File.basename(file_name),
+				"public" => true
+			}.to_json
+			response = https.request(request, payload)
+			callback = response.body
+		end
+		def setFileContentUpload(file_id, file_path, file_token) #this one doesn't
+			url = "https://alpha-api.app.net/stream/0/files/#{file_id}/content?file_token=#{file_token}"
+			uri = URI("#{url}")
+
+			#check with the docs to format it properly
+			# boundary="AaB03xEd73XiiiZkK"
+			# post_body = []
+			# post_body << "Content-Type: image/jpeg"
+			# post_body << File.read(file_path, "rb")
+			# post_body << "--#{boundary}--"
+			# https = Net::HTTP.new(uri.host,uri.port)
+			# https.use_ssl = true
+			# https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+			# request = Net::HTTP::Post.new(uri.request_uri)
+			# request.body = post_body.join
+			# request["Content-Type"] = "multipart/form-data, boundary=#{boundary}"
+			# request["Authorization"] = "Bearer #{@token}"
+			# puts request.to_s
+			# response = https.request(request)
+			# puts response.code
+			# puts response.body
+			# exit
+		end
+
+
 		def connectWithHTTP(url)
 			uri = URI("#{url}")
 			https = Net::HTTP.new(uri.host,uri.port)
@@ -270,7 +309,7 @@ class AyaDN
 		def getSimpleUnified
 			@url = 'https://alpha-api.app.net/'
 			@url += 'stream/0/posts/stream/unified?access_token='
-			@url += @token + '&include_deleted=0'
+			@url += "#{@token}" + '&include_deleted=0'
 			@url += '&include_html=0'
 			@url += '&include_directed_posts=1' unless $directedPosts == false
 			@url += "&count=#{$countStreamBack}"

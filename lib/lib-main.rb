@@ -228,7 +228,7 @@ class AyaDN
 		puts @view.new(@hash).buildPostInfo(@hash, isMine = true)
 		puts $status.postSent
 		# show end of the stream after posting
-		if reply_to.empty?
+		if reply_to == nil
 			@hash = @api.getSimpleUnified
 			stream, lastPageID = completeStream
 			displayStream(stream)
@@ -602,6 +602,19 @@ class AyaDN
 		else
 			puts "Current skipped sources: ".green + $skipped_sources.join(", ").red + "\n\n"
 		end
+ 	end
+
+ 	# experimenting
+ 	def ayadnFileUpload(file_name)
+ 		# puts "\nUploading ".green + file_name.brown + "\n"
+ 		# response = @api.createIncompleteFileUpload(file_name)
+ 		# puts response.inspect        #SUCCESS
+ 		file_token = "atJjQCEDcmlIelT8-otW4wRR01uGuFfkPbchKmYgn0fwH1HtjAAakGadM6BiH0IsyfaHEfcpQpmGy0kigz49N4vxLgi8_jBN_nJ9FUhU2QGEBd4VLkjXDyFXxzHeT_ma9eWa_TslM5oJ-wbACZ6IAej3OkiXK48Z6M8fTXHsuY0z-hebAiXnlNTKdnJUvv4Gp"
+ 		file_token_read = "afs842f_6D8x62InBHB4lWLA7htIIGWjs7KwisrIWk21db7ByUyV6Z-aJAGAxsjw07ezMepytgglgOJFhdZxHzcXR8WHE1jP5CaxcxP5r47NAg_xSVT_60o0rJnkyiFGXIIu98hjlEZNMVm_8g7Eq8EtdN-g6mvvfcC66bgWjEfxUtLcs6pNiOD7D8r6J6CmL"
+ 		file_permanent_url = "https://files.app.net/1/282439/afs842f_6D8x62InBHB4lWLA7htIIGWjs7KwisrIWk21db7ByUyV6Z-aJAGAxsjw07ezMepytgglgOJFhdZxHzcXR8WHE1jP5CaxcxP5r47NAg_xSVT_60o0rJnkyiFGXIIu98hjlEZNMVm_8g7Eq8EtdN-g6mvvfcC66bgWjEfxUtLcs6pNiOD7D8r6J6CmL"
+ 		file_id = "282439"
+ 		resp = @api.setFileContentUpload(file_id, file_name, file_token)
+ 		puts resp.inspect
  	end
 end
 
