@@ -622,14 +622,20 @@ class AyaDN
  				beforeID = nil
  				pagination_array = []
  				reverse = true
+ 				i = 1
 		    	loop do
 		    		@hash = @api.getFilesList(beforeID)
 		    		view, file_url, pagination_array = @view.new(@hash).showFilesList(with_url, reverse)
 		    		beforeID = pagination_array.last
 		    		break if beforeID == nil
-		    		print "\rPlease wait, fetching page (".cyan + "#{beforeID}".pink + ")...\n".cyan unless beforeID == nil
-	 				#big_view += view
+		    		#big_view += view
 	 				puts view
+	 				i += 1
+		    		if pagination_array.first != nil
+		    			$tools.countdown(5) unless i == 2
+		    			print "\r" + (" " * 40)
+		    			print "\n\nPlease wait, fetching page (".cyan + "#{beforeID}".pink + ")...\n".cyan unless i == 2
+		    		end
 				end
 				puts "\n"
 			else
