@@ -167,6 +167,12 @@ class AyaDN
 				@url += '&include_html=0'
 				@url += '&include_directed_posts=1' unless $directedPosts == false
 				@url += "&count=#{$countUnified}"
+			when "simple_unified"
+				@url += 'stream/0/posts/stream/unified?access_token='
+				@url += @token + '&include_deleted=0'
+				@url += '&include_html=0'
+				@url += '&include_directed_posts=1' unless $directedPosts == false
+				@url += "&count=#{$countStreamBack}"
 			when "checkins"
 				@url += 'stream/0/posts/stream/explore/'
 				@url += "#{stream}" + "?access_token=#{@token}" + '&include_deleted=0&include_html=0&include_annotations=1'
@@ -286,6 +292,7 @@ class AyaDN
 				@url += "stream/0/files/"
 				@url += "?ids=#{value}"
 				@url += "&access_token=#{@token}"
+			
 
 			end
 		end
@@ -318,12 +325,7 @@ class AyaDN
 			getHash
 		end
 		def getSimpleUnified
-			@url = 'https://alpha-api.app.net/'
-			@url += 'stream/0/posts/stream/unified?access_token='
-			@url += "#{@token}" + '&include_deleted=0'
-			@url += '&include_html=0'
-			@url += '&include_directed_posts=1' unless $directedPosts == false
-			@url += "&count=#{$countStreamBack}"
+			@url = makeStreamURL("simple_unified")
 			getHash
 		end
 		def getInteractions

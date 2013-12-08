@@ -228,7 +228,7 @@ class AyaDN
 		puts @view.new(@hash).buildPostInfo(@hash, isMine = true)
 		puts $status.postSent
 		# show end of the stream after posting
-		if reply_to == nil
+		if reply_to.empty?
 			@hash = @api.getSimpleUnified
 			stream, last_page_ID = completeStream
 			displayStream(stream)
