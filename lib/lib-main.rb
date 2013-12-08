@@ -651,7 +651,8 @@ class AyaDN
 			end
  			puts big_view
  		when "download"
- 			with_url = true
+ 			#with_url = true
+ 			with_url = false
  			targets_array = target.split(",")
  			number_of_targets = targets_array.length
  			$tools.fileOps("makedir", $ayadn_files_path)
@@ -757,9 +758,12 @@ class AyaDN
 			meta = resp['meta']
 			if meta['code'] == 200
 				puts "\nDone!\n".green
+				data = resp['data']
+ 				changed_file_id = data['id']
 				@hash = @api.getFilesList(nil)
 				reverse = false
 				view, file_url, pagination_array = @view.new(@hash).showFilesList(with_url, reverse)
+				view.gsub!("#{changed_file_id}", "#{changed_file_id}".reverse_color)
 				puts view
 			else
 				puts "\nERROR: #{meta.inspect}\n".red
