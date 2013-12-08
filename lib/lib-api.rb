@@ -507,6 +507,10 @@ class AyaDN
 			@url = makeStreamURL("get_multiple_files", file_ids)
 			getHash
 		end
+		def deleteFile(file_id)
+			@url = makeStreamURL("get_file", file_id)
+			restDelete
+		end
 	end
 end
 

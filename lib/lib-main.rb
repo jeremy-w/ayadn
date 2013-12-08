@@ -718,9 +718,36 @@ class AyaDN
 				view.gsub!("#{id}", "#{id}".reverse_color)
 			end
 			puts view
+		when "remove", "delete-file"
+			puts "\nWARNING: ".red + "delete a file ONLY is you're sure it's not referenced by a post or a message.\n\n".pink
+			puts "Do you wish to continue? (y/N) ".cyan
+			input = STDIN.getch
+			if input == ("y" || "Y")
+				puts "\nPlease wait...".green
+				resp = JSON.parse(@api.deleteFile(target))
+				meta = resp['meta']
+ 				if meta['code'] == 200
+ 					puts "\n\nDone!\n".green
+ 				else
+ 					puts "\n\nERROR: #{meta.inspect}\n".red
+ 				end
+			else
+				puts "\n\nCanceled.\n\n".red
+				exit
+			end
+
+
+		when "backup"
+			# backup all my files locally
+
+		when "public"
+			# make private file public
+
+		when "private"
+			# make public file private
+
  		end
  	end
-
 end
 
 

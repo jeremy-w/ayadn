@@ -231,12 +231,7 @@ when "random"
 		end
 	end
 
-# experimenting
-when "upload"
-	#client.ayadnFileUpload(arg2)
-	client.ayadnFiles(arg1, arg2, nil)
-
-when "download"
+when "upload", "download", "remove", "delete-file"
 	client.ayadnFiles(arg1, arg2, nil)
 
 else

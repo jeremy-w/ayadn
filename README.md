@@ -19,6 +19,8 @@ AYADN
 
 - send a private message
 
+- read your private messages
+
 - follow/unfollow a user
 
 - mute/unmute a user
@@ -53,9 +55,9 @@ AYADN
 
 - skip posts from specific clients (like IFTTT, PourOver, etc)
 
-- list your files stored on your ADN account
+- list/download/delete files from your ADN account
 
-- download your files from your ADN account
+- upload files to your ADN account *(no Windows support)*
 
 - [and more!](https://github.com/ericdke/ayadn#list-of-commands)
 
@@ -249,6 +251,8 @@ ayadn list files
 ayadn list files all
 ayadn download 286458
 ayadn download 286458,286797
+ayadn upload /path/to/kitten.jpg
+ayadn delete-file 286458
 ayadn messages
 ayadn messages 12345
 ayadn messages 12345 all
