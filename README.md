@@ -246,6 +246,7 @@ ayadn mute @ericd
 ayadn unmute @ericd
 ayadn interactions
 ayadn list files
+ayadn list files all
 ayadn download 286458
 ayadn download 286458,286797
 ayadn messages
