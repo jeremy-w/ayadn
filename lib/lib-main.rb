@@ -656,7 +656,8 @@ class AyaDN
 	 			view, file_url, file_name = @view.new(@hash).showFileInfo(with_url)
 	 			puts "\nDownloading file ".green + target.to_s.brown
 	 			puts view
-	 			new_file_name = "#{target}_#{file_name}"
+	 			#new_file_name = "#{target}_#{file_name}" # should put target before .ext instead
+	 			new_file_name = "#{file_name}"
 	 			download_file_path = $ayadn_files_path + "/#{new_file_name}"
 	 			if !File.exists?download_file_path
 	 				the_file = @api.getResponse(file_url)
