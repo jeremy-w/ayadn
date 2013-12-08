@@ -64,6 +64,17 @@ class AyaDN
 			# exit
 		end
 
+		def httpPutFile(file, data) # data must be json
+			url = "https://alpha-api.app.net/stream/0/files/#{file}"
+			uri = URI("#{url}")
+			https = Net::HTTP.new(uri.host,uri.port)
+			https.use_ssl = true
+			https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+			request = Net::HTTP::Put.new(uri.path)
+			request["Authorization"] = "Bearer #{@token}"
+			request["Content-Type"] = "application/json"
+			response = https.request(request, data)
+		end
 
 		def connectWithHTTP(url)
 			uri = URI("#{url}")

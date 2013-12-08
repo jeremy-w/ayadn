@@ -55,7 +55,9 @@ AYADN
 
 - skip posts from specific clients (like IFTTT, PourOver, etc)
 
-- list/download/delete files from your ADN account
+- list, download, delete files from your ADN account
+
+- change file attribute: public/private
 
 - upload files to your ADN account *(no Windows support)*
 
@@ -252,12 +254,14 @@ ayadn list files all
 ayadn download 286458
 ayadn download 286458,286797
 ayadn upload /path/to/kitten.jpg
+ayadn private 286458
+ayadn public 286458
 ayadn delete-file 286458
+ayadn search ruby
+ayadn search ruby,json
 ayadn messages
 ayadn messages 12345
 ayadn messages 12345 all
-ayadn search ruby
-ayadn search ruby,json
 ayadn star 15723266
 ayadn unstar 15723266
 ayadn repost 15723266

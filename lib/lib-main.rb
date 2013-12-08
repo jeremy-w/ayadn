@@ -218,6 +218,8 @@ class AyaDN
 		end
 	end
 
+
+
 	def ayadnSendPost(text, reply_to = nil)
 		abort($status.emptyPost) if (text.empty? || text == nil)
 		puts $status.sendPost
@@ -269,6 +271,7 @@ class AyaDN
 			abort($status.errorMessageTooLong(real_length, to_remove))
 		end
 	end
+
 	def ayadnComposePost(reply_to = "", mentions_list = "", my_username = "")
 		puts $status.writePost
 		max_char = 256
@@ -604,11 +607,12 @@ class AyaDN
 		end
  	end
 
- 	# experimenting
+ 	# experimenting without curl
  	def ayadnFileUpload(file_name)
  		# puts "\nUploading ".green + file_name.brown + "\n"
  		# response = @api.createIncompleteFileUpload(file_name)
  		# puts response.inspect        #SUCCESS
+ 		# THEN multipart => #FAIL
  	end
 
 
@@ -721,7 +725,7 @@ class AyaDN
 			puts view
 		when "remove", "delete-file"
 			puts "\nWARNING: ".red + "delete a file ONLY is you're sure it's not referenced by a post or a message.\n\n".pink
-			puts "Do you wish to continue? (y/N) ".cyan
+			puts "Do you wish to continue? (y/N) ".reddish
 			input = STDIN.getch
 			if input == ("y" || "Y")
 				puts "\nPlease wait...".green
@@ -736,17 +740,30 @@ class AyaDN
 				puts "\n\nCanceled.\n\n".red
 				exit
 			end
-
-
-		when "backup"
-			# backup all my files locally
-
-		when "public"
-			# make private file public
-
-		when "private"
-			# make public file private
-
+		when "public", "private"
+			if action == "public"
+				puts "\nChanging file attribute...".green
+				data = {
+					"public" => true
+				}.to_json
+			elsif action == "private"
+				puts "\nChanging file attribute...".green
+				data = {
+					"public" => false
+				}.to_json
+			end
+			response = @api.httpPutFile(target, data)
+			resp = JSON.parse(response.body)
+			meta = resp['meta']
+			if meta['code'] == 200
+				puts "\nDone!\n".green
+				@hash = @api.getFilesList(nil)
+				reverse = false
+				view, file_url, pagination_array = @view.new(@hash).showFilesList(with_url, reverse)
+				puts view
+			else
+				puts "\nERROR: #{meta.inspect}\n".red
+			end
  		end
  	end
 end

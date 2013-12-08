@@ -504,24 +504,25 @@ class AyaDN
 				list_string += "\nSource: ".cyan + file_source_name.brown + " - #{file_source_url}".brown
 				if file_public == true
 					list_string += "\nThis file is ".cyan + "public".blue
+					list_string += "\nLink: ".cyan + item['url_short'].magenta
 				else
 					list_string += "\nThis file is ".cyan + "private".red
-				end
-				if with_url == true
-					file_url = item['url_permanent']
-					list_string += "\nURL: ".cyan + file_url.brown
-					# if derived_files != nil
-					# 	if derived_files['image_thumb_960r'] != nil
-					# 		file_derived_bigthumb_name = derived_files['image_thumb_960r']['name']
-					# 		file_derived_bigthumb_url = derived_files['image_thumb_960r']['url']
-					# 	end
-					# 	if derived_files['image_thumb_200s'] != nil
-					# 		file_derived_smallthumb_name = derived_files['image_thumb_200s']['name']
-					# 		file_derived_smallthumb_url = derived_files['image_thumb_200s']['url']
-					# 	end
-					# 	list_string += "\nBig thumbnail: ".cyan + file_derived_bigthumb_url unless file_derived_bigthumb_url == nil
-					# 	list_string += "\nSmall thumbnail: ".cyan + file_derived_smallthumb_url unless file_derived_smallthumb_url == nil
-					# end
+					if with_url == true
+						file_url = item['url']
+						list_string += "\nURL: ".cyan + file_url.brown
+						# if derived_files != nil
+						# 	if derived_files['image_thumb_960r'] != nil
+						# 		file_derived_bigthumb_name = derived_files['image_thumb_960r']['name']
+						# 		file_derived_bigthumb_url = derived_files['image_thumb_960r']['url']
+						# 	end
+						# 	if derived_files['image_thumb_200s'] != nil
+						# 		file_derived_smallthumb_name = derived_files['image_thumb_200s']['name']
+						# 		file_derived_smallthumb_url = derived_files['image_thumb_200s']['url']
+						# 	end
+						# 	list_string += "\nBig thumbnail: ".cyan + file_derived_bigthumb_url unless file_derived_bigthumb_url == nil
+						# 	list_string += "\nSmall thumbnail: ".cyan + file_derived_smallthumb_url unless file_derived_smallthumb_url == nil
+						# end
+					end
 				end
 				list_string += "\n"
 			end

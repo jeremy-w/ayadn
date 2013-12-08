@@ -231,7 +231,7 @@ when "random"
 		end
 	end
 
-when "upload", "download", "remove", "delete-file"
+when "upload", "download", "remove", "delete-file", "private", "public"
 	client.ayadnFiles(arg1, arg2, nil)
 
 else
