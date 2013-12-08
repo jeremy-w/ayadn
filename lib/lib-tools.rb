@@ -196,6 +196,9 @@ class AyaDN
                 end
             end
         end
+        def uploadImage(file, token)
+            resp = `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F content=@#{file} -X POST`
+        end
 
 		def colorize(contentText)
 			content = Array.new

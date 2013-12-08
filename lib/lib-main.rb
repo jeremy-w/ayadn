@@ -687,6 +687,37 @@ class AyaDN
 		 			end
 		 		end
 	 		end
+	 	when "upload"
+	 		case RbConfig::CONFIG['host_os']     
+            when /mswin|mingw|cygwin/
+            	puts "\nThis feature doesn't work on Windows yet. Sorry.\n\n".red
+            	exit
+            end
+	 		targets_array = target.split(",")
+ 			number_of_targets = targets_array.length
+ 			$tools.fileOps("makedir", $ayadn_files_path)
+ 			uploaded_ids = []
+ 			targets_array.each do |file|
+ 				file_name = File.basename(file)
+ 				puts "Uploading ".cyan + "#{file_name}".brown + "\n\n"
+ 				resp = JSON.parse($tools.uploadImage(file, @token))
+ 				meta = resp['meta']
+ 				if meta['code'] == 200
+ 					puts "\nDone!\n".green
+ 				else
+ 					puts "\nERROR: #{meta.inspect}\n".red
+ 				end
+ 				data = resp['data']
+ 				new_file_id = data['id']
+ 				uploaded_ids.push(new_file_id)
+ 			end
+ 			@hash = @api.getFilesList(nil)
+			reverse = false
+			view, file_url, pagination_array = @view.new(@hash).showFilesList(with_url, reverse)
+			uploaded_ids.each do |id|
+				view.gsub!("#{id}", "#{id}".reverse_color)
+			end
+			puts view
  		end
  	end
 

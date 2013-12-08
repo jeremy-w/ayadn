@@ -233,7 +233,8 @@ when "random"
 
 # experimenting
 when "upload"
-	client.ayadnFileUpload(arg2)
+	#client.ayadnFileUpload(arg2)
+	client.ayadnFiles(arg1, arg2, nil)
 
 when "download"
 	client.ayadnFiles(arg1, arg2, nil)
