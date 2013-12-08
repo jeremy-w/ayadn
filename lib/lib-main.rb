@@ -633,7 +633,7 @@ class AyaDN
 	 				i += 1
 		    		if pagination_array.first != nil
 		    			$tools.countdown(5) unless i == 2
-		    			print "\r" + (" " * 40)
+		    			print "\r" + (" " * 40) unless i == 2
 		    			print "\n\nPlease wait, fetching page (".cyan + "#{beforeID}".pink + ")...\n".cyan unless i == 2
 		    		end
 				end
@@ -647,27 +647,46 @@ class AyaDN
 			end
  			puts big_view
  		when "download"
- 			if !target.is_integer?
- 				puts $status.errorSyntax
- 				exit
- 			end
  			with_url = true
- 			@hash = @api.getSingleFile(target)
- 			view, file_url, file_name = @view.new(@hash).showFileInfo(with_url)
- 			puts "\nDownloading file ".green + target.to_s.brown
- 			puts view
+ 			targets_array = target.split(",")
+ 			number_of_targets = targets_array.length
  			$tools.fileOps("makedir", $ayadn_files_path)
- 			new_file_name = "#{target}_#{file_name}"
- 			download_file_path = $ayadn_files_path + "/#{new_file_name}"
- 			if !File.exists?download_file_path
- 				the_file = @api.getResponse(file_url)
-	 			f = File.new(download_file_path, "wb")
-	 				f.puts(the_file)
-	 			f.close
-	 			puts "File downloaded in ".green + $ayadn_files_path.pink + "/#{new_file_name}".brown + "\n\n"
+ 			if number_of_targets == 1
+	 			@hash = @api.getSingleFile(target)
+	 			view, file_url, file_name = @view.new(@hash).showFileInfo(with_url)
+	 			puts "\nDownloading file ".green + target.to_s.brown
+	 			puts view
+	 			new_file_name = "#{target}_#{file_name}"
+	 			download_file_path = $ayadn_files_path + "/#{new_file_name}"
+	 			if !File.exists?download_file_path
+	 				the_file = @api.getResponse(file_url)
+		 			f = File.new(download_file_path, "wb")
+		 				f.puts(the_file)
+		 			f.close
+		 			puts "File downloaded in ".green + $ayadn_files_path.pink + "/#{new_file_name}".brown + "\n\n"
+		 		else
+		 			puts "Canceled: ".red + "#{new_file_name} ".pink + "already exists in ".red + "#{$ayadn_files_path}".brown + "\n\n"
+	 			end
 	 		else
-	 			puts "ERROR: ".red + "#{new_file_name} ".pink + "already exists in ".red + "#{$ayadn_files_path}".brown + "\n\n"
- 			end
+	 			@hash = @api.getMultipleFiles(target)
+	 			@hash['data'].each do |unique_file|
+		 			view, file_url, file_name = @view.new(nil).buildFileInfo(unique_file, with_url)
+		 			unique_file_id = unique_file['id']
+		 			puts "\nDownloading file ".green + unique_file_id.to_s.brown
+		 			puts view
+		 			new_file_name = "#{unique_file_id}_#{file_name}"
+		 			download_file_path = $ayadn_files_path + "/#{new_file_name}"
+		 			if !File.exists?download_file_path
+		 				the_file = @api.getResponse(file_url)
+			 			f = File.new(download_file_path, "wb")
+			 				f.puts(the_file)
+			 			f.close
+			 			puts "File downloaded in ".green + $ayadn_files_path.pink + "/#{new_file_name}".brown + "\n\n"
+			 		else
+			 			puts "Canceled: ".red + "#{new_file_name} ".pink + "already exists in ".red + "#{$ayadn_files_path}".brown + "\n\n"
+		 			end
+		 		end
+	 		end
  		end
  	end
 

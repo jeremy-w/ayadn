@@ -282,6 +282,10 @@ class AyaDN
 				@url += "stream/0/files/"
 				@url += "#{value}"
 				@url += "?access_token=#{@token}"
+			when "get_multiple_files"
+				@url += "stream/0/files/"
+				@url += "?ids=#{value}"
+				@url += "&access_token=#{@token}"
 
 			end
 		end
@@ -495,6 +499,10 @@ class AyaDN
 		end
 		def getSingleFile(file_id)
 			@url = makeStreamURL("get_file", file_id)
+			getHash
+		end
+		def getMultipleFiles(file_ids)
+			@url = makeStreamURL("get_multiple_files", file_ids)
 			getHash
 		end
 	end

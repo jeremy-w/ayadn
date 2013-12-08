@@ -55,7 +55,7 @@ AYADN
 
 - list your files stored on your ADN account
 
-- download a file from your ADN account
+- download your files from your ADN account
 
 - [and more!](https://github.com/ericdke/ayadn#list-of-commands)
 
@@ -247,6 +247,7 @@ ayadn unmute @ericd
 ayadn interactions
 ayadn list files
 ayadn download 286458
+ayadn download 286458,286797
 ayadn messages
 ayadn messages 12345
 ayadn messages 12345 all

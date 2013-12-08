@@ -5,7 +5,7 @@ AYADN is a learning exercise: while it's fully functional, it's still very alpha
 
 ## 2013-12-07 v0.34
 - List your ADN files!
-- Download a file from your ADN account!
+- Download files from your ADN account!
 - authorization bugfix
 - explore streams bugfix
 - various bugfixes and improvements

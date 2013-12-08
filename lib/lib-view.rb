@@ -420,9 +420,12 @@ class AyaDN
 			return usersHash, pagination_array
 		end
 		def showFileInfo(with_url)
+			resp_hash = getDataNormal(@hash)
+			buildFileInfo(resp_hash, with_url)
+		end
+		def buildFileInfo(resp_hash, with_url)
 			list_string = ""
 			file_url = nil
-			resp_hash = getDataNormal(@hash)
 			file_name = resp_hash['name']
 			file_token = resp_hash['file_token']
 			file_source_name = resp_hash['source']['name']
