@@ -4,6 +4,7 @@ ruby "1.9.3"
 platform :ruby do
 	gem "rest-client"
 	gem "json"
+	gem "pinboard"
 end
 
 platforms :mswin, :mingw do
