@@ -779,18 +779,22 @@ class AyaDN
 			created_day = created_at[0...10]
 			created_hour = created_at[11...19]
 			link = data['entities']['links'][0]['url']
- 			pin_username = $configFileContents['pinboard']['username']
- 			pin_password = $configFileContents['pinboard']['password']
- 			if pin_username != nil
+ 			if $configFileContents['pinboard']['username'] != nil
+ 				pin_username = $configFileContents['pinboard']['username']
+ 				pin_password = $configFileContents['pinboard']['password']
  				puts "\nSaving post ".green + post_id.brown + " to Pinboard...\n".green
  				$tools.saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text)
  				puts "\nDone!\n\n".green
  			else
  				puts "\nConfiguration does not include your Pinbard credentials.\n".red
- 				puts "Please enter your Pinboard username (CTRL+C to cancel): ".green
- 				pin_username = STDIN.gets.chomp()
- 				puts "Please enter your Pinboard password (invisible, CTRL+C to cancel): ".green
- 				pin_password = STDIN.noecho(&:gets).chomp()
+ 				begin
+ 					puts "Please enter your Pinboard username (CTRL+C to cancel): ".green
+ 					pin_username = STDIN.gets.chomp()
+ 					puts "Please enter your Pinboard password (invisible, CTRL+C to cancel): ".green
+ 					pin_password = STDIN.noecho(&:gets).chomp()
+ 				rescue Exception => e
+ 					abort($status.stopped)
+ 				end
  				$configFileContents['pinboard']['username'] = pin_username
  				$configFileContents['pinboard']['password'] = pin_password
  				$tools.saveConfig

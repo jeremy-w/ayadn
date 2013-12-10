@@ -20,3 +20,6 @@ identity: # change this prefix in each folder for your username in you're using 
     prefix: me
 skipped: # posts matching these values won't show up
     sources: []
+pinboard:
+  username:
+  password:
