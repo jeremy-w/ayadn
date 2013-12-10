@@ -61,6 +61,8 @@ AYADN
 
 - upload files to your ADN account *(no Windows support)*
 
+- save a post link to your Pinboard account
+
 - [and more!](https://github.com/ericdke/ayadn#list-of-commands)
 
 *See the [AyaDN page](http://ayadn-app.net) for screenshots.*  
@@ -276,7 +278,7 @@ ayadn save 15723266
 ayadn load 15723266
 ayadn skiplist add IFTTT
 ayadn skiplist remove IFTTT
-ayadn pin 15723266
+ayadn pin 16864003
 ayadn reset pagination
 ayadn help
 ayadn webhelp
@@ -380,9 +382,9 @@ There's basically no verification with this feature, so be careful to not add mi
 
 ### Pinboard
 
-Export a post to Pinboard:
+Export a post link + text + tags to Pinboard:
 
-`ayadn pin 15723266`  
+`ayadn pin 15723266 tag1,tag2`  
 
 ### Old version
 
