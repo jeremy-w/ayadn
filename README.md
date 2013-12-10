@@ -133,11 +133,10 @@ While you can use the app with the ruby interpreter -see [How to use](https://gi
 chmod +x ayadn.rb
 ```  
 
-and to declare the app folder in your $PATH *or* create a symlink of the app in `/usr/local/bin` or whatever you're using as your $PATH.
+and to declare the app folder in your $PATH *or* to create a symlink of the app in `/usr/local/bin` or whatever you're using as your $PATH.
 
 ```
 sudo ln -s ayadn.rb /usr/local/bin/ayadn
-source ~/.bashrc
 ```  
 
 ### Step 4
@@ -148,7 +147,7 @@ You have to authorize AyaDN to use your App.net credentials.
 
 ## How to use
 
-**You type `ayadn` + the optional action you want to do + the optional target of this action.**
+**`ayadn` + optional action + optional target(s) + optional value(s)**
 
 If you don't provide any option to AyaDN, your personnalized stream is displayed.
 
@@ -174,33 +173,28 @@ ayadn.rb
 ayadn.rb write 
 ```
 
-### If you made the symlink
-
-```
-ayadn
-ayadn write 
-```  
-
 ### As a local executable
 
-If the app is executable but not in your $PATH, then launch it locally:
+If the app is executable but not in your $PATH, launch it locally:
 
 ```
 ./ayadn.rb
 ./ayadn.rb write
 ```  
 
+### If you made the symlink (recommended)
+
+```
+ayadn
+ayadn write 
+```  
+
 ### With an alias (recommended)
 
-My advice is to make an alias in your `.bashrc`:
+The geekiest option is to make an alias in your `.bashrc`:
 
 ```
 alias a="your/path/to/ayadn.rb"
-```  
-
-Refresh:  
-
-```
 source ~/.bashrc
 ```  
 
@@ -209,6 +203,7 @@ Then it's easier to use, and very fast with the app's shortcuts:
 ```
 a 
 a w
+a pm @ericd
 ```  
 
 Enjoy!  
@@ -302,48 +297,6 @@ ayadn list followings me
 (etc)
 ```  
 
-### Backup some data
-
-```
-ayadn.rb backup followings @ericd
-ayadn.rb backup followers @ericd
-ayadn.rb backup muted
-```  
-
-A JSON file containing the username and real name of your followings/followers/muted will be saved in `%USERDIR%/ayadn/data/lists`.
-
-The `muted` option only works for yourself (this is a limitation from the API).
-
-### Post links
-
-- Write/paste a simple link:
-
-```
-ayadn.rb write 'Subscribe to the #AyaDN broadcast! https://app.net/c/2zqf'
-```  
-
-- Write/paste a markdown link to embed the link:
-
-```
-ayadn.rb write '[Subscribe](https://app.net/c/2zqf) to the #AyaDN broadcast!'
-```  
-
-### Reset pagination data
-
-If AyaDN shows you "No recent posts" but you still want to see the stream again, you have to reset the pagination data first.
-
-```
-./ayadn.rb reset
-./ayadn.rb reset pagination unified
-./ayadn.rb reset pagination mentions @ericd
-./ayadn.rb reset pagination posts @ericd
-(etc)
-```  
-
-Without arguments: resets all your pagination data.  
-
-*Note: AyaDN doesn't use Stream Markers. This is because it's meant as an independent tool that shouldn't modify your mobile/desktop experience of ADN. Example: if AyaDN used Stream Markers, and you let it scrolling a stream on your Mac, then you couldn't sync this stream properly on your smartphone with another app.*  
-
 ### Configuration
 
 Unless you're planning on using multiple accounts (see next chapter), you should install the configuration file in the permanent AyaDN folder:
@@ -352,11 +305,51 @@ Unless you're planning on using multiple accounts (see next chapter), you should
 ayadn install config
 ```  
 
-Now you can securely edit your preferences in `%USERDIR%/ayadn/data/config.yml` without losing anything when updating AyaDN.
+Now you may safely edit your preferences in `%USERDIR%/ayadn/data/config.yml` without losing anything when updating AyaDN.
 
-You can modify the values (right hand) in the file but be very careful not to modify anything else: don't change the indentation or the name of the keys (left hand), don't add or remove quotes or special characters, etc.
+If a new version of AyaDN offers new configuration options and you've already installed and modified the config, then you should run this command again *after having backed up your file*, then report your precedent options in the new file.  
 
-If a new version of AyaDN offers new configuration options and you've installed the config and modified it already, then you should run this command again *after having backed up your file*.
+### Backup some data
+
+```
+ayadn backup followings @ericd
+ayadn backup followers @ericd
+ayadn backup muted
+```  
+
+A JSON file containing the username and real name of your followings/followers/muted will be saved in `%USERDIR%/ayadn/data/lists`.
+
+The `muted` option only works for yourself (this is a normal limitation from the API).
+
+### Post links
+
+- Write/paste a simple link:
+
+```
+ayadn write 'Subscribe to the #AyaDN broadcast! https://app.net/c/2zqf'
+```  
+
+- Write/paste a markdown link to embed the link:
+
+```
+ayadn write '[Subscribe](https://app.net/c/2zqf) to the #AyaDN broadcast!'
+```  
+
+### Reset pagination data
+
+If AyaDN shows you "No recent posts" but you still want to see the stream again, you have to reset the pagination data first.
+
+```
+ayadn reset
+ayadn reset pagination unified
+ayadn reset pagination mentions @ericd
+ayadn reset pagination posts @ericd
+(etc)
+```  
+
+Without arguments: resets all your pagination data.  
+
+*Note: AyaDN doesn't use Stream Markers (stream syncing), and it's not a bug but a feature :p This is because AyaDN is meant as an independent tool that shouldn't interfere with other ADN clients.*  
 
 ### Running multiple accounts
 
@@ -370,13 +363,13 @@ If a new version of AyaDN offers new configuration options and you've installed 
 
 App.net already gives you the "mute" command to mute a user. But what if you want to mute a *client*, like IFTTT or PourOver?
 
-Easy: `ayadn skiplist add IFTTT`. 
+Easy: `ayadn skiplist add IFTTT`
 
 Want to mute another one? Go on: `ayadn skiplist add PourOver`. Etc.
 
 Change of mind? `ayadn skiplist remove IFTTT`, `ayadn skiplist remove PourOver`, etc.
 
-You can discover what client was used to post a post with `ayadn infos POSTNUMBER`.  
+You can discover what client was used to post a post with `ayadn infos PostID`  
 
 There's basically no verification with this feature, so be careful to not add misspelled or non-existent clients.
 
@@ -385,10 +378,6 @@ There's basically no verification with this feature, so be careful to not add mi
 Export a post link + text + tags to Pinboard:
 
 `ayadn pin 15723266 tag1,tag2`  
-
-### Old version
-
-If you already used AyaDN before with a token generated from your App.net account, connect to your app.net page, go to `settings`, go to `Manage apps` and in `Your app` erase the settings for the old versions of AyaDN. This is optional but recommended.
 
 ### Shortcuts
 
@@ -418,13 +407,11 @@ ayadn t ruby
 
 ### Ruby 1.9.3
 
-Ruby 1.9.3 is mandatory. If you're running any other version, including 2.0, you need to install 1.9.3, with "rvm" for example:
+Ruby 1.9.3 is mandatory. If you're running an older version, you need to install 1.9.3, with "rvm" for example:
 
 ```
 \curl -L https://get.rvm.io | bash -s stable --ruby=1.9.3
 ```  
-
-*Windows: well, I have no idea...*  
 
 ### GCC
 
@@ -463,8 +450,8 @@ The answer is to post with *"double quotes"* but use `\`, the *antislash* charac
 ayadn.rb write "Here's an escaped exclamation mark \! and a normal simple quote in the same text."
 ```  
 
-**To avoid any problem, post with the compose feature, that is to say without providing arguments:** 
-
+**To avoid any problem, post with the compose feature, that is to say without providing arguments:**  
+  
 `ayadn.rb write`  
 
 
