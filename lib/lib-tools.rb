@@ -280,17 +280,18 @@ class AyaDN
             Process.detach(pid)
         end
         def meta(meta)
-            code = meta['code']
-            if code == 200
+            case meta['code']
+            when 200
                 puts "\nDone!\n".green
             else
                 abort("\nERROR: #{meta.inspect}\n".red)
             end
         end
-        def saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text, the_name)
+        def saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text, user_name)
             tags += ",ADN"
+            post_text += " http://alpha.app.net/#{user_name}/post/#{post_id}"
             pinboard = Pinboard::Client.new(:username => pin_username, :password => pin_password)
-            pinboard.add(:url => link, :tags => tags, :extended => post_text, :description => "Author: #{the_name} Post: #{post_id}")
+            pinboard.add(:url => link, :tags => tags, :extended => post_text, :description => link)
         end
         def helpScreen
             help = ""
