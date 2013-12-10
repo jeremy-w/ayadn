@@ -277,6 +277,7 @@ ayadn save 15723266
 ayadn load 15723266
 ayadn skiplist add IFTTT
 ayadn skiplist remove IFTTT
+ayadn pin 15723266
 ayadn reset pagination
 ayadn help
 ayadn webhelp
@@ -377,6 +378,12 @@ Change of mind? `ayadn skiplist remove IFTTT`, `ayadn skiplist remove PourOver`,
 You can discover what client was used to post a post with `ayadn infos POSTNUMBER`.  
 
 There's basically no verification with this feature, so be careful to not add misspelled or non-existent clients.
+
+### Pinboard
+
+Export a post to Pinboard:
+
+`ayadn pin 15723266`  
 
 ### Old version
 

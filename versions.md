@@ -3,6 +3,9 @@ AYADN
 
 AYADN is a learning exercise: while it's fully functional, it's still very alpha (remember I'm a beginner with Ruby).  
 
+## 2013-12-10 v0.35
+- Save a post to Pinboard!
+
 ## 2013-12-08 v0.34b
 - Upload a file to your ADN account! (no Windows support)
 - Delete a file from your ADN account!
