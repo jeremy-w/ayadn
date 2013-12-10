@@ -110,8 +110,7 @@ If you're not using Bundler, you have to install some dependencies manually:
 
 ```
 cd ayadn-master
-gem install json
-gem install rest-client
+gem install json rest-client pinboard
 ```  
 
 *Windows*: you have one more gem to install:

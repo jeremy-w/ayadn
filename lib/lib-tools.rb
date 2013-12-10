@@ -288,7 +288,7 @@ class AyaDN
             end
         end
         def saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text)
-            tags += ",Appdotnet,AyaDN"
+            tags += ",App.net,ADN"
             pinboard = Pinboard::Client.new(:username => pin_username, :password => pin_password)
             pinboard.add(:url => link, :tags => tags, :extended => post_text, :description => "From ADN - Post ID: #{post_id}")
         end
