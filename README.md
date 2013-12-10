@@ -278,7 +278,7 @@ ayadn save 15723266
 ayadn load 15723266
 ayadn skiplist add IFTTT
 ayadn skiplist remove IFTTT
-ayadn pin 16864003
+ayadn pin 16864003 ruby,json
 ayadn reset pagination
 ayadn help
 ayadn webhelp
