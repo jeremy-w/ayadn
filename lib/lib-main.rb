@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 # encoding: utf-8
 class AyaDN
 	def initialize(token)
@@ -708,11 +708,7 @@ class AyaDN
  				puts "Uploading ".cyan + "#{file_name}".brown + "\n\n"
  				resp = JSON.parse($tools.uploadImage(file, @token))
  				meta = resp['meta']
- 				if meta['code'] == 200
- 					puts "\nDone!\n".green
- 				else
- 					puts "\nERROR: #{meta.inspect}\n".red
- 				end
+ 				$tools.meta(meta)
  				data = resp['data']
  				new_file_id = data['id']
  				uploaded_ids.push(new_file_id)
@@ -732,11 +728,7 @@ class AyaDN
 				puts "\nPlease wait...".green
 				resp = JSON.parse(@api.deleteFile(target))
 				meta = resp['meta']
- 				if meta['code'] == 200
- 					puts "\n\nDone!\n".green
- 				else
- 					puts "\n\nERROR: #{meta.inspect}\n".red
- 				end
+ 				$tools.meta(meta)
 			else
 				puts "\n\nCanceled.\n\n".red
 				exit
@@ -768,6 +760,44 @@ class AyaDN
 			else
 				puts "\nERROR: #{meta.inspect}\n".red
 			end
+ 		end
+ 	end
+
+ 	def ayadnBookmark(*args)
+ 		action = args[0][0]
+ 		post_id = args[0][1]
+ 		tags = args[0][2]
+ 		case action
+ 		when "pin"
+ 			hash = @api.getSinglePost(post_id)
+ 			data = hash['data']
+			post_text = data['text']
+			user_name = data['user']['username']
+			real_name = data['user']['name']
+			the_name = "@" + user_name
+			created_at = data['created_at']
+			created_day = created_at[0...10]
+			created_hour = created_at[11...19]
+			link = data['entities']['links'][0]['url']
+ 			pin_username = $configFileContents['pinboard']['username']
+ 			pin_password = $configFileContents['pinboard']['password']
+ 			if pin_username != nil
+ 				puts "\nSaving post ".green + post_id.brown + " to Pinboard...\n".green
+ 				$tools.saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text)
+ 				puts "\nDone!\n\n".green
+ 			else
+ 				puts "\nConfiguration does not include your Pinbard credentials.\n".red
+ 				puts "Please enter your Pinboard username (CTRL+C to cancel): ".green
+ 				pin_username = STDIN.gets.chomp()
+ 				puts "Please enter your Pinboard password (invisible, CTRL+C to cancel): ".green
+ 				pin_password = STDIN.noecho(&:gets).chomp()
+ 				$configFileContents['pinboard']['username'] = pin_username
+ 				$configFileContents['pinboard']['password'] = pin_password
+ 				$tools.saveConfig
+ 				puts "\nSaving post ".green + post_id.brown + " to Pinboard...\n".green
+ 				$tools.saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text)
+ 				puts "\nDone!\n\n".green
+ 			end
  		end
  	end
 end

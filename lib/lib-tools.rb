@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 # encoding: utf-8
 class String
     def is_integer?
@@ -279,39 +279,52 @@ class AyaDN
             pid = Process.spawn(command)
             Process.detach(pid)
         end
+        def meta(meta)
+            code = meta['code']
+            if code == 200
+                puts "\nDone!\n".green
+            else
+                abort("\nERROR: #{meta.inspect}\n".red)
+            end
+        end
+        def saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text)
+            tags += "Appdotnet,AyaDN"
+            pinboard = Pinboard::Client.new(:username => pin_username, :password => pin_password)
+            pinboard.add(:url => link, :tags => tags, :extended => post_text, :description => "From ADN - Post ID: #{post_id}")
+        end
         def helpScreen
             help = ""
-            help += "- " + "without options: ".cyan + "display your unified stream\n" #.rjust(50)
-            help += "- " + "write ".green + "+ [Enter key] ".magenta + "create a post\n" #.rjust(33)
-            help += "- " + "write ".green + "\"your text\" ".brown + "create a post\n" #.rjust(35)
-            help += "- " + "reply ".green + "PostID ".brown + "reply to a post\n" #.rjust(42)
+            help += "- " + "without options: ".cyan + "\tdisplay your unified stream\n" #.rjust(50)
+            help += "- " + "write ".green + "+ [Enter key] ".magenta + "\tcreate a post\n" #.rjust(33)
+            help += "- " + "write ".green + "\"your text\" ".brown + "\tcreate a post\n" #.rjust(35)
+            help += "- " + "reply ".green + "PostID ".brown + "\t\treply to a post\n" #.rjust(42)
             help += "- " + "infos, delete, star/unstar, repost/unrepost, convo, starred, reposted ".green + "PostID\n".brown
             # help += "- " + "delete postID ".green + "to delete a post\n"
-            help += "- " + "pm ".green + "@username ".brown + "send a private message\n"
-            help += "- " + "messages ".green + "display private channels\n"
-            help += "- " + "messages ".green + "channelID ".brown + "display private messages\n"
-            help += "- " + "search ".green + "word ".brown + "search for word(s)\n"
-            help += "- " + "tag ".green + "hashtag ".brown + "search for a hashtag\n"
+            help += "- " + "pm ".green + "@username ".brown + "\t\tsend a private message\n"
+            help += "- " + "messages ".green + "\t\tdisplay private channels\n"
+            help += "- " + "messages ".green + "channelID ".brown + "\tdisplay private messages\n"
+            help += "- " + "search ".green + "word ".brown + "\t\tsearch for word(s)\n"
+            help += "- " + "tag ".green + "hashtag ".brown + "\t\tsearch for a hashtag\n"
             # help += "- " + "star/unstar postID ".green + "to star/unstar a post\n"
             # help += "- " + "repost/unrepost postID ".green + "to repost/unrepost a post\n"
             # help += "- " + "infos @username/postID ".green + "to display detailed informations on a user or a post\n"
             # help += "- " + "convo postID ".green + "to display the conversation around a post\n"
-            help += "- " + "posts ".green + "@username ".brown + "display a user's posts\n"
-            help += "- " + "mentions ".green + "@username ".brown + "display posts mentionning a user\n"
+            help += "- " + "posts ".green + "@username ".brown + "\tdisplay a user's posts\n"
+            help += "- " + "mentions ".green + "@username ".brown + "\tdisplay posts mentionning a user\n"
             help += "- " + "infos, starred, follow, unfollow, mute, unmute ".green + "@username\n".brown
             # help += "- " + "starred @username/postID ".green + "to display a user's starred posts / who starred a post\n"
             # help += "- " + "reposted postID ".green + "to display who reposted a post\n"
             # help += "- " + "interactions ".green + "to display a stream of your interactions\n"
-            help += "- " + "global/trending/checkins/conversations ".green + "display a stream\n"
+            help += "- " + "global/trending/checkins/conversations/photos ".green + "\tdisplay a stream\n"
             # help += "- " + "follow/unfollow @username ".green + "to follow/unfollow a user\n"
             # help += "- " + "mute/unmute @username ".green + "to mute/unmute a user\n"
             #help += "- " + "save/load postID ".green + "to save/load a post locally\n"
-            help += "- " + "list/backup followings/followers/muted @username/me ".green + "list/backup users\n"
-            help += "- " + "help ".green + "display this screen\n" 
-            help += "- " + "webhelp ".green + "more commands, options and examples" + "\n\n"
+            help += "- " + "list/backup followings/followers/muted ".green + "@username/me ".brown + "\tlist/backup users\n"
+            #help += "- " + "help ".green + "\t\t\tdisplay this screen\n" 
+            help += "- " + "Visit http://github.com/ericdke/ayadn for more commands, options and examples".cyan + "\n\n"
             #help += "- " + "tip: ".cyan + "some commands have a shortcut: w(rite), r(eply), s(earch), p(osts), m(entions), t(ag), c(onvo), i(nfos), h(elp)\n"
-            help += "- " + "tip: ".cyan + "put 'scroll' before a stream to use the scrolling feature\n\n"
-            help += "Examples:\n".cyan
+            help += "- " + "Tip: put 'scroll' before a stream to use the scrolling feature\n\n".cyan
+            help += "Examples:\n\n".cyan
             help += "ayadn \n"#.green + "(display your Unified stream)\n"
             help += "ayadn write \n"#.green + "(write a post with a compose window)\n"
             help += "ayadn write \'@ericd Good morning Eric!\' \n"#.green + "(write a post instantly between double quotes)\n"
@@ -321,9 +334,8 @@ class AyaDN
             help += "ayadn checkins \n"#.green + "(display the Checkins stream)\n"
             help += "ayadn follow @ayadn \n"#.green + "(follow user @ericd)\n"
             help += "ayadn search ruby,json \n"#.green + "(search for posts with these words)\n"
-            help += "ayadn scroll unified \n"#.green + "(scroll the global stream)\n"
-            help += "ayadn backup followings me \n"
             help += "ayadn list files \n"
+            help += "ayadn backup followings me \n"
             help += "\n"
             return help
         end

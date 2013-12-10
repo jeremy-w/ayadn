@@ -280,6 +280,7 @@ ayadn skiplist remove IFTTT
 ayadn reset pagination
 ayadn help
 ayadn webhelp
+ayadn random
 ```  
 
 

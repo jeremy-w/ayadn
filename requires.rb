@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 # encoding: utf-8
 require 'rubygems'
 require 'uri'
@@ -8,6 +8,7 @@ require 'json'
 require 'io/console'
 require 'fileutils'
 require 'yaml'
+require 'pinboard'
 require_relative "lib/lib-tools"
 require_relative "lib/lib-api"
 require_relative "lib/lib-view"

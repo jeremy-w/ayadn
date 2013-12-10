@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 # encoding: utf-8
 # App.net command-line client
 # by Eric Dejonckheere
@@ -179,7 +179,11 @@ when "help", "h"
 
 when "webhelp"
 	puts $tools.helpScreen
-	$tools.startBrowser("https://github.com/ericdke/ayadn#ayadn")
+	begin 
+		$tools.startBrowser("https://github.com/ericdke/ayadn#ayadn")
+	rescue
+		puts "\nFailed to start a browser automatically. Please visit ".cyan + "https://github.com/ericdke/ayadn#ayadn".magenta
+	end
 
 when "debug"
 	if arg2 == nil
@@ -233,6 +237,9 @@ when "random"
 
 when "upload", "download", "remove", "delete-file", "private", "public"
 	client.ayadnFiles(arg1, arg2, nil)
+
+when "pin"
+	client.ayadnBookmark(ARGV)
 
 else
 	# if not any known argument
