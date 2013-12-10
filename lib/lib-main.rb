@@ -772,9 +772,9 @@ class AyaDN
  			hash = @api.getSinglePost(post_id)
  			data = hash['data']
 			post_text = data['text']
-			# user_name = data['user']['username']
+			user_name = data['user']['username']
 			# real_name = data['user']['name']
-			# the_name = "@" + user_name
+			the_name = "@" + user_name
 			# created_at = data['created_at']
 			# created_day = created_at[0...10]
 			# created_hour = created_at[11...19]
@@ -783,7 +783,7 @@ class AyaDN
  				pin_username = $configFileContents['pinboard']['username']
  				pin_password = $configFileContents['pinboard']['password']
  				puts "Saving post ".green + post_id.brown + " to Pinboard...\n".green
- 				$tools.saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text)
+ 				$tools.saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text, the_name)
  				puts "Done!\n\n".green
  			else
  				puts "\nConfiguration does not include your Pinbard credentials.\n".red
@@ -799,7 +799,7 @@ class AyaDN
  				$configFileContents['pinboard']['password'] = pin_password
  				$tools.saveConfig
  				puts "Saving post ".green + post_id.brown + " to Pinboard...\n".green
- 				$tools.saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text)
+ 				$tools.saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text, the_name)
  				puts "Done!\n\n".green
  			end
  		end

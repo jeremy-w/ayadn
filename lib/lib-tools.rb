@@ -287,10 +287,10 @@ class AyaDN
                 abort("\nERROR: #{meta.inspect}\n".red)
             end
         end
-        def saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text)
-            tags += ",App.net,ADN"
+        def saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text, the_name)
+            tags += ",ADN"
             pinboard = Pinboard::Client.new(:username => pin_username, :password => pin_password)
-            pinboard.add(:url => link, :tags => tags, :extended => post_text, :description => "From ADN - Post ID: #{post_id}")
+            pinboard.add(:url => link, :tags => tags, :extended => post_text, :description => "Author: #{the_name} Post: #{post_id}")
         end
         def helpScreen
             help = ""
