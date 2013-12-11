@@ -211,7 +211,8 @@ class AyaDN
                     new_word = removeEndCharIfSpecial(word, "red")
 					content.push(new_word)
 				elsif word =~ /^http/ or word =~ /^photos.app.net/ or word =~ /^files.app.net/ or word =~ /^chimp.li/ or word =~ /^bli.ms/
-					content.push(word.magenta)
+					#content.push(word.magenta)
+                    content.push(word)
 				else
 					content.push(word)
 				end

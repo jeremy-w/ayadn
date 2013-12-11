@@ -216,12 +216,17 @@ class AyaDN
 					coloredPost = "--Post deleted--".red
 				end
 				userName = item['user']['username']
+				user_real_name = item['user']['name']
 				createdAt = item['created_at']
 				createdDay = createdAt[0...10]
 				createdHour = createdAt[11...19]
-				postString += "Post ID: ".cyan + postId.to_s.green
-				postString += " - "
-				postString += createdDay.cyan + ' at ' + createdHour.cyan + ' by ' + "@".reddish + userName.reddish + "\n" + coloredPost + "\n"
+				handle = "@".reddish + userName.reddish
+				post_date = createdDay.cyan + " " + createdHour.cyan
+				#postString += "Post ID: ".cyan + postId.to_s.green
+				#postString += " - "
+				#postString += createdDay.cyan + ' at ' + createdHour.cyan + ' by ' + "@".reddish + userName.reddish + "\n" + coloredPost + "\n"
+				#postString += postId.to_s.green + " " + createdDay.cyan + " " + createdHour.cyan + " " + "[#{user_real_name}]".blue + " " + "@".reddish + userName.reddish + "\n" + coloredPost + "\n"
+				postString += postId.to_s.green.ljust(14) + " " + handle + " [#{user_real_name}]".magenta + " " + post_date + " " + "\n" + coloredPost + "\n"
 				links = item['entities']['links']
 
 				sourceLink = item['source']['link']
@@ -267,11 +272,15 @@ class AyaDN
 					end
 				end
 				if !links.empty?
+					links_array = []
 					links.each do |link|
 						linkURL = link['url']
-						postString += "Link: ".cyan + linkURL.brown + " "
+						links_array.push(linkURL)
 					end
-					postString += "\n"
+					links_array.reverse.each do |linkURL|
+						postString += "Link: ".cyan + linkURL.brown + "\n"
+					end
+					#postString += "\n"
 				end
 				postString += "\n"
 			end
