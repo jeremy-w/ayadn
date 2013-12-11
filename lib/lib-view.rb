@@ -148,13 +148,47 @@ class AyaDN
 					linkURL = link['url']
 					links_array.push(linkURL)
 				end
-				links_array.reverse.each do |linkURL|
+				#links_array.reverse.each do |linkURL|
+				links_array.each do |linkURL|
 					links_string += "Link: ".cyan + linkURL.brown + "\n"
 				end
 			else
 				links_string = ""
 			end
 			return links_string
+		end
+		def objectNames(item)
+			user_name = item['username']
+			user_real_name = item['name']
+			user_handle = "@" + user_name
+			return user_name, user_real_name, user_handle
+		end
+		def filesDetails(item)
+			file_name = resp_hash['name']
+			file_token = resp_hash['file_token']
+			file_source_name = resp_hash['source']['name']
+			file_source_url = resp_hash['source']['link']
+			file_kind = resp_hash['kind']
+			file_id = resp_hash['id']
+			file_size = resp_hash['size']
+			file_size_converted = file_size.to_filesize unless file_size == nil
+			file_public = resp_hash['public']
+			return file_name, file_token, file_source_name, file_source_url, file_kind, file_id, file_size, file_size_converted, file_public
+		end
+		def derivedFilesDetails(derived_files)
+			if derived_files != nil
+				if derived_files['image_thumb_960r'] != nil
+					file_derived_bigthumb_name = derived_files['image_thumb_960r']['name']
+					file_derived_bigthumb_url = derived_files['image_thumb_960r']['url']
+				end
+				if derived_files['image_thumb_200s'] != nil
+					file_derived_smallthumb_name = derived_files['image_thumb_200s']['name']
+					file_derived_smallthumb_url = derived_files['image_thumb_200s']['url']
+				end
+				list_string += "\nBig thumbnail: ".cyan + file_derived_bigthumb_url unless file_derived_bigthumb_url == nil
+				list_string += "\nSmall thumbnail: ".cyan + file_derived_smallthumb_url unless file_derived_smallthumb_url == nil
+			end
+			return list_string
 		end
 
 		def buildStream(post_hash)
@@ -207,7 +241,7 @@ class AyaDN
 				post_text = item['text']
 				post_id = item['id']
 				source_name = item['source']['name']
-
+				source_link = item['source']['link']
 				# Skip sources
 				# case source_name
 				# when *$skipped_sources
@@ -223,18 +257,15 @@ class AyaDN
 				else
 					colored_post = "--Post deleted--".red
 				end
-				user_name = item['user']['username']
-				user_real_name = item['user']['name']
+				user_name, user_real_name, handle = objectNames(item['user'])
 				created_day, created_hour = objectDate(item)
-				handle = "@".reddish + user_name.reddish
 				post_date = created_day.cyan + " " + created_hour.cyan
 				#post_string += "Post ID: ".cyan + post_id.to_s.green
 				#post_string += " - "
 				#post_string += created_day.cyan + ' at ' + created_hour.cyan + ' by ' + "@".reddish + user_name.reddish + "\n" + colored_post + "\n"
 				#post_string += post_id.to_s.green + " " + created_day.cyan + " " + created_hour.cyan + " " + "[#{user_real_name}]".blue + " " + "@".reddish + user_name.reddish + "\n" + colored_post + "\n"
-				post_string += post_id.to_s.green.ljust(14) + " " + handle + " [#{user_real_name}]".magenta + " " + post_date + " " + "\n" + colored_post + "\n"
+				post_string += post_id.to_s.green.ljust(14) + " " + handle.reddish + " [#{user_real_name}]".magenta + " " + post_date + " " + "\n" + colored_post + "\n"
 				links = item['entities']['links']
-				source_link = item['source']['link']
 				annotations_list = item['annotations']
 				xxx = 0
 				if annotations_list != nil
@@ -303,9 +334,7 @@ class AyaDN
 		def buildSimplePostView(post_hash)
 			the_post_id = post_hash['id']
 			post_text = post_hash['text']
-			user_name = post_hash['user']['username']
-			real_name = post_hash['user']['name']
-			the_name = "@" + user_name
+			user_name, user_real_name, the_name = objectNames(post_hash['user'])
 			colored_post = $tools.colorize(post_text)
 			created_day, created_hour = objectDate(post_hash)
 			post_details = created_day.cyan + " " + the_post_id.green + " " + the_name.brown
@@ -317,9 +346,7 @@ class AyaDN
 		def buildPostInfo(post_hash, is_mine)
 			the_post_id = post_hash['id']
 			post_text = post_hash['text']
-			user_name = post_hash['user']['username']
-			real_name = post_hash['user']['name']
-			the_name = "@" + user_name
+			user_name, user_real_name, the_name = objectNames(post_hash['user'])
 			user_follows = post_hash['follows_you']
 			user_followed = post_hash['you_follow']
 			colored_post = $tools.colorize(post_text)
@@ -379,9 +406,7 @@ class AyaDN
 		def buildUsersList(users_hash)
 			users_string = ""
 			users_hash.each do |item|
-				user_name = item['username']
-				user_real_name = item['name']
-				user_handle = "@" + user_name
+				user_name, user_real_name, user_handle = objectNames(item)
 				users_string += user_handle.green + " #{user_real_name}\n".cyan
 			end
 			users_string += "\n\n"
@@ -391,9 +416,7 @@ class AyaDN
 			pagination_array = []
 			users_hash = {}
 			hashes.each do |item|
-				user_name = item['username']
-				user_real_name = item['name']
-				user_handle = "@" + user_name
+				user_name, user_real_name, user_handle = objectNames(item)
 				pagination_array.push(item['pagination_id'])
 				users_hash[user_handle] = user_real_name
 			end
@@ -404,18 +427,10 @@ class AyaDN
 			buildFileInfo(resp_hash, with_url)
 		end
 		def buildFileInfo(resp_hash, with_url)
+			created_day, created_hour = objectDate(resp_hash)
 			list_string = ""
 			file_url = nil
-			file_name = resp_hash['name']
-			file_token = resp_hash['file_token']
-			file_source_name = resp_hash['source']['name']
-			file_source_url = resp_hash['source']['link']
-			created_day, created_hour = objectDate(resp_hash)
-			file_kind = resp_hash['kind']
-			file_id = resp_hash['id']
-			file_size = resp_hash['size']
-			file_size_converted = file_size.to_filesize unless file_size == nil
-			file_public = resp_hash['public']
+			file_name, file_token, file_source_name, file_source_url, file_kind, file_id, file_size, file_size_converted, file_public = filesDetails(resp_hash)
 			file_url_expires = resp_hash['url_expires']
 			derived_files = resp_hash['derived_files']
 			# list_string += "\nID: ".cyan + file_id.brown
@@ -433,18 +448,7 @@ class AyaDN
 			end
 			if with_url == true
 				list_string += "\nURL: ".cyan + file_url
-				# if derived_files != nil
-				# 	if derived_files['image_thumb_960r'] != nil
-				# 		file_derived_bigthumb_name = derived_files['image_thumb_960r']['name']
-				# 		file_derived_bigthumb_url = derived_files['image_thumb_960r']['url']
-				# 	end
-				# 	if derived_files['image_thumb_200s'] != nil
-				# 		file_derived_smallthumb_name = derived_files['image_thumb_200s']['name']
-				# 		file_derived_smallthumb_url = derived_files['image_thumb_200s']['url']
-				# 	end
-				# 	list_string += "\nBig thumbnail: ".cyan + file_derived_bigthumb_url unless file_derived_bigthumb_url == nil
-				# 	list_string += "\nSmall thumbnail: ".cyan + file_derived_smallthumb_url unless file_derived_smallthumb_url == nil
-				# end
+				#list_string += derivedFilesDetails(derived_files)
 			end
 			list_string += "\n\n"
 			return list_string, file_url, file_name
@@ -459,17 +463,9 @@ class AyaDN
 			file_url = nil
 			pagination_array = []
 			resp_hash.each do |item|
-				pagination_array.push(item['pagination_id'])
-				file_name = item['name']
-				file_token = item['file_token']
-				file_source_name = item['source']['name']
-				file_source_url = item['source']['link']
 				created_day, created_hour = objectDate(item)
-				file_kind = item['kind']
-				file_id = item['id']
-				file_size = item['size']
-				file_size_converted = file_size.to_filesize unless file_size == nil
-				file_public = item['public']
+				pagination_array.push(item['pagination_id'])
+				file_name, file_token, file_source_name, file_source_url, file_kind, file_id, file_size, file_size_converted, file_public = filesDetails(item)
 				file_url_expires = item['url_expires']
 				derived_files = item['derived_files']
 				list_string += "\nID: ".cyan + file_id.brown
@@ -486,18 +482,7 @@ class AyaDN
 					if with_url == true
 						file_url = item['url']
 						list_string += "\nURL: ".cyan + file_url.brown
-						# if derived_files != nil
-						# 	if derived_files['image_thumb_960r'] != nil
-						# 		file_derived_bigthumb_name = derived_files['image_thumb_960r']['name']
-						# 		file_derived_bigthumb_url = derived_files['image_thumb_960r']['url']
-						# 	end
-						# 	if derived_files['image_thumb_200s'] != nil
-						# 		file_derived_smallthumb_name = derived_files['image_thumb_200s']['name']
-						# 		file_derived_smallthumb_url = derived_files['image_thumb_200s']['url']
-						# 	end
-						# 	list_string += "\nBig thumbnail: ".cyan + file_derived_bigthumb_url unless file_derived_bigthumb_url == nil
-						# 	list_string += "\nSmall thumbnail: ".cyan + file_derived_smallthumb_url unless file_derived_smallthumb_url == nil
-						# end
+						#list_string += derivedFilesDetails(derived_files)
 					end
 				end
 				list_string += "\n"
@@ -532,30 +517,10 @@ class AyaDN
 							#the_writers.push(writer) 
 						end
 					end
-					# if readers != nil
-					# 	readers.each do |reader|
-					# 		the_readers.push(reader) 
-					# 	end
-					# end
-					# if you_write
-					# 	the_writers.push("yourself")
-					# end
 					the_channels += "\nChannel ID: ".cyan + "#{channel_id}\n".brown
 					the_channels += "Creator: ".cyan + owner.magenta + "\n"
 					#the_channels += "Channels type: ".cyan + "#{channel_type}\n".brown
 					the_channels += "Interlocutor(s): ".cyan + the_writers.join(", ").magenta + "\n"
-					# the_channels += "Authorized: ".cyan + the_writers.join(", ").brown + "\n"
-					# if readers != nil
-					# 	the_channels += "Readers: ".cyan + the_readers.join(", ").brown + "\n"
-					# else
-					# 	the_channels += "Readers: ".cyan + "yourself\n".brown
-					# end
-					# if unread_messages > 0
-					# 	the_channels += "Unread messages: ".cyan + unread_messages.to_s.reddish + "\n"
-					# else
-					# 	the_channels += "Unread messages: ".cyan + unread_messages.to_s.green + "\n"
-					# end
-					# the_channels += "You can do ".pink + "ayadn pm #{owner} ".brown + "to send a private message.\n\n".pink
 				end
 				if channel_type == "com.ayadn.drafts"
 					$drafts = channel_id
@@ -567,12 +532,9 @@ class AyaDN
 			return the_channels, channels_list
 		end
 		def buildUserInfos(name, adn_data)
-			user_name = adn_data['username']
+			user_name, user_real_name, the_name = objectNames(adn_data)
 			user_id = adn_data['id']
-			user_show = ""
-			#user_show += "\n--- @".brown + user_name.brown + " ---\n\n".brown
-			the_name = "@" + user_name
-			user_real_name = adn_data['name']
+			user_show = ""			
 			user_show += "ID: ".cyan.ljust(21) + user_id.green + "\n"
 			if user_real_name != nil
 				user_show += "Name: ".cyan.ljust(21) + user_real_name.green + "\n"
