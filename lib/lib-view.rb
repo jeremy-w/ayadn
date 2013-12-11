@@ -212,12 +212,7 @@ class AyaDN
 			messages_string = ""
 			messages_stream.each do |item|
 				message_text = item['text']
-				if message_text != nil
-					colored_post = $tools.colorize(message_text)
-				else
-					colored_post = "--Message deleted--".red
-					#next
-				end
+				message_text != nil ? (colored_post = $tools.colorize(message_text)) : (colored_post = "--Post deleted--".red)
 				created_day, created_hour = objectDate(item)
 				links = item['entities']['links']
 				user_name = item['user']['username']
@@ -251,12 +246,7 @@ class AyaDN
 					# post_string += " \"#{$skipped_sources[matched]}\"\n\n".cyan
 				# 	next
 				# end
-
-				if post_text != nil
-					colored_post = $tools.colorize(post_text)
-				else
-					colored_post = "--Post deleted--".red
-				end
+				post_text != nil ? (colored_post = $tools.colorize(post_text)) : (colored_post = "--Post deleted--".red)
 				user_name, user_real_name, handle = objectNames(item['user'])
 				created_day, created_hour = objectDate(item)
 				post_date = created_day.cyan + " " + created_hour.cyan
@@ -314,11 +304,7 @@ class AyaDN
 		end
 		def buildSimplePost(post_hash)
 			post_text = post_hash['text']
-			if post_text != nil
-				colored_post = $tools.colorize(post_text)
-			else
-				colored_post = "--Post deleted--".red
-			end
+			post_text != nil ? (colored_post = $tools.colorize(post_text)) : (colored_post = "--Post deleted--".red)
 			user_name = post_hash['user']['username']
 			created_day, created_hour = objectDate(post_hash)
 			post_id = post_hash['id']
@@ -335,7 +321,7 @@ class AyaDN
 			the_post_id = post_hash['id']
 			post_text = post_hash['text']
 			user_name, user_real_name, the_name = objectNames(post_hash['user'])
-			colored_post = $tools.colorize(post_text)
+			post_text != nil ? (colored_post = $tools.colorize(post_text)) : (colored_post = "--Post deleted--".red)
 			created_day, created_hour = objectDate(post_hash)
 			post_details = created_day.cyan + " " + the_post_id.green + " " + the_name.brown
 			if !real_name.empty?
@@ -344,12 +330,12 @@ class AyaDN
 			post_details += "\n" + colored_post + "\n\n"
 		end
 		def buildPostInfo(post_hash, is_mine)
-			the_post_id = post_hash['id']
 			post_text = post_hash['text']
+			post_text != nil ? (colored_post = $tools.colorize(post_text)) : (puts "--Post deleted--\n\n".red; exit)
+			the_post_id = post_hash['id']
 			user_name, user_real_name, the_name = objectNames(post_hash['user'])
 			user_follows = post_hash['follows_you']
 			user_followed = post_hash['you_follow']
-			colored_post = $tools.colorize(post_text)
 			created_day, created_hour = objectDate(post_hash)
 			links = post_hash['entities']['links']
 			post_details = "\nThe " + created_day.cyan + ' at ' + created_hour.cyan + ' by ' + "@".green + user_name.green
