@@ -78,14 +78,14 @@ class AyaDN
 			end
 			return ret_string
 		end
+
 		def buildInteractions(hash)
 			inter_string = ""
 			hash.each do |item|
 				action = item['action']
-				event_date = item['event_date']
-				created_day = event_date[0...10]
-				created_hour = event_date[11...19]
-				objects_names, users_list, post_ids, post_text = [], [], [], []
+				created_day = item['event_date'][0...10]
+				created_hour = item['event_date'][11...19]
+				objects_names = users_list = post_ids = post_text = []
 				objects = item['objects']
 				obj_has_names = false
 				objects.each do |o|
@@ -133,28 +133,44 @@ class AyaDN
 			end
 			return inter_string
 		end
+
+		def objectDate(item)
+			created_at = item['created_at']
+			created_day = created_at[0...10]
+			created_hour = created_at[11...19]
+			return created_day, created_hour
+		end
+		def objectLinks(links)
+			if !links.empty?
+				links_string = ""
+				links_array = []
+				links.each do |link|
+					linkURL = link['url']
+					links_array.push(linkURL)
+				end
+				links_array.reverse.each do |linkURL|
+					links_string += "Link: ".cyan + linkURL.brown + "\n"
+				end
+			else
+				links_string = ""
+			end
+			return links_string
+		end
+
 		def buildStream(post_hash)
 			post_string = ""
 			post_hash.each do |item|
 				post_text = item['text']
 				post_text != nil ? (colored_post = $tools.colorize(post_text)) : (colored_post = "--Post deleted--".red)
 				user_name = item['user']['username']
-				createdAt = item['created_at']
-				created_day = createdAt[0...10]
-				created_hour = createdAt[11...19]
+				created_day, created_hour = objectDate(item)
 				links = item['entities']['links']
 				post_id = item['id']
 				post_string += "Post ID: ".cyan + post_id.to_s.green
 				post_string += " - "
 				post_string += created_day.cyan + ' at ' + created_hour.cyan + ' by ' + "@".green + user_name.green + "\n" + colored_post + "\n"
-				if !links.empty?
-					post_string += "Link: ".cyan
-					links.each do |link|
-						linkURL = link['url']
-						post_string += linkURL.brown + " \n"
-					end
-				end
-				post_string += "\n\n"
+				links_string = objectLinks(links)
+				post_string += links_string + "\n"
 			end
 			return post_string
 		end
@@ -168,23 +184,15 @@ class AyaDN
 					colored_post = "--Message deleted--".red
 					#next
 				end
-				createdAt = item['created_at']
-				created_day = createdAt[0...10]
-				created_hour = createdAt[11...19]
+				created_day, created_hour = objectDate(item)
 				links = item['entities']['links']
 				user_name = item['user']['username']
 				post_id = item['id']
 				messages_string += "Post ID: ".cyan + post_id.to_s.green
 				messages_string += " - "
 				messages_string += created_day.cyan + ' ' + created_hour.cyan + " by " + "@".green + user_name.green + "\n" + colored_post + "\n"
-				if !links.empty?
-					messages_string += "Link: ".cyan
-					links.each do |link|
-						linkURL = link['url']
-						messages_string += linkURL.brown + " \n"
-					end
-				end
-				messages_string += "\n"
+				links_string = objectLinks(links)
+				messages_string += links_string + "\n"
 			end
 			last_viewed = messages_stream.last
 			last_id = last_viewed['pagination_id'] unless last_viewed == nil
@@ -217,9 +225,7 @@ class AyaDN
 				end
 				user_name = item['user']['username']
 				user_real_name = item['user']['name']
-				createdAt = item['created_at']
-				created_day = createdAt[0...10]
-				created_hour = createdAt[11...19]
+				created_day, created_hour = objectDate(item)
 				handle = "@".reddish + user_name.reddish
 				post_date = created_day.cyan + " " + created_hour.cyan
 				#post_string += "Post ID: ".cyan + post_id.to_s.green
@@ -228,7 +234,6 @@ class AyaDN
 				#post_string += post_id.to_s.green + " " + created_day.cyan + " " + created_hour.cyan + " " + "[#{user_real_name}]".blue + " " + "@".reddish + user_name.reddish + "\n" + colored_post + "\n"
 				post_string += post_id.to_s.green.ljust(14) + " " + handle + " [#{user_real_name}]".magenta + " " + post_date + " " + "\n" + colored_post + "\n"
 				links = item['entities']['links']
-
 				source_link = item['source']['link']
 				annotations_list = item['annotations']
 				xxx = 0
@@ -271,18 +276,8 @@ class AyaDN
 						xxx += 1
 					end
 				end
-				if !links.empty?
-					links_array = []
-					links.each do |link|
-						linkURL = link['url']
-						links_array.push(linkURL)
-					end
-					links_array.reverse.each do |linkURL|
-						post_string += "Link: ".cyan + linkURL.brown + "\n"
-					end
-					#post_string += "\n"
-				end
-				post_string += "\n"
+				links_string = objectLinks(links)
+				post_string += links_string + "\n"
 			end
 			return post_string, pagination_array
 		end
@@ -294,9 +289,7 @@ class AyaDN
 				colored_post = "--Post deleted--".red
 			end
 			user_name = post_hash['user']['username']
-			createdAt = post_hash['created_at']
-			created_day = createdAt[0...10]
-			created_hour = createdAt[11...19]
+			created_day, created_hour = objectDate(post_hash)
 			post_id = post_hash['id']
 			post_string = "Post ID: ".cyan + post_id.to_s.red.reverse_color
 			post_string += " - "
@@ -304,14 +297,8 @@ class AyaDN
 			links = post_hash['entities']['links']
 			source_name = post_hash['source']['name']
 			source_link = post_hash['source']['link']
-			if !links.empty?
-				links.each do |link|
-					linkURL = link['url']
-					post_string += "Link: ".cyan + linkURL.brown + " "
-				end
-				post_string += "\n"
-			end
-			post_string += "\n"
+			links_string = objectLinks(links)
+			post_string += links_string + "\n"
 		end
 		def buildSimplePostView(post_hash)
 			the_post_id = post_hash['id']
@@ -320,9 +307,7 @@ class AyaDN
 			real_name = post_hash['user']['name']
 			the_name = "@" + user_name
 			colored_post = $tools.colorize(post_text)
-			createdAt = post_hash['created_at']
-			created_day = createdAt[0...10]
-			created_hour = createdAt[11...19]
+			created_day, created_hour = objectDate(post_hash)
 			post_details = created_day.cyan + " " + the_post_id.green + " " + the_name.brown
 			if !real_name.empty?
 				post_details += " #{real_name}".pink
@@ -337,14 +322,9 @@ class AyaDN
 			the_name = "@" + user_name
 			user_follows = post_hash['follows_you']
 			user_followed = post_hash['you_follow']
-			
 			colored_post = $tools.colorize(post_text)
-
-			createdAt = post_hash['created_at']
-			created_day = createdAt[0...10]
-			created_hour = createdAt[11...19]
+			created_day, created_hour = objectDate(post_hash)
 			links = post_hash['entities']['links']
-
 			post_details = "\nThe " + created_day.cyan + ' at ' + created_hour.cyan + ' by ' + "@".green + user_name.green
 			if !real_name.empty?
 				post_details += " \[#{real_name}\]".reddish
@@ -352,18 +332,10 @@ class AyaDN
 			post_details += ":\n"
 			post_details += "\n" + colored_post + "\n" + "\n" 
 			post_details += "Post ID: ".cyan + the_post_id.to_s.green
-			if !links.empty?
-				links.each do |link|
-					linkURL = link['url']
-					post_details += "\nLink: ".cyan + linkURL.brown
-				end
-			else
-				#post_details += "\n"
-			end
+			links_string = objectLinks(links)
+			post_details += links_string + "\n"
 			post_URL = post_hash['canonical_url']
-
 			post_details += "\nPost URL: ".cyan + post_URL.brown
-
 			num_stars = post_hash['num_stars']
 			num_replies = post_hash['num_replies']
 			num_reposts = post_hash['num_reposts']
@@ -377,7 +349,6 @@ class AyaDN
 			if is_reply != nil
 				post_details += "\nThis post is a reply to post ".cyan + is_reply.brown
 			end
-
 			if is_mine == false
 				if repost_of != nil
 					repost_id = repost_of['id']
@@ -439,9 +410,7 @@ class AyaDN
 			file_token = resp_hash['file_token']
 			file_source_name = resp_hash['source']['name']
 			file_source_url = resp_hash['source']['link']
-			file_created_at = resp_hash['created_at']
-			created_day = file_created_at[0...10]
-			created_hour = file_created_at[11...19]
+			created_day, created_hour = objectDate(resp_hash)
 			file_kind = resp_hash['kind']
 			file_id = resp_hash['id']
 			file_size = resp_hash['size']
@@ -495,9 +464,7 @@ class AyaDN
 				file_token = item['file_token']
 				file_source_name = item['source']['name']
 				file_source_url = item['source']['link']
-				file_created_at = item['created_at']
-				created_day = file_created_at[0...10]
-				created_hour = file_created_at[11...19]
+				created_day, created_hour = objectDate(item)
 				file_kind = item['kind']
 				file_id = item['id']
 				file_size = item['size']
