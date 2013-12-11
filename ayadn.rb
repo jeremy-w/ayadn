@@ -188,6 +188,8 @@ when "webhelp"
 when "debug"
 	if arg2 == nil
 		client.ayadnDebugStream
+	elsif arg2 =~ /^@/
+		client.ayadnDebugUser(arg2)
 	elsif arg3.is_integer?
 		if arg2 == "post"
 			client.ayadnDebugPost(arg3)

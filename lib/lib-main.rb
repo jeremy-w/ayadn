@@ -27,6 +27,10 @@ class AyaDN
 		@hash = @api.getPostInfos("call", postID)
 		debugStream
 	end
+	def ayadnDebugUser(username)
+		@hash = @api.getUserInfos(username)
+		debugStream
+	end
 	def ayadnDebugMessage(channel_id, message_id)
 		@hash = @api.getUniqueMessage(channel_id, message_id)
 		debugStream

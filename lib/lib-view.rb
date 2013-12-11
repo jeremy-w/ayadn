@@ -601,52 +601,57 @@ class AyaDN
 		end
 		def buildUserInfos(name, adnData)
 			userName = adnData['username']
-			userShow = "\n--- @".brown + userName.brown + " ---\n".brown
+			user_id = adnData['id']
+			userShow = ""
+			#userShow += "\n--- @".brown + userName.brown + " ---\n\n".brown
 			theName = "@" + userName
 			userRealName = adnData['name']
+			userShow += "ID: ".cyan.ljust(21) + user_id.green + "\n"
 			if userRealName != nil
-				userShow += "Name: ".red + userRealName.cyan + "\n"
+				userShow += "Name: ".cyan.ljust(21) + userRealName.green + "\n"
 			end
 			if adnData['description'] != nil
 				userDescr = adnData['description']['text']
 			else
-				userDescr = "No description available.".red
+				userDescr = "No description available.".cyan
 			end
 			userTimezone = adnData['timezone']
 			if userTimezone != nil
-				userShow += "Timezone: ".red + userTimezone.cyan + "\n"
+				userShow += "Timezone: ".cyan.ljust(21) + userTimezone.green + "\n"
 			end
 			locale = adnData['locale']
 			if locale != nil
-				userShow += "Locale: ".red + locale.cyan + "\n"
+				userShow += "Locale: ".cyan.ljust(21) + locale.green + "\n"
 			end
-			userShow += theName.red
-
-
-			# this will be obsolete once the app has its own token
+			userPosts = adnData['counts']['posts']
+			userFollowers = adnData['counts']['followers']
+			userFollowing = adnData['counts']['following']
+			userShow += "Posts: ".cyan.ljust(21) + userPosts.to_s.green + "\n" + "Followers: ".cyan.ljust(21) + userFollowers.to_s.green + "\n" + "Following: ".cyan.ljust(21) + userFollowing.to_s.green + "\n"
+			userShow += "Web: ".cyan.ljust(21) + "http://".green + adnData['verified_domain'].green + "\n" if adnData['verified_domain'] != nil
+			userShow += "\n"
+			userShow += theName.brown
 			if name != "me"
 				userFollows = adnData['follows_you']
 				userFollowed = adnData['you_follow']
+				user_is_muted = adnData['you_muted']
 				if userFollows == true
 					userShow += " follows you\n".green
 				else
 					userShow += " doesn't follow you\n".reddish
 				end
 				if userFollowed == true
-					userShow += "You follow ".green + theName.red
+					userShow += "You follow ".green + theName.brown + "\n"
 				else
-					userShow += "You don't follow ".reddish + theName.red
+					userShow += "You don't follow ".reddish + theName.brown + "\n"
+				end
+				if user_is_muted == true
+					userShow += "You muted ".reddish + theName.brown + "\n"
 				end
 			else
-				userShow += ":".red + " yourself!".cyan
+				userShow += ":".cyan + " yourself!".brown + "\n"
 			end
-			#
-			
-			userPosts = adnData['counts']['posts']
-			userFollowers = adnData['counts']['followers']
-			userFollowing = adnData['counts']['following']
-			userShow += "\nPosts: ".red + userPosts.to_s.cyan + "\nFollowers: ".red + userFollowers.to_s.cyan + "\nFollowing: ".red + userFollowing.to_s.cyan
-			userShow += "\nBio: \n".red + userDescr + "\n\n"
+			userShow += "\n"
+			userShow += "Bio: \n\n".cyan + userDescr + "\n\n"
 		end
 	end
 end

@@ -87,7 +87,7 @@ class AyaDN
             s += "\nStarred by: \n".cyan
         end
         def infosUser(arg)
-            s = "\nLoading informations on user ".green + "#{arg}".brown + "...\n".green
+            s = "\nLoading informations on ".green + "#{arg}".brown + "\n\n"
         end
         def infosPost(arg)
             s = "\nLoading informations on post ".green + "#{arg}".brown + "...\n".green
