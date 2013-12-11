@@ -85,7 +85,7 @@ class AyaDN
 				action = item['action']
 				created_day = item['event_date'][0...10]
 				created_hour = item['event_date'][11...19]
-				objects_names = users_list = post_ids = post_text = []
+				objects_names, users_list, post_ids, post_text = [], [], [], []
 				objects = item['objects']
 				obj_has_names = false
 				objects.each do |o|
@@ -96,9 +96,10 @@ class AyaDN
 					when "star", "unstar", "repost", "unrepost", "reply"
 						post_id = o['id']
 						post_ids.push(post_id)
-						#text = o['text']
+						text = o['text']
 						post_info = buildPostInfo(o, false)
 						post_text.push(post_info.chomp("\n\n"))
+						#post_text << text
 					end
 				end
 				users = item['users']
@@ -324,8 +325,8 @@ class AyaDN
 			post_text != nil ? (colored_post = $tools.colorize(post_text)) : (colored_post = "--Post deleted--".red)
 			created_day, created_hour = objectDate(post_hash)
 			post_details = created_day.cyan + " " + the_post_id.green + " " + the_name.brown
-			if !real_name.empty?
-				post_details += " #{real_name}".pink
+			if !user_real_name.empty?
+				post_details += " #{user_real_name}".pink
 			end
 			post_details += "\n" + colored_post + "\n\n"
 		end
@@ -339,8 +340,8 @@ class AyaDN
 			created_day, created_hour = objectDate(post_hash)
 			links = post_hash['entities']['links']
 			post_details = "\nThe " + created_day.cyan + ' at ' + created_hour.cyan + ' by ' + "@".green + user_name.green
-			if !real_name.empty?
-				post_details += " \[#{real_name}\]".reddish
+			if !user_real_name.empty?
+				post_details += " \[#{user_real_name}\]".reddish
 			end
 			post_details += ":\n"
 			post_details += "\n" + colored_post + "\n" + "\n" 
