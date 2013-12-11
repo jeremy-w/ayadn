@@ -785,7 +785,7 @@ class AyaDN
 			link = data['entities']['links'][0]['url']
  			if $configFileContents['pinboard']['username'] != nil
  				pin_username = $configFileContents['pinboard']['username']
- 				pin_password = $configFileContents['pinboard']['password']
+ 				pin_password = URI.unescape(Base64::decode64($configFileContents['pinboard']['password']))
  				puts "Saving post ".green + post_id.brown + " to Pinboard...\n".green
  				$tools.saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text, user_name)
  				puts "Done!\n\n".green
@@ -800,7 +800,7 @@ class AyaDN
  					abort($status.stopped)
  				end
  				$configFileContents['pinboard']['username'] = pin_username
- 				$configFileContents['pinboard']['password'] = pin_password
+ 				$configFileContents['pinboard']['password'] = URI.escape(Base64::encode64(pin_password))
  				$tools.saveConfig
  				puts "Saving post ".green + post_id.brown + " to Pinboard...\n".green
  				$tools.saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text, user_name)

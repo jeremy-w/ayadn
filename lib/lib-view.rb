@@ -85,7 +85,7 @@ class AyaDN
 				action = item['action']
 				created_day = item['event_date'][0...10]
 				created_hour = item['event_date'][11...19]
-				objects_names, users_list, post_ids, post_text = [], [], [], []
+				objects_names, users_list, post_ids, post_text = [], [], [], [] # not the same as var1 = var2 = []
 				objects = item['objects']
 				obj_has_names = false
 				objects.each do |o|

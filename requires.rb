@@ -9,6 +9,7 @@ require 'io/console'
 require 'fileutils'
 require 'yaml'
 require 'pinboard'
+require 'base64'
 require_relative "lib/lib-tools"
 require_relative "lib/lib-api"
 require_relative "lib/lib-view"
