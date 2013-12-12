@@ -165,15 +165,15 @@ class AyaDN
 			return user_name, user_real_name, user_handle
 		end
 		def filesDetails(item)
-			file_name = resp_hash['name']
-			file_token = resp_hash['file_token']
-			file_source_name = resp_hash['source']['name']
-			file_source_url = resp_hash['source']['link']
-			file_kind = resp_hash['kind']
-			file_id = resp_hash['id']
-			file_size = resp_hash['size']
+			file_name = item['name']
+			file_token = item['file_token']
+			file_source_name = item['source']['name']
+			file_source_url = item['source']['link']
+			file_kind = item['kind']
+			file_id = item['id']
+			file_size = item['size']
 			file_size_converted = file_size.to_filesize unless file_size == nil
-			file_public = resp_hash['public']
+			file_public = item['public']
 			return file_name, file_token, file_source_name, file_source_url, file_kind, file_id, file_size, file_size_converted, file_public
 		end
 		def derivedFilesDetails(derived_files)
@@ -399,15 +399,18 @@ class AyaDN
 			users_string += "\n\n"
 		end
 		def buildFollowList
-			hashes = getDataNormal(@hash)
-			pagination_array = []
+			#hashes = getDataNormal(@hash)
+			hashes = @hash['data']
+			meta = @hash['meta']
+			#pagination_array = []
 			users_hash = {}
 			hashes.each do |item|
 				user_name, user_real_name, user_handle = objectNames(item)
-				pagination_array.push(item['pagination_id'])
+				#pagination_array.push(item['pagination_id'])
 				users_hash[user_handle] = user_real_name
 			end
-			return users_hash, pagination_array
+			#return users_hash, pagination_array
+			return users_hash, meta['min_id']
 		end
 		def showFileInfo(with_url)
 			resp_hash = getDataNormal(@hash)

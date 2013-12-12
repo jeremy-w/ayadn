@@ -11,22 +11,8 @@ class AyaDN
 			# maybe advanced features later
 			@authorizeURL
 		end
-		def getResponse(url)
-			begin
-				response = RestClient.get(url)
-				return response.body
-			rescue => e
-				abort("HTTP ERROR :\n".red + "#{e}\n".red)
-			end
-		end
-		def restDelete
-			begin
-				response = RestClient.delete(@url)
-			rescue => e
-				abort("HTTP ERROR :\n".red + "#{e}\n".red)
-			end
-		end
 
+		##### 
 		# experimenting
 		def createIncompleteFileUpload(file_name) #this part works
 			url = "https://alpha-api.app.net/stream/0/files"
@@ -43,7 +29,6 @@ class AyaDN
 		def setFileContentUpload(file_id, file_path, file_token) #this one doesn't
 			url = "https://alpha-api.app.net/stream/0/files/#{file_id}/content?file_token=#{file_token}"
 			uri = URI("#{url}")
-
 			#check with the docs to format it properly
 			# boundary="AaB03xEd73XiiiZkK"
 			# post_body = []
@@ -63,6 +48,7 @@ class AyaDN
 			# puts response.body
 			# exit
 		end
+		#####
 
 		def httpPutFile(file, data) # data must be json
 			url = "https://alpha-api.app.net/stream/0/files/#{file}"
@@ -86,19 +72,69 @@ class AyaDN
 			request["Content-Type"] = "application/json"
 			return https, request
 		end
+
+
+		# WIP, todo: DRY
+		def clientHTTP(action, target = nil)
+			uri = URI("#{@url}")
+			https = Net::HTTP.new(uri.host,uri.port)
+			https.use_ssl = true
+			https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+			case action
+			when "delete"
+				request = Net::HTTP::Delete.new(uri.path)
+				request["Authorization"] = "Bearer #{@token}"
+				request["Content-Type"] = "application/json"
+				response = https.request(request)
+			when "get"
+				request = Net::HTTP::Get.new(uri.path)
+				request["Authorization"] = "Bearer #{@token}"
+				request["Content-Type"] = "application/json"
+				response = https.request(request)
+			when "getlist"
+				uri = URI.parse("#{target}")
+				https = Net::HTTP.new(uri.host,uri.port)
+				https.use_ssl = true
+				https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+				request = Net::HTTP::Get.new(uri.request_uri)
+				request["Authorization"] = "Bearer #{@token}"
+				request["Content-Type"] = "application/json"
+				response = https.request(request)
+			when "download"
+				uri = URI("#{target}")
+				final_uri = ''
+				open(uri) do |h|
+				  final_uri = h.base_uri.to_s
+				end
+				new_uri = URI.parse(final_uri)
+				https = Net::HTTP.new(new_uri.host,new_uri.port)
+				https.use_ssl = true
+				https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+				request = Net::HTTP::Get.new(new_uri.request_uri)
+				request["Authorization"] = "Bearer #{@token}"
+				request["Content-Type"] = "application/json"
+				response = https.request(request)
+			end
+			
+		end
+		#
+
 		def httpPost(url)
 			https, request = connectWithHTTP(url)
 			response = https.request(request)
 		end
+
 		def deleteMessage(channel_id, message_id)
 			@url = "https://alpha-api.app.net/stream/0/channels/#{channel_id}/messages/#{message_id}"
 			@url += "?access_token=#{@token}"
-			restDelete
+			resp = @api.clientHTTP("delete")
+			$tools.checkHTTPResp(resp)
 		end
 		def deactivateChannel(channel_id)
 			@url = "https://alpha-api.app.net/stream/0/channels/#{channel_id}"
 			@url += "?access_token=#{@token}"
-			restDelete
+			resp = @api.clientHTTP("delete")
+			$tools.checkHTTPResp(resp)
 		end
 		
 		def httpSendMessage(target, text)
@@ -162,7 +198,12 @@ class AyaDN
 			return ayadn_annotations
 		end
 		def getHash
-			theHash = JSON.parse(getResponse(@url))
+			response = clientHTTP("get")  
+			theHash = JSON.parse(response.body)
+		end
+		def getListHash
+			response = clientHTTP("getlist", @url)  
+			theHash = JSON.parse(response.body)
 		end
 		def makeStreamURL(stream, value = nil)
 			@url = "https://alpha-api.app.net/"
@@ -432,7 +473,8 @@ class AyaDN
 		end
 		def unstarPost(postID)
 			@url = makeStreamURL("star", postID)
-			restDelete
+			resp = clientHTTP("delete")
+			$tools.checkHTTPResp(resp)
 		end
 		def repostPost(postID)
 			@url = makeStreamURL("repost", postID)
@@ -440,7 +482,8 @@ class AyaDN
 		end
 		def unrepostPost(postID)
 			@url = makeStreamURL("repost", postID)
-			restDelete
+			resp = clientHTTP("delete")
+			$tools.checkHTTPResp(resp)
 		end
 		def ifExists(postID)
 			theHash = getHash
@@ -475,7 +518,8 @@ class AyaDN
 		end
 		def unmuteUser(name)
 			@url = makeStreamURL("mute", name)
-			restDelete
+			resp = clientHTTP("delete")
+			$tools.checkHTTPResp(resp)
 		end
 		def followUser(name)
 			@url = makeStreamURL("follow", name)
@@ -483,23 +527,27 @@ class AyaDN
 		end
 		def unfollowUser(name)
 			@url = makeStreamURL("follow", name)
-			restDelete
+			resp = clientHTTP("delete")
+			$tools.checkHTTPResp(resp)
 		end
 		def getFollowings(name, beforeID)
 			@url = makeStreamURL("followings", name)
 			@url += "&count=200"
 			@url += "&before_id=#{beforeID}" if beforeID != nil
-			getHash
+			#getHash
+			getListHash
 		end
 		def getFollowers(name, beforeID)
 			@url = makeStreamURL("followers", name)
 			@url += "&before_id=#{beforeID}" if beforeID != nil
-			getHash
+			#getHash
+			getListHash
 		end
 		def getMuted(name, beforeID)
 			@url = makeStreamURL("muted", name)
 			@url += "&before_id=#{beforeID}" if beforeID != nil
-			getHash
+			#getHash
+			getListHash
 		end
 		def getSearch(value)
 			@url = makeStreamURL("search", value)
@@ -508,7 +556,8 @@ class AyaDN
 		def getFilesList(beforeID)
 			@url = makeStreamURL("files_list")
 			@url += "&before_id=#{beforeID}" if beforeID != nil
-			getHash
+			#getHash
+			getListHash
 		end
 		def getSingleFile(file_id)
 			@url = makeStreamURL("get_file", file_id)
@@ -516,11 +565,13 @@ class AyaDN
 		end
 		def getMultipleFiles(file_ids)
 			@url = makeStreamURL("get_multiple_files", file_ids)
-			getHash
+			#getHash
+			getListHash
 		end
 		def deleteFile(file_id)
 			@url = makeStreamURL("get_file", file_id)
-			restDelete
+			resp = clientHTTP("delete")
+			$tools.checkHTTPResp(resp)
 		end
 	end
 end

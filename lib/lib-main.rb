@@ -334,7 +334,8 @@ class AyaDN
 		if is_there_post == nil
 			abort($status.errorAlreadyDeleted)
 		else
-			@api.restDelete()
+			resp = @api.clientHTTP("delete")
+			$tools.checkHTTPResp(resp)
 			puts $status.postDeleted
 			exit
 		end
@@ -382,10 +383,10 @@ class AyaDN
 		elsif list == "muted"
 			@hash = @api.getMuted(name, beforeID)
 		end
-		users_hash, pagination_array = @view.new(@hash).buildFollowList()
+		users_hash, min_id = @view.new(@hash).buildFollowList()
 	    big_hash.merge!(users_hash)
-	    beforeID = pagination_array.last
-	    while pagination_array != nil
+	    beforeID = min_id
+	    loop do
 			if list == "followers"
 				@hash = @api.getFollowers(name, beforeID)
 			elsif list == "followings"
@@ -393,10 +394,10 @@ class AyaDN
 			elsif list == "muted"
 				@hash = @api.getMuted(name, beforeID)
 			end
-		    users_hash, pagination_array = @view.new(@hash).buildFollowList()
+		    users_hash, min_id = @view.new(@hash).buildFollowList()
 		    big_hash.merge!(users_hash)
-	    	break if pagination_array.first == nil
-	    	beforeID = pagination_array.last
+	    	break if min_id == nil
+	    	beforeID = min_id
 		end
 	    return big_hash
 	end
@@ -669,7 +670,9 @@ class AyaDN
 	 			new_file_name = "#{file_name}"
 	 			download_file_path = $ayadn_files_path + "/#{new_file_name}"
 	 			if !File.exists?download_file_path
-	 				the_file = @api.getResponse(file_url)
+	 				@url = file_url
+	 				resp = @api.clientHTTP("download", @url)
+					the_file = resp.body
 		 			f = File.new(download_file_path, "wb")
 		 				f.puts(the_file)
 		 			f.close
@@ -687,7 +690,9 @@ class AyaDN
 		 			new_file_name = "#{unique_file_id}_#{file_name}"
 		 			download_file_path = $ayadn_files_path + "/#{new_file_name}"
 		 			if !File.exists?download_file_path
-		 				the_file = @api.getResponse(file_url)
+		 				@url = file_url
+	 					resp = @api.clientHTTP("download", @url)
+						the_file = resp.body
 			 			f = File.new(download_file_path, "wb")
 			 				f.puts(the_file)
 			 			f.close
@@ -777,11 +782,6 @@ class AyaDN
  			data = hash['data']
 			post_text = data['text']
 			user_name = data['user']['username']
-			# real_name = data['user']['name']
-			# the_name = "@" + user_name
-			# created_at = data['created_at']
-			# created_day = created_at[0...10]
-			# created_hour = created_at[11...19]
 			link = data['entities']['links'][0]['url']
  			if $configFileContents['pinboard']['username'] != nil
  				pin_username = $configFileContents['pinboard']['username']

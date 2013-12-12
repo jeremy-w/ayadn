@@ -288,6 +288,12 @@ class AyaDN
                 abort("\nERROR: #{meta.inspect}\n".red)
             end
         end
+        def checkHTTPResp(resp)
+            case resp.code
+            when !200
+                abort("\nERROR: #{resp.code} #{resp.body}\n".red)
+            end
+        end
         def saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text, user_name)
             tags += ",ADN"
             post_text += " http://alpha.app.net/#{user_name}/post/#{post_id}"
