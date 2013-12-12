@@ -201,7 +201,7 @@ class AyaDN
 			response = clientHTTP("get")  
 			theHash = JSON.parse(response.body)
 		end
-		def getListHash
+		def getHashNew
 			response = clientHTTP("getlist", @url)  
 			theHash = JSON.parse(response.body)
 		end
@@ -354,72 +354,72 @@ class AyaDN
 		def getUniqueMessage(channel_id, message_id)
 			@url = "https://alpha-api.app.net/stream/0/channels/#{channel_id}/messages/#{message_id}?access_token=#{@token}"
 			@url += "&include_annotations=1"
-			getHash
+			getHashNew
 		end
 		def getMessages(channel, last_page_ID)
 			@url += "stream/0/channels/#{channel}/messages?access_token=#{@token}&count=100"
 			@url += "&include_annotations=1"
 			checkLastPageID(last_page_ID)
-			getHash
+			getHashNew
 		end
 		def getChannels
 			@url = makeStreamURL("channels")
-			getHash
+			getHashNew
 		end
 		def getGlobal(last_page_ID = nil)
 			@url = makeStreamURL("global")
 			checkLastPageID(last_page_ID)
-			getHash
+			getHashNew
 		end	
 		def getUnified(last_page_ID = nil)
 			@url = makeStreamURL("unified")
 			checkLastPageID(last_page_ID)
-			getHash
+			getHashNew
 		end
 		def getSimpleUnified
 			@url = makeStreamURL("simple_unified")
-			getHash
+			getHashNew
 		end
 		def getInteractions
 			@url = makeStreamURL("interactions")
 			#checkLastPageID(last_page_ID)
-			getHash
+			getHashNew
 		end
-		def getHashtags(tag)
+		def getHashNewtags(tag)
 			@url = makeStreamURL("tag", tag)
-			getHash
+			getHashNew
 		end
 		def getExplore(explore, last_page_ID = nil)
 			@url = makeStreamURL(explore)
 			checkLastPageID(last_page_ID)
-			getHash
+			getHashNew
 		end
 		def getUserMentions(name, last_page_ID = nil)
 			@url = makeStreamURL("mentions", name)
 			checkLastPageID(last_page_ID)
-			getHash
+			getHashNew
 		end
 		def getUserPosts(name, last_page_ID = nil)
 			@url = makeStreamURL("posts", name)
 			checkLastPageID(last_page_ID)
-			getHash
+			getHashNew
 		end
 		def getUserInfos(name)
 			@url = makeStreamURL("userInfo", name)
-			getHash
+			getHashNew
 		end
 		def getWhoReposted(postID)
 			@url = makeStreamURL("whoReposted", postID)
-			getHash
+			getHashNew
 		end
 		def getWhoStarred(postID)
 			@url = makeStreamURL("whoStarred", postID)
-			getHash
+			getHashNew
 		end
 		def getPostInfos(action, postID)
 			@url = makeStreamURL("singlePost", postID)
 			if action == "call"
-				getHash
+				getHashNew
 			elsif action == "load"
 				fileContent = {}
 				File.open("#{$ayadn_posts_path}/#{postID}.post", "r") do |f|
@@ -432,19 +432,19 @@ class AyaDN
 		end
 		def getSinglePost(postID)
 			@url = makeStreamURL("singlePost", postID)
-			getHash
+			getHashNew
 		end
 		def getStarredPosts(name)
 			@url = makeStreamURL("starredPosts", name)
-			getHash
+			getHashNew
 		end
 		def getPostReplies(postID)
 			@url = makeStreamURL("replies", postID)
-			getHash
+			getHashNew
 		end
 		def getPostMentions(postID)
 			@url = makeStreamURL("singlePost", postID)
-			theHash = getHash
+			theHash = getHashNew
 			postInfo = theHash['data']
 			userName = postInfo['user']['username']
 			#rawText = postInfo['text']
@@ -458,7 +458,7 @@ class AyaDN
 		end
 		def getUserName(name)
 			@url = makeStreamURL("userInfo", name)
-			theHash = getHash
+			theHash = getHashNew
 			userInfo = theHash['data']
 			userName = userInfo['username']
 		end
@@ -486,21 +486,21 @@ class AyaDN
 			$tools.checkHTTPResp(resp)
 		end
 		def ifExists(postID)
-			theHash = getHash
+			theHash = getHashNew
 			postInfo = theHash['data']
 			isTherePost = postInfo['text']
 			isYours = postInfo['user']['username']
 			return isTherePost, isYours
 		end
 		def getOriginalPost(postID)
-			theHash = getHash
+			theHash = getHashNew
 			postInfo = theHash['data']
 			isRepost = postInfo['repost_of']
 			goToID = isRepost['id']
 		end
 		def getUserFollowInfo(name)
 			@url = makeStreamURL("userInfo", name)
-			theHash = getHash
+			theHash = getHashNew
 			userInfo = theHash['data']
 			youFollow = userInfo['you_follow']
 			followsYou = userInfo['follows_you']
@@ -508,7 +508,7 @@ class AyaDN
 		end
 		def getUserMuteInfo(name)
 			@url = makeStreamURL("userInfo", name)
-			theHash = getHash
+			theHash = getHashNew
 			userInfo = theHash['data']
 			youMuted = userInfo['you_muted']
 		end
@@ -535,19 +535,19 @@ class AyaDN
 			@url += "&count=200"
 			@url += "&before_id=#{beforeID}" if beforeID != nil
 			#getHash
-			getListHash
+			getHashNew
 		end
 		def getFollowers(name, beforeID)
 			@url = makeStreamURL("followers", name)
 			@url += "&before_id=#{beforeID}" if beforeID != nil
 			#getHash
-			getListHash
+			getHashNew
 		end
 		def getMuted(name, beforeID)
 			@url = makeStreamURL("muted", name)
 			@url += "&before_id=#{beforeID}" if beforeID != nil
 			#getHash
-			getListHash
+			getHashNew
 		end
 		def getSearch(value)
 			@url = makeStreamURL("search", value)
@@ -557,7 +557,7 @@ class AyaDN
 			@url = makeStreamURL("files_list")
 			@url += "&before_id=#{beforeID}" if beforeID != nil
 			#getHash
-			getListHash
+			getHashNew
 		end
 		def getSingleFile(file_id)
 			@url = makeStreamURL("get_file", file_id)
@@ -566,7 +566,7 @@ class AyaDN
 		def getMultipleFiles(file_ids)
 			@url = makeStreamURL("get_multiple_files", file_ids)
 			#getHash
-			getListHash
+			getHashNew
 		end
 		def deleteFile(file_id)
 			@url = makeStreamURL("get_file", file_id)
