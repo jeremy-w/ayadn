@@ -3,6 +3,9 @@ AYADN
 
 AYADN is a learning exercise: while it's fully functional, it's still very alpha (remember I'm a beginner with Ruby).  
 
+## 2013-12-12 v0.36
+- No more Rest-Client, all HTTP by hand
+
 ## 2013-12-10 v0.35
 - Save a post to Pinboard!
 
