@@ -197,10 +197,10 @@ class AyaDN
 				}]
 			return ayadn_annotations
 		end
-		def getHash
-			response = clientHTTP("get")  
-			theHash = JSON.parse(response.body)
-		end
+		# def getHash
+		# 	response = clientHTTP("get")  
+		# 	theHash = JSON.parse(response.body)
+		# end
 		def getHashNew
 			response = clientHTTP("getlist", @url)  
 			theHash = JSON.parse(response.body)
@@ -551,7 +551,7 @@ class AyaDN
 		end
 		def getSearch(value)
 			@url = makeStreamURL("search", value)
-			getHash
+			getHashNew
 		end
 		def getFilesList(beforeID)
 			@url = makeStreamURL("files_list")
@@ -561,7 +561,7 @@ class AyaDN
 		end
 		def getSingleFile(file_id)
 			@url = makeStreamURL("get_file", file_id)
-			getHash
+			getHashNew
 		end
 		def getMultipleFiles(file_ids)
 			@url = makeStreamURL("get_multiple_files", file_ids)
