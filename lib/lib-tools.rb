@@ -198,10 +198,10 @@ class AyaDN
         end
         def uploadImage(file, token)
             file_ext = File.extname(file)
-            if file_ext == ".jpg"
-                resp = `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F "content=@#{file}" -X POST`
-            elsif file_ext == ".png"
+            if file_ext == ".png"
                 resp = `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F "content=@#{file};type=image/png" -X POST`
+            else
+                resp = `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F content=@#{file} -X POST`
             end 
         end
 
