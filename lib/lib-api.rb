@@ -3,13 +3,11 @@
 class AyaDN
 	class API
 		def initialize(token)
-			@url = 'https://alpha-api.app.net/'
 			@token = token
-			@authorizeURL = "https://account.app.net/oauth/authenticate?client_id=#{AYADN_CLIENT_ID}&response_type=token&redirect_uri=#{AYADN_CALLBACK_URL}&scope=basic stream write_post follow public_messages messages files&include_marker=1"
+			@endpoints = AyaDN::Endpoints.new(@token)
 		end
 		def makeAuthorizeURL
-			# maybe advanced features later
-			@authorizeURL
+			@endpoints.authorize_url
 		end
 
 		##### 
@@ -123,22 +121,8 @@ class AyaDN
 			https, request = connectWithHTTP(url)
 			response = https.request(request)
 		end
-
-		def deleteMessage(channel_id, message_id)
-			@url = "https://alpha-api.app.net/stream/0/channels/#{channel_id}/messages/#{message_id}"
-			@url += "?access_token=#{@token}"
-			resp = @api.clientHTTP("delete")
-			$tools.checkHTTPResp(resp)
-		end
-		def deactivateChannel(channel_id)
-			@url = "https://alpha-api.app.net/stream/0/channels/#{channel_id}"
-			@url += "?access_token=#{@token}"
-			resp = @api.clientHTTP("delete")
-			$tools.checkHTTPResp(resp)
-		end
-		
 		def httpSendMessage(target, text)
-			url = 'https://alpha-api.app.net/stream/0/channels/pm/messages'
+			url = PM_URL
 			url += "?include_annotations=1"
 			https, request = connectWithHTTP(url)
 			entities_content = { 
@@ -157,7 +141,7 @@ class AyaDN
 			callback = response.body
 		end
 		def httpSend(text, replyto = nil)
-			url = 'https://alpha-api.app.net/stream/0/posts'
+			url = POSTS_URL
 			url += "?include_annotations=1"
 			https, request = connectWithHTTP(url)
 			entities_content = { 
@@ -182,6 +166,7 @@ class AyaDN
 			response = https.request(request, payload)
 			callback = response.body
 		end
+
 		def clientAnnotations
 			ayadn_annotations = [{
     			"type" => "com.ayadn.client",
@@ -197,253 +182,127 @@ class AyaDN
 				}]
 			return ayadn_annotations
 		end
-		# def getHash
-		# 	response = clientHTTP("get")  
-		# 	theHash = JSON.parse(response.body)
-		# end
+
 		def getHashNew
 			response = clientHTTP("getlist", @url)  
 			theHash = JSON.parse(response.body)
 		end
-		def makeStreamURL(stream, value = nil)
-			@url = "https://alpha-api.app.net/"
-			case stream
-			when "global"
-				@url += 'stream/0/posts/stream/global?access_token='
-				@url += @token + '&include_deleted=0'
-				@url += '&include_html=0'
-				@url += "&count=#{$countGlobal}"
-			when "unified"
-				@url += 'stream/0/posts/stream/unified?access_token='
-				@url += @token + '&include_deleted=1'
-				@url += '&include_html=0'
-				@url += '&include_directed_posts=1' unless $directedPosts == false
-				@url += "&count=#{$countUnified}"
-			when "simple_unified"
-				@url += 'stream/0/posts/stream/unified?access_token='
-				@url += @token + '&include_deleted=0'
-				@url += '&include_html=0'
-				@url += '&include_directed_posts=1' unless $directedPosts == false
-				@url += "&count=#{$countStreamBack}"
-			when "checkins"
-				@url += 'stream/0/posts/stream/explore/'
-				@url += "#{stream}" + "?access_token=#{@token}" + '&include_deleted=0&include_html=0&include_annotations=1'
-				@url += "&count=#{$countCheckins}"
-			when "trending", "conversations", "photos"
-				@url += 'stream/0/posts/stream/explore/'
-				@url += "#{stream}" + "?access_token=#{@token}" + '&include_deleted=0&include_html=0'
-				@url += "&count=#{$countExplore}"
-			when "tag"
-				@url += 'stream/0/posts/tag/'
-				@url += "#{value}"
-			when "mentions"
-				@url += 'stream/0/users/'
-				@url += "#{value}" 
-				@url += "/mentions"
-				@url += "/?access_token=#{@token}"
-				@url += '&include_html=0'
-				@url += "&count=#{$countMentions}"
-			when "posts"
-				@url += 'stream/0/users/'
-				@url += "#{value}" 
-				@url += "/posts"
-				@url += "/?access_token=#{@token}"
-				@url += '&include_deleted=1&include_html=0'
-				@url += "&count=#{$countPosts}"
-			when "userInfo"
-				@url += 'stream/0/users/'
-				@url += "#{value}" 
-				@url += "/?access_token=#{@token}"
-				@url += '&include_html=0'
-			when "whoReposted"
-				@url += 'stream/0/posts/'
-				@url += "#{value}" 
-				@url += "/reposters"
-				@url += "/?access_token=#{@token}"
-				@url += '&include_html=0'
-			when "whoStarred"
-				@url += 'stream/0/posts/'
-				@url += "#{value}" 
-				@url += "/stars"
-				@url += "/?access_token=#{@token}"
-				@url += '&include_html=0'
-			when "singlePost"
-				@url += 'stream/0/posts/'
-				@url += "#{value}" 
-				@url += "/?access_token=#{@token}"
-				@url += "&include_annotations=1&include_html=0"
-			when "starredPosts"
-				@url += 'stream/0/users/'
-				@url += "#{value}" 
-				@url += "/stars"
-				@url += "/?access_token=#{@token}"
-				@url += '&include_deleted=0&include_html=0'
-				@url += "&count=#{$countStarred}"
-			when "replies"
-				@url += 'stream/0/posts/'
-				@url += "#{value}" 
-				@url += "/replies"
-				@url += "/?access_token=#{@token}"
-				@url += '&include_html=0'
-			when "star"
-				@url += 'stream/0/posts/'
-				@url += "/#{value}" + "/star" + "/?access_token=#{@token}"
-			when "repost"
-				@url += 'stream/0/posts/'
-				@url += "/#{value}" + "/repost"  + "/?access_token=#{@token}"
-			when "follow"
-				@url += 'stream/0/users/'
-				@url += "#{value}"
-				@url += "/follow" 
-				@url += "/?access_token=#{@token}"
-			when "followings"
-				@url += 'stream/0/users/'
-				@url += "#{value}"
-				@url += "/following" 
-				@url += "/?access_token=#{@token}"
-				@url += '&include_html=0'
-			when "followers"
-				@url += 'stream/0/users/'
-				@url += "#{value}"
-				@url += "/followers" 
-				@url += "/?access_token=#{@token}"
-				@url += '&include_html=0'
-			when "muted"
-				@url += 'stream/0/users/'
-				@url += "#{value}"
-				@url += "/muted" 
-				@url += "/?access_token=#{@token}"
-				@url += '&include_html=0'
-			when "mute"
-				@url += 'stream/0/users/'
-				@url += "#{value}"
-				@url += "/mute" 
-				@url += "/?access_token=#{@token}"
-			when "search"
-				@url += 'stream/0/posts/'
-				@url += "search"
-				@url += "?text=#{value}"
-				@url += "&include_annotations=1"
-				@url += "&access_token=#{@token}"
-				@url += '&include_html=0'
-			when "interactions"
-				@url += 'stream/0/users/'
-				@url += "me/interactions?"
-				@url += "&access_token=#{@token}"
-			when "channels"
-				@url += "stream/0/channels"
-				@url += "?access_token=#{@token}"
-			when "files_list"
-				@url += "stream/0/users/me/files"
-				@url += "?access_token=#{@token}"
-			when "get_file"
-				@url += "stream/0/files/"
-				@url += "#{value}"
-				@url += "?access_token=#{@token}"
-			when "get_multiple_files"
-				@url += "stream/0/files/"
-				@url += "?ids=#{value}"
-				@url += "&access_token=#{@token}"
-			
 
-			end
-		end
 		def checkLastPageID(last_page_ID = nil)
 			@url += "&since_id=#{last_page_ID}" if last_page_ID != nil
 		end
+
 		def getUniqueMessage(channel_id, message_id)
-			@url = "https://alpha-api.app.net/stream/0/channels/#{channel_id}/messages/#{message_id}?access_token=#{@token}"
-			@url += "&include_annotations=1"
+			@url = @endpoints.get_message(channel_id, message_id)
+			@url += @endpoints.base_params
 			getHashNew
 		end
 		def getMessages(channel, last_page_ID)
-			@url += "stream/0/channels/#{channel}/messages?access_token=#{@token}&count=100"
-			@url += "&include_annotations=1"
+			@url = @endpoints.messages(channel)
+			@url += @endpoints.base_params
 			checkLastPageID(last_page_ID)
 			getHashNew
 		end
 		def getChannels
-			@url = makeStreamURL("channels")
+			@url = @endpoints.channels
+			@url += @endpoints.light_params
 			getHashNew
 		end
 		def getGlobal(last_page_ID = nil)
-			@url = makeStreamURL("global")
+			@url = @endpoints.global
+			@url += @endpoints.light_params
+			@url += @endpoints.include_directed
 			checkLastPageID(last_page_ID)
 			getHashNew
 		end	
 		def getUnified(last_page_ID = nil)
-			@url = makeStreamURL("unified")
+			@url = @endpoints.unified
+			@url += @endpoints.base_params
+			@url += @endpoints.include_directed
 			checkLastPageID(last_page_ID)
 			getHashNew
 		end
 		def getSimpleUnified
-			@url = makeStreamURL("simple_unified")
+			@url = @endpoints.unified
+			@url += @endpoints.light_params
+			@url += @endpoints.include_directed
 			getHashNew
 		end
 		def getInteractions
-			@url = makeStreamURL("interactions")
+			@url = @endpoints.interactions
 			#checkLastPageID(last_page_ID)
 			getHashNew
 		end
-		def getHashNewtags(tag)
-			@url = makeStreamURL("tag", tag)
+		def getHashtags(tag)
+			@url = @endpoints.hashtags(tag)
 			getHashNew
 		end
-		def getExplore(explore, last_page_ID = nil)
-			@url = makeStreamURL(explore)
+		def getExplore(stream, last_page_ID = nil)
+			@url = @endpoints.explore(stream)
+			@url += @endpoints.base_params
 			checkLastPageID(last_page_ID)
 			getHashNew
 		end
-		def getUserMentions(name, last_page_ID = nil)
-			@url = makeStreamURL("mentions", name)
+		def getUserMentions(username, last_page_ID = nil)
+			@url = @endpoints.mentions(username)
+			@url += @endpoints.light_params
 			checkLastPageID(last_page_ID)
 			getHashNew
 		end
-		def getUserPosts(name, last_page_ID = nil)
-			@url = makeStreamURL("posts", name)
+		def getUserPosts(username, last_page_ID = nil)
+			@url = @endpoints.posts(username)
+			@url += @endpoints.base_params
 			checkLastPageID(last_page_ID)
 			getHashNew
 		end
-		def getUserInfos(name)
-			@url = makeStreamURL("userInfo", name)
+		def getUserInfos(username)
+			@url = @endpoints.user_info(username)
+			@url += @endpoints.light_params
 			getHashNew
 		end
-		def getWhoReposted(postID)
-			@url = makeStreamURL("whoReposted", postID)
+		def getWhoReposted(post_id)
+			@url = @endpoints.who_reposted(post_id)
+			@url += @endpoints.light_params
 			getHashNew
 		end
-		def getWhoStarred(postID)
-			@url = makeStreamURL("whoStarred", postID)
+		def getWhoStarred(post_id)
+			@url = @endpoints.who_starred(post_id)
+			@url += @endpoints.light_params
 			getHashNew
 		end
-		def getPostInfos(action, postID)
-			@url = makeStreamURL("singlePost", postID)
+		def getPostInfos(action, post_id)
+			@url = @endpoints.single_post(post_id)
+			@url += @endpoints.base_params
 			if action == "call"
 				getHashNew
 			elsif action == "load"
 				fileContent = {}
-				File.open("#{$ayadn_posts_path}/#{postID}.post", "r") do |f|
+				File.open("#{$ayadn_posts_path}/#{post_id}.post", "r") do |f|
 					fileContent = f.gets
 				end
 				theHash = eval(fileContent)
 			else
-				abort("\nSyntax error\n".red)
+				abort($tools.errorSyntax)
 			end
 		end
-		def getSinglePost(postID)
-			@url = makeStreamURL("singlePost", postID)
+		def getSinglePost(post_id)
+			@url = @endpoints.single_post(post_id)
+			@url += @endpoints.base_params
 			getHashNew
 		end
-		def getStarredPosts(name)
-			@url = makeStreamURL("starredPosts", name)
+		def getStarredPosts(username)
+			@url = @endpoints.starred_posts(username)
+			@url += @endpoints.light_params
 			getHashNew
 		end
-		def getPostReplies(postID)
-			@url = makeStreamURL("replies", postID)
+		def getPostReplies(post_id)
+			@url = @endpoints.replies(post_id)
+			@url += @endpoints.light_params
 			getHashNew
 		end
-		def getPostMentions(postID)
-			@url = makeStreamURL("singlePost", postID)
+		def getPostMentions(post_id)
+			@url = @endpoints.single_post(post_id)
+			@url += @endpoints.light_params
 			theHash = getHashNew
 			postInfo = theHash['data']
 			userName = postInfo['user']['username']
@@ -456,121 +315,148 @@ class AyaDN
 			end
 			return postMentionsArray, userName, isRepost
 		end
-		def getUserName(name)
-			@url = makeStreamURL("userInfo", name)
+		def getUserName(username)
+			@url = @endpoints.user_info(username)
+			@url += @endpoints.light_params
 			theHash = getHashNew
 			userInfo = theHash['data']
 			userName = userInfo['username']
 		end
-		def goDelete(postID)
-			@url = makeStreamURL("singlePost", postID)
-			isTherePost, isYours = ifExists(postID)
+		def goDelete(post_id)
+			@url = @endpoints.single_post(post_id)
+			@url += @endpoints.light_params
+			isTherePost, isYours = ifExists(post_id)
 			return isTherePost, isYours
 		end
-		def starPost(postID)
-			@url = makeStreamURL("star", postID)
+		def starPost(post_id)
+			@url = @endpoints.star(post_id)
+			@url += @endpoints.light_params
 			httpPost(@url)
 		end
-		def unstarPost(postID)
-			@url = makeStreamURL("star", postID)
+		def unstarPost(post_id)
+			@url = @endpoints.star(post_id)
+			@url += @endpoints.light_params
 			resp = clientHTTP("delete")
 			$tools.checkHTTPResp(resp)
 		end
-		def repostPost(postID)
-			@url = makeStreamURL("repost", postID)
+		def repostPost(post_id)
+			@url = @endpoints.repost(post_id)
+			@url += @endpoints.light_params
 			httpPost(@url)
 		end
-		def unrepostPost(postID)
-			@url = makeStreamURL("repost", postID)
+		def unrepostPost(post_id)
+			@url = @endpoints.repost(post_id)
+			@url += @endpoints.light_params
 			resp = clientHTTP("delete")
 			$tools.checkHTTPResp(resp)
 		end
-		def ifExists(postID)
+		def ifExists(post_id)
 			theHash = getHashNew
 			postInfo = theHash['data']
 			isTherePost = postInfo['text']
 			isYours = postInfo['user']['username']
 			return isTherePost, isYours
 		end
-		def getOriginalPost(postID)
+		def getOriginalPost(post_id)
 			theHash = getHashNew
 			postInfo = theHash['data']
 			isRepost = postInfo['repost_of']
 			goToID = isRepost['id']
 		end
-		def getUserFollowInfo(name)
-			@url = makeStreamURL("userInfo", name)
+		def getUserFollowInfo(username)
+			@url = @endpoints.user_info(username)
+			@url += @endpoints.light_params
 			theHash = getHashNew
 			userInfo = theHash['data']
 			youFollow = userInfo['you_follow']
 			followsYou = userInfo['follows_you']
 			return youFollow, followsYou
 		end
-		def getUserMuteInfo(name)
-			@url = makeStreamURL("userInfo", name)
+		def getUserMuteInfo(username)
+			@url = @endpoints.user_info(username)
+			@url += @endpoints.light_params
 			theHash = getHashNew
 			userInfo = theHash['data']
 			youMuted = userInfo['you_muted']
 		end
-		def muteUser(name)
-			@url = makeStreamURL("mute", name)
+		def muteUser(username)
+			@url = @endpoints.mute(username)
+			@url += @endpoints.light_params
 			httpPost(@url)
 		end
-		def unmuteUser(name)
-			@url = makeStreamURL("mute", name)
+		def unmuteUser(username)
+			@url = @endpoints.mute(username)
+			@url += @endpoints.light_params
 			resp = clientHTTP("delete")
 			$tools.checkHTTPResp(resp)
 		end
-		def followUser(name)
-			@url = makeStreamURL("follow", name)
+		def followUser(username)
+			@url = @endpoints.follow(username)
+			@url += @endpoints.light_params
 			httpPost(@url)
 		end
-		def unfollowUser(name)
-			@url = makeStreamURL("follow", name)
+		def unfollowUser(username)
+			@url = @endpoints.follow(username)
+			@url += @endpoints.light_params
 			resp = clientHTTP("delete")
 			$tools.checkHTTPResp(resp)
 		end
-		def getFollowings(name, beforeID)
-			@url = makeStreamURL("followings", name)
+		def getFollowings(username, beforeID)
+			@url = @endpoints.following(username)
+			@url += @endpoints.light_params
 			@url += "&count=200"
 			@url += "&before_id=#{beforeID}" if beforeID != nil
-			#getHash
 			getHashNew
 		end
-		def getFollowers(name, beforeID)
-			@url = makeStreamURL("followers", name)
+		def getFollowers(username, beforeID)
+			@url = @endpoints.followers(username)
+			@url += @endpoints.light_params
 			@url += "&before_id=#{beforeID}" if beforeID != nil
-			#getHash
 			getHashNew
 		end
-		def getMuted(name, beforeID)
-			@url = makeStreamURL("muted", name)
+		def getMuted(username, beforeID)
+			@url = @endpoints.muted(username)
+			@url += @endpoints.light_params
 			@url += "&before_id=#{beforeID}" if beforeID != nil
-			#getHash
 			getHashNew
 		end
-		def getSearch(value)
-			@url = makeStreamURL("search", value)
+		def getSearch(words)
+			@url = @endpoints.search(words)
+			@url += @endpoints.light_params
 			getHashNew
 		end
 		def getFilesList(beforeID)
-			@url = makeStreamURL("files_list")
+			@url = @endpoints.files_list
+			@url += @endpoints.light_params
 			@url += "&before_id=#{beforeID}" if beforeID != nil
-			#getHash
 			getHashNew
 		end
 		def getSingleFile(file_id)
-			@url = makeStreamURL("get_file", file_id)
+			@url = @endpoints.get_file(file_id)
+			@url += @endpoints.light_params
 			getHashNew
 		end
 		def getMultipleFiles(file_ids)
-			@url = makeStreamURL("get_multiple_files", file_ids)
-			#getHash
+			@url = @endpoints.get_multiple_files(file_ids)
+			@url += @endpoints.light_params
 			getHashNew
 		end
 		def deleteFile(file_id)
-			@url = makeStreamURL("get_file", file_id)
+			@url = @endpoints.get_file(file_id)
+			@url += @endpoints.light_params
 			resp = clientHTTP("delete")
+			$tools.checkHTTPResp(resp)
+		end
+		def deleteMessage(channel_id, message_id)
+			@url = @endpoints.get_message(channel_id, message_id)
+			@url += @endpoints.access_token
+			resp = @api.clientHTTP("delete")
+			$tools.checkHTTPResp(resp)
+		end
+		def deactivateChannel(channel_id)
+			@url = CHANNELS_URL + "#{channel_id}?"
+			@url += @endpoints.access_token
+			resp = @api.clientHTTP("delete")
 			$tools.checkHTTPResp(resp)
 		end
 	end
