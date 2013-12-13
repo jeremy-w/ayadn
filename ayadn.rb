@@ -5,8 +5,7 @@
 # http://alpha.app.net/ericd
 # © 2013
 require_relative 'requires'
-AYADN_CLIENT_ID = "hFsCGArAjgJkYBHTHbZnUvzTmL4vaLHL"
-AYADN_CALLBACK_URL = "http://aya.io/ayadn/auth.html"
+
 
 puts "\nAYADN".red + " - " + "App.net command-line client\n".brown
 

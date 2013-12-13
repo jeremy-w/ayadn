@@ -1,4 +1,9 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
 class AyaDN
+
+	AYADN_CLIENT_ID = "hFsCGArAjgJkYBHTHbZnUvzTmL4vaLHL"
+	AYADN_CALLBACK_URL = "http://aya.io/ayadn/auth.html"
 
 	BASE_URL = "https://alpha-api.app.net/"
 	POSTS_URL = BASE_URL + "stream/0/posts/"

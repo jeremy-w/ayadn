@@ -10,13 +10,14 @@ require 'fileutils'
 require 'yaml'
 require 'pinboard'
 require 'base64'
-require_relative "lib/lib-tools"
-require_relative "lib/lib-api"
-require_relative "lib/lib-view"
-require_relative "lib/lib-main"
+require_relative "lib/tools"
+require_relative "lib/api"
+require_relative "lib/view"
+require_relative "lib/main"
 require_relative "lib/colors"
 require_relative "lib/status"
 require_relative "lib/endpoints"
+require_relative "lib/client-http"
 winPlatforms = ['mswin', 'mingw', 'mingw_18', 'mingw_19', 'mingw_20', 'mingw32']
 case Gem::Platform.local.os
 when *winPlatforms
