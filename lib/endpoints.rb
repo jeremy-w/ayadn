@@ -20,28 +20,31 @@ class AyaDN
 			"https://account.app.net/oauth/authenticate?client_id=#{AYADN_CLIENT_ID}&response_type=token&redirect_uri=#{AYADN_CALLBACK_URL}&scope=basic stream write_post follow public_messages messages files&include_marker=1"
 		end
 		def global
-			POSTS_URL + "stream/global?access_token=#{@token}"
+			POSTS_URL + "stream/global?access_token=#{@token}&count=#{$countGlobal}"
 		end
 		def unified
-			POSTS_URL + "stream/unified?access_token=#{@token}"
+			POSTS_URL + "stream/unified?access_token=#{@token}&count=#{$countUnified}"
+		end
+		def unified_streamback
+			POSTS_URL + "stream/unified?access_token=#{@token}&count=#{$countStreamback}"
 		end
 		def single_post(post_id)
 			POSTS_URL + "#{post_id}?access_token=#{@token}"
 		end
 		def checkins
-			POSTS_URL + "stream/explore/checkins?access_token=#{@token}"
+			POSTS_URL + "stream/explore/checkins?access_token=#{@token}&count=#{$countCheckins}"
 		end
 		def trending
-			POSTS_URL + "stream/explore/trending?access_token=#{@token}"
+			POSTS_URL + "stream/explore/trending?access_token=#{@token}&count=#{$countExplore}"
 		end
 		def conversations
 			POSTS_URL + "stream/explore/conversations?access_token=#{@token}"
 		end
 		def explore(stream)
-			POSTS_URL + "stream/explore/#{stream}?access_token=#{@token}"
+			POSTS_URL + "stream/explore/#{stream}?access_token=#{@token}&count=#{$countExplore}"
 		end
 		def photos
-			POSTS_URL + "stream/explore/photos?access_token=#{@token}"
+			POSTS_URL + "stream/explore/photos?access_token=#{@token}&count=#{$countExplore}"
 		end
 		def hashtags(tags)
 			POSTS_URL + "tag/#{tags}"
@@ -65,19 +68,16 @@ class AyaDN
 			POSTS_URL + "search?text=#{words}?access_token=#{@token}"
 		end
 		def mentions(username)
-			USERS_URL + "#{username}/mentions/?access_token=#{@token}"
+			USERS_URL + "#{username}/mentions/?access_token=#{@token}&count=#{$countMentions}"
 		end
 		def posts(username)
-			USERS_URL + "#{username}/posts/?access_token=#{@token}"
-		end
-		def mentions(username)
-			USERS_URL + "#{username}/mentions/?access_token=#{@token}"
+			USERS_URL + "#{username}/posts/?access_token=#{@token}&count=#{$countPosts}"
 		end
 		def user_info(username)
 			USERS_URL + "#{username}/?access_token=#{@token}"
 		end
 		def starred_posts(username)
-			USERS_URL + "#{username}/stars/?access_token=#{@token}"
+			USERS_URL + "#{username}/stars/?access_token=#{@token}&count=#{$countStarred}"
 		end
 		def follow(username)
 			USERS_URL + "#{username}/follow/?access_token=#{@token}"
@@ -131,10 +131,10 @@ class AyaDN
 			"&include_html=0"
 		end
 		def include_directed
-			"&include_directed-posts=1"
+			"&include_directed_posts=1"
 		end
 		def exclude_directed
-			"&include_directed-posts=0"
+			"&include_directed_posts=0"
 		end
 		def include_annotations
 			"&include_annotations=1"

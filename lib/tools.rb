@@ -99,7 +99,7 @@ class AyaDN
                 $ayadn_last_page_id_path = $ayadn_data_path + "/#{$identityPrefix}/.pagination"
                 $ayadn_messages_path = $ayadn_data_path + "/#{$identityPrefix}/messages"
                 $ayadn_authorization_path = $ayadn_data_path + "/#{$identityPrefix}/.auth"
-                $countGlobal = $countUnified = $countCheckins = $countExplore = $countMentions = $countStarred = 100
+                $countGlobal = $countUnified = $countCheckins = $countExplore = $countMentions = $countStarred = $countPosts = 100
                 $directedPosts = true
                 $countStreamBack = 30
                 $countdown_1 = 5

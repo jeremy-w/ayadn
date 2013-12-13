@@ -1,6 +1,7 @@
 class AyaDN
 	class API
 		# WIP
+		# TESTING DIFFERENT WAYS
 		# TODO: DRY
 		def clientHTTP(action, target = nil)
 			uri = URI("#{@url}")
