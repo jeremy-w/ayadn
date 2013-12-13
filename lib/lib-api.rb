@@ -13,8 +13,7 @@ class AyaDN
 		##### 
 		# experimenting
 		def createIncompleteFileUpload(file_name) #this part works
-			url = "https://alpha-api.app.net/stream/0/files"
-			https, request = connectWithHTTP(url)
+			https, request = connectWithHTTP(FILES_URL)
 			payload = {
 				"kind" => "image",
 				"type" => "com.ayadn.files",
@@ -25,26 +24,9 @@ class AyaDN
 			callback = response.body
 		end
 		def setFileContentUpload(file_id, file_path, file_token) #this one doesn't
-			url = "https://alpha-api.app.net/stream/0/files/#{file_id}/content?file_token=#{file_token}"
+			url = FILES_URL + "#{file_id}/content?file_token=#{file_token}"
 			uri = URI("#{url}")
-			#check with the docs to format it properly
-			# boundary="AaB03xEd73XiiiZkK"
-			# post_body = []
-			# post_body << "Content-Type: image/jpeg"
-			# post_body << File.read(file_path, "rb")
-			# post_body << "--#{boundary}--"
-			# https = Net::HTTP.new(uri.host,uri.port)
-			# https.use_ssl = true
-			# https.verify_mode = OpenSSL::SSL::VERIFY_NONE
-			# request = Net::HTTP::Post.new(uri.request_uri)
-			# request.body = post_body.join
-			# request["Content-Type"] = "multipart/form-data, boundary=#{boundary}"
-			# request["Authorization"] = "Bearer #{@token}"
-			# puts request.to_s
-			# response = https.request(request)
-			# puts response.code
-			# puts response.body
-			# exit
+			# ...
 		end
 		#####
 
@@ -85,11 +67,6 @@ class AyaDN
 				request["Content-Type"] = "application/json"
 				response = https.request(request)
 			when "get"
-				request = Net::HTTP::Get.new(uri.path)
-				request["Authorization"] = "Bearer #{@token}"
-				request["Content-Type"] = "application/json"
-				response = https.request(request)
-			when "getlist"
 				uri = URI.parse("#{target}")
 				https = Net::HTTP.new(uri.host,uri.port)
 				https.use_ssl = true
@@ -113,7 +90,6 @@ class AyaDN
 				request["Content-Type"] = "application/json"
 				response = https.request(request)
 			end
-			
 		end
 		#
 
@@ -183,98 +159,82 @@ class AyaDN
 			return ayadn_annotations
 		end
 
-		def getHashNew
-			response = clientHTTP("getlist", @url)  
+		def getHash
+			response = clientHTTP("get", @url)  
 			theHash = JSON.parse(response.body)
 		end
 
-		def checkLastPageID(last_page_ID = nil)
-			@url += "&since_id=#{last_page_ID}" if last_page_ID != nil
+		def checkLastPageID(last_page_id)
+			@url += "&since_id=#{last_page_id}" if last_page_id != nil
 		end
 
-		def getUniqueMessage(channel_id, message_id)
-			@url = @endpoints.get_message(channel_id, message_id)
-			@url += @endpoints.base_params
-			getHashNew
-		end
-		def getMessages(channel, last_page_ID)
-			@url = @endpoints.messages(channel)
-			@url += @endpoints.base_params
-			checkLastPageID(last_page_ID)
-			getHashNew
-		end
-		def getChannels
-			@url = @endpoints.channels
-			@url += @endpoints.light_params
-			getHashNew
-		end
-		def getGlobal(last_page_ID = nil)
+		def getGlobal(last_page_id)
 			@url = @endpoints.global
 			@url += @endpoints.light_params
 			@url += @endpoints.include_directed
-			checkLastPageID(last_page_ID)
-			getHashNew
+			checkLastPageID(last_page_id)
+			getHash
 		end	
-		def getUnified(last_page_ID = nil)
+		def getUnified(last_page_id)
 			@url = @endpoints.unified
 			@url += @endpoints.base_params
 			@url += @endpoints.include_directed
-			checkLastPageID(last_page_ID)
-			getHashNew
+			checkLastPageID(last_page_id)
+			getHash
 		end
 		def getSimpleUnified
 			@url = @endpoints.unified
 			@url += @endpoints.light_params
 			@url += @endpoints.include_directed
-			getHashNew
+			getHash
 		end
 		def getInteractions
 			@url = @endpoints.interactions
-			#checkLastPageID(last_page_ID)
-			getHashNew
+			#checkLastPageID(last_page_id)
+			getHash
 		end
 		def getHashtags(tag)
 			@url = @endpoints.hashtags(tag)
-			getHashNew
+			getHash
 		end
-		def getExplore(stream, last_page_ID = nil)
+		def getExplore(stream, last_page_id)
 			@url = @endpoints.explore(stream)
 			@url += @endpoints.base_params
-			checkLastPageID(last_page_ID)
-			getHashNew
+			checkLastPageID(last_page_id)
+			getHash
 		end
-		def getUserMentions(username, last_page_ID = nil)
+		def getUserMentions(username, last_page_id)
 			@url = @endpoints.mentions(username)
 			@url += @endpoints.light_params
-			checkLastPageID(last_page_ID)
-			getHashNew
+			checkLastPageID(last_page_id)
+			getHash
 		end
-		def getUserPosts(username, last_page_ID = nil)
+		def getUserPosts(username, last_page_id)
 			@url = @endpoints.posts(username)
 			@url += @endpoints.base_params
-			checkLastPageID(last_page_ID)
-			getHashNew
+			checkLastPageID(last_page_id)
+			getHash
 		end
 		def getUserInfos(username)
 			@url = @endpoints.user_info(username)
 			@url += @endpoints.light_params
-			getHashNew
+			getHash
 		end
 		def getWhoReposted(post_id)
 			@url = @endpoints.who_reposted(post_id)
 			@url += @endpoints.light_params
-			getHashNew
+			getHash
 		end
 		def getWhoStarred(post_id)
 			@url = @endpoints.who_starred(post_id)
 			@url += @endpoints.light_params
-			getHashNew
+			getHash
 		end
 		def getPostInfos(action, post_id)
 			@url = @endpoints.single_post(post_id)
 			@url += @endpoints.base_params
 			if action == "call"
-				getHashNew
+				getHash
 			elsif action == "load"
 				fileContent = {}
 				File.open("#{$ayadn_posts_path}/#{post_id}.post", "r") do |f|
@@ -288,22 +248,22 @@ class AyaDN
 		def getSinglePost(post_id)
 			@url = @endpoints.single_post(post_id)
 			@url += @endpoints.base_params
-			getHashNew
+			getHash
 		end
 		def getStarredPosts(username)
 			@url = @endpoints.starred_posts(username)
 			@url += @endpoints.light_params
-			getHashNew
+			getHash
 		end
 		def getPostReplies(post_id)
 			@url = @endpoints.replies(post_id)
 			@url += @endpoints.light_params
-			getHashNew
+			getHash
 		end
 		def getPostMentions(post_id)
 			@url = @endpoints.single_post(post_id)
 			@url += @endpoints.light_params
-			theHash = getHashNew
+			theHash = getHash
 			postInfo = theHash['data']
 			userName = postInfo['user']['username']
 			#rawText = postInfo['text']
@@ -318,7 +278,7 @@ class AyaDN
 		def getUserName(username)
 			@url = @endpoints.user_info(username)
 			@url += @endpoints.light_params
-			theHash = getHashNew
+			theHash = getHash
 			userInfo = theHash['data']
 			userName = userInfo['username']
 		end
@@ -351,14 +311,14 @@ class AyaDN
 			$tools.checkHTTPResp(resp)
 		end
 		def ifExists(post_id)
-			theHash = getHashNew
+			theHash = getHash
 			postInfo = theHash['data']
 			isTherePost = postInfo['text']
 			isYours = postInfo['user']['username']
 			return isTherePost, isYours
 		end
 		def getOriginalPost(post_id)
-			theHash = getHashNew
+			theHash = getHash
 			postInfo = theHash['data']
 			isRepost = postInfo['repost_of']
 			goToID = isRepost['id']
@@ -366,7 +326,7 @@ class AyaDN
 		def getUserFollowInfo(username)
 			@url = @endpoints.user_info(username)
 			@url += @endpoints.light_params
-			theHash = getHashNew
+			theHash = getHash
 			userInfo = theHash['data']
 			youFollow = userInfo['you_follow']
 			followsYou = userInfo['follows_you']
@@ -375,7 +335,7 @@ class AyaDN
 		def getUserMuteInfo(username)
 			@url = @endpoints.user_info(username)
 			@url += @endpoints.light_params
-			theHash = getHashNew
+			theHash = getHash
 			userInfo = theHash['data']
 			youMuted = userInfo['you_muted']
 		end
@@ -406,40 +366,56 @@ class AyaDN
 			@url += @endpoints.light_params
 			@url += "&count=200"
 			@url += "&before_id=#{beforeID}" if beforeID != nil
-			getHashNew
+			getHash
 		end
 		def getFollowers(username, beforeID)
 			@url = @endpoints.followers(username)
 			@url += @endpoints.light_params
 			@url += "&before_id=#{beforeID}" if beforeID != nil
-			getHashNew
+			getHash
 		end
 		def getMuted(username, beforeID)
 			@url = @endpoints.muted(username)
 			@url += @endpoints.light_params
 			@url += "&before_id=#{beforeID}" if beforeID != nil
-			getHashNew
+			getHash
 		end
 		def getSearch(words)
 			@url = @endpoints.search(words)
 			@url += @endpoints.light_params
-			getHashNew
+			getHash
+		end
+		def getUniqueMessage(channel_id, message_id)
+			@url = @endpoints.get_message(channel_id, message_id)
+			@url += @endpoints.base_params
+			getHash
+		end
+		def getMessages(channel, last_page_id)
+			@url = @endpoints.messages(channel)
+			@url += @endpoints.base_params
+			checkLastPageID(last_page_id)
+			getHash
+		end
+		def getChannels
+			@url = @endpoints.channels
+			@url += @endpoints.light_params
+			getHash
 		end
 		def getFilesList(beforeID)
 			@url = @endpoints.files_list
 			@url += @endpoints.light_params
 			@url += "&before_id=#{beforeID}" if beforeID != nil
-			getHashNew
+			getHash
 		end
 		def getSingleFile(file_id)
 			@url = @endpoints.get_file(file_id)
 			@url += @endpoints.light_params
-			getHashNew
+			getHash
 		end
 		def getMultipleFiles(file_ids)
 			@url = @endpoints.get_multiple_files(file_ids)
 			@url += @endpoints.light_params
-			getHashNew
+			getHash
 		end
 		def deleteFile(file_id)
 			@url = @endpoints.get_file(file_id)
@@ -450,24 +426,14 @@ class AyaDN
 		def deleteMessage(channel_id, message_id)
 			@url = @endpoints.get_message(channel_id, message_id)
 			@url += @endpoints.access_token
-			resp = @api.clientHTTP("delete")
+			resp = clientHTTP("delete")
 			$tools.checkHTTPResp(resp)
 		end
 		def deactivateChannel(channel_id)
 			@url = CHANNELS_URL + "#{channel_id}?"
 			@url += @endpoints.access_token
-			resp = @api.clientHTTP("delete")
+			resp = clientHTTP("delete")
 			$tools.checkHTTPResp(resp)
 		end
 	end
 end
-
-
-
-
-
-
-
-
-
-

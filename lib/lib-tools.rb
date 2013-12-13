@@ -73,7 +73,7 @@ class AyaDN
                 $ayadn_posts_path = $ayadn_data_path + "/#{$identityPrefix}/posts"
                 $ayadn_lists_path = $ayadn_data_path + "/#{$identityPrefix}/lists"
                 $ayadn_files_path = $ayadn_data_path + "/#{$identityPrefix}/files"
-                $ayadn_last_page_ID_path = $ayadn_data_path + "/#{$identityPrefix}/.pagination"
+                $ayadn_last_page_id_path = $ayadn_data_path + "/#{$identityPrefix}/.pagination"
                 $ayadn_messages_path = $ayadn_data_path + "/#{$identityPrefix}/messages"
                 $ayadn_authorization_path = $ayadn_data_path + "/#{$identityPrefix}/.auth"
                 $countGlobal = $configFileContents['counts']['global'].to_i
@@ -96,7 +96,7 @@ class AyaDN
                 $ayadn_posts_path = $ayadn_data_path + "/#{$identityPrefix}/posts"
                 $ayadn_lists_path = $ayadn_data_path + "/#{$identityPrefix}/lists"
                 $ayadn_files_path = $ayadn_data_path + "/#{$identityPrefix}/files"
-                $ayadn_last_page_ID_path = $ayadn_data_path + "/#{$identityPrefix}/.pagination"
+                $ayadn_last_page_id_path = $ayadn_data_path + "/#{$identityPrefix}/.pagination"
                 $ayadn_messages_path = $ayadn_data_path + "/#{$identityPrefix}/messages"
                 $ayadn_authorization_path = $ayadn_data_path + "/#{$identityPrefix}/.auth"
                 $countGlobal = $countUnified = $countCheckins = $countExplore = $countMentions = $countStarred = 100
@@ -118,12 +118,12 @@ class AyaDN
             when "getlastpageid"
                 if File.exists?(value)
                     f = File.open(value, "r")
-                        last_page_ID = f.gets
+                        last_page_id = f.gets
                     f.close
                 else
-                    last_page_ID = nil
+                    last_page_id = nil
                 end
-                return last_page_ID
+                return last_page_id
             when "writelastpageid"
                 f = File.new(value, "w")
                     f.puts(content)
@@ -164,7 +164,7 @@ class AyaDN
                     if content != nil
                         if option != nil
                             puts "\nResetting #{content} pagination for #{option}.\n".red
-                            filePath = $ayadn_last_page_ID_path + "/last_page_ID-#{content}-#{option}"
+                            filePath = $ayadn_last_page_id_path + "/last_page_id-#{content}-#{option}"
                             if File.exists?(filePath)
                                 FileUtils.rm_rf(filePath)
                                 puts "\nDone!\n\n".green
@@ -173,7 +173,7 @@ class AyaDN
                             end
                         else
                             puts "\nResetting the pagination for #{content}.\n".red
-                            filePath = $ayadn_last_page_ID_path + "/last_page_ID-#{content}"
+                            filePath = $ayadn_last_page_id_path + "/last_page_id-#{content}"
                             if File.exists?(filePath)
                                 FileUtils.rm_rf(filePath)
                                 puts "\nDone!\n\n".green
@@ -183,7 +183,7 @@ class AyaDN
                         end
                     else
                         puts "\nResetting all pagination data.\n".red
-                        Dir["#{$ayadn_last_page_ID_path}/*"].each do |file|
+                        Dir["#{$ayadn_last_page_id_path}/*"].each do |file|
                             FileUtils.rm_rf file
                         end
                         puts "\nDone!\n\n".green
