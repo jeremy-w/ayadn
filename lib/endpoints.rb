@@ -1,15 +1,13 @@
 class AyaDN
+
 	BASE_URL = "https://alpha-api.app.net/"
 	POSTS_URL = BASE_URL + "stream/0/posts/"
 	USERS_URL = BASE_URL + "stream/0/users/"
 	FILES_URL = BASE_URL + "stream/0/files/"
 	CHANNELS_URL = BASE_URL + "stream/0/channels/"
 	PM_URL = CHANNELS_URL + "pm/messages"
-	
+
 	class Endpoints
-
-		
-
 		def initialize(token)
 			@token = token
 		end
