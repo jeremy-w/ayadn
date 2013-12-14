@@ -299,7 +299,7 @@ ayadn list followings me
 
 ### Configuration
 
-Unless you're planning on using multiple accounts (see next chapter), you should install the configuration file in the permanent AyaDN folder:
+Unless you're planning on using [multiple accounts](https://github.com/ericdke/ayadn#running-multiple-accounts), you should install the configuration file in the permanent AyaDN folder:
 
 ```
 ayadn install config
