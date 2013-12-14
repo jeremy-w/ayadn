@@ -291,6 +291,12 @@ class AyaDN
             case meta['code']
             when 200
                 puts "\nDone!\n".green
+            when 301,302
+                puts "\nRedirected.\n\n".red
+                puts "#{meta.inspect}\n".red
+            when 404
+                puts "Does not exist (or has been deleted).\n\n".red
+                exit
             else
                 abort("\nERROR: #{meta.inspect}\n".red)
             end

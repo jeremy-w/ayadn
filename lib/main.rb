@@ -173,6 +173,7 @@ class AyaDN
 	def ayadnUserInfos(name)
 		puts $status.infosUser(name)
 		@hash = @api.getUserInfos(name)
+		$tools.meta(@hash['meta'])
 	    puts @view.new(@hash).showUsersInfos(name)
 	end
 	
@@ -405,16 +406,14 @@ class AyaDN
 	def ayadnShowList(list, name)
 		puts $status.fetchingList(list)
 		@hash = getList(list, name)
-		if list == "muted"
-			puts "Your list of muted users:\n".green
-		elsif list == "followings"
-			puts "List of users you're following:\n".green
-		elsif list == "followers"
-			puts "List of users following you:\n".green
-		end
+		puts $status.showList(list, name)
 		users, number = @view.new(@hash).showUsers()
+		if number == 0
+			puts $status.errorEmptyList
+			exit
+		end
 		puts users
-		puts "Number of users: ".green + " #{number}\n".brown
+		puts "Number of users: ".green + " #{number}\n\n".brown
 	end
 
 	def ayadnSaveList(list, name) # to be called with: var = ayadnSaveList("followers", "@ericd")
@@ -430,11 +429,7 @@ class AyaDN
 			input = STDIN.getch
 			abort("\nCanceled.\n\n".red) unless input == ("y" || "Y")
 		end
-		if list == "muted"
-			puts "\nFetching your muted users list.\n".cyan
-		else
-			puts "\nFetching ".cyan + "#{name}".brown + "'s list of #{list}.\n".cyan
-		end
+		puts $status.showList(list, name)
 		puts "Please wait...\n".green
 		follow_list = getList(list, name)
 		puts "Saving the list...\n".green

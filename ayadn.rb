@@ -7,7 +7,7 @@
 require_relative 'requires'
 
 
-puts "\nAYADN".red + " - " + "App.net command-line client\n".brown
+puts "\n\nAYADN".red + " - " + "App.net command-line client\n".brown
 
 $status = AyaDN::ClientStatus.new
 $tools = AyaDN::Tools.new

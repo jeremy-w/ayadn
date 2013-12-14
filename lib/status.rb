@@ -2,8 +2,17 @@
 # encoding: utf-8
 class AyaDN
     class ClientStatus
+        def showList(list, name)
+            if list == "muted"
+                s = "Your list of muted users:\n".green
+            elsif list == "followings"
+                s = "List of users ".green + "#{name} ".brown + "is following:\n".green
+            elsif list == "followers"
+                s = "List of ".green + "#{name}".brown + "'s followers:\n".green
+            end
+        end
         def getInteractions
-            s = "\nLoading the ".green + "interactions ".brown + "informations.\n\n".green
+            s = "\nLoading the ".green + "interactions ".brown + "informations.\n".green
         end
         def launchAuthorization(os)
             if os == "osx"
@@ -19,6 +28,9 @@ class AyaDN
         end
         def noNewPosts
             s = "No new posts since your last visit.\n\n".red
+        end
+        def errorEmptyList
+            s = "The list is empty.\n\n".red
         end
         def errorSyntax
             s = "\nSyntax error.\n\n".red
@@ -69,66 +81,66 @@ class AyaDN
             s = "Redirecting to the original post: ".cyan + "#{postID}\n".brown
         end
         def fetchingList(list)
-            s = "\nFetching the \'#{list}\' list. Please wait...\n\n".green
+            s = "\nFetching the \'#{list}\' list. Please wait.\n".green
         end
         def getUnified
-            s = "\nLoading the ".green + "unified ".brown + "Stream...\n".green
+            s = "\nLoading the ".green + "unified ".brown + "Stream.\n".green
         end
         def getExplore(explore)
-            s = "\nLoading the ".green + "#{explore}".brown + " stream.".green
+            s = "\nLoading the ".green + "#{explore}".brown + " Stream.\n".green
         end
         def getGlobal
-            s = "\nLoading the ".green + "global ".brown + "Stream...\n".green
+            s = "\nLoading the ".green + "global ".brown + "Stream.\n".green
         end
         def whoReposted(arg)
-            s = "\nLoading informations on post ".green + "#{arg}".brown + "...\n ".green
+            s = "\nLoading informations on post ".green + "#{arg}".brown + ".\n ".green
             s += "\nReposted by: \n".cyan
         end
         def whoStarred(arg)
-            s = "\nLoading informations on post ".green + "#{arg}".brown + "...\n".green
+            s = "\nLoading informations on post ".green + "#{arg}".brown + ".\n".green
             s += "\nStarred by: \n".cyan
         end
         def infosUser(arg)
             s = "\nLoading informations on ".green + "#{arg}".brown + "\n\n"
         end
         def infosPost(arg)
-            s = "\nLoading informations on post ".green + "#{arg}".brown + "...\n".green
+            s = "\nLoading informations on post ".green + "#{arg}".brown + ".\n".green
         end
         def postsUser(arg)
-            s = "\nLoading posts of ".green + "#{arg}".brown + "...\n".green
+            s = "\nLoading posts of ".green + "#{arg}".brown + ".\n".green
         end
         def mentionsUser(arg)
-            s = "\nLoading posts mentionning ".green + "#{arg}".brown + "...\n".green
+            s = "\nLoading posts mentionning ".green + "#{arg}".brown + ".\n".green
         end
         def starsUser(arg)
-            s = "\nLoading ".green + "#{arg}".reddish + "'s favorite posts...\n".green
+            s = "\nLoading ".green + "#{arg}".reddish + "'s favorite posts.\n".green
         end
         def starsPost(arg)
-            s = "\nLoading users who starred post ".green + "#{arg}".reddish + "...\n" .green
+            s = "\nLoading users who starred post ".green + "#{arg}".reddish + ".\n" .green
         end
         def getHashtags(arg)
-            s = "\nLoading posts containing ".green + "##{arg}".pink + "...\n".green
+            s = "\nLoading posts containing ".green + "##{arg}".pink + ".\n".green
         end
         def sendPost
-            s = "\nSending post...\n".green
+            s = "\nSending post.\n".green
         end
         def sendMessage
-            s = "\nSending private Message...\n".green
+            s = "\nSending private Message.\n".green
         end
         def postSent
-            s = "Successfully posted.\n".green
+            s = "Successfully posted.\n\n".green
         end
         def postDeleted
             s = "\nPost successfully deleted.\n\n".green
         end
         def replyingToPost(postID)
-            s = "Replying to post ".cyan + "#{postID}...\n".brown
+            s = "Replying to post ".cyan + "#{postID}.\n".brown
         end
         def deletePost(postID)
-            s = "\nDeleting post ".green + "#{postID}".brown + "...\n".green
+            s = "\nDeleting post ".green + "#{postID}".brown + ".\n".green
         end
         def getPostReplies(arg)
-            s = "\nLoading the conversation around post ".green + "#{arg}".brown + "...\n".green
+            s = "\nLoading the conversation around post ".green + "#{arg}".brown + ".\n".green
         end
         def writePost
             s = "\n256 characters max, validate with [Enter] or cancel with [CTRL+C].\n".green
@@ -139,7 +151,7 @@ class AyaDN
             s += "\nType your text: ".cyan + "\n\n"
         end
         def writeReply(arg)
-            s = "\nLoading informations of post " + "#{arg}".brown + "...\n".green
+            s = "\nLoading informations of post " + "#{arg}".brown + ".\n".green
         end
         def savingFile(name, path, file)
             s = "\nSaving ".green + "#{name} ".brown + "in ".green + "#{path}#{file}".magenta
