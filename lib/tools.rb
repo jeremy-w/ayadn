@@ -87,6 +87,7 @@ class AyaDN
                 $countStreamBack = $configFileContents['timeline']['streamback'].to_i
                 $countdown_1 = $configFileContents['timeline']['countdown_1'].to_i
                 $countdown_2 = $configFileContents['timeline']['countdown_2'].to_i
+                $configShowClient = $configFileContents['timeline']['show_client']
                 $downsideTimeline = $configFileContents['timeline']['downside']
                 $skipped_sources = $configFileContents['skipped']['sources']
             else
@@ -106,6 +107,7 @@ class AyaDN
                 $countdown_2 = 15
                 $downsideTimeline = true
                 $skipped_sources = []
+                $configShowClient = false
             end
         end
 

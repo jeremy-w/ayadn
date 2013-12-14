@@ -13,7 +13,10 @@ timeline:
     # if true, the unified timeline includes directed posts
     directed: true
     # number of stream posts displayed after a successful post
-    streamback: 10
+    streamback: 30
+    countdown_1: 5
+    countdown_2: 15
+    show_client: false
 files:
     ayadnfiles: "/ayadn/data"
 identity: # change this prefix in each folder for your username in you're using several ADN accounts (don't use "@")
@@ -23,3 +26,4 @@ skipped: # posts matching these values won't show up
 pinboard:
   username:
   password:
+  
