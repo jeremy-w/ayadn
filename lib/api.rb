@@ -22,21 +22,21 @@ class AyaDN
 		def getGlobal(last_page_id)
 			@url = @endpoints.global
 			@url += @endpoints.light_params
-			@url += @endpoints.include_directed
+			@url += @endpoints.include_directed if $directedPosts == true
 			checkLastPageID(last_page_id)
 			getHash
 		end	
 		def getUnified(last_page_id)
 			@url = @endpoints.unified
 			@url += @endpoints.base_params
-			@url += @endpoints.include_directed
+			@url += @endpoints.include_directed if $directedPosts == true
 			checkLastPageID(last_page_id)
 			getHash
 		end
 		def getSimpleUnified
 			@url = @endpoints.unified_streamback
 			@url += @endpoints.light_params
-			@url += @endpoints.include_directed
+			@url += @endpoints.include_directed if $directedPosts == true
 			getHash
 		end
 		def getInteractions
