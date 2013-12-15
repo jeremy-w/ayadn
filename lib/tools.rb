@@ -90,6 +90,7 @@ class AyaDN
                 $configShowClient = $configFileContents['timeline']['show_client']
                 $downsideTimeline = $configFileContents['timeline']['downside']
                 $skipped_sources = $configFileContents['skipped']['sources']
+                $skipped_tags = $configFileContents['skipped']['hashtags']
             else
                 # defaults
                 $ayadn_data_path = Dir.home + "/ayadn/data"
@@ -107,6 +108,7 @@ class AyaDN
                 $countdown_2 = 15
                 $downsideTimeline = true
                 $skipped_sources = []
+                $skipped_tags = []
                 $configShowClient = false
             end
         end

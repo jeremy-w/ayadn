@@ -610,6 +610,30 @@ class AyaDN
 			puts "Current skipped sources: ".green + $skipped_sources.join(", ").red + "\n\n"
 		end
  	end
+ 	def ayadnSkipTag(action, tag)
+		puts "Current skipped #hashtags: ".green + $skipped_tags.join(", ").red + "\n\n"
+		if action == "add"
+			puts "Adding ".green + tag.red + " to the skipped #hashtags.".green + "\n"
+			$configFileContents['skipped']['hashtags'].each do |config_tags|
+				if config_tags == tag
+					puts "#{tag}".red + " is already skipped.\n\n".green
+					exit
+				end
+			end
+			$configFileContents['skipped']['hashtags'].push(tag)
+			puts "New skipped #hashtags: ".green + $configFileContents['skipped']['hashtags'].join(", ").red + "\n\n"
+			$tools.saveConfig
+		elsif action == "remove"
+			puts "Removing ".green + tag.red + " from the skipped #hashtags.".green + "\n"
+			$configFileContents['skipped']['hashtags'].each do |config_tags|
+				if config_tags == tag
+					$configFileContents['skipped']['hashtags'].delete(config_tags)
+				end
+			end
+			puts "New skipped #hashtags: ".green + $configFileContents['skipped']['hashtags'].join(", ").red + "\n\n"
+			$tools.saveConfig
+		end
+ 	end
 
  	# experimenting without curl
  	def ayadnFileUpload(file_name)

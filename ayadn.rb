@@ -198,8 +198,11 @@ when "debug"
 		end
 	end
 
-when "skiplist"
+when "skip-source"
 	client.ayadnSkipSource(arg2, arg3)
+
+when "skip-tag"
+	client.ayadnSkipTag(arg2, arg3)
 
 when "reset"
 	if arg2 == "pagination"

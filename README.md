@@ -271,8 +271,8 @@ ayadn backup followings @ericd
 ayadn backup followers @ericd
 ayadn save 15723266
 ayadn load 15723266
-ayadn skiplist add IFTTT
-ayadn skiplist remove IFTTT
+ayadn skip-source add IFTTT
+ayadn skip-source remove IFTTT
 ayadn pin 16864003 ruby,json
 ayadn reset pagination
 ayadn help
@@ -369,11 +369,11 @@ Without arguments: resets all your pagination data.
 
 App.net already gives you the "mute" command to mute a user. But what if you want to mute a *client*, like IFTTT or PourOver?
 
-Easy: `ayadn skiplist add IFTTT`
+Easy: `ayadn skip-source add IFTTT`
 
-Want to mute another one? Go on: `ayadn skiplist add PourOver`. Etc.
+Want to mute another one? Go on: `ayadn skip-source add PourOver`. Etc.
 
-Change of mind? `ayadn skiplist remove IFTTT`, `ayadn skiplist remove PourOver`, etc.
+Change of mind? `ayadn skip-source remove IFTTT`, `ayadn skip-source remove PourOver`, etc.
 
 You can discover what client was used to post a post with `ayadn infos PostID`  
 

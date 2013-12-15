@@ -230,28 +230,42 @@ class AyaDN
 		end
 		def buildCompleteStream(post_hash)
 			post_string = ""
-			#geoString = ""
 			pagination_array = []
+			new_tags = []
+			$skipped_tags.each do |tag|
+				new_tag = "#" + tag
+				new_tags << new_tag
+			end
 			post_hash.each do |item|
-				pagination_array.push(item['pagination_id'])
 				post_text = item['text']
 				post_id = item['id']
 				source_name = item['source']['name']
 				source_link = item['source']['link']
+				#Skip sources
+				case source_name
+				when *$skipped_sources
+					# post_string += "Post ID: ".cyan + post_id.to_s.green
+					# post_string += " -" + " SKIPPED".cyan
+					# matched = $skipped_sources.index(source_name)
+					# post_string += " \"#{$skipped_sources[matched]}\"\n\n".cyan
+					next
+				end
+				#Skip hashtags
+				skipped_hashtags_encountered = false
+				splitted = post_text.split(" ")
+				splitted.each do |word|
+					case word
+					when *new_tags
+						skipped_hashtags_encountered = true
+						next
+					end
+				end
+				next if skipped_hashtags_encountered
 				entitiesMentions = item['entities']['mentions']
 				postMentionsArray = []
 				entitiesMentions.each do |item|
 					postMentionsArray.push(item['name'])
 				end
-				# Skip sources
-				# case source_name
-				# when *$skipped_sources
-					# post_string += "Post ID: ".cyan + post_id.to_s.green
-					# post_string += " -" + " SKIPPED".cyan
-					# matched = $skipped_sources.index(source_name)
-					# post_string += " \"#{$skipped_sources[matched]}\"\n\n".cyan
-				# 	next
-				# end
 				post_text != nil ? (colored_post = $tools.colorize(post_text)) : (colored_post = "--Post deleted--".red)
 				user_name, user_real_name, handle = objectNames(item['user'])
 				created_day, created_hour = objectDate(item)
