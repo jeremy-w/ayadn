@@ -238,6 +238,11 @@ class AyaDN
 				post_id = item['id']
 				source_name = item['source']['name']
 				source_link = item['source']['link']
+				entitiesMentions = item['entities']['mentions']
+				postMentionsArray = []
+				entitiesMentions.each do |item|
+					postMentionsArray.push(item['name'])
+				end
 				# Skip sources
 				# case source_name
 				# when *$skipped_sources
@@ -256,7 +261,17 @@ class AyaDN
 				#post_string += created_day.cyan + ' at ' + created_hour.cyan + ' by ' + "@".reddish + user_name.reddish + "\n" + colored_post + "\n"
 				#post_string += post_id.to_s.green + " " + created_day.cyan + " " + created_hour.cyan + " " + "[#{user_real_name}]".blue + " " + "@".reddish + user_name.reddish + "\n" + colored_post + "\n"
 				#post_string += post_id.to_s.green.ljust(14) + " " + handle.reddish + " [#{user_real_name}]".magenta + " " + post_date + " "
-				post_string += post_id.to_s.cyan.ljust(14) + " " + handle.green + " [#{user_real_name}]".magenta + " " + post_date + " "
+				me_mentioned = false
+				postMentionsArray.each do |name|
+					if name == $identityPrefix
+						me_mentioned = true
+					end
+				end
+				if me_mentioned == true
+					post_string += post_id.to_s.cyan.reverse_color.ljust(14) + " " + handle.green + " [#{user_real_name}]".magenta + " " + post_date + " "
+				else
+					post_string += post_id.to_s.cyan.ljust(14) + " " + handle.green + " [#{user_real_name}]".magenta + " " + post_date + " "
+				end
 				#post_string += "[#{source_name}]".blue if $configShowClient == true
 				post_string += "[#{source_name}]".cyan if $configShowClient == true
 				post_string += "\n" + colored_post + "\n"
