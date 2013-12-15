@@ -814,10 +814,9 @@ class AyaDN
  	def ayadnRecord(item)
  		# first create with curl -i -H 'Authorization: BEARER xxx' "https://stream-channel.app.net/stream/user?auto_delete=1&include_annotations=1"
  		# it stays open and returns a stream_id in the headers
+ 		# TODO: replace curl with a good connection system with HTTP or Rest-Client
 
- 		#long_connect_resp = `curl -i -H 'Authorization: BEARER AQAAAAAACP4vpl_RwhuKi9_5iS_P1FQghtvVZin0I-xNW4kD3FSHiz75BpRduDld0TgrsYG5KDh5LPUO5SZH1peIGfX3non3IA' "https://stream-channel.app.net/stream/user?auto_delete=1&include_annotations=1"`
-
- 		command = "sleep 1; curl -i -H 'Authorization: BEARER AQAAAAAACP4vpl_RwhuKi9_5iS_P1FQghtvVZin0I-xNW4kD3FSHiz75BpRduDld0TgrsYG5KDh5LPUO5SZH1peIGfX3non3IA' 'https://stream-channel.app.net/stream/user?auto_delete=1&include_annotations=1'"
+ 		command = "sleep 1; curl -i -H 'Authorization: BEARER XXX' 'https://stream-channel.app.net/stream/user?auto_delete=1&include_annotations=1'"
  		pid = Process.spawn(command)
         Process.detach(pid)
 
@@ -828,7 +827,7 @@ class AyaDN
  		case item
  		when "global" # works :)
  			@url = "https://alpha-api.app.net/stream/0/posts/stream/global?connection_id=#{stream_id}&since_id=#{last_page_id}"
- 		when "unified" # doesn't work, have to implement some sort of real keep-alive
+ 		when "unified" # doesn't work, have to implement some sort of real keep-alive connection
  			@url = "https://alpha-api.app.net/stream/0/posts/stream/unified?connection_id=#{stream_id}&since_id=#{last_page_id}&include_directed_posts=1"
  		end
 		puts "\nRecording stream in #{$ayadn_files_path}/rec-#{item}.json\n\n"
@@ -872,6 +871,8 @@ class AyaDN
 					number_of_connections += 1
 					next
 				end
+				# don't let it run for days, it will eat your RAM
+				# + the simple file dump isn't ok in the long run
 				big_stream << @hash['data']
 				number_of_connections += 1
 				file_operations_timer += 1
