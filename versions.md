@@ -3,6 +3,11 @@ AYADN
 
 AYADN is a learning exercise: while it's fully functional, it's still very alpha (remember I'm a beginner with Ruby).  
 
+## 2013-12-15 v0.38
+- better colors and layout
+- better username detect
+- bugfixes
+
 ## 2013-12-14 v0.37
 - many bugfixes
 - internal code improvements

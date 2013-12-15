@@ -297,9 +297,15 @@ ayadn list followings me
 (etc)
 ```  
 
+### Me
+
+Speaking of "me", one thing I really recommend is to **fill in your username** in the `config.yml` file (without "@"). 
+
+AyaDN will then be able to perform a lot better and faster (less API calls, more colors, etc).  
+
 ### Configuration
 
-Unless you're planning on using [multiple accounts](https://github.com/ericdke/ayadn#running-multiple-accounts), you should install the configuration file in the permanent AyaDN folder:
+Unless you're planning on using [multiple accounts](https://github.com/ericdke/ayadn#running-multiple-accounts), you should then install the configuration file in the permanent AyaDN folder:
 
 ```
 ayadn install config
