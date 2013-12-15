@@ -710,7 +710,12 @@ class AyaDN
  			targets_array.each do |file|
  				file_name = File.basename(file)
  				puts "Uploading ".cyan + "#{file_name}".brown + "\n\n"
- 				resp = JSON.parse($tools.uploadImage(file, @token))
+ 				begin
+ 					resp = JSON.parse($tools.uploadFiles(file, @token))
+ 				rescue => e
+ 					puts "\nERROR: ".red + e.inspect.red + "\n\n"
+ 					exit
+ 				end
  				meta = resp['meta']
  				$tools.meta(meta)
  				data = resp['data']
@@ -802,6 +807,82 @@ class AyaDN
  				puts "Done!\n\n".green
  			end
  		end
+ 	end
+
+ 	### experiment
+ 	def ayadnRecord(item)
+ 		# first create with curl -i -H 'Authorization: BEARER xxx' "https://stream-channel.app.net/stream/user?auto_delete=1&include_annotations=1"
+ 		# it stays open and returns a stream_id in the headers
+ 		puts "Enter stream id: "
+ 		stream_id = STDIN.gets.chomp
+ 		last_page_id = nil
+ 		start = Time.now
+ 		case item
+ 		when "global" # works :)
+ 			@url = "https://alpha-api.app.net/stream/0/posts/stream/global?connection_id=#{stream_id}&since_id=#{last_page_id}"
+ 		when "unified" # doesn't work, have to implement some sort of real keep-alive
+ 			@url = "https://alpha-api.app.net/stream/0/posts/stream/unified?connection_id=#{stream_id}&since_id=#{last_page_id}&include_directed_posts=1"
+ 		end
+		puts "\nRecording stream in #{$ayadn_files_path}/rec-#{item}.json\n\n"
+		uri = URI.parse(@url)
+		https = Net::HTTP.new(uri.host,uri.port)
+		https.use_ssl = true
+		https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+		request = Net::HTTP::Get.new(uri.request_uri)
+		request["Authorization"] = "Bearer #{@token}"
+		request["Content-Type"] = "application/json"
+		response = https.request(request)
+		@hash = JSON.parse(response.body)
+		big_stream = @hash['data']
+		f = File.new($ayadn_files_path + "/rec-#{item}.json", 'w')
+			f.puts(big_stream.to_json)
+		f.close
+		stream, last_page_id = completeStream
+		displayScrollStream(stream)
+		number_of_connections = 1
+		loop do
+ 			begin
+ 				case item
+		 		when "global"		
+		 			@url = "https://alpha-api.app.net/stream/0/posts/stream/global?connection_id=#{stream_id}&since_id=#{last_page_id}"
+		 		when "unified"
+		 			@url = "https://alpha-api.app.net/stream/0/posts/stream/unified?connection_id=#{stream_id}&since_id=#{last_page_id}&include_directed_posts=1"
+		 		end
+ 				uri = URI.parse(@url)
+ 				request = Net::HTTP::Get.new(uri.request_uri)
+ 				request["Authorization"] = "Bearer #{@token}"
+ 				request["Content-Type"] = "application/json"
+ 				before_request_id = last_page_id
+				response = https.request(request)
+				@hash = JSON.parse(response.body)
+				stream, last_page_id = completeStream
+				displayScrollStream(stream)
+				if last_page_id == nil
+					last_page_id = before_request_id
+					sleep 0.5 # trying to play nice with the API limits
+					number_of_connections += 1
+					next
+				end
+				number_of_connections += 1
+				sleep 0.2 # trying to play nice with the API limits
+				big_json = JSON.parse(IO.read($ayadn_files_path + "/rec-#{item}.json"))
+				big_stream << @hash['data']
+				f = File.new($ayadn_files_path + "/rec-#{item}.json", 'w')
+					f.puts(big_stream.to_json)
+				f.close
+			rescue Exception => e
+				puts e.inspect
+				puts e.to_s
+				finish = Time.now
+				elapsed = finish.to_f - start.to_f
+				mins, secs = elapsed.divmod 60.0
+				puts "\nRequests: #{number_of_connections}\n"
+				puts "Elapsed time (min:secs.msecs): "
+				puts("%3d:%04.2f"%[mins.to_i, secs])
+				puts "\nStream recorded in #{$ayadn_files_path}/rec-#{item}.json"
+				exit
+			end
+		end
  	end
 end
 

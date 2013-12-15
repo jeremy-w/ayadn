@@ -255,8 +255,10 @@ class AyaDN
 				#post_string += " - "
 				#post_string += created_day.cyan + ' at ' + created_hour.cyan + ' by ' + "@".reddish + user_name.reddish + "\n" + colored_post + "\n"
 				#post_string += post_id.to_s.green + " " + created_day.cyan + " " + created_hour.cyan + " " + "[#{user_real_name}]".blue + " " + "@".reddish + user_name.reddish + "\n" + colored_post + "\n"
-				post_string += post_id.to_s.green.ljust(14) + " " + handle.reddish + " [#{user_real_name}]".magenta + " " + post_date + " "
-				post_string += "[#{source_name}]".blue if $configShowClient == true
+				#post_string += post_id.to_s.green.ljust(14) + " " + handle.reddish + " [#{user_real_name}]".magenta + " " + post_date + " "
+				post_string += post_id.to_s.cyan.ljust(14) + " " + handle.green + " [#{user_real_name}]".magenta + " " + post_date + " "
+				#post_string += "[#{source_name}]".blue if $configShowClient == true
+				post_string += "[#{source_name}]".cyan if $configShowClient == true
 				post_string += "\n" + colored_post + "\n"
 				links = item['entities']['links']
 				annotations_list = item['annotations']
@@ -301,7 +303,7 @@ class AyaDN
 					end
 				end
 				links_string = objectLinks(links)
-				post_string += links_string + "\n"
+				post_string += links_string + "\n\n"
 			end
 			return post_string, pagination_array
 		end

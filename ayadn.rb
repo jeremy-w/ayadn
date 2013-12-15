@@ -242,6 +242,10 @@ when "upload", "download", "remove", "delete-file", "private", "public"
 when "pin"
 	client.ayadnBookmark(ARGV)
 
+# experiment
+when "record"
+	client.ayadnRecord(arg2)
+
 else
 	# if not any known argument
 	option = ARGV

@@ -3,6 +3,10 @@ AYADN
 
 AYADN is a learning exercise: while it's fully functional, it's still very alpha (remember I'm a beginner with Ruby).  
 
+## 2013-12-14 v0.37
+- many bugfixes
+- internal code improvements
+
 ## 2013-12-12 v0.36
 - No more Rest-Client, all HTTP by hand
 
@@ -115,7 +119,7 @@ AYADN is a learning exercise: while it's fully functional, it's still very alpha
 
 ## 2013-11-08 v0.06
 - Changed the logic for ARGV
-- Inverted syntax for better consistance
+- Inverted syntax for better consistence
 - Hashtag search!
 
 ## 2013-11-07 v0.05
