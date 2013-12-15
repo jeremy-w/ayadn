@@ -816,7 +816,7 @@ class AyaDN
  		# it stays open and returns a stream_id in the headers
  		# TODO: replace curl with a good connection system with HTTP or Rest-Client
 
- 		command = "sleep 1; curl -i -H 'Authorization: BEARER XXX' 'https://stream-channel.app.net/stream/user?auto_delete=1&include_annotations=1'"
+ 		command = "sleep 1; curl -i -H 'Authorization: BEARER #{@token}' 'https://stream-channel.app.net/stream/user?auto_delete=1&include_annotations=1'"
  		pid = Process.spawn(command)
         Process.detach(pid)
 
