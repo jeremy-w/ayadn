@@ -314,7 +314,11 @@ class AyaDN
 			puts $status.redirectingToOriginal(postID)
 			post_mentions_array, replying_to_this_username, is_repost = @api.getPostMentions(postID) 
 		end
-		my_username = @api.getUserName("me")
+		if $identityPrefix == "me"
+			my_username = @api.getUserName("me")
+		else
+			my_username = $identityPrefix
+		end
 		#my_handle = "@" + my_username
 		replying_to_handle = "@" + replying_to_this_username
 		new_content = Array.new
