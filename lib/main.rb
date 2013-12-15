@@ -810,9 +810,17 @@ class AyaDN
  	end
 
  	### experiment
+ 	### not DRY at all, this is ok, chill out
  	def ayadnRecord(item)
  		# first create with curl -i -H 'Authorization: BEARER xxx' "https://stream-channel.app.net/stream/user?auto_delete=1&include_annotations=1"
  		# it stays open and returns a stream_id in the headers
+
+ 		#long_connect_resp = `curl -i -H 'Authorization: BEARER AQAAAAAACP4vpl_RwhuKi9_5iS_P1FQghtvVZin0I-xNW4kD3FSHiz75BpRduDld0TgrsYG5KDh5LPUO5SZH1peIGfX3non3IA' "https://stream-channel.app.net/stream/user?auto_delete=1&include_annotations=1"`
+
+ 		command = "sleep 1; curl -i -H 'Authorization: BEARER AQAAAAAACP4vpl_RwhuKi9_5iS_P1FQghtvVZin0I-xNW4kD3FSHiz75BpRduDld0TgrsYG5KDh5LPUO5SZH1peIGfX3non3IA' 'https://stream-channel.app.net/stream/user?auto_delete=1&include_annotations=1'"
+ 		pid = Process.spawn(command)
+        Process.detach(pid)
+
  		puts "Enter stream id: "
  		stream_id = STDIN.gets.chomp
  		last_page_id = nil
@@ -840,6 +848,7 @@ class AyaDN
 		stream, last_page_id = completeStream
 		displayScrollStream(stream)
 		number_of_connections = 1
+		file_operations_timer = 0
 		loop do
  			begin
  				case item
@@ -863,13 +872,18 @@ class AyaDN
 					number_of_connections += 1
 					next
 				end
-				number_of_connections += 1
-				sleep 0.2 # trying to play nice with the API limits
-				big_json = JSON.parse(IO.read($ayadn_files_path + "/rec-#{item}.json"))
 				big_stream << @hash['data']
-				f = File.new($ayadn_files_path + "/rec-#{item}.json", 'w')
-					f.puts(big_stream.to_json)
-				f.close
+				number_of_connections += 1
+				file_operations_timer += 1
+				sleep 0.2 # trying to play nice with the API limits
+				if file_operations_timer == 10
+					puts "\nRecording stream in #{$ayadn_files_path}/rec-#{item}.json\n\n".green
+					#big_json = JSON.parse(IO.read($ayadn_files_path + "/rec-#{item}.json"))
+					f = File.new($ayadn_files_path + "/rec-#{item}.json", 'w')
+						f.puts(big_stream.to_json)
+					f.close
+					file_operations_timer = 0
+				end
 			rescue Exception => e
 				puts e.inspect
 				puts e.to_s
