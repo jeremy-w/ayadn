@@ -55,6 +55,8 @@ AYADN
 
 - skip posts from specific clients (like IFTTT, PourOver, etc)
 
+- skip posts containing specific #hashtags
+
 - list, download, delete files from your ADN account
 
 - change file attribute: public/private
