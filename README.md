@@ -273,6 +273,8 @@ ayadn save 15723266
 ayadn load 15723266
 ayadn skip-source add IFTTT
 ayadn skip-source remove IFTTT
+ayadn skip-tag add sports
+ayadn skip-tag remove sports
 ayadn pin 16864003 ruby,json
 ayadn reset pagination
 ayadn help
@@ -283,23 +285,9 @@ ayadn random
 
 ## Tips  
 
-### "me"
+### Username
 
-With some features you can replace `@username` by `me` if you want to check yourself:
-
-```
-ayadn mentions me
-ayadn scroll mentions me
-ayadn posts me
-ayadn starred me
-ayadn infos me
-ayadn list followings me
-(etc)
-```  
-
-### Me
-
-Speaking of "me", one thing I really recommend is to **fill in your username** in the `config.yml` file (without "@"). 
+One thing I really recommend is to **fill in your username** in the `config.yml` file (without the "@"). 
 
 AyaDN will then be able to perform a lot better and faster (less API calls, more colors, etc).  
 
@@ -311,9 +299,21 @@ Unless you're planning on using [multiple accounts](https://github.com/ericdke/a
 ayadn install config
 ```  
 
-Now you may safely edit your preferences in `%USERDIR%/ayadn/data/config.yml` without losing anything when updating AyaDN.
+Now you may safely edit your preferences in `%USERDIR%/ayadn/data/config.yml` without losing anything when updating AyaDN.   
 
-If a new version of AyaDN offers new configuration options and you've already installed and modified the config, then you should run this command again *after having backed up your file*, then report your precedent options in the new file.  
+### Skip specific posts
+
+App.net already gives you the "mute" command to mute certain users. 
+
+But what if you want to mute a certain *hashtag*, like "#sports", or mute a *client*, like "IFTTT"? 
+
+Easy: `ayadn skip-source add IFTTT`, and no more posts by IFTTT in your timeline.
+
+Same for hashtags: `ayadn skip-tag add sports`, and you won't see any posts containing "#sports" again. *(remember that most terminals and consoles won't accept the `#` sign, so don't type it in a command)*
+
+Change of mind? `ayadn skip-source remove IFTTT`, `ayadn skip-tag remove sports`, etc.
+
+There's basically no verification with this feature, so be careful to not add misspelled or non-existent info.  
 
 ### Backup some data
 
@@ -365,25 +365,25 @@ Without arguments: resets all your pagination data.
 - do `ayadn authorize` to force a new process (you may have to log off your browser (or delete cookies) first if you want to change accounts)
 - don't ever run "ayadn install config" or AyaDN will ignore your multiple settings  
 
-### Skip specific clients
-
-App.net already gives you the "mute" command to mute a user. But what if you want to mute a *client*, like IFTTT or PourOver?
-
-Easy: `ayadn skip-source add IFTTT`
-
-Want to mute another one? Go on: `ayadn skip-source add PourOver`. Etc.
-
-Change of mind? `ayadn skip-source remove IFTTT`, `ayadn skip-source remove PourOver`, etc.
-
-You can discover what client was used to post a post with `ayadn infos PostID`  
-
-There's basically no verification with this feature, so be careful to not add misspelled or non-existent clients.
-
 ### Pinboard
 
 Export a post link + text + tags to Pinboard:
 
 `ayadn pin 15723266 tag1,tag2`  
+
+### "me"
+
+With some features you can replace `@username` by `me` if you want to check yourself:
+
+```
+ayadn mentions me
+ayadn scroll mentions me
+ayadn posts me
+ayadn starred me
+ayadn infos me
+ayadn list followings me
+(etc)
+```  
 
 ### Shortcuts
 
