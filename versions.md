@@ -8,6 +8,7 @@ AYADN is a learning exercise: while it's fully functional, it's still very alpha
 - better colors and layout
 - better username detect
 - bugfixes
+- introducing AyaDN to some multithreading :)
 
 ## 2013-12-14 v0.37
 - many bugfixes

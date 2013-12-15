@@ -252,7 +252,7 @@ class AyaDN
 				end
 				#Skip hashtags
 				skipped_hashtags_encountered = false
-				splitted = post_text.split(" ")
+				post_text != nil ? splitted = post_text.split(" ") : next
 				splitted.each do |word|
 					case word
 					when *new_tags
@@ -362,6 +362,25 @@ class AyaDN
 				post_details += " #{user_real_name}".pink
 			end
 			post_details += "\n" + colored_post + "\n\n"
+		end
+
+		def buildSimplePostInfo(post_hash)
+			the_post_id = post_hash['id']
+			post_text = post_hash['text']
+			post_URL = post_hash['canonical_url']
+			post_details = "Post URL: ".cyan + post_URL.brown + "\n"
+			is_reply = post_hash['reply_to']
+			if is_reply != nil
+				post_details += "This post is a reply to post ".cyan + is_reply.brown + "\n"
+			end
+			if post_text != nil
+				to_regex = post_text.dup
+				without_Markdown = $tools.getMarkdownText(to_regex)
+				without_braces = $tools.withoutSquareBraces(without_Markdown)
+				actual_length = without_braces.length
+				post_details += "\nLength: ".cyan + actual_length.to_s.reddish
+			end
+			return post_details + "\n\n"
 		end
 		def buildPostInfo(post_hash, is_mine)
 			post_text = post_hash['text']

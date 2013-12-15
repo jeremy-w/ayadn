@@ -215,7 +215,7 @@ class AyaDN
 			end
 			@hash = @api.getChannels
 			the_channels, channels_list = @view.new(@hash).showChannels
-			if $drafts != nil
+			if $drafts != nil # remains of a past experiment... that will disappear some day
 				private_message_channel_ID = $drafts
 				$tools.fileOps("savechannelid", private_message_channel_ID, "drafts")
 			end
@@ -232,7 +232,8 @@ class AyaDN
 		blob = JSON.parse(callback)
 		@hash = blob['data']
 		my_post_id = @hash['id']
-		puts @view.new(@hash).buildPostInfo(@hash, isMine = true)
+		#puts @view.new(@hash).buildPostInfo(@hash, isMine = true)
+		puts @view.new(@hash).buildSimplePostInfo(@hash)
 		puts $status.postSent
 		# show end of the stream after posting
 		if reply_to.empty?
@@ -240,11 +241,16 @@ class AyaDN
 			stream, last_page_id = completeStream
 			displayStream(stream)
 		else
-			hash1 = @api.getPostReplies(reply_to)
+			@reply_to = reply_to
+			t1 = Thread.new{@api.getPostReplies(@reply_to)}
+			t2 = Thread.new{@api.getSimpleUnified}
+			t1.join
+			t2.join
+			hash1 = t1.value
+			hash2 = t1.value
 			hash_data = hash1['data']
 			last_of_hash = hash_data.last
 			original_post = @view.new(nil).buildSimplePost(last_of_hash)
-			hash2 = @api.getSimpleUnified
 			unified_data = hash2['data']
 			first_of_unified = unified_data.last # because adnData.reverse in API
 			first_of_unified_id = first_of_unified['id']
