@@ -257,21 +257,16 @@ class AyaDN
 				 		next # get out of this loop
 					end
 				end
-				next if skipped_hashtags_encountered # get out of this loop and get next post
+				next if skipped_hashtags_encountered # get out of this loop
 				entitiesMentions = item['entities']['mentions']
 				postMentionsArray = []
-				entitiesMentions.each do |item|
-					postMentionsArray.push(item['name'])
+				entitiesMentions.each do |mention|
+					postMentionsArray.push(mention['name'])
 				end
 				post_text != nil ? (colored_post = $tools.colorize(post_text)) : (colored_post = "--Post deleted--".red)
 				user_name, user_real_name, handle = objectNames(item['user'])
 				created_day, created_hour = objectDate(item)
 				post_date = created_day.cyan + " " + created_hour.cyan
-				#post_string += "Post ID: ".cyan + post_id.to_s.green
-				#post_string += " - "
-				#post_string += created_day.cyan + ' at ' + created_hour.cyan + ' by ' + "@".reddish + user_name.reddish + "\n" + colored_post + "\n"
-				#post_string += post_id.to_s.green + " " + created_day.cyan + " " + created_hour.cyan + " " + "[#{user_real_name}]".blue + " " + "@".reddish + user_name.reddish + "\n" + colored_post + "\n"
-				#post_string += post_id.to_s.green.ljust(14) + " " + handle.reddish + " [#{user_real_name}]".magenta + " " + post_date + " "
 				me_mentioned = false
 				postMentionsArray.each do |name|
 					if name == $identityPrefix
@@ -283,55 +278,62 @@ class AyaDN
 				else
 					post_string += post_id.to_s.cyan.ljust(14) + " " + handle.green + " [#{user_real_name}]".magenta + " " + post_date + " "
 				end
-				#post_string += "[#{source_name}]".blue if $configShowClient == true
 				post_string += "[#{source_name}]".cyan if $configShowClient == true
 				post_string += "\n" + colored_post + "\n"
+				annotations_string = checkins_annotations(item)
+				post_string += annotations_string
 				links = item['entities']['links']
-				annotations_list = item['annotations']
-				xxx = 0
-				if annotations_list != nil
-					annotations_list.each do |it|
-						annotation_type = annotations_list[xxx]['type']
-						annotation_value = annotations_list[xxx]['value']
-						if annotation_type == "net.app.core.checkin" or annotation_type == "net.app.ohai.location"
-							checkins_name = annotation_value['name']
-							checkins_address = annotation_value['address']
-							checkins_locality = annotation_value['locality']
-							checkins_region = annotation_value['region']
-							checkins_postcode = annotation_value['postcode']
-							checkins_country_code = annotation_value['country_code']
-							fancy = checkins_name.length + 7
-							post_string += "." * fancy #longueur du nom plus son étiquette
-							unless checkins_name.nil?
-								post_string += "\nName: ".cyan + checkins_name.upcase.reddish
-							end
-							unless checkins_address.nil?
-								post_string += "\nAddress: ".cyan + checkins_address.green
-							end
-							unless checkins_locality.nil?
-								post_string += "\nLocality: ".cyan + checkins_locality.green
-							end
-							unless checkins_postcode.nil?
-								post_string += " (#{checkins_postcode})".green
-							end
-							unless checkins_region.nil?
-								post_string += "\nState/Region: ".cyan + checkins_region.green
-							end
-							unless checkins_country_code.nil?
-								post_string += " (#{checkins_country_code})".upcase.green
-							end
-							unless source_name.nil?
-								post_string += "\nPosted with: ".cyan + "#{source_name} [#{source_link}]".green + " "
-							end
-							post_string += "\n"
-						end
-						xxx += 1
-					end
-				end
 				links_string = objectLinks(links)
 				post_string += links_string + "\n\n"
 			end
 			return post_string, pagination_array
+		end
+		def checkins_annotations(item)
+			anno_string = ""
+			source_name = item['source']['name']
+			source_link = item['source']['link']
+			annotations_list = item['annotations']
+			xxx = 0
+			if annotations_list != nil
+				annotations_list.each do |it|
+					annotation_type = annotations_list[xxx]['type']
+					annotation_value = annotations_list[xxx]['value']
+					if annotation_type == "net.app.core.checkin" or annotation_type == "net.app.ohai.location"
+						checkins_name = annotation_value['name']
+						checkins_address = annotation_value['address']
+						checkins_locality = annotation_value['locality']
+						checkins_region = annotation_value['region']
+						checkins_postcode = annotation_value['postcode']
+						checkins_country_code = annotation_value['country_code']
+						fancy = checkins_name.length + 6
+						anno_string += "." * fancy #longueur du nom plus son étiquette
+						unless checkins_name.nil?
+							anno_string += "\nName: ".cyan + checkins_name.upcase.reddish
+						end
+						unless checkins_address.nil?
+							anno_string += "\nAddress: ".cyan + checkins_address.green
+						end
+						unless checkins_locality.nil?
+							anno_string += "\nLocality: ".cyan + checkins_locality.green
+						end
+						unless checkins_postcode.nil?
+							anno_string += " (#{checkins_postcode})".green
+						end
+						unless checkins_region.nil?
+							anno_string += "\nState/Region: ".cyan + checkins_region.green
+						end
+						unless checkins_country_code.nil?
+							anno_string += " (#{checkins_country_code})".upcase.green
+						end
+						unless source_name.nil?
+							anno_string += "\nPosted with: ".cyan + "#{source_name} [#{source_link}]".green + " "
+						end
+						anno_string += "\n"
+					end
+					xxx += 1
+				end
+				return anno_string
+			end
 		end
 		def buildSimplePost(post_hash)
 			post_text = post_hash['text']

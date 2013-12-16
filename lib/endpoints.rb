@@ -31,21 +31,26 @@ class AyaDN
 		def single_post(post_id)
 			POSTS_URL + "#{post_id}?access_token=#{@token}"
 		end
-		def checkins
-			POSTS_URL + "stream/explore/checkins?access_token=#{@token}&count=#{$countCheckins}"
-		end
-		def trending
-			POSTS_URL + "stream/explore/trending?access_token=#{@token}&count=#{$countExplore}"
-		end
-		def conversations
-			POSTS_URL + "stream/explore/conversations?access_token=#{@token}"
-		end
+		# def checkins
+		# 	POSTS_URL + "stream/explore/checkins?access_token=#{@token}&count=#{$countCheckins}"
+		# end
+		# def trending
+		# 	POSTS_URL + "stream/explore/trending?access_token=#{@token}&count=#{$countExplore}"
+		# end
+		# def conversations
+		# 	POSTS_URL + "stream/explore/conversations?access_token=#{@token}"
+		# end
 		def explore(stream)
-			POSTS_URL + "stream/explore/#{stream}?access_token=#{@token}&count=#{$countExplore}"
+			case stream
+			when "checkins"
+				POSTS_URL + "stream/explore/checkins?access_token=#{@token}&count=#{$countCheckins}"
+			when "trending", "conversations", "photos"
+				POSTS_URL + "stream/explore/#{stream}?access_token=#{@token}&count=#{$countExplore}"
+			end
 		end
-		def photos
-			POSTS_URL + "stream/explore/photos?access_token=#{@token}&count=#{$countExplore}"
-		end
+		# def photos
+		# 	POSTS_URL + "stream/explore/photos?access_token=#{@token}&count=#{$countExplore}"
+		# end
 		def hashtags(tags)
 			POSTS_URL + "tag/#{tags}"
 		end
