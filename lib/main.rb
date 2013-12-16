@@ -626,7 +626,7 @@ class AyaDN
 					exit
 				end
 			end
-			$configFileContents['skipped']['hashtags'].push(tag)
+			$configFileContents['skipped']['hashtags'].push(tag.downcase)
 			puts "New skipped #hashtags: ".green + $configFileContents['skipped']['hashtags'].join(", ").red + "\n\n"
 			$tools.saveConfig
 		elsif action == "remove"

@@ -233,7 +233,7 @@ class AyaDN
 			pagination_array = []
 			new_tags = []
 			$skipped_tags.each do |tag|
-				new_tag = "#" + tag.downcase
+				new_tag = "#" + tag.downcase # hashtags are already saved in downcase by AyaDN, but you never know...
 				new_tags << new_tag
 			end
 			post_hash.each do |item|
@@ -245,11 +245,7 @@ class AyaDN
 				#Skip sources
 				case source_name
 				when *$skipped_sources
-					# post_string += "Post ID: ".cyan + post_id.to_s.green
-					# post_string += " -" + " SKIPPED".cyan
-					# matched = $skipped_sources.index(source_name)
-					# post_string += " \"#{$skipped_sources[matched]}\"\n\n".cyan
-					next
+					next # get out of this loop and get next post
 				end
 				#Skip hashtags
 				skipped_hashtags_encountered = false
@@ -259,10 +255,10 @@ class AyaDN
 					case word
 					when *new_tags
 						skipped_hashtags_encountered = true
-						next
+						next # get out of this loop
 					end
 				end
-				next if skipped_hashtags_encountered
+				next if skipped_hashtags_encountered # get out of this loop and get next post
 				entitiesMentions = item['entities']['mentions']
 				postMentionsArray = []
 				entitiesMentions.each do |item|
