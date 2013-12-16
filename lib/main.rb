@@ -240,10 +240,12 @@ class AyaDN
 		puts $status.postSent
 		# show end of the stream after posting
 		if reply_to.empty?
+			$bar_while_scrolling = false
 			@hash = @api.getSimpleUnified
 			stream, last_page_id = completeStream
 			displayStream(stream)
 		else
+			$bar_while_scrolling = true
 			@reply_to = reply_to
 			t1 = Thread.new{@api.getPostReplies(@reply_to)}
 			t2 = Thread.new{@api.getSimpleUnified}
@@ -315,6 +317,7 @@ class AyaDN
 		end
 	end
 	def ayadnReply(postID)
+		$bar_while_scrolling = false
 		puts $status.replyingToPost(postID)
 		post_mentions_array, replying_to_this_username, is_repost = @api.getPostMentions(postID) 
 		if is_repost != nil
@@ -417,6 +420,7 @@ class AyaDN
 	end
 
 	def ayadnShowList(list, name)
+		$bar_while_scrolling = false
 		puts $status.fetchingList(list)
 		@hash = getList(list, name)
 		puts $status.showList(list, name)
