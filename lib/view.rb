@@ -281,7 +281,7 @@ class AyaDN
 				post_string += "[#{source_name}]".cyan if $configShowClient == true
 				post_string += "\n" + colored_post + "\n"
 				annotations_string = checkins_annotations(item)
-				post_string += annotations_string
+				post_string += annotations_string unless annotations_string == nil
 				links = item['entities']['links']
 				links_string = objectLinks(links)
 				post_string += links_string + "\n\n"

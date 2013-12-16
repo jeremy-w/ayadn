@@ -11,8 +11,8 @@ class AyaDN
 		end
 
 		def getHash
-			response = clientHTTP("get", @url)  
-			theHash = JSON.parse(response.body)
+			response = clientHTTP("get", @url)
+			theHash = JSON.parse(response)
 		end
 
 		def checkLastPageID(last_page_id)

@@ -22,7 +22,29 @@ class AyaDN
 				request = Net::HTTP::Get.new(uri.request_uri)
 				request["Authorization"] = "Bearer #{@token}"
 				request["Content-Type"] = "application/json"
-				response = https.request(request)
+				
+				if $bar_while_scrolling == false # this is ugly but I don't see anything LESS ugly for now
+					response = https.request(request)
+					return response.body
+				else
+						body = ''
+						https.request(request) do |response| 
+							fileSize = response['Content-Length'].to_i
+							bytesTransferred = 0
+							response.read_body do |part|
+								bytesTransferred += part.length
+								rounded = bytesTransferred.percent_of(fileSize).round
+								print "\rFetching data: ".cyan + "#{rounded.to_s}%".brown
+								body << part
+							end
+						end
+						print "\r                           "
+						puts "\n\n"
+						return body
+				end
+
+
+
 			when "download"
 				uri = URI("#{target}")
 				final_uri = ''

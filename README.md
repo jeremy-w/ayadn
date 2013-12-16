@@ -275,8 +275,10 @@ ayadn save 15723266
 ayadn load 15723266
 ayadn skip-source add IFTTT
 ayadn skip-source remove IFTTT
+ayadn skip-source show
 ayadn skip-tag add sports
 ayadn skip-tag remove sports
+ayadn skip-tag show
 ayadn pin 16864003 ruby,json
 ayadn reset pagination
 ayadn help

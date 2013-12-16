@@ -16,6 +16,13 @@ class Integer
     }.each_pair { |e, s| return "#{(self.to_f / (s / 1024)).round(2)}#{e}" if self < s }
   end
 end
+
+class Numeric
+  def percent_of(n)
+    self.to_f / n.to_f * 100.0
+  end
+end
+
 class AyaDN
 	class Tools
         def initialize

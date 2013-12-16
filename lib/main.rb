@@ -5,6 +5,7 @@ class AyaDN
 		@token = token
 		@api = AyaDN::API.new(@token)
 		@view = AyaDN::View
+		$bar_while_scrolling = true # this is ugly but I don't see anything LESS ugly for now
 	end
 	def stream
 		$tools.fileOps("makedir", $ayadn_last_page_id_path)
@@ -69,6 +70,7 @@ class AyaDN
 		!stream.empty? ? (puts stream) : (print "\r")
 	end
 	def ayadnScroll(value, target)
+		$bar_while_scrolling = true # this is ugly but I don't see anything LESS ugly for now
 		value = "unified" if value == nil
 		if target == nil
 			fileURL = $ayadn_last_page_id_path + "/last_page_id-#{value}"
@@ -94,6 +96,7 @@ class AyaDN
 				# todo: color post id if I'm mentioned
 				stream, last_page_id = completeStream
 				displayScrollStream(stream)
+				$bar_while_scrolling = false # this is ugly but I don't see anything LESS ugly for now
 				if last_page_id != nil
 					$tools.fileOps("writelastpageid", fileURL, last_page_id)
 					print "\r                                         "
