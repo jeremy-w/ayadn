@@ -612,8 +612,6 @@ class AyaDN
 			end
 			puts "New skipped sources: ".green + $configFileContents['skipped']['sources'].join(", ").red + "\n\n"
 			$tools.saveConfig
-		else
-			puts "Current skipped sources: ".green + $skipped_sources.join(", ").red + "\n\n"
 		end
  	end
  	def ayadnSkipTag(action, tag)
