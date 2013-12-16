@@ -231,14 +231,14 @@ class AyaDN
 		def buildCompleteStream(post_hash)
 			post_string = ""
 			pagination_array = []
-			new_tags = []
+			saved_tags = []
 			$skipped_tags.each do |tag|
-				new_tag = "#" + tag.downcase # hashtags are already saved in downcase by AyaDN, but you never know...
-				new_tags << new_tag
+				saved_tags << tag.downcase
 			end
 			post_hash.each do |item|
 				pagination_array.push(item['pagination_id'])
 				post_text = item['text']
+				next if post_text == nil
 				post_id = item['id']
 				source_name = item['source']['name']
 				source_link = item['source']['link']
@@ -249,13 +249,12 @@ class AyaDN
 				end
 				#Skip hashtags
 				skipped_hashtags_encountered = false
-				post_text != nil ? splitted = post_text.split(" ") : next
-				splitted.each do |word|
-					word.downcase
-					case word
-					when *new_tags
+				entities_tags = item['entities']['hashtags']
+				entities_tags.each do |post_tag|
+					case post_tag['name']
+					when *saved_tags
 						skipped_hashtags_encountered = true
-						next # get out of this loop
+				 		next # get out of this loop
 					end
 				end
 				next if skipped_hashtags_encountered # get out of this loop and get next post
