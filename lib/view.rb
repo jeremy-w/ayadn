@@ -233,7 +233,7 @@ class AyaDN
 			pagination_array = []
 			new_tags = []
 			$skipped_tags.each do |tag|
-				new_tag = "#" + tag
+				new_tag = "#" + tag.downcase
 				new_tags << new_tag
 			end
 			post_hash.each do |item|
@@ -255,6 +255,7 @@ class AyaDN
 				skipped_hashtags_encountered = false
 				post_text != nil ? splitted = post_text.split(" ") : next
 				splitted.each do |word|
+					word.downcase
 					case word
 					when *new_tags
 						skipped_hashtags_encountered = true
