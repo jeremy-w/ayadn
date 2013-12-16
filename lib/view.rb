@@ -548,19 +548,26 @@ class AyaDN
 					readers = item['readers']['user_ids']
 					you_write = item['writers']['you']
 					you_read = item['readers']['you']
-					the_writers, the_readers = [], []
+					@the_writers, the_readers = [], []
+					threads = []
 					writers.each do |writer|
-						if writer != nil
-							user = AyaDN::API.new(@token).getUserInfos(writer)
-							name = user['data']['username']
-							the_writers.push("@" + name)
-							#the_writers.push(writer) 
-						end
+						threads << Thread.new(writer) { |writer_in_thread|
+
+							if writer_in_thread != nil
+								user = AyaDN::API.new(@token).getUserInfos(writer_in_thread)
+								name = user['data']['username']
+								@the_writers.push("@" + name)
+							end
+
+						}
 					end
+
+					threads.each { |the_thread| the_thread.join }
+
 					the_channels += "\nChannel ID: ".cyan + "#{channel_id}\n".brown
 					the_channels += "Creator: ".cyan + owner.magenta + "\n"
 					#the_channels += "Channels type: ".cyan + "#{channel_type}\n".brown
-					the_channels += "Interlocutor(s): ".cyan + the_writers.join(", ").magenta + "\n"
+					the_channels += "Interlocutor(s): ".cyan + @the_writers.join(", ").magenta + "\n"
 				end
 				if channel_type == "com.ayadn.drafts"
 					$drafts = channel_id
