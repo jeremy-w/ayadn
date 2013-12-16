@@ -237,6 +237,7 @@ class AyaDN
 				new_tags << new_tag
 			end
 			post_hash.each do |item|
+				pagination_array.push(item['pagination_id'])
 				post_text = item['text']
 				post_id = item['id']
 				source_name = item['source']['name']
