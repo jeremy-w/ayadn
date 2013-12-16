@@ -591,9 +591,9 @@ class AyaDN
 		$tools.fileOps("reset", target, content, option)
 	end
 	def ayadnSkipSource(action, source)
-		puts "Current skipped sources: ".green + $skipped_sources.join(", ").red + "\n"
+		puts "Current skipped sources: ".green + $skipped_sources.join(", ").red + "\n\n"
 		if action == "add"
-			puts "Adding ".green + source.red + " to the skipped sources.".green + "\n"
+			puts "Adding ".green + source.red + " to the skipped sources.".green + "\n\n"
 			$configFileContents['skipped']['sources'].each do |config_sources|
 				if config_sources == source
 					puts "#{source}".red + " is already skipped.\n\n".green
@@ -604,7 +604,7 @@ class AyaDN
 			puts "New skipped sources: ".green + $configFileContents['skipped']['sources'].join(", ").red + "\n\n"
 			$tools.saveConfig
 		elsif action == "remove"
-			puts "Removing ".green + source.red + " from the skipped sources.".green + "\n"
+			puts "Removing ".green + source.red + " from the skipped sources.".green + "\n\n"
 			$configFileContents['skipped']['sources'].each do |config_sources|
 				if config_sources == source
 					$configFileContents['skipped']['sources'].delete(config_sources)
@@ -617,7 +617,7 @@ class AyaDN
  	def ayadnSkipTag(action, tag)
 		puts "Current skipped #hashtags: ".green + $skipped_tags.join(", ").red + "\n\n"
 		if action == "add"
-			puts "Adding ".green + tag.red + " to the skipped #hashtags.".green + "\n"
+			puts "Adding ".green + tag.red + " to the skipped #hashtags.".green + "\n\n"
 			$configFileContents['skipped']['hashtags'].each do |config_tags|
 				if config_tags == tag
 					puts "#{tag}".red + " is already skipped.\n\n".green
@@ -628,7 +628,7 @@ class AyaDN
 			puts "New skipped #hashtags: ".green + $configFileContents['skipped']['hashtags'].join(", ").red + "\n\n"
 			$tools.saveConfig
 		elsif action == "remove"
-			puts "Removing ".green + tag.red + " from the skipped #hashtags.".green + "\n"
+			puts "Removing ".green + tag.red + " from the skipped #hashtags.".green + "\n\n"
 			$configFileContents['skipped']['hashtags'].each do |config_tags|
 				if config_tags == tag
 					$configFileContents['skipped']['hashtags'].delete(config_tags)
