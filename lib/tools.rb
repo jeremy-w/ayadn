@@ -234,7 +234,7 @@ class AyaDN
 		def colorize(contentText)
 			content = Array.new
 			splitted = contentText.split(" ")
-			splitted.each do |word|
+			for word in splitted do
 				if word =~ /^#\w/
                     new_word = removeEndCharIfSpecial(word, "pink")
                     content.push(new_word)

@@ -17,7 +17,6 @@ class AyaDN
 			links_string = ""
 			if !links.empty?
 				#links_string << "\n"
-				links_array = []
 				for link in links do
 					links_string << "Link: ".cyan + link['url'].brown + "\n"
 				end
@@ -40,7 +39,7 @@ class AyaDN
 			annotations_list = item['annotations']
 			xxx = 0
 			if annotations_list != nil
-				annotations_list.each do |it|
+				for it in annotations_list do
 					annotation_type = annotations_list[xxx]['type']
 					annotation_value = annotations_list[xxx]['value']
 					if annotation_type == "net.app.core.checkin" or annotation_type == "net.app.ohai.location"

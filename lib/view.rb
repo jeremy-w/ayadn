@@ -131,7 +131,7 @@ class AyaDN
 		def skip_hashtags(item, saved_tags)
 			entities_tags = item['entities']['hashtags']
 			skipped_hashtags_encountered = false
-			entities_tags.each do |post_tag|
+			for post_tag in entities_tags do
 				case post_tag['name']
 				when *saved_tags
 					skipped_hashtags_encountered = true
@@ -143,7 +143,7 @@ class AyaDN
 
 		def buildStream(post_hash)
 			post_string = ""
-			post_hash.each do |item|
+			for item in post_hash do
 				# create_content_string(item, annotations, me_mentioned)
 				post_string << create_content_string(item, nil, false)
 			end
@@ -151,7 +151,7 @@ class AyaDN
 		end
 		def buildMessages(messages_stream)
 			messages_string = ""
-			messages_stream.each do |item|
+			for item in messages_string do
 				# create_content_string(item, annotations, me_mentioned)
 				messages_string << create_content_string(item, nil, false)
 			end
