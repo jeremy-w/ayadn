@@ -164,8 +164,10 @@ class AyaDN
 			post_string = ""
 			pagination_array = []
 			saved_tags = []
-			$skipped_tags.each do |tag|
-				saved_tags << tag.downcase
+			if $skipped_tags != nil
+				$skipped_tags.each do |tag|
+					saved_tags << tag.downcase
+				end
 			end
 			post_hash.each do |item|
 				pagination_array.push(item['pagination_id'])
