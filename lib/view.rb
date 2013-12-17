@@ -165,11 +165,12 @@ class AyaDN
 			pagination_array = []
 			saved_tags = []
 			if $skipped_tags != nil
-				$skipped_tags.each do |tag|
+				for tag in $skipped_tags do
 					saved_tags << tag.downcase
 				end
 			end
-			post_hash.each do |item|
+			#post_hash.each do |item|
+			for item in post_hash do
 				pagination_array.push(item['pagination_id'])
 				next if item['text'] == nil
 				@source_name, @source_link = objectSource(item)
@@ -180,11 +181,11 @@ class AyaDN
 				next if skip_hashtags(item, saved_tags)
 				entitiesMentions = item['entities']['mentions']
 				postMentionsArray = []
-				entitiesMentions.each do |mention|
+				for mention in entitiesMentions do
 					postMentionsArray.push(mention['name'])
 				end
 				me_mentioned = false
-				postMentionsArray.each do |name|
+				for name in postMentionsArray do
 					me_mentioned = true if name == $identityPrefix
 				end
 				colored_post = coloredText(item)

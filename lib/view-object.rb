@@ -14,18 +14,13 @@ class AyaDN
 		end
 		def objectLinks(item)
 			links = item['entities']['links']
+			links_string = ""
 			if !links.empty?
-				links_string = ""
+				#links_string << "\n"
 				links_array = []
-				links.each do |link|
-					linkURL = link['url']
-					links_array.push(linkURL)
+				for link in links do
+					links_string << "Link: ".cyan + link['url'].brown + "\n"
 				end
-				links_array.each do |linkURL|
-					links_string << "Link: ".cyan + linkURL.brown + "\n"
-				end
-			else
-				links_string = ""
 			end
 			return links_string
 		end
