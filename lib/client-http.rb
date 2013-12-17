@@ -39,7 +39,7 @@ class AyaDN
 							end
 						end
 						print "\r                           "
-						puts ""
+						#puts ""
 						return body
 				end
 

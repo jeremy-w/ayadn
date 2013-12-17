@@ -56,7 +56,7 @@ class AyaDN
 						checkins_postcode = annotation_value['postcode']
 						checkins_country_code = annotation_value['country_code']
 						fancy = checkins_name.length + 6
-						anno_string += "." * fancy #longueur du nom plus son étiquette
+						anno_string += "\n" + ("." * fancy) #longueur du nom plus son étiquette
 						unless checkins_name.nil?
 							anno_string += "\nName: ".cyan + checkins_name.upcase.reddish
 						end
@@ -100,8 +100,10 @@ class AyaDN
 			obj_view += ' '
 			obj_view += "[#{@source_name}]".cyan if $configShowClient == true
 			obj_view += "\n"
-			obj_view += obj_colored_text + "\n"
-			obj_view += annotations + "\n" unless annotations == nil
+			obj_view += obj_colored_text
+			if annotations != nil
+				obj_view += annotations + "\n"
+			end
 			obj_view += obj_links + "\n\n"
 		end
 		def file_view(file_name, file_kind, file_size, file_size_converted, file_source_name, file_source_url, created_day, created_hour)
