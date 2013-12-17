@@ -41,7 +41,7 @@ class AyaDN
 			users = ""
 			sorted_hash = @hash.sort
 			sorted_hash.each do |handle, name|
-				users += "#{handle}".red + " - " + "#{name}\n".cyan
+				users << "#{handle}".red + " - " + "#{name}\n".cyan
 			end
 			hash_length = @hash.length
 			return users, hash_length
@@ -56,7 +56,7 @@ class AyaDN
 		def buildDebugStream(post_hash)
 			ret_string = ""
 			post_hash.each do |k, v|
-				ret_string += "#{k}: #{v}\n\n"
+				ret_string << "#{k}: #{v}\n\n"
 			end
 			return ret_string
 		end
@@ -93,28 +93,28 @@ class AyaDN
 				end
 				joined_users_list = users_list.join(", ")
 				joined_post_text = post_text.join(" ")
-				inter_string += "-----\n\n".blue
-				inter_string += "Date: ".green + "#{created_day} #{created_hour}\n".cyan
+				inter_string << "-----\n\n".blue
+				inter_string << "Date: ".green + "#{created_day} #{created_hour}\n".cyan
 				case action
 				when "follow", "unfollow"
-					inter_string += "#{joined_users_list} ".green + "#{action}ed ".magenta + "you\n".brown
+					inter_string << "#{joined_users_list} ".green + "#{action}ed ".magenta + "you\n".brown
 				when "mute", "unmute"
-					inter_string += "#{joined_users_list} ".green + "#{action}d ".magenta + "#{objects_names.join(", ")}\n".brown
+					inter_string << "#{joined_users_list} ".green + "#{action}d ".magenta + "#{objects_names.join(", ")}\n".brown
 				when "repost", "unrepost"
-					inter_string += "#{joined_users_list} ".green + "#{action}ed:\n".magenta
-					inter_string += joined_post_text
+					inter_string << "#{joined_users_list} ".green + "#{action}ed:\n".magenta
+					inter_string << joined_post_text
 				when "star", "unstar"
-					inter_string += "#{joined_users_list} ".green + "#{action}red:\n".magenta
-					inter_string += joined_post_text
+					inter_string << "#{joined_users_list} ".green + "#{action}red:\n".magenta
+					inter_string << joined_post_text
 				when "reply"
-					inter_string += "#{joined_users_list} ".green + "#{action}ed to:\n".magenta
-					inter_string += joined_post_text
+					inter_string << "#{joined_users_list} ".green + "#{action}ed to:\n".magenta
+					inter_string << joined_post_text
 				when "welcome"
-					inter_string += "App.net ".green + "welcomed ".magenta + "you.\n".green
+					inter_string << "App.net ".green + "welcomed ".magenta + "you.\n".green
 				else
-					inter_string += "Unknown data.\n".red
+					inter_string << "Unknown data.\n".red
 				end
-				inter_string += "\n"
+				inter_string << "\n"
 			end
 			return inter_string
 		end
@@ -145,7 +145,7 @@ class AyaDN
 			post_string = ""
 			post_hash.each do |item|
 				# create_content_string(item, annotations, me_mentioned)
-				post_string += create_content_string(item, nil, false)
+				post_string << create_content_string(item, nil, false)
 			end
 			return post_string
 		end
@@ -153,7 +153,7 @@ class AyaDN
 			messages_string = ""
 			messages_stream.each do |item|
 				# create_content_string(item, annotations, me_mentioned)
-				messages_string += create_content_string(item, nil, false)
+				messages_string << create_content_string(item, nil, false)
 			end
 			last_viewed = messages_stream.last
 			last_id = last_viewed['pagination_id'] unless last_viewed == nil
@@ -191,7 +191,7 @@ class AyaDN
 				user_name, user_real_name, handle = objectNames(item['user'])
 				created_day, created_hour = objectDate(item)
 				annotations = checkins_annotations(item)
-				post_string += create_content_string(item, annotations, me_mentioned)
+				post_string << create_content_string(item, annotations, me_mentioned)
 			end
 			return post_string, pagination_array
 		end
@@ -208,14 +208,14 @@ class AyaDN
 			post_details = "Post URL: ".cyan + post_URL.brown + "\n"
 			is_reply = post_hash['reply_to']
 			if is_reply != nil
-				post_details += "This post is a reply to post ".cyan + is_reply.brown + "\n"
+				post_details << "This post is a reply to post ".cyan + is_reply.brown + "\n"
 			end
 			if post_text != nil
 				to_regex = post_text.dup
 				without_Markdown = $tools.getMarkdownText(to_regex)
 				without_braces = $tools.withoutSquareBraces(without_Markdown)
 				actual_length = without_braces.length
-				post_details += "\nLength: ".cyan + actual_length.to_s.reddish
+				post_details << "\nLength: ".cyan + actual_length.to_s.reddish
 			end
 			return post_details + "\n\n"
 		end
@@ -229,15 +229,15 @@ class AyaDN
 			created_day, created_hour = objectDate(post_hash)
 			post_details = "\nThe " + created_day.cyan + ' at ' + created_hour.cyan + ' by ' + the_name.green
 			if !user_real_name.empty?
-				post_details += " [#{user_real_name}]".reddish
+				post_details << " [#{user_real_name}]".reddish
 			end
-			post_details += ":\n"
-			post_details += "\n" + colored_post + "\n\n" 
-			post_details += "Post ID: ".cyan + the_post_id.to_s.green + "\n"
+			post_details << ":\n"
+			post_details << "\n" + colored_post + "\n\n" 
+			post_details << "Post ID: ".cyan + the_post_id.to_s.green + "\n"
 			links_string = objectLinks(post_hash)
-			post_details += links_string + "\n"
+			post_details << links_string + "\n"
 			post_URL = post_hash['canonical_url']
-			post_details += "\nPost URL: ".cyan + post_URL.brown
+			post_details << "\nPost URL: ".cyan + post_URL.brown
 			num_stars = post_hash['num_stars']
 			num_replies = post_hash['num_replies']
 			num_reposts = post_hash['num_reposts']
@@ -249,39 +249,39 @@ class AyaDN
 			is_reply = post_hash['reply_to']
 			repost_of = post_hash['repost_of']
 			if is_reply != nil
-				post_details += "\nThis post is a reply to post ".cyan + is_reply.brown
+				post_details << "\nThis post is a reply to post ".cyan + is_reply.brown
 			end
 			if is_mine == false
 				if repost_of != nil
 					repost_id = repost_of['id']
-					post_details += "\nThis post is a repost of post ".cyan + repost_id.brown
+					post_details << "\nThis post is a repost of post ".cyan + repost_id.brown
 				else
-					post_details += "\nReplies: ".cyan + num_replies.to_s.reddish
-					post_details += "  Reposts: ".cyan + num_reposts.to_s.reddish
-					post_details += "  Stars: ".cyan + num_stars.to_s.reddish
+					post_details << "\nReplies: ".cyan + num_replies.to_s.reddish
+					post_details << "  Reposts: ".cyan + num_reposts.to_s.reddish
+					post_details << "  Stars: ".cyan + num_stars.to_s.reddish
 				end
 				if you_reposted == true
-					post_details += "\nYou reposted this post.".cyan
+					post_details << "\nYou reposted this post.".cyan
 				end
 				if you_starred == true
-					post_details += "\nYou starred this post.".cyan
+					post_details << "\nYou starred this post.".cyan
 				end
-				post_details += "\nPosted with: ".cyan + source_app.reddish
-				post_details += "  Locale: ".cyan + locale.reddish
-				post_details += "  Timezone: ".cyan + timezone.reddish
+				post_details << "\nPosted with: ".cyan + source_app.reddish
+				post_details << "  Locale: ".cyan + locale.reddish
+				post_details << "  Timezone: ".cyan + timezone.reddish
 			else
 				without_braces = $tools.withoutSquareBraces($tools.getMarkdownText(post_text.dup))
-				post_details += "\nLength: ".cyan + without_braces.length.to_s.reddish
+				post_details << "\nLength: ".cyan + without_braces.length.to_s.reddish
 			end
-			post_details += "\n\n\n"
+			post_details << "\n\n\n"
 		end
 		def buildUsersList(users_hash)
 			users_string = ""
 			users_hash.each do |item|
 				user_name, user_real_name, user_handle = objectNames(item)
-				users_string += user_handle.green + " #{user_real_name}\n".cyan
+				users_string << user_handle.green + " #{user_real_name}\n".cyan
 			end
-			users_string += "\n\n"
+			users_string << "\n\n"
 		end
 		def buildFollowList
 			#hashes = getDataNormal(@hash)
@@ -311,17 +311,17 @@ class AyaDN
 			# list_string += "\nID: ".cyan + file_id.brown
 			list_string = file_view(file_name, file_kind, file_size, file_size_converted, file_source_name, file_source_url, created_day, created_hour)
 			if file_public == true
-				list_string += "\nThis file is ".cyan + "public".blue
+				list_string << "\nThis file is ".cyan + "public".blue
 				file_url = resp_hash['url_permanent']
 			else
-				list_string += "\nThis file is ".cyan + "private".red
+				list_string << "\nThis file is ".cyan + "private".red
 				file_url = resp_hash['url']
 			end
 			if with_url == true
-				list_string += "\nURL: ".cyan + file_url
-				#list_string += derivedFilesDetails(derived_files)
+				list_string << "\nURL: ".cyan + file_url
+				#list_string << derivedFilesDetails(derived_files)
 			end
-			list_string += "\n\n"
+			list_string << "\n\n"
 			return list_string, file_url, file_name
 		end
 		def showFilesList(with_url, reverse)
@@ -339,22 +339,22 @@ class AyaDN
 				file_name, file_token, file_source_name, file_source_url, file_kind, file_id, file_size, file_size_converted, file_public = filesDetails(item)
 				file_url_expires = item['url_expires']
 				derived_files = item['derived_files']
-				list_string += "\nID: ".cyan + file_id.brown
-				list_string += file_view(file_name, file_kind, file_size, file_size_converted, file_source_name, file_source_url, created_day, created_hour)
+				list_string << "\nID: ".cyan + file_id.brown
+				list_string << file_view(file_name, file_kind, file_size, file_size_converted, file_source_name, file_source_url, created_day, created_hour)
 				if file_public == true
-					list_string += "\nThis file is ".cyan + "public".blue
-					list_string += "\nLink: ".cyan + item['url_short'].magenta
+					list_string << "\nThis file is ".cyan + "public".blue
+					list_string << "\nLink: ".cyan + item['url_short'].magenta
 				else
-					list_string += "\nThis file is ".cyan + "private".red
+					list_string << "\nThis file is ".cyan + "private".red
 					if with_url == true
 						file_url = item['url']
-						list_string += "\nURL: ".cyan + file_url.brown
-						#list_string += derivedFilesDetails(derived_files)
+						list_string << "\nURL: ".cyan + file_url.brown
+						#list_string << derivedFilesDetails(derived_files)
 					end
 				end
-				list_string += "\n"
+				list_string << "\n"
 			end
-			list_string += "\n"
+			list_string << "\n"
 			return list_string, file_url, pagination_array
 		end
 		def buildChannelsInfos(hash)
@@ -383,27 +383,27 @@ class AyaDN
 							the_writers.push("@" + name)
 						end
 					end
-					the_channels += "\nChannel ID: ".cyan + "#{channel_id}\n".brown
-					the_channels += "Creator: ".cyan + owner.magenta + "\n"
-					#the_channels += "Channels type: ".cyan + "#{channel_type}\n".brown
-					the_channels += "Interlocutor(s): ".cyan + the_writers.join(", ").magenta + "\n"
+					the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown
+					the_channels << "Creator: ".cyan + owner.magenta + "\n"
+					#the_channels << "Channels type: ".cyan + "#{channel_type}\n".brown
+					the_channels << "Interlocutor(s): ".cyan + the_writers.join(", ").magenta + "\n"
 				end
 				if channel_type == "com.ayadn.drafts"
 					$drafts = channel_id
 					channels_list.push(channel_id)
-					the_channels += "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "your AyaDN Drafts channel\n".green
+					the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "your AyaDN Drafts channel\n".green
 				end
 			end
-			the_channels += "\n"
+			the_channels << "\n"
 			return the_channels, channels_list
 		end
 		def buildUserInfos(name, adn_data)
 			user_name, user_real_name, the_name = objectNames(adn_data)
 			user_id = adn_data['id']
 			user_show = ""			
-			user_show += "ID: ".cyan.ljust(21) + user_id.green + "\n"
+			user_show << "ID: ".cyan.ljust(21) + user_id.green + "\n"
 			if user_real_name != nil
-				user_show += "Name: ".cyan.ljust(21) + user_real_name.green + "\n"
+				user_show << "Name: ".cyan.ljust(21) + user_real_name.green + "\n"
 			end
 			if adn_data['description'] != nil
 				user_descr = adn_data['description']['text']
@@ -412,41 +412,41 @@ class AyaDN
 			end
 			user_timezone = adn_data['timezone']
 			if user_timezone != nil
-				user_show += "Timezone: ".cyan.ljust(21) + user_timezone.green + "\n"
+				user_show << "Timezone: ".cyan.ljust(21) + user_timezone.green + "\n"
 			end
 			locale = adn_data['locale']
 			if locale != nil
-				user_show += "Locale: ".cyan.ljust(21) + locale.green + "\n"
+				user_show << "Locale: ".cyan.ljust(21) + locale.green + "\n"
 			end
 			user_posts = adn_data['counts']['posts']
 			user_followers = adn_data['counts']['followers']
 			user_following = adn_data['counts']['following']
-			user_show += "Posts: ".cyan.ljust(21) + user_posts.to_s.green + "\n" + "Followers: ".cyan.ljust(21) + user_followers.to_s.green + "\n" + "Following: ".cyan.ljust(21) + user_following.to_s.green + "\n"
-			user_show += "Web: ".cyan.ljust(21) + "http://".green + adn_data['verified_domain'].green + "\n" if adn_data['verified_domain'] != nil
-			user_show += "\n"
-			user_show += the_name.brown
+			user_show << "Posts: ".cyan.ljust(21) + user_posts.to_s.green + "\n" + "Followers: ".cyan.ljust(21) + user_followers.to_s.green + "\n" + "Following: ".cyan.ljust(21) + user_following.to_s.green + "\n"
+			user_show << "Web: ".cyan.ljust(21) + "http://".green + adn_data['verified_domain'].green + "\n" if adn_data['verified_domain'] != nil
+			user_show << "\n"
+			user_show << the_name.brown
 			if name != "me"
 				user_follows = adn_data['follows_you']
 				user_followed = adn_data['you_follow']
 				user_is_muted = adn_data['you_muted']
 				if user_follows == true
-					user_show += " follows you\n".green
+					user_show << " follows you\n".green
 				else
-					user_show += " doesn't follow you\n".reddish
+					user_show << " doesn't follow you\n".reddish
 				end
 				if user_followed == true
-					user_show += "You follow ".green + the_name.brown + "\n"
+					user_show << "You follow ".green + the_name.brown + "\n"
 				else
-					user_show += "You don't follow ".reddish + the_name.brown + "\n"
+					user_show << "You don't follow ".reddish + the_name.brown + "\n"
 				end
 				if user_is_muted == true
-					user_show += "You muted ".reddish + the_name.brown + "\n"
+					user_show << "You muted ".reddish + the_name.brown + "\n"
 				end
 			else
-				user_show += ":".cyan + " yourself!".brown + "\n"
+				user_show << ":".cyan + " yourself!".brown + "\n"
 			end
-			user_show += "\n"
-			user_show += "Bio: \n\n".cyan + user_descr + "\n\n"
+			user_show << "\n"
+			user_show << "Bio: \n\n".cyan + user_descr + "\n\n"
 		end
 	end
 end

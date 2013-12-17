@@ -241,9 +241,8 @@ class AyaDN
 				elsif word =~ /^@\w/
                     new_word = removeEndCharIfSpecial(word, "red")
 					content.push(new_word)
-				elsif word =~ /^http/ or word =~ /^photos.app.net/ or word =~ /^files.app.net/ or word =~ /^chimp.li/ or word =~ /^bli.ms/
+				#elsif word =~ /^http/ or word =~ /^photos.app.net/ or word =~ /^files.app.net/ or word =~ /^chimp.li/ or word =~ /^bli.ms/
 					#content.push(word.magenta)
-                    content.push(word)
 				else
 					content.push(word)
 				end
@@ -332,56 +331,56 @@ class AyaDN
             end
         end
         def saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text, user_name)
-            tags += ",ADN"
-            post_text += " http://alpha.app.net/#{user_name}/post/#{post_id}"
+            tags << ",ADN"
+            post_text << " http://alpha.app.net/#{user_name}/post/#{post_id}"
             pinboard = Pinboard::Client.new(:username => pin_username, :password => pin_password)
             pinboard.add(:url => link, :tags => tags, :extended => post_text, :description => link)
         end
         def helpScreen
             help = "USAGE: ".cyan + "ayadn ".pink + "+ " + "optional action ".green + "+ " + "optional target(s) ".green + "+ " + "optional value(s)\n\n".green
-            help += "- " + "without options: ".cyan + "\tdisplay your unified stream\n" #.rjust(50)
-            help += "- " + "write ".green + "+ [Enter key] ".magenta + "\tcreate a post\n" #.rjust(33)
-            help += "- " + "write ".green + "\"your text\" ".brown + "\tcreate a post\n" #.rjust(35)
-            help += "- " + "reply ".green + "PostID ".brown + "\t\treply to a post\n" #.rjust(42)
-            help += "- " + "infos, delete, star/unstar, repost/unrepost, convo, starred, reposted ".green + "PostID\n".brown
-            # help += "- " + "delete postID ".green + "to delete a post\n"
-            help += "- " + "pm ".green + "@username ".brown + "\t\tsend a private message\n"
-            help += "- " + "messages ".green + "\t\tdisplay private channels\n"
-            help += "- " + "messages ".green + "channelID ".brown + "\tdisplay private messages\n"
-            help += "- " + "search ".green + "word ".brown + "\t\tsearch for word(s)\n"
-            help += "- " + "tag ".green + "hashtag ".brown + "\t\tsearch for a hashtag\n"
-            # help += "- " + "star/unstar postID ".green + "to star/unstar a post\n"
-            # help += "- " + "repost/unrepost postID ".green + "to repost/unrepost a post\n"
-            # help += "- " + "infos @username/postID ".green + "to display detailed informations on a user or a post\n"
-            # help += "- " + "convo postID ".green + "to display the conversation around a post\n"
-            help += "- " + "posts ".green + "@username ".brown + "\tdisplay a user's posts\n"
-            help += "- " + "mentions ".green + "@username ".brown + "\tdisplay posts mentionning a user\n"
-            help += "- " + "infos, starred, follow, unfollow, mute, unmute ".green + "@username\n".brown
-            # help += "- " + "starred @username/postID ".green + "to display a user's starred posts / who starred a post\n"
-            # help += "- " + "reposted postID ".green + "to display who reposted a post\n"
-            # help += "- " + "interactions ".green + "to display a stream of your interactions\n"
-            help += "- " + "global/trending/checkins/conversations/photos ".green + "\tdisplay a stream\n"
-            # help += "- " + "follow/unfollow @username ".green + "to follow/unfollow a user\n"
-            # help += "- " + "mute/unmute @username ".green + "to mute/unmute a user\n"
-            #help += "- " + "save/load postID ".green + "to save/load a post locally\n"
-            help += "- " + "list/backup followings/followers/muted ".green + "@username/me ".brown + "\tlist/backup users\n"
-            #help += "- " + "help ".green + "\t\t\tdisplay this screen\n" 
-            help += "- " + "Visit http://github.com/ericdke/ayadn for more commands, options and examples".cyan + "\n\n"
-            #help += "- " + "tip: ".cyan + "some commands have a shortcut: w(rite), r(eply), s(earch), p(osts), m(entions), t(ag), c(onvo), i(nfos), h(elp)\n"
-            help += "- " + "Tip: put 'scroll' before a stream to use the scrolling feature\n\n".cyan
-            help += "Examples:\n\n".cyan
-            help += "ayadn \n"#.green + "(display your Unified stream)\n"
-            help += "ayadn write \n"#.green + "(write a post with a compose window)\n"
-            help += "ayadn write \'@ayadn Posting with AyaDN!\' \n"#.green + "(write a post instantly between double quotes)\n"
-            help += "ayadn reply 14805036 \n"#.green + "(reply to post n°14805036 with a compose window)\n"
-            help += "ayadn tag nowplaying \n"#.green + "(search for hashtag #nowplaying)\n"
-            help += "ayadn star 14805036 \n"#.green + "(star post n°14805036)\n"
-            help += "ayadn checkins \n"#.green + "(display the Checkins stream)\n"
-            help += "ayadn follow @ayadn \n"#.green + "(follow user @ericd)\n"
-            help += "ayadn search ruby,json \n"#.green + "(search for posts with these words)\n"
-            help += "ayadn list files \n"
-            help += "ayadn backup followings me \n"
-            help += "\n"
+            help << "- " + "without options: ".cyan + "\tdisplay your unified stream\n" #.rjust(50)
+            help << "- " + "write ".green + "+ [Enter key] ".magenta + "\tcreate a post\n" #.rjust(33)
+            help << "- " + "write ".green + "\"your text\" ".brown + "\tcreate a post\n" #.rjust(35)
+            help << "- " + "reply ".green + "PostID ".brown + "\t\treply to a post\n" #.rjust(42)
+            help << "- " + "infos, delete, star/unstar, repost/unrepost, convo, starred, reposted ".green + "PostID\n".brown
+            # help << "- " + "delete postID ".green + "to delete a post\n"
+            help << "- " + "pm ".green + "@username ".brown + "\t\tsend a private message\n"
+            help << "- " + "messages ".green + "\t\tdisplay private channels\n"
+            help << "- " + "messages ".green + "channelID ".brown + "\tdisplay private messages\n"
+            help << "- " + "search ".green + "word ".brown + "\t\tsearch for word(s)\n"
+            help << "- " + "tag ".green + "hashtag ".brown + "\t\tsearch for a hashtag\n"
+            # help << "- " + "star/unstar postID ".green + "to star/unstar a post\n"
+            # help << "- " + "repost/unrepost postID ".green + "to repost/unrepost a post\n"
+            # help << "- " + "infos @username/postID ".green + "to display detailed informations on a user or a post\n"
+            # help << "- " + "convo postID ".green + "to display the conversation around a post\n"
+            help << "- " + "posts ".green + "@username ".brown + "\tdisplay a user's posts\n"
+            help << "- " + "mentions ".green + "@username ".brown + "\tdisplay posts mentionning a user\n"
+            help << "- " + "infos, starred, follow, unfollow, mute, unmute ".green + "@username\n".brown
+            # help << "- " + "starred @username/postID ".green + "to display a user's starred posts / who starred a post\n"
+            # help << "- " + "reposted postID ".green + "to display who reposted a post\n"
+            # help << "- " + "interactions ".green + "to display a stream of your interactions\n"
+            help << "- " + "global/trending/checkins/conversations/photos ".green + "\tdisplay a stream\n"
+            # help << "- " + "follow/unfollow @username ".green + "to follow/unfollow a user\n"
+            # help << "- " + "mute/unmute @username ".green + "to mute/unmute a user\n"
+            #help << "- " + "save/load postID ".green + "to save/load a post locally\n"
+            help << "- " + "list/backup followings/followers/muted ".green + "@username/me ".brown + "\tlist/backup users\n"
+            #help << "- " + "help ".green + "\t\t\tdisplay this screen\n" 
+            help << "- " + "Visit http://github.com/ericdke/ayadn for more commands, options and examples".cyan + "\n\n"
+            #help << "- " + "tip: ".cyan + "some commands have a shortcut: w(rite), r(eply), s(earch), p(osts), m(entions), t(ag), c(onvo), i(nfos), h(elp)\n"
+            help << "- " + "Tip: put 'scroll' before a stream to use the scrolling feature\n\n".cyan
+            help << "Examples:\n\n".cyan
+            help << "ayadn \n"#.green + "(display your Unified stream)\n"
+            help << "ayadn write \n"#.green + "(write a post with a compose window)\n"
+            help << "ayadn write \'@ayadn Posting with AyaDN!\' \n"#.green + "(write a post instantly between double quotes)\n"
+            help << "ayadn reply 14805036 \n"#.green + "(reply to post n°14805036 with a compose window)\n"
+            help << "ayadn tag nowplaying \n"#.green + "(search for hashtag #nowplaying)\n"
+            help << "ayadn star 14805036 \n"#.green + "(star post n°14805036)\n"
+            help << "ayadn checkins \n"#.green + "(display the Checkins stream)\n"
+            help << "ayadn follow @ayadn \n"#.green + "(follow user @ericd)\n"
+            help << "ayadn search ruby,json \n"#.green + "(search for posts with these words)\n"
+            help << "ayadn list files \n"
+            help << "ayadn backup followings me \n"
+            help << "\n"
             return help
         end
 	end

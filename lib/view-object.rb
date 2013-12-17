@@ -22,7 +22,7 @@ class AyaDN
 					links_array.push(linkURL)
 				end
 				links_array.each do |linkURL|
-					links_string += "Link: ".cyan + linkURL.brown + "\n"
+					links_string << "Link: ".cyan + linkURL.brown + "\n"
 				end
 			else
 				links_string = ""
@@ -56,27 +56,27 @@ class AyaDN
 						checkins_postcode = annotation_value['postcode']
 						checkins_country_code = annotation_value['country_code']
 						fancy = checkins_name.length + 6
-						anno_string += "\n" + ("." * fancy) #longueur du nom plus son étiquette
+						anno_string << "\n" + ("." * fancy) #longueur du nom plus son étiquette
 						unless checkins_name.nil?
-							anno_string += "\nName: ".cyan + checkins_name.upcase.reddish
+							anno_string << "\nName: ".cyan + checkins_name.upcase.reddish
 						end
 						unless checkins_address.nil?
-							anno_string += "\nAddress: ".cyan + checkins_address.green
+							anno_string << "\nAddress: ".cyan + checkins_address.green
 						end
 						unless checkins_locality.nil?
-							anno_string += "\nLocality: ".cyan + checkins_locality.green
+							anno_string << "\nLocality: ".cyan + checkins_locality.green
 						end
 						unless checkins_postcode.nil?
-							anno_string += " (#{checkins_postcode})".green
+							anno_string << " (#{checkins_postcode})".green
 						end
 						unless checkins_region.nil?
-							anno_string += "\nState/Region: ".cyan + checkins_region.green
+							anno_string << "\nState/Region: ".cyan + checkins_region.green
 						end
 						unless checkins_country_code.nil?
-							anno_string += " (#{checkins_country_code})".upcase.green
+							anno_string << " (#{checkins_country_code})".upcase.green
 						end
 						unless @source_name.nil? or $configShowClient == true
-							anno_string += "\nPosted with: ".cyan + "#{@source_name} [#{@source_link}]".green + " "
+							anno_string << "\nPosted with: ".cyan + "#{@source_name} [#{@source_link}]".green + " "
 						end
 						#anno_string += "\n"
 					end
@@ -91,27 +91,27 @@ class AyaDN
 			else
 				obj_view = obj_id.to_s.cyan.ljust(14)
 			end
-			obj_view += ' '
-			obj_view += obj_user_handle.green
-			obj_view += ' '
-			obj_view += "[#{obj_user_realname}]".magenta
-			obj_view += ' '
-			obj_view += obj_created_day.cyan + ' ' + obj_created_hour.cyan 
-			obj_view += ' '
-			obj_view += "[#{@source_name}]".cyan if $configShowClient == true
-			obj_view += "\n"
-			obj_view += obj_colored_text
+			obj_view << ' '
+			obj_view << obj_user_handle.green
+			obj_view << ' '
+			obj_view << "[#{obj_user_realname}]".magenta
+			obj_view << ' '
+			obj_view << obj_created_day.cyan + ' ' + obj_created_hour.cyan 
+			obj_view << ' '
+			obj_view << "[#{@source_name}]".cyan if $configShowClient == true
+			obj_view << "\n"
+			obj_view << obj_colored_text
 			if annotations != nil
-				obj_view += annotations + "\n"
+				obj_view << annotations + "\n"
 			end
-			obj_view += obj_links + "\n\n"
+			obj_view << obj_links + "\n\n"
 		end
 		def file_view(file_name, file_kind, file_size, file_size_converted, file_source_name, file_source_url, created_day, created_hour)
 			file_elements = "\nName: ".cyan + file_name.green
-			file_elements += "\nKind: ".cyan + file_kind.pink
-			file_elements += "\nSize: ".cyan + file_size_converted.reddish unless file_size == nil
-			file_elements += "\nDate: ".cyan + created_day.green + " " + created_hour.green
-			file_elements += "\nSource: ".cyan + file_source_name.brown + " - #{file_source_url}".brown
+			file_elements << "\nKind: ".cyan + file_kind.pink
+			file_elements << "\nSize: ".cyan + file_size_converted.reddish unless file_size == nil
+			file_elements << "\nDate: ".cyan + created_day.green + " " + created_hour.green
+			file_elements << "\nSource: ".cyan + file_source_name.brown + " - #{file_source_url}".brown
 		end
 		def filesDetails(item)
 			file_name = item['name']
