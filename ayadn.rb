@@ -4,8 +4,8 @@
 # by Eric Dejonckheere
 # http://alpha.app.net/ericd
 # © 2013
-require_relative 'requires'
 
+require_relative 'requires'
 
 puts "\n\nAYADN".red + " - " + "App.net command-line client\n".brown
 
@@ -19,7 +19,6 @@ else
 	AyaDN.new(nil).ayadnAuthorize(nil)
 	exit
 end
-
 
 arg1, arg2, arg3, arg4 = ARGV[0], ARGV[1], ARGV[2], ARGV[3]
 
@@ -231,7 +230,7 @@ when "random"
 				sleep 0.5
 				next
 			end
-			stream = AyaDN::View.new(nil).buildSimplePostView(hash)
+			stream = AyaDN::View.new(nil).buildSimplePost(hash)
 			puts stream
 			sleep 2
 		rescue Exception => e
@@ -258,4 +257,3 @@ else
 	puts $tools.helpScreen
 
 end
-

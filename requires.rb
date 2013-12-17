@@ -1,22 +1,14 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
-require 'rubygems'
-require 'open-uri'
-require 'net/http'
-require 'json'
-require 'io/console'
-require 'fileutils'
-require 'yaml'
-require 'pinboard'
-require 'base64'
-require_relative "lib/tools"
-require_relative "lib/api"
-require_relative "lib/view"
-require_relative "lib/main"
-require_relative "lib/colors"
-require_relative "lib/status"
-require_relative "lib/endpoints"
-require_relative "lib/client-http"
+
+%w{rubygems open-uri net/http json io/console fileutils yaml pinboard base64}.each do |r|
+  require "#{r}"
+end
+
+%w{main api endpoints client-http view view-object tools status colors}.each do |r|
+  require_relative "lib/#{r}"
+end
+
 winPlatforms = ['mswin', 'mingw', 'mingw_18', 'mingw_19', 'mingw_20', 'mingw32']
 case Gem::Platform.local.os
 when *winPlatforms

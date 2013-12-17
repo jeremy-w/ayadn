@@ -176,7 +176,7 @@ class AyaDN
 	def ayadnUserInfos(name)
 		puts $status.infosUser(name)
 		@hash = @api.getUserInfos(name)
-		$tools.meta(@hash['meta'])
+		#$tools.meta(@hash['meta'])
 	    puts @view.new(@hash).showUsersInfos(name)
 	end
 	

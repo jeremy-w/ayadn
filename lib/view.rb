@@ -6,37 +6,21 @@ class AyaDN
 			@hash = hash
 		end
 		def getData(hash)
-			adn_data = @hash['data']
+			adn_data = hash['data']
 			adn_data_reverse = adn_data.reverse
 		end
 		def getDataNormal(hash)
-			adn_data = @hash['data']
+			adn_data = hash['data']
 		end
 		def showMessagesFromChannel
 			buildMessages(getData(@hash))
 		end
 		def showStream
-			if $loaded
-				if $downsideTimeline == true
-					the_hash = getData(@hash)
-				else
-					the_hash = getDataNormal(@hash)
-				end
-			else
-				the_hash = getData(@hash)
-			end
+			$downsideTimeline ? the_hash = getData(@hash) : the_hash = getDataNormal(@hash)
 			buildStream(the_hash)
 		end
 		def showCompleteStream
-			if $loaded
-				if $downsideTimeline == true
-					the_hash = getData(@hash)
-				else
-					the_hash = getDataNormal(@hash)
-				end
-			else
-				the_hash = getData(@hash)
-			end
+			$downsideTimeline ? the_hash = getData(@hash) : the_hash = getDataNormal(@hash)
 			stream, pagination_array = buildCompleteStream(the_hash)
 		end
 		def showChannels
@@ -64,12 +48,10 @@ class AyaDN
 		end
 
 		def showUsersInfos(name)
-			adn_data = @hash['data']
-			buildUserInfos(name, adn_data)
+			buildUserInfos(name, getDataNormal(@hash))
 		end
 		def showPostInfos(post_id, is_mine)
-			post_hash = @hash['data']
-			buildPostInfo(post_hash, is_mine)
+			buildPostInfo(getDataNormal(@hash), is_mine)
 		end
 		def buildDebugStream(post_hash)
 			ret_string = ""
@@ -109,22 +91,24 @@ class AyaDN
 						users_list.push(user_name)
 					end
 				end
+				joined_users_list = users_list.join(", ")
+				joined_post_text = post_text.join(" ")
 				inter_string += "-----\n\n".blue
 				inter_string += "Date: ".green + "#{created_day} #{created_hour}\n".cyan
 				case action
 				when "follow", "unfollow"
-					inter_string += "#{users_list.join(", ")} ".green + "#{action}ed ".magenta + "you\n".brown
+					inter_string += "#{joined_users_list} ".green + "#{action}ed ".magenta + "you\n".brown
 				when "mute", "unmute"
-					inter_string += "#{users_list.join(", ")} ".green + "#{action}d ".magenta + "#{objects_names.join(", ")}\n".brown
+					inter_string += "#{joined_users_list} ".green + "#{action}d ".magenta + "#{objects_names.join(", ")}\n".brown
 				when "repost", "unrepost"
-					inter_string += "#{users_list.join(", ")} ".green + "#{action}ed:\n".magenta
-					inter_string += "#{post_text.join(" ")}"
+					inter_string += "#{joined_users_list} ".green + "#{action}ed:\n".magenta
+					inter_string += joined_post_text
 				when "star", "unstar"
-					inter_string += "#{users_list.join(", ")} ".green + "#{action}red:\n".magenta
-					inter_string += "#{post_text.join(" ")}"
+					inter_string += "#{joined_users_list} ".green + "#{action}red:\n".magenta
+					inter_string += joined_post_text
 				when "reply"
-					inter_string += "#{users_list.join(", ")} ".green + "#{action}ed to:\n".magenta
-					inter_string += "#{post_text.join(" ")}"
+					inter_string += "#{joined_users_list} ".green + "#{action}ed to:\n".magenta
+					inter_string += joined_post_text
 				when "welcome"
 					inter_string += "App.net ".green + "welcomed ".magenta + "you.\n".green
 				else
@@ -135,99 +119,47 @@ class AyaDN
 			return inter_string
 		end
 
-		def objectDate(item)
-			created_at = item['created_at']
-			created_day = created_at[0...10]
-			created_hour = created_at[11...19]
-			return created_day, created_hour
+		def create_content_string(item, annotations, me_mentioned)
+			post_id = item['id']
+			user_name, user_real_name, user_handle = objectNames(item['user'])
+			created_day, created_hour = objectDate(item)
+			links_string = objectLinks(item)
+			colored_post = coloredText(item)
+			post_string = objectView(post_id, created_day, created_hour, user_handle, user_real_name, colored_post, links_string, annotations, me_mentioned)
 		end
-		def objectLinks(links)
-			if !links.empty?
-				links_string = ""
-				links_array = []
-				links.each do |link|
-					linkURL = link['url']
-					links_array.push(linkURL)
+
+		def skip_hashtags(item, saved_tags)
+			entities_tags = item['entities']['hashtags']
+			skipped_hashtags_encountered = false
+			entities_tags.each do |post_tag|
+				case post_tag['name']
+				when *saved_tags
+					skipped_hashtags_encountered = true
+			 		next # get out of this loop
 				end
-				#links_array.reverse.each do |linkURL|
-				links_array.each do |linkURL|
-					links_string += "Link: ".cyan + linkURL.brown + "\n"
-				end
-			else
-				links_string = ""
 			end
-			return links_string
-		end
-		def objectNames(item)
-			user_name = item['username']
-			user_real_name = item['name']
-			user_handle = "@" + user_name
-			return user_name, user_real_name, user_handle
-		end
-		def filesDetails(item)
-			file_name = item['name']
-			file_token = item['file_token']
-			file_source_name = item['source']['name']
-			file_source_url = item['source']['link']
-			file_kind = item['kind']
-			file_id = item['id']
-			file_size = item['size']
-			file_size_converted = file_size.to_filesize unless file_size == nil
-			file_public = item['public']
-			return file_name, file_token, file_source_name, file_source_url, file_kind, file_id, file_size, file_size_converted, file_public
-		end
-		def derivedFilesDetails(derived_files)
-			if derived_files != nil
-				if derived_files['image_thumb_960r'] != nil
-					file_derived_bigthumb_name = derived_files['image_thumb_960r']['name']
-					file_derived_bigthumb_url = derived_files['image_thumb_960r']['url']
-				end
-				if derived_files['image_thumb_200s'] != nil
-					file_derived_smallthumb_name = derived_files['image_thumb_200s']['name']
-					file_derived_smallthumb_url = derived_files['image_thumb_200s']['url']
-				end
-				list_string += "\nBig thumbnail: ".cyan + file_derived_bigthumb_url unless file_derived_bigthumb_url == nil
-				list_string += "\nSmall thumbnail: ".cyan + file_derived_smallthumb_url unless file_derived_smallthumb_url == nil
-			end
-			return list_string
+			return skipped_hashtags_encountered
 		end
 
 		def buildStream(post_hash)
 			post_string = ""
 			post_hash.each do |item|
-				post_text = item['text']
-				post_text != nil ? (colored_post = $tools.colorize(post_text)) : (colored_post = "--Post deleted--".red)
-				user_name = item['user']['username']
-				created_day, created_hour = objectDate(item)
-				links = item['entities']['links']
-				post_id = item['id']
-				post_string += "Post ID: ".cyan + post_id.to_s.green
-				post_string += " - "
-				post_string += created_day.cyan + ' at ' + created_hour.cyan + ' by ' + "@".green + user_name.green + "\n" + colored_post + "\n"
-				links_string = objectLinks(links)
-				post_string += links_string + "\n"
+				# create_content_string(item, annotations, me_mentioned)
+				post_string += create_content_string(item, nil, false)
 			end
 			return post_string
 		end
 		def buildMessages(messages_stream)
 			messages_string = ""
 			messages_stream.each do |item|
-				message_text = item['text']
-				message_text != nil ? (colored_post = $tools.colorize(message_text)) : (colored_post = "--Post deleted--".red)
-				created_day, created_hour = objectDate(item)
-				links = item['entities']['links']
-				user_name = item['user']['username']
-				post_id = item['id']
-				messages_string += "Post ID: ".cyan + post_id.to_s.green
-				messages_string += " - "
-				messages_string += created_day.cyan + ' ' + created_hour.cyan + " by " + "@".green + user_name.green + "\n" + colored_post + "\n"
-				links_string = objectLinks(links)
-				messages_string += links_string + "\n"
+				# create_content_string(item, annotations, me_mentioned)
+				messages_string += create_content_string(item, nil, false)
 			end
 			last_viewed = messages_stream.last
 			last_id = last_viewed['pagination_id'] unless last_viewed == nil
 			return messages_string, last_id
 		end
+
 		def buildCompleteStream(post_hash)
 			post_string = ""
 			pagination_array = []
@@ -237,132 +169,36 @@ class AyaDN
 			end
 			post_hash.each do |item|
 				pagination_array.push(item['pagination_id'])
-				post_text = item['text']
-				next if post_text == nil
-				post_id = item['id']
-				source_name = item['source']['name']
-				source_link = item['source']['link']
-				#Skip sources
-				case source_name
+				next if item['text'] == nil
+				@source_name, @source_link = objectSource(item)
+				case @source_name
 				when *$skipped_sources
-					next # get out of this loop and get next post
+					next
 				end
-				#Skip hashtags
-				skipped_hashtags_encountered = false
-				entities_tags = item['entities']['hashtags']
-				entities_tags.each do |post_tag|
-					case post_tag['name']
-					when *saved_tags
-						skipped_hashtags_encountered = true
-				 		next # get out of this loop
-					end
-				end
-				next if skipped_hashtags_encountered # get out of this loop
+				next if skip_hashtags(item, saved_tags)
 				entitiesMentions = item['entities']['mentions']
 				postMentionsArray = []
 				entitiesMentions.each do |mention|
 					postMentionsArray.push(mention['name'])
 				end
-				post_text != nil ? (colored_post = $tools.colorize(post_text)) : (colored_post = "--Post deleted--".red)
-				user_name, user_real_name, handle = objectNames(item['user'])
-				created_day, created_hour = objectDate(item)
-				post_date = created_day.cyan + " " + created_hour.cyan
 				me_mentioned = false
 				postMentionsArray.each do |name|
-					if name == $identityPrefix
-						me_mentioned = true
-					end
+					me_mentioned = true if name == $identityPrefix
 				end
-				if me_mentioned == true
-					post_string += post_id.to_s.cyan.reverse_color.ljust(14) + " " + handle.green + " [#{user_real_name}]".magenta + " " + post_date + " "
-				else
-					post_string += post_id.to_s.cyan.ljust(14) + " " + handle.green + " [#{user_real_name}]".magenta + " " + post_date + " "
-				end
-				post_string += "[#{source_name}]".cyan if $configShowClient == true
-				post_string += "\n" + colored_post + "\n"
-				annotations_string = checkins_annotations(item)
-				post_string += annotations_string unless annotations_string == nil
-				links = item['entities']['links']
-				links_string = objectLinks(links)
-				post_string += links_string + "\n\n"
+				colored_post = coloredText(item)
+				user_name, user_real_name, handle = objectNames(item['user'])
+				created_day, created_hour = objectDate(item)
+				annotations = checkins_annotations(item)
+				post_string += create_content_string(item, annotations, me_mentioned)
 			end
 			return post_string, pagination_array
 		end
-		def checkins_annotations(item)
-			anno_string = ""
-			source_name = item['source']['name']
-			source_link = item['source']['link']
-			annotations_list = item['annotations']
-			xxx = 0
-			if annotations_list != nil
-				annotations_list.each do |it|
-					annotation_type = annotations_list[xxx]['type']
-					annotation_value = annotations_list[xxx]['value']
-					if annotation_type == "net.app.core.checkin" or annotation_type == "net.app.ohai.location"
-						checkins_name = annotation_value['name']
-						checkins_address = annotation_value['address']
-						checkins_locality = annotation_value['locality']
-						checkins_region = annotation_value['region']
-						checkins_postcode = annotation_value['postcode']
-						checkins_country_code = annotation_value['country_code']
-						fancy = checkins_name.length + 6
-						anno_string += "." * fancy #longueur du nom plus son étiquette
-						unless checkins_name.nil?
-							anno_string += "\nName: ".cyan + checkins_name.upcase.reddish
-						end
-						unless checkins_address.nil?
-							anno_string += "\nAddress: ".cyan + checkins_address.green
-						end
-						unless checkins_locality.nil?
-							anno_string += "\nLocality: ".cyan + checkins_locality.green
-						end
-						unless checkins_postcode.nil?
-							anno_string += " (#{checkins_postcode})".green
-						end
-						unless checkins_region.nil?
-							anno_string += "\nState/Region: ".cyan + checkins_region.green
-						end
-						unless checkins_country_code.nil?
-							anno_string += " (#{checkins_country_code})".upcase.green
-						end
-						unless source_name.nil?
-							anno_string += "\nPosted with: ".cyan + "#{source_name} [#{source_link}]".green + " "
-						end
-						anno_string += "\n"
-					end
-					xxx += 1
-				end
-				return anno_string
-			end
-		end
 		def buildSimplePost(post_hash)
-			post_text = post_hash['text']
-			post_text != nil ? (colored_post = $tools.colorize(post_text)) : (colored_post = "--Post deleted--".red)
-			user_name = post_hash['user']['username']
+			colored_post = coloredText(post_hash)
+			user_name, user_real_name, handle = objectNames(post_hash['user'])
 			created_day, created_hour = objectDate(post_hash)
-			post_id = post_hash['id']
-			post_string = "Post ID: ".cyan + post_id.to_s.red.reverse_color
-			post_string += " - "
-			post_string += created_day.cyan + ' at ' + created_hour.cyan + ' by ' + "@".reddish + user_name.reddish + "\n" + colored_post + "\n"
-			links = post_hash['entities']['links']
-			source_name = post_hash['source']['name']
-			source_link = post_hash['source']['link']
-			links_string = objectLinks(links)
-			post_string += links_string + "\n"
+			post_string = create_content_string(post_hash, nil, false)
 		end
-		def buildSimplePostView(post_hash)
-			the_post_id = post_hash['id']
-			post_text = post_hash['text']
-			user_name, user_real_name, the_name = objectNames(post_hash['user'])
-			post_text != nil ? (colored_post = $tools.colorize(post_text)) : (colored_post = "--Post deleted--".red)
-			created_day, created_hour = objectDate(post_hash)
-			post_details = created_day.cyan + " " + the_post_id.green + " " + the_name.brown
-			if !user_real_name.empty?
-				post_details += " #{user_real_name}".pink
-			end
-			post_details += "\n" + colored_post + "\n\n"
-		end
-
 		def buildSimplePostInfo(post_hash)
 			the_post_id = post_hash['id']
 			post_text = post_hash['text']
@@ -389,15 +225,14 @@ class AyaDN
 			user_follows = post_hash['follows_you']
 			user_followed = post_hash['you_follow']
 			created_day, created_hour = objectDate(post_hash)
-			links = post_hash['entities']['links']
-			post_details = "\nThe " + created_day.cyan + ' at ' + created_hour.cyan + ' by ' + "@".green + user_name.green
+			post_details = "\nThe " + created_day.cyan + ' at ' + created_hour.cyan + ' by ' + the_name.green
 			if !user_real_name.empty?
-				post_details += " \[#{user_real_name}\]".reddish
+				post_details += " [#{user_real_name}]".reddish
 			end
 			post_details += ":\n"
 			post_details += "\n" + colored_post + "\n\n" 
 			post_details += "Post ID: ".cyan + the_post_id.to_s.green + "\n"
-			links_string = objectLinks(links)
+			links_string = objectLinks(post_hash)
 			post_details += links_string + "\n"
 			post_URL = post_hash['canonical_url']
 			post_details += "\nPost URL: ".cyan + post_URL.brown
@@ -433,11 +268,8 @@ class AyaDN
 				post_details += "  Locale: ".cyan + locale.reddish
 				post_details += "  Timezone: ".cyan + timezone.reddish
 			else
-				to_regex = post_text.dup
-				without_Markdown = $tools.getMarkdownText(to_regex)
-				without_braces = $tools.withoutSquareBraces(without_Markdown)
-				actual_length = without_braces.length
-				post_details += "\nLength: ".cyan + actual_length.to_s.reddish
+				without_braces = $tools.withoutSquareBraces($tools.getMarkdownText(post_text.dup))
+				post_details += "\nLength: ".cyan + without_braces.length.to_s.reddish
 			end
 			post_details += "\n\n\n"
 		end
@@ -475,11 +307,7 @@ class AyaDN
 			file_url_expires = resp_hash['url_expires']
 			derived_files = resp_hash['derived_files']
 			# list_string += "\nID: ".cyan + file_id.brown
-			list_string += "\nName: ".cyan + file_name.green
-			list_string += "\nKind: ".cyan + file_kind.pink
-			list_string += "\nSize: ".cyan + file_size_converted.reddish unless file_size == nil
-			list_string += "\nDate: ".cyan + created_day.green + " " + created_hour.green
-			list_string += "\nSource: ".cyan + file_source_name.brown + " - #{file_source_url}".brown
+			list_string = file_view(file_name, file_kind, file_size, file_size_converted, file_source_name, file_source_url, created_day, created_hour)
 			if file_public == true
 				list_string += "\nThis file is ".cyan + "public".blue
 				file_url = resp_hash['url_permanent']
@@ -510,11 +338,7 @@ class AyaDN
 				file_url_expires = item['url_expires']
 				derived_files = item['derived_files']
 				list_string += "\nID: ".cyan + file_id.brown
-				list_string += "\nName: ".cyan + file_name.green
-				list_string += "\nKind: ".cyan + file_kind.pink
-				list_string += " Size: ".cyan + file_size_converted.reddish unless file_size == nil
-				list_string += "\nDate: ".cyan + created_day.green + " " + created_hour.green
-				list_string += "\nSource: ".cyan + file_source_name.brown + " - #{file_source_url}".brown
+				list_string += file_view(file_name, file_kind, file_size, file_size_converted, file_source_name, file_source_url, created_day, created_hour)
 				if file_public == true
 					list_string += "\nThis file is ".cyan + "public".blue
 					list_string += "\nLink: ".cyan + item['url_short'].magenta
