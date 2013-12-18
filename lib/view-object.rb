@@ -79,7 +79,7 @@ class AyaDN
 				return anno_string
 			end
 		end
-		def objectView(obj_id, obj_created_day, obj_created_hour, obj_user_handle, obj_user_realname, obj_colored_text, obj_links, annotations, me_mentioned)
+		def objectView(obj_id, obj_created_day, obj_created_hour, obj_user_handle, obj_user_realname, obj_colored_text, obj_links, annotations, me_mentioned, num_replies, reply_to)
 			if me_mentioned == true
 				obj_view = obj_id.to_s.cyan.reverse_color.ljust(14)
 			else
@@ -92,7 +92,11 @@ class AyaDN
 			obj_view << ' '
 			obj_view << obj_created_day.cyan + ' ' + obj_created_hour.cyan 
 			obj_view << ' '
-			obj_view << "[#{@source_name}]".cyan if $configShowClient == true
+			obj_view << "[#{@source_name}]".cyan if $configShowClient
+			if $configShowReplySymbols
+				obj_view << " <".blue if reply_to != nil
+				obj_view << " >".blue if num_replies > 0
+			end
 			obj_view << "\n"
 			obj_view << obj_colored_text
 			if annotations != nil

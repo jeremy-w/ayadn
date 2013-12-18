@@ -17,6 +17,7 @@ timeline:
     countdown_1: 5
     countdown_2: 15
     show_client: false
+    show_symbols: true
 files:
     ayadnfiles: "/ayadn/data"
 identity: # change this prefix in each folder for your username in you're using several ADN accounts (don't use "@")

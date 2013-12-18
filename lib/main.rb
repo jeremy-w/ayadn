@@ -21,7 +21,7 @@ class AyaDN
 		puts @view.new(@hash).showDebugStream
 	end
 	def ayadnDebugStream
-		@hash = @api.getUnified
+		@hash = @api.getUnified(nil)
 		debugStream
 	end
 	def ayadnDebugPost(postID)

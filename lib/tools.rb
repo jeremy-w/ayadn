@@ -95,6 +95,7 @@ class AyaDN
                 $countdown_1 = $configFileContents['timeline']['countdown_1'].to_i
                 $countdown_2 = $configFileContents['timeline']['countdown_2'].to_i
                 $configShowClient = $configFileContents['timeline']['show_client']
+                $configShowReplySymbols = $configFileContents['timeline']['show_symbols']
                 $downsideTimeline = $configFileContents['timeline']['downside']
                 $skipped_sources = $configFileContents['skipped']['sources']
                 $skipped_tags = $configFileContents['skipped']['hashtags']
@@ -117,6 +118,7 @@ class AyaDN
                 $skipped_sources = []
                 $skipped_tags = []
                 $configShowClient = false
+                $configShowReplySymbols = true
             end
         end
 

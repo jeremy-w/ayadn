@@ -54,11 +54,13 @@ class AyaDN
 			buildPostInfo(getDataNormal(@hash), is_mine)
 		end
 		def buildDebugStream(post_hash)
-			ret_string = ""
-			post_hash.each do |k, v|
-				ret_string << "#{k}: #{v}\n\n"
-			end
-			return ret_string
+			# ret_string = ""
+			# post_hash.each do |k, v|
+			# 	ret_string << "#{k}: #{v}\n\n"
+			# end
+			jj post_hash
+			#exit
+			#return ret_string
 		end
 
 		def buildInteractions(hash)
@@ -121,11 +123,13 @@ class AyaDN
 
 		def create_content_string(item, annotations, me_mentioned)
 			post_id = item['id']
+			num_replies = item['num_replies']
+			reply_to = item['reply_to']
 			user_name, user_real_name, user_handle = objectNames(item['user'])
 			created_day, created_hour = objectDate(item)
 			links_string = objectLinks(item)
 			colored_post = coloredText(item)
-			post_string = objectView(post_id, created_day, created_hour, user_handle, user_real_name, colored_post, links_string, annotations, me_mentioned)
+			post_string = objectView(post_id, created_day, created_hour, user_handle, user_real_name, colored_post, links_string, annotations, me_mentioned, num_replies, reply_to)
 		end
 
 		def skip_hashtags(item, saved_tags)
