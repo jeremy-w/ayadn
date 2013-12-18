@@ -35,7 +35,7 @@ class AyaDN
 		end
 		def getSimpleUnified
 			@url = @endpoints.unified_streamback
-			@url += @endpoints.light_params
+			@url += @endpoints.base_params
 			@url += @endpoints.include_directed if $directedPosts == true
 			getHash
 		end

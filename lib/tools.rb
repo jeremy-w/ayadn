@@ -321,13 +321,13 @@ class AyaDN
                 puts "Does not exist (or has been deleted).\n\n".red
                 exit
             else
-                abort("\nERROR: #{meta.inspect}\n".red)
+                abort("\nERROR: #{meta.to_s}\n".red)
             end
         end
         def checkHTTPResp(resp)
             case resp.code
             when !200
-                abort("\nERROR: #{resp.code} #{resp.body}\n".red)
+                abort("\nERROR: does not exist (or has been deleted) => #{resp.code} #{resp.body}\n".red)
             end
         end
         def saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text, user_name)
