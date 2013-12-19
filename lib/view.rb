@@ -185,9 +185,16 @@ class AyaDN
 				next if skip_hashtags(item, saved_tags)
 				entitiesMentions = item['entities']['mentions']
 				postMentionsArray = []
+				@skipped_mentions_encountered = false
 				for mention in entitiesMentions do
+					case mention['name']
+					when *$skipped_mentions
+						@skipped_mentions_encountered = true
+						next
+					end
 					postMentionsArray.push(mention['name'])
 				end
+				next if @skipped_mentions_encountered == true
 				me_mentioned = false
 				for name in postMentionsArray do
 					me_mentioned = true if name == $identityPrefix

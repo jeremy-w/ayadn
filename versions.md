@@ -3,8 +3,11 @@ AYADN
 
 AYADN is a learning exercise: while it's fully functional, it's still very alpha (remember I'm a beginner with Ruby).  
 
+## 2013-12-19 v0.39
+- Skip posts containing specific @username!
+
 ## 2013-12-15 v0.38
-- Skip posts containing certain #hashtags!
+- Skip posts containing specific #hashtag!
 - better colors and layout
 - better username detect
 - bugfixes

@@ -645,6 +645,30 @@ class AyaDN
 			$tools.saveConfig
 		end
  	end
+ 	def ayadnSkipMention(action, mention)
+		puts "Current skipped @mentions: ".green + $skipped_mentions.join(", ").red + "\n\n"
+		if action == "add"
+			puts "Adding ".green + mention.red + " to the skipped @mentions.".green + "\n\n"
+			$configFileContents['skipped']['mentions'].each do |config_mentions|
+				if config_mentions == mention
+					puts "#{mention}".red + " is already skipped.\n\n".green
+					exit
+				end
+			end
+			$configFileContents['skipped']['mentions'].push(mention.downcase)
+			puts "New skipped @mentions: ".green + $configFileContents['skipped']['mentions'].join(", ").red + "\n\n"
+			$tools.saveConfig
+		elsif action == "remove"
+			puts "Removing ".green + mention.red + " from the skipped @mentions.".green + "\n\n"
+			$configFileContents['skipped']['mentions'].each do |config_mentions|
+				if config_mentions == mention
+					$configFileContents['skipped']['mentions'].delete(config_mentions)
+				end
+			end
+			puts "New skipped @mentions: ".green + $configFileContents['skipped']['mentions'].join(", ").red + "\n\n"
+			$tools.saveConfig
+		end
+ 	end
 
  	# experimenting without curl
  	def ayadnFileUpload(file_name)

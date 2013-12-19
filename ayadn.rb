@@ -203,6 +203,9 @@ when "skip-source"
 when "skip-tag"
 	client.ayadnSkipTag(arg2, arg3)
 
+when "skip-mention"
+	client.ayadnSkipMention(arg2, arg3)
+
 when "reset"
 	if arg2 == "pagination"
 		client.ayadnReset("pagination", arg3, arg4)

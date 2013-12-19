@@ -53,9 +53,11 @@ AYADN
 
 - create links with Markdown in your text
 
-- skip posts from specific clients (like IFTTT, PourOver, etc)
+- skip posts from specific client (like IFTTT, PourOver, etc)
 
-- skip posts containing specific #hashtags
+- skip posts containing specific #hashtag
+
+- skip posts containing specific @username
 
 - list, download, delete files from your ADN account
 
@@ -279,6 +281,9 @@ ayadn skip-source show
 ayadn skip-tag add sports
 ayadn skip-tag remove sports
 ayadn skip-tag show
+ayadn skip-mention add username
+ayadn skip-mention remove username
+ayadn skip-mention show
 ayadn pin 16864003 ruby,json
 ayadn reset pagination
 ayadn help

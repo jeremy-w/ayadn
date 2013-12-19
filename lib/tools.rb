@@ -99,6 +99,7 @@ class AyaDN
                 $downsideTimeline = $configFileContents['timeline']['downside']
                 $skipped_sources = $configFileContents['skipped']['sources']
                 $skipped_tags = $configFileContents['skipped']['hashtags']
+                $skipped_mentions = $configFileContents['skipped']['mentions']
             else
                 # defaults
                 $ayadn_data_path = Dir.home + "/ayadn/data"
@@ -117,6 +118,7 @@ class AyaDN
                 $downsideTimeline = true
                 $skipped_sources = []
                 $skipped_tags = []
+                $skipped_mentions = []
                 $configShowClient = false
                 $configShowReplySymbols = true
             end
