@@ -156,8 +156,9 @@ class AyaDN
 		def buildMessages(messages_stream)
 			messages_string = ""
 			for item in messages_stream do
-				# create_content_string(item, annotations, me_mentioned)
-				messages_string << create_content_string(item, nil, false)
+				@source_name, @source_link = objectSource(item)
+				annotations = checkins_annotations(item)
+				messages_string << create_content_string(item, annotations, false) # create_content_string(item, annotations, me_mentioned)
 			end
 			last_viewed = messages_stream.last
 			last_id = last_viewed['pagination_id'] unless last_viewed == nil
