@@ -155,7 +155,7 @@ class AyaDN
 		end
 		def buildMessages(messages_stream)
 			messages_string = ""
-			for item in messages_string do
+			for item in messages_stream do
 				# create_content_string(item, annotations, me_mentioned)
 				messages_string << create_content_string(item, nil, false)
 			end
