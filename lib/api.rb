@@ -108,7 +108,7 @@ class AyaDN
 		end
 		def getPostReplies(post_id)
 			@url = @endpoints.replies(post_id)
-			@url += @endpoints.light_params
+			@url += @endpoints.base_params
 			getHash
 		end
 		def getPostMentions(post_id)
