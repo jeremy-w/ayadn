@@ -70,7 +70,7 @@ class AyaDN
 			POSTS_URL + "#{post_id}/repost/?access_token=#{@token}"
 		end
 		def search(words)
-			POSTS_URL + "search?text=#{words}?access_token=#{@token}"
+			POSTS_URL + "search?text=#{words}&access_token=#{@token}"
 		end
 		def mentions(username)
 			USERS_URL + "#{username}/mentions/?access_token=#{@token}&count=#{$countMentions}"

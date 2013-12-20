@@ -233,7 +233,7 @@ class AyaDN
 		end
 		def getSearch(words)
 			@url = @endpoints.search(words)
-			@url += @endpoints.light_params
+			@url += @endpoints.base_params
 			getHash
 		end
 		def getUniqueMessage(channel_id, message_id)
