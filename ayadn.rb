@@ -221,9 +221,9 @@ when "reset"
 		client.ayadnReset("pagination", nil, nil)
 	end
 
-when "deactivate"
-	# deactivate a user channel (WIP)
-	client.ayadnDeactivateChannel(arg2)
+# when "deactivate"
+# 	# deactivate a user channel (WIP)
+# 	client.ayadnDeactivateChannel(arg2)
 
 when "random"
 	# just for fun :)
