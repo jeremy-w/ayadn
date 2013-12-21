@@ -426,6 +426,15 @@ class AyaDN
 						elsif channel_type == "net.paste-app.clips"
 							$tools.fileOps("savechannelid", channel_id, "Paste-App Clips")
 							the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "your Paste-App Clips channel\n".green
+						elsif channel_type == "net.app.core.broadcast"
+							broadcast_annotations = item['annotations']
+							broadcast_annotations.each do |anno|
+								if anno['type'] == "net.app.core.broadcast.metadata"
+									broadcast_name = anno['value']['title']
+									$tools.fileOps("savechannelid", channel_id, "Broadcast: #{broadcast_name}")
+									the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "Broadcast channel: #{broadcast_name}\n".green
+								end
+							end
 						elsif channel_type == "net.patter-app.room"
 							patter_room_annotations = item['annotations']
 							patter_room_annotations.each do |anno|
