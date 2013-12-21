@@ -23,7 +23,6 @@
     - backup all your files
     - save/bookmark conversations (for backup/reference purposes)
     - live character countdown including Markdown detection
-    - name and tag channels
     - discover channels
     - follow a conversation in real time
     - more options activable from the app itself

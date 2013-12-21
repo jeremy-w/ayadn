@@ -3,7 +3,13 @@ AYADN
 
 AYADN is a learning exercise: while it's fully functional, it's still very alpha (remember I'm a beginner with Ruby).  
 
-## 2013-12-20 v0.5.1
+## 2013-12-21 v0.5.1b
+- layout bug fixes
+- list all channels and show types + names
+- send message to any channel
+- backup list of channels
+
+## 2013-12-20 v0.5.1a
 - lots of bug squashing
 - faster, faster, pussycat
 - layout is more consistent

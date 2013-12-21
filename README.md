@@ -65,6 +65,10 @@ AYADN
 
 - upload files to your ADN account *(no Windows support)*
 
+- list your subscribed channels
+
+- post to your subscribed channels
+
 - save a post link to your Pinboard account
 
 - [and more!](https://github.com/ericdke/ayadn#list-of-commands)
