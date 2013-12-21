@@ -259,7 +259,8 @@ ayadn public 286458
 ayadn delete-file 286458
 ayadn search ruby
 ayadn search ruby,json
-ayadn messages
+ayadn pm 12345
+ayadn channels
 ayadn messages 12345
 ayadn messages 12345 all
 ayadn star 15723266
