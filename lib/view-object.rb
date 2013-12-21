@@ -16,7 +16,9 @@ class AyaDN
 			links = item['entities']['links']
 			links_string = ""
 			if !links.empty?
-				#links_string << "\n"
+				if item['annotations'] == nil
+					links_string << "\n"
+				end
 				for link in links do
 					links_string << "Link: ".cyan + link['url'].brown + "\n"
 				end
