@@ -249,6 +249,7 @@ class AyaDN
 	end
 	def ayadnGetMessages(target, action = nil)
 		$tools.fileOps("makedir", $ayadn_messages_path)
+		$bar_while_scrolling = false
 		if target != nil
 			fileURL = $ayadn_last_page_id_path + "/last_page_id-channels-#{target}"
 			last_page_id = $tools.fileOps("getlastpageid", fileURL) unless action == "all"
@@ -262,7 +263,7 @@ class AyaDN
 				puts "Backed-up list of your active channels:\n".green
 				loaded_channels.each do |k,v|
 					puts "Channel: ".cyan + k.brown
-					puts "Interlocutor: ".cyan + v.magenta
+					puts "Title: ".cyan + v.magenta
 					puts "\n"
 				end
 				puts "Do you want to see if you have more channels activated? (Y/n)".green

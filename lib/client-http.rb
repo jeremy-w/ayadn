@@ -24,10 +24,11 @@ class AyaDN
 				request["Content-Type"] = "application/json"
 				
 				if $bar_while_scrolling == false # this is ugly but I don't see anything LESS ugly for now
+					print "Connecting to #{uri.host}#{uri.path} ...\n\n".cyan
 					response = https.request(request)
 					return response.body
 				else
-						print "\rConnecting...".cyan
+						print "\rConnecting to #{uri.host}#{uri.path}".cyan
 						body = ''
 						https.request(request) do |response| 
 							fileSize = response['Content-Length'].to_i

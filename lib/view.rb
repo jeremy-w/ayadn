@@ -377,7 +377,7 @@ class AyaDN
 				data = hash['data']
 				the_channels = ""
 				channels_list = []
-				puts "Getting users infos, please wait a few seconds... (could take a while the first time if you have a lot of channels activated)\n".cyan
+				puts "\nGetting users infos, please wait a few seconds... (could take a while the first time if you have a lot of channels activated)\n".cyan
 				data.each do |item|
 					channel_id = item['id']
 					channel_type = item['type']
@@ -420,10 +420,24 @@ class AyaDN
 					channel_type = item['type']
 					if channel_type != "net.app.core.pm"
 						channels_list.push(channel_id)
-						$tools.fileOps("savechannelid", channel_id, channel_type)
 						if channel_type == "net.app.ohai.journal"
-							the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "your Ohai journal channel\n".green
+							$tools.fileOps("savechannelid", channel_id, "Ohai Journal")
+							the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "your Ohai Journal channel\n".green
+						elsif channel_type == "net.paste-app.clips"
+							$tools.fileOps("savechannelid", channel_id, "Paste-App Clips")
+							the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "your Paste-App Clips channel\n".green
+						elsif channel_type == "net.patter-app.room"
+							patter_room_annotations = item['annotations']
+							patter_room_annotations.each do |anno|
+								if anno['type'] == "net.patter-app.settings"
+									patter_room_name = anno['value']['name']
+									$tools.fileOps("savechannelid", channel_id, "Patter-App Room: #{patter_room_name}")
+									the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "Patter-App Room: #{patter_room_name}\n".green
+									next
+								end
+							end
 						else
+							$tools.fileOps("savechannelid", channel_id, channel_type)
 							the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "#{channel_type}\n"
 						end
 					end
