@@ -158,7 +158,7 @@ when "pm"
 		end
 	end
 
-when "messages"
+when "messages", "channels"
 	# arg2 is integer -> display channel stream
 	# arg2 is nil -> get a list of your previously used channels
 	# arg3 == nil = with pagination, arg3 == "all" = no pagination
