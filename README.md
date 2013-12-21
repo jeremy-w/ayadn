@@ -308,7 +308,7 @@ Unless you're planning on using [multiple accounts](https://github.com/ericdke/a
 ayadn install config
 ```  
 
-Now you may safely edit your preferences in `%USERDIR%/ayadn/data/config.yml` without losing anything when updating AyaDN.   
+Now you may safely edit your preferences in `%USERDIR%/ayadn/data/config.yml` without losing anything when updating AyaDN.  
 
 ### Skip specific posts
 
