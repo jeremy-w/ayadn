@@ -143,11 +143,19 @@ when "unmute"
 	arg2 =~ /^@/ ? client.ayadnMuting("unmute", arg2) : (puts $status.errorUserID(arg2))
 
 when "pm"
-	if arg3 != nil
-		# ayadn pm @ericd "hello!"
-		client.ayadnSendMessage(arg2, arg3)
+	if !arg2.is_integer?
+		if arg3 != nil
+			# ayadn pm @ericd "hello!"
+			client.ayadnSendMessage(arg2, arg3)
+		else
+			client.ayadnComposeMessage(arg2)
+		end
 	else
-		client.ayadnComposeMessage(arg2)
+		if arg3 != nil
+			client.ayadnSendMessageToChannel(arg2, arg3)
+		else
+			client.ayadnComposeMessageToChannel(arg2)
+		end
 	end
 
 when "messages"

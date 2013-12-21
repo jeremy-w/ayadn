@@ -179,7 +179,24 @@ class AyaDN
 		#$tools.meta(@hash['meta'])
 	    puts @view.new(@hash).showUsersInfos(name)
 	end
-	
+	def ayadnComposeMessage(target)
+		puts $status.writeMessage
+		max_char = 2048
+		begin
+			input_text = STDIN.gets.chomp
+		rescue Exception => e
+			abort($status.errorMessageNotSent)
+		end
+		to_regex = input_text.dup
+		without_markdown = $tools.getMarkdownText(to_regex)
+		real_length = without_markdown.length
+		if real_length < 2048
+			ayadnSendMessage(target, input_text)
+		else
+			to_remove = real_length - max_char
+			abort($status.errorMessageTooLong(real_length, to_remove))
+		end
+	end
 	def ayadnSendMessage(target, text)
 		abort($status.emptyPost) if (text.empty? || text == nil)
 		puts $status.sendMessage
@@ -194,7 +211,44 @@ class AyaDN
 		puts $status.postSent
 		$tools.fileOps("savechannelid", private_message_channel_ID, target)
 	end
+
+	def ayadnComposeMessageToChannel(target)
+		puts $status.writeMessage
+		max_char = 2048
+		begin
+			input_text = STDIN.gets.chomp
+		rescue Exception => e
+			abort($status.errorMessageNotSent)
+		end
+		to_regex = input_text.dup
+		without_markdown = $tools.getMarkdownText(to_regex)
+		real_length = without_markdown.length
+		if real_length < 2048
+			ayadnSendMessageToChannel(target, input_text)
+		else
+			to_remove = real_length - max_char
+			abort($status.errorMessageTooLong(real_length, to_remove))
+		end
+	end
+	def ayadnSendMessageToChannel(target, text)
+		abort($status.emptyPost) if (text.empty? || text == nil)
+		puts $status.sendMessage
+		callback = @api.httpSendMessageToChannel(target, text)
+
+		#abort(callback.inspect)
+
+		blob = JSON.parse(callback)
+		@hash = blob['data']
+		private_channel_ID = @hash['channel_id']
+		private_thread_ID = @hash['thread_id']
+		private_ID = @hash['id']
+		$tools.fileOps("makedir", $ayadn_messages_path)
+		puts "Channel ID: ".cyan + private_channel_ID.brown + " Message ID: ".cyan + private_ID.brown + "\n\n"
+		puts $status.postSent
+		$tools.fileOps("savechannelid", private_channel_ID, target)
+	end
 	def ayadnGetMessages(target, action = nil)
+		$tools.fileOps("makedir", $ayadn_messages_path)
 		if target != nil
 			fileURL = $ayadn_last_page_id_path + "/last_page_id-channels-#{target}"
 			last_page_id = $tools.fileOps("getlastpageid", fileURL) unless action == "all"
@@ -267,24 +321,7 @@ class AyaDN
 			displayStream(stream)
 		end
 	end
-	def ayadnComposeMessage(target)
-		puts $status.writeMessage
-		max_char = 2048
-		begin
-			input_text = STDIN.gets.chomp
-		rescue Exception => e
-			abort($status.errorMessageNotSent)
-		end
-		to_regex = input_text.dup
-		without_markdown = $tools.getMarkdownText(to_regex)
-		real_length = without_markdown.length
-		if real_length < 2048
-			ayadnSendMessage(target, input_text)
-		else
-			to_remove = real_length - max_char
-			abort($status.errorMessageTooLong(real_length, to_remove))
-		end
-	end
+
 
 	def ayadnComposePost(reply_to = "", mentions_list = "", my_username = "")
 		puts $status.writePost

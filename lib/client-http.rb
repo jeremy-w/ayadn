@@ -132,6 +132,26 @@ class AyaDN
 			response = https.request(request, payload)
 			callback = response.body
 		end
+		def httpSendMessageToChannel(target, text)
+			url = CHANNELS_URL
+			url += "#{target}/messages"
+			#url += "&include_annotations=1"
+
+			https, request = connectWithHTTP(url)
+			entities_content = { 
+				"parse_markdown_links" => true, 
+				"parse_links" => true
+			}
+			ayadnAnno = clientAnnotations
+			destinations = []
+			payload = {
+				"text" => "#{text}",
+				"entities" => entities_content,
+				"annotations" => ayadnAnno
+			}.to_json
+			response = https.request(request, payload)
+			callback = response.body
+		end
 		def httpSend(text, replyto = nil)
 			url = POSTS_URL
 			url += "?include_annotations=1"
