@@ -23,8 +23,8 @@ class AyaDN
 			$downsideTimeline ? the_hash = getData(@hash) : the_hash = getDataNormal(@hash)
 			stream, pagination_array = buildCompleteStream(the_hash)
 		end
-		def showChannels
-			stream, pagination_array = buildChannelsInfos(@hash)
+		def showChannels(type)
+			stream, pagination_array = buildChannelsInfos(@hash, type)
 		end
 		def showDebugStream
 			buildDebugStream(getDataNormal(@hash))
@@ -370,45 +370,67 @@ class AyaDN
 			list_string << "\n"
 			return list_string, file_url, pagination_array
 		end
-		def buildChannelsInfos(hash)
-			meta = hash['meta']
-			unread_messages = meta['unread_counts']['net.app.core.pm']
-			data = hash['data']
-			the_channels = ""
-			channels_list = []
-			puts "Getting users infos, please wait a few seconds... (could take a while if many channels)\n".cyan
-			data.each do |item|
-				channel_id = item['id']
-				channel_type = item['type']
-				if channel_type == "net.app.core.pm"
-					channels_list.push(channel_id)
-					total_messages = item['counts']['messages']
-					owner = "@" + item['owner']['username']
-					writers = item['writers']['user_ids']
-					readers = item['readers']['user_ids']
-					you_write = item['writers']['you']
-					you_read = item['readers']['you']
-					the_writers, the_readers = [], []
-					writers.each do |writer|
-						if writer != nil
-							user = AyaDN::API.new(@token).getUserInfos(writer)
-							name = user['data']['username']
-							the_writers.push("@" + name)
+		def buildChannelsInfos(hash, type)
+			if type == "net.app.core.pm"
+				meta = hash['meta']
+				unread_messages = meta['unread_counts']['net.app.core.pm']
+				data = hash['data']
+				the_channels = ""
+				channels_list = []
+				puts "Getting users infos, please wait a few seconds... (could take a while the first time if you have a lot of channels activated)\n".cyan
+				data.each do |item|
+					channel_id = item['id']
+					channel_type = item['type']
+					if channel_type == "net.app.core.pm"
+						channels_list.push(channel_id)
+						total_messages = item['counts']['messages']
+						#owner = "@" + item['owner']['username']
+						writers = item['writers']['user_ids']
+						readers = item['readers']['user_ids']
+						you_write = item['writers']['you']
+						you_read = item['readers']['you']
+						the_writers, the_readers = [], []
+						writers.each do |writer|
+							if writer != nil
+								user = AyaDN::API.new(@token).getUserInfos(writer)
+								name = user['data']['username']
+								handle = "@" + name
+								$tools.fileOps("savechannelid", channel_id, handle)
+								the_writers.push(handle)
+							end
+						end
+						the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown
+						#the_channels << "Creator: ".cyan + owner.magenta + "\n"
+						#the_channels << "Channels type: ".cyan + "#{channel_type}\n".brown
+						the_channels << "Interlocutor(s): ".cyan + the_writers.join(", ").magenta + "\n"
+					end
+				end
+				the_channels << "\n"
+				return the_channels, channels_list
+			# elsif channel_type == "com.ayadn.drafts"
+			# 	$drafts = channel_id
+			# 	channels_list.push(channel_id)
+			# 	the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "your AyaDN Drafts channel\n".green
+			else
+				data = hash['data']
+				the_channels = ""
+				channels_list = []
+				data.each do |item|
+					channel_id = item['id']
+					channel_type = item['type']
+					if channel_type != "net.app.core.pm"
+						channels_list.push(channel_id)
+						$tools.fileOps("savechannelid", channel_id, channel_type)
+						if channel_type == "net.app.ohai.journal"
+							the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "your Ohai journal channel\n".green
+						else
+							the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "#{channel_type}\n"
 						end
 					end
-					the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown
-					the_channels << "Creator: ".cyan + owner.magenta + "\n"
-					#the_channels << "Channels type: ".cyan + "#{channel_type}\n".brown
-					the_channels << "Interlocutor(s): ".cyan + the_writers.join(", ").magenta + "\n"
 				end
-				if channel_type == "com.ayadn.drafts"
-					$drafts = channel_id
-					channels_list.push(channel_id)
-					the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "your AyaDN Drafts channel\n".green
-				end
+				the_channels << "\n"
+				return the_channels, channels_list
 			end
-			the_channels << "\n"
-			return the_channels, channels_list
 		end
 		def buildUserInfos(name, adn_data)
 			user_name, user_real_name, the_name = objectNames(adn_data)

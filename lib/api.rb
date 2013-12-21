@@ -249,7 +249,7 @@ class AyaDN
 		end
 		def getChannels
 			@url = @endpoints.channels
-			@url += @endpoints.light_params
+			@url += @endpoints.base_params
 			getHash
 		end
 		def getFilesList(beforeID)

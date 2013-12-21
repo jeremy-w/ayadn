@@ -144,7 +144,7 @@ class AyaDN
                     f.puts(content)
                 f.close
             when "savechannelid"
-                filePath = $ayadn_messages_path + "/pm-channels.json"
+                filePath = $ayadn_messages_path + "/channels.json"
                 newPrivateChannel = { "#{value}" => "#{content}" }
                 if !File.exists?filePath
                     f = File.new(filePath, "w")
@@ -160,7 +160,7 @@ class AyaDN
                     f.close
                 end
             when "loadchannels"
-                filePath = $ayadn_messages_path + "/pm-channels.json"
+                filePath = $ayadn_messages_path + "/channels.json"
                 channels = JSON.load(IO.read(filePath)) if File.exists?filePath
             when "auth"
                 filePath = $ayadn_authorization_path + "/token"

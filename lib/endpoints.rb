@@ -103,7 +103,7 @@ class AyaDN
 			USERS_URL + "me/interactions?access_token=#{@token}"
 		end
 		def channels
-			CHANNELS_URL + "?access_token=#{@token}"
+			CHANNELS_URL + "?access_token=#{@token}&count=200"
 		end
 		def messages(channel_id)
 			CHANNELS_URL + "#{channel_id}/messages?access_token=#{@token}"

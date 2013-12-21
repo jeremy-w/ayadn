@@ -75,9 +75,9 @@ AYADN
 
 ```
 git clone https://github.com/ericdke/ayadn.git
-cd ayadn-master && chmod +x ayadn.rb
+cd ayadn
 bundle install
-./ayadn.rb
+./ayadn.rb authorize
 ./ayadn.rb write 'Posting to App.net with Ruby!'
 ``` 
 

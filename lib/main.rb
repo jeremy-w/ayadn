@@ -217,11 +217,9 @@ class AyaDN
 				puts "\n"
 			end
 			@hash = @api.getChannels
-			the_channels, channels_list = @view.new(@hash).showChannels
-			if $drafts != nil # remains of a past experiment... that will disappear some day
-				private_message_channel_ID = $drafts
-				$tools.fileOps("savechannelid", private_message_channel_ID, "drafts")
-			end
+			the_channels, channels_list = @view.new(@hash).showChannels("net.app.core.pm")
+			puts the_channels
+			the_channels, channels_list = @view.new(@hash).showChannels(nil)
 			puts the_channels
 		end
 	end
