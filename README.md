@@ -101,14 +101,14 @@ git clone https://github.com/ericdke/ayadn.git
 
 Mac OS X, Linux: if you already have [bundler](http://bundler.io), you should just enter the `ayadn-master` folder and run `bundle install`.
 
-For example, if you downloaded or cloned AyaDN in your downloads folder:
+Example if you downloaded or cloned AyaDN in your downloads folder:
 
 ```
 cd ~/Downloads/ayadn-master
 bundle install
 ```  
 
-**Installation done, you can jump to Step 3 now**.
+**Installation done, you can jump to Step 3**.
 
 #### Without Bundler
 
@@ -125,11 +125,11 @@ gem install json pinboard
 gem install win32console -v 1.3.2
 ```  
 
-*Windows, again: jump to Step 4 now.*
+You only have to install the Gems *once*, it's not necessary to do it each time you update AyaDN.
 
-Installing the gems only has to be done *once*, it's not necessary to do it each time you update AyaDN.
+*Windows: jump to Step 4*
 
-### Step 3
+### Step 3 (optional)
 
 While you can use the app with the ruby interpreter -see [How to use](https://github.com/ericdke/ayadn#how-to-use)-, it's recommended to make the app executable:
 
@@ -137,7 +137,7 @@ While you can use the app with the ruby interpreter -see [How to use](https://gi
 chmod +x ayadn.rb
 ```  
 
-and to declare the app folder in your $PATH *or* to create a symlink of the app in `/usr/local/bin` or whatever you're using as your $PATH.
+Even better: after that, declare the app folder in your $PATH *or* create a symlink of the app in `/usr/local/bin` or equivalent.
 
 ```
 sudo ln -s ayadn.rb /usr/local/bin/ayadn
@@ -312,15 +312,29 @@ Now you may safely edit your preferences in `%USERDIR%/ayadn/data/config.yml` wi
 
 ### Skip specific posts
 
-App.net already gives you the "mute" command to mute certain users. 
+You can make posts containing a specific *hashtag*, like "#sports", or from a specific *client*, like "IFTTT" disappear from your timeline. 
 
-But what if you want to mute a certain *hashtag*, like "#sports", or mute a *client*, like "IFTTT"? 
+It works with users too: although App.net has the *mute* feature, it doesn't prevent the muted user to appear in reposts or to see posts mentioning him/her. This command allows you to do it.
 
-Easy: `ayadn skip-source add IFTTT`, and no more posts by IFTTT in your timeline.
+*ayadn skip-xxx add/remove target* to add/remove from the 'skipped' list.
 
-Same for hashtags: `ayadn skip-tag add sports`, and you won't see any posts containing "#sports" again. *(remember that most terminals and consoles won't accept the `#` sign, so don't type it in a command)*
+- Skip posts from specific client:
 
-Change of mind? `ayadn skip-source remove IFTTT`, `ayadn skip-tag remove sports`, etc.
+`ayadn skip-source add IFTTT`
+
+- Skip posts with specific hashtag:
+
+`ayadn skip-tag add sports`
+
+- Skip posts with mentioning specific user:
+
+`ayadn skip-mention add username`
+
+Change of mind? 
+
+`ayadn skip-source remove IFTTT`
+`ayadn skip-tag remove sports`
+`ayadn skip-mention remove username`
 
 There's basically no verification with this feature, so be careful to not add misspelled or non-existent info.  
 
