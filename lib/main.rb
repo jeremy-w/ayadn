@@ -70,9 +70,11 @@ class AyaDN
 		file_timer = $API_config_path + "/timer.json"
 		if !File.exists?(file_API)
 			resp = @api.getAPIConfig
-			f = File.new(file_API, "w")
-			    f.puts(resp.to_json)
-			f.close
+			if resp['meta']['code'] == 200
+				f = File.new(file_API, "w")
+			    	f.puts(resp.to_json)
+				f.close
+			end
 			hash_timer = {
 				"checked" => time_now,
 				"deadline" => time_now + 1
@@ -90,9 +92,11 @@ class AyaDN
 				f.close
 			else
 				resp = @api.getAPIConfig
-				f = File.new(file_API, "w")
-				    f.puts(resp.to_json)
-				f.close
+				if resp['meta']['code'] == 200
+					f = File.new(file_API, "w")
+				    	f.puts(resp.to_json)
+					f.close
+				end
 				hash_timer = {
 					"checked" => time_now,
 					"deadline" => time_now + 1
