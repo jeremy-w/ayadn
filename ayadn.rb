@@ -25,33 +25,33 @@ arg1, arg2, arg3, arg4 = ARGV[0], ARGV[1], ARGV[2], ARGV[3]
 
 case arg1
 
-when "authorize", "login"
-	AyaDN.new(nil).ayadnAuthorize("reset")
-
-when "install"
-	if arg2 == "config"
-		$tools.installConfig
-	else
-		puts $status.errorSyntax
-	end
-
 when "scroll"
 	client.ayadnScroll(arg2, arg3)
 
 when nil, "flux", "stream", "uni", "unified"
 	client.ayadnUnified
 
+when "write", "w"
+	arg2 != nil ? client.ayadnSendPost(arg2, nil) : client.ayadnComposePost
+
+when "reply", "r"
+	if arg2 != nil
+		arg2.is_integer? ? client.ayadnReply(arg2) : (puts $status.errorPostID(arg2))
+	else
+		puts $status.errorNoID
+	end
+
 when "global", "g"
 	client.ayadnGlobal
-
-when "trending", "conversations", "checkins", "photos"
-	client.ayadnExplore(arg1)
 
 when "mentions", "m"
 	(arg2 =~ /^@/ || arg2 == "me") ? client.ayadnUserMentions(arg2) : (puts $status.errorUserID(arg2))
 
 when "posts", "p"
 	(arg2 =~ /^@/ || arg2 == "me") ? client.ayadnUserPosts(arg2) : (puts $status.errorUserID(arg2))
+
+when "trending", "conversations", "checkins", "photos"
+	client.ayadnExplore(arg1)
 
 when "starred"
 	if arg2 =~ /^@/ || arg2 == "me"
@@ -166,16 +166,6 @@ when "messages", "channels"
 	# arg3 == nil = with pagination, arg3 == "all" = no pagination
 	client.ayadnGetMessages(arg2, arg3)
 
-when "write", "w"
-	arg2 != nil ? client.ayadnSendPost(arg2, nil) : client.ayadnComposePost
-
-when "reply", "r"
-	if arg2 != nil
-		arg2.is_integer? ? client.ayadnReply(arg2) : (puts $status.errorPostID(arg2))
-	else
-		puts $status.errorNoID
-	end
-
 when "search", "s"
 	arg2 != nil ? client.ayadnSearch(arg2) : (puts $status.errorSyntax)
 
@@ -224,7 +214,7 @@ when "reset"
 	end
 
 # when "deactivate"
-# 	# deactivate a user channel (WIP)
+# 	# deactivate a user channel
 # 	client.ayadnDeactivateChannel(arg2)
 
 when "random"
@@ -243,10 +233,9 @@ when "random"
 				sleep 0.2
 				next
 			end
-			stream = AyaDN::View.new(nil).buildSimplePost(hash)
-			puts stream
+			puts AyaDN::View.new(nil).buildSimplePost(hash)
 			sleep 2
-		rescue Exception => e
+		rescue Exception
 			abort($status.stopped)
 		end
 	end
@@ -261,12 +250,20 @@ when "pin"
 # when "record"
 # 	client.ayadnRecord(arg2)
 
+when "authorize", "login"
+	AyaDN.new(nil).ayadnAuthorize("reset")
+
+when "install"
+	if arg2 == "config"
+		$tools.installConfig
+	else
+		puts $status.errorSyntax
+	end
+
 else
 	# if not any known argument
-	option = ARGV
-	bad_option = option.join(" ")
 	puts $status.errorSyntax
-	puts "#{bad_option} ".brown + "is not a valid option.\n\n".red
+	puts "#{ARGV.join(" ")} ".brown + "is not a valid option.\n\n".red
 	puts $tools.helpScreen
 
 end

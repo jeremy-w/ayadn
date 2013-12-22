@@ -588,7 +588,7 @@ class AyaDN
 		if action == "star"
 			if you_starred == false
 				puts "\nStarring post ".green + "#{postID}\n".brown
-				resp = @api.starPost(postID)
+				@api.starPost(postID)
 				puts "\nSuccessfully starred the post.\n\n".green
 			else
 				abort("Canceled: the post is already starred.\n\n".red)
@@ -598,7 +598,7 @@ class AyaDN
 				abort("Canceled: the post wasn't already starred.\n\n".red)
 			else
 				puts "\nUnstarring post ".green + "#{postID}\n".brown
-				resp = @api.unstarPost(postID)
+				@api.unstarPost(postID)
 				puts "\nSuccessfully unstarred the post.\n\n".green
 			end
 		else
@@ -618,17 +618,17 @@ class AyaDN
 			you_reposted = is_repost['you_reposted']
 		end
 		if action == "repost"
-			if you_reposted == false
-				puts "\nReposting post ".green + "#{postID}\n".brown
-				resp = @api.repostPost(postID)
-				puts "\nSuccessfully reposted the post.\n\n".green
-			else
+			if you_reposted
 				abort("Canceled: you already reposted this post.\n\n".red)
+			else
+				puts "\nReposting post ".green + "#{postID}\n".brown
+				@api.repostPost(postID)
+				puts "\nSuccessfully reposted the post.\n\n".green
 			end
 		elsif action == "unrepost"
-			if you_reposted == true
+			if you_reposted
 				puts "\nUnreposting post ".green + "#{postID}\n".brown
-				resp = @api.unrepostPost(postID)
+				@api.unrepostPost(postID)
 				puts "\nSuccessfully unreposted the post.\n\n".green
 			else
 				abort("Canceled: this post wasn't reposted by you.\n\n".red)
@@ -731,14 +731,11 @@ class AyaDN
  				puts "\nGetting the list of all your files...\n".green
  				beforeID = nil
  				pagination_array = []
- 				reverse = true
  				i = 1
 		    	loop do
-		    		@hash = @api.getFilesList(beforeID)
-		    		view, file_url, pagination_array = @view.new(@hash).showFilesList(with_url, reverse)
+		    		view, file_url, pagination_array = @view.new(@api.getFilesList(beforeID)).showFilesList(with_url, true)
 		    		beforeID = pagination_array.last
 		    		break if beforeID == nil
-		    		#big_view += view
 	 				puts view
 	 				i += 1
 		    		if pagination_array.first != nil
@@ -750,32 +747,25 @@ class AyaDN
 				puts "\n"
 			else
 				puts "\nGetting the list of your recent files...\n".green
-				@hash = @api.getFilesList(nil)
-				reverse = false
-				view, file_url, pagination_array = @view.new(@hash).showFilesList(with_url, reverse)
+				view, file_url, pagination_array = @view.new(@api.getFilesList(nil)).showFilesList(with_url, false)
 				big_view += view
 			end
  			puts big_view
  		when "download"
  			#with_url = true
  			with_url = false
- 			targets_array = target.split(",")
- 			number_of_targets = targets_array.length
  			$tools.fileOps("makedir", $ayadn_files_path)
- 			if number_of_targets == 1
-	 			@hash = @api.getSingleFile(target)
-	 			view, file_url, file_name = @view.new(@hash).showFileInfo(with_url)
+ 			if target.split(",").length == 1
+	 			view, file_url, file_name = @view.new(@api.getSingleFile(target)).showFileInfo(with_url)
 	 			puts "\nDownloading file ".green + target.to_s.brown
 	 			puts view
 	 			#new_file_name = "#{target}_#{file_name}" # should put target before .ext instead
 	 			new_file_name = "#{file_name}"
 	 			download_file_path = $ayadn_files_path + "/#{new_file_name}"
 	 			if !File.exists?download_file_path
-	 				@url = file_url
-	 				resp = @api.clientHTTP("download", @url)
-					the_file = resp.body
+	 				resp = @api.clientHTTP("download", file_url)
 		 			f = File.new(download_file_path, "wb")
-		 				f.puts(the_file)
+		 				f.puts(resp.body)
 		 			f.close
 		 			puts "File downloaded in ".green + $ayadn_files_path.pink + "/#{new_file_name}".brown + "\n\n"
 		 		else
@@ -791,11 +781,9 @@ class AyaDN
 		 			new_file_name = "#{unique_file_id}_#{file_name}"
 		 			download_file_path = $ayadn_files_path + "/#{new_file_name}"
 		 			if !File.exists?download_file_path
-		 				@url = file_url
-	 					resp = @api.clientHTTP("download", @url)
-						the_file = resp.body
+	 					resp = @api.clientHTTP("download", file_url)
 			 			f = File.new(download_file_path, "wb")
-			 				f.puts(the_file)
+			 				f.puts(resp.body)
 			 			f.close
 			 			puts "File downloaded in ".green + $ayadn_files_path.pink + "/#{new_file_name}".brown + "\n\n"
 			 		else
@@ -809,28 +797,20 @@ class AyaDN
             	puts "\nThis feature doesn't work on Windows yet. Sorry.\n\n".red
             	exit
             end
-	 		targets_array = target.split(",")
- 			number_of_targets = targets_array.length
  			$tools.fileOps("makedir", $ayadn_files_path)
  			uploaded_ids = []
- 			targets_array.each do |file|
- 				file_name = File.basename(file)
- 				puts "Uploading ".cyan + "#{file_name}".brown + "\n\n"
+ 			target.split(",").each do |file|
+ 				puts "Uploading ".cyan + "#{File.basename(file)}".brown + "\n\n"
  				begin
  					resp = JSON.parse($tools.uploadFiles(file, @token))
  				rescue => e
  					puts "\nERROR: ".red + e.inspect.red + "\n\n"
  					exit
  				end
- 				meta = resp['meta']
- 				$tools.meta(meta)
- 				data = resp['data']
- 				new_file_id = data['id']
- 				uploaded_ids.push(new_file_id)
+ 				$tools.meta(resp['meta'])
+ 				uploaded_ids.push(resp['data']['id'])
  			end
- 			@hash = @api.getFilesList(nil)
-			reverse = false
-			view, file_url, pagination_array = @view.new(@hash).showFilesList(with_url, reverse)
+			view, file_url, pagination_array = @view.new(@api.getFilesList(nil)).showFilesList(with_url, false)
 			uploaded_ids.each do |id|
 				view.gsub!("#{id}", "#{id}".reverse_color)
 			end
@@ -838,24 +818,21 @@ class AyaDN
 		when "remove", "delete-file"
 			puts "\nWARNING: ".red + "delete a file ONLY is you're sure it's not referenced by a post or a message.\n\n".pink
 			puts "Do you wish to continue? (y/N) ".reddish
-			input = STDIN.getch
-			if input == ("y" || "Y")
+			if STDIN.getch == ("y" || "Y")
 				puts "\nPlease wait...".green
 				resp = JSON.parse(@api.deleteFile(target))
-				meta = resp['meta']
- 				$tools.meta(meta)
+ 				$tools.meta(resp['meta'])
 			else
 				puts "\n\nCanceled.\n\n".red
 				exit
 			end
 		when "public", "private"
+			puts "\nChanging file attribute...".green
 			if action == "public"
-				puts "\nChanging file attribute...".green
 				data = {
 					"public" => true
 				}.to_json
-			elsif action == "private"
-				puts "\nChanging file attribute...".green
+			else
 				data = {
 					"public" => false
 				}.to_json
@@ -865,11 +842,8 @@ class AyaDN
 			meta = resp['meta']
 			if meta['code'] == 200
 				puts "\nDone!\n".green
-				data = resp['data']
- 				changed_file_id = data['id']
-				@hash = @api.getFilesList(nil)
-				reverse = false
-				view, file_url, pagination_array = @view.new(@hash).showFilesList(with_url, reverse)
+ 				changed_file_id = resp['data']['id']
+				view, file_url, pagination_array = @view.new(@api.getFilesList(nil)).showFilesList(with_url, false)
 				view.gsub!("#{changed_file_id}", "#{changed_file_id}".reverse_color)
 				puts view
 			else
@@ -890,10 +864,8 @@ class AyaDN
 			user_name = data['user']['username']
 			link = data['entities']['links'][0]['url']
  			if $configFileContents['pinboard']['username'] != nil
- 				pin_username = $configFileContents['pinboard']['username']
- 				pin_password = URI.unescape(Base64::decode64($configFileContents['pinboard']['password']))
  				puts "Saving post ".green + post_id.brown + " to Pinboard...\n".green
- 				$tools.saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text, user_name)
+ 				$tools.saveToPinboard(post_id, $configFileContents['pinboard']['username'], URI.unescape(Base64::decode64($configFileContents['pinboard']['password'])), link, tags, post_text, user_name)
  				puts "Done!\n\n".green
  			else
  				puts "\nConfiguration does not include your Pinbard credentials.\n".red
