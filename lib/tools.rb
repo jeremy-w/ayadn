@@ -337,8 +337,8 @@ class AyaDN
             end
         end
         def saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text, user_name)
-            tags << ",ADN"
-            post_text << " http://alpha.app.net/#{user_name}/post/#{post_id}"
+            tags += ",ADN"
+            post_text += " http://alpha.app.net/#{user_name}/post/#{post_id}"
             pinboard = Pinboard::Client.new(:username => pin_username, :password => pin_password)
             pinboard.add(:url => link, :tags => tags, :extended => post_text, :description => link)
         end
