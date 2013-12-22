@@ -28,7 +28,7 @@ class AyaDN
 					response = https.request(request)
 					return response.body
 				else
-						print "\rConnecting to #{uri.host}#{uri.path}".cyan
+						#print "\rConnecting to #{uri.host}#{uri.path}".cyan
 						body = ''
 						https.request(request) do |response| 
 							fileSize = response['Content-Length'].to_i
