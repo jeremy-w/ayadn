@@ -8,9 +8,7 @@ class AyaDN
 		end
 		def objectDate(item)
 			created_at = item['created_at']
-			created_day = created_at[0...10]
-			created_hour = created_at[11...19]
-			return created_day, created_hour
+			return created_at[0...10], created_at[11...19]
 		end
 		def objectLinks(item)
 			links = item['entities']['links']
@@ -26,15 +24,12 @@ class AyaDN
 			return links_string
 		end
 		def objectSource(item)
-			source_name = item['source']['name']
-			source_link = item['source']['link']
-			return source_name, source_link
+			return item['source']['name'], item['source']['link']
 		end
 		def objectNames(item)
 			user_name = item['username']
-			user_real_name = item['name']
 			user_handle = "@" + user_name
-			return user_name, user_real_name, user_handle
+			return user_name, item['name'], user_handle
 		end
 		def checkins_annotations(item)
 			anno_string = ""
@@ -114,16 +109,9 @@ class AyaDN
 			file_elements << "\nSource: ".cyan + file_source_name.brown + " - #{file_source_url}".brown
 		end
 		def filesDetails(item)
-			file_name = item['name']
-			file_token = item['file_token']
-			file_source_name = item['source']['name']
-			file_source_url = item['source']['link']
-			file_kind = item['kind']
-			file_id = item['id']
 			file_size = item['size']
 			file_size_converted = file_size.to_filesize unless file_size == nil
-			file_public = item['public']
-			return file_name, file_token, file_source_name, file_source_url, file_kind, file_id, file_size, file_size_converted, file_public
+			return item['name'], item['file_token'], item['source']['name'], item['source']['name'], item['kind'], item['id'], file_size, file_size_converted, item['public']
 		end
 		def derivedFilesDetails(derived_files)
 			if derived_files != nil

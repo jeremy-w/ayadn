@@ -58,8 +58,7 @@ class AyaDN
         def installConfig
             if File.exists?(@installed_config_path)
                 puts "\nInstalled config file already exists. Replace with the new one? (N/y) ".red
-                input = STDIN.getch
-                if input == ("y" || "Y")
+                if STDIN.getch == ("y" || "Y")
                     copyConfigFromMaster
                 else
                     abort("\nCanceled.\n\n".red)
@@ -153,17 +152,15 @@ class AyaDN
                         f.puts(newPrivateChannel.to_json)
                     f.close
                 else
-                    oldJson = JSON.parse(IO.read(filePath))
-                    oldHash = oldJson.to_hash
-                    oldHash.merge!(newPrivateChannel)
-                    newJson = oldHash.to_json
+                    the_hash = JSON.parse(IO.read(filePath)).to_hash
+                    the_hash.merge!(newPrivateChannel)
                     f = File.new(filePath, "w")
-                        f.puts(newJson)
+                        f.puts(the_hash.to_json)
                     f.close
                 end
             when "loadchannels"
                 filePath = $ayadn_messages_path + "/channels.json"
-                channels = JSON.load(IO.read(filePath)) if File.exists?filePath
+                JSON.load(IO.read(filePath)) if File.exists?filePath
             when "auth"
                 filePath = $ayadn_authorization_path + "/token"
                 if value == "read"
@@ -217,36 +214,33 @@ class AyaDN
             file_ext = File.extname(file).downcase
             case file_ext
             when ".png"
-                resp = `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F "content=@#{file};type=image/png" -X POST`
+                `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F "content=@#{file};type=image/png" -X POST`
             when ".gif"
-                resp = `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F "content=@#{file};type=image/gif" -X POST`
+                `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F "content=@#{file};type=image/gif" -X POST`
             when ".json",".txt",".md",".markdown",".mdown",".html",".css",".scss",".sass",".jade",".rb",".py",".sh",".js",".xml",".csv"
-                resp = `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F "content=@#{file};type=text/plain" -X POST`
+                `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F "content=@#{file};type=text/plain" -X POST`
             when ".zip"
-                resp = `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F "content=@#{file};type=application/zip" -X POST`
+                `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F "content=@#{file};type=application/zip" -X POST`
             when ".rar"
-                resp = `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F "content=@#{file};type=application/rar" -X POST`
+                `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F "content=@#{file};type=application/rar" -X POST`
             when ".mp4"
-                resp = `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F "content=@#{file};type=video/mp4" -X POST`
+                `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F "content=@#{file};type=video/mp4" -X POST`
             when ".mov"
-                resp = `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F "content=@#{file};type=video/quicktime" -X POST`
+                `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F "content=@#{file};type=video/quicktime" -X POST`
             when ".mkv",".mp3",".m4a",".m4v",".wav",".aif",".aiff",".aac",".flac"
-                resp = `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F "content=@#{file};type=application/octet-stream" -X POST`
+                `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F "content=@#{file};type=application/octet-stream" -X POST`
             else
-                resp = `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F content=@#{file} -X POST`
+                `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F content=@#{file} -X POST`
             end 
         end
 
 		def colorize(contentText)
 			content = Array.new
-			splitted = contentText.split(" ")
-			for word in splitted do
+			for word in contentText.split(" ") do
 				if word =~ /^#\w/
-                    new_word = removeEndCharIfSpecial(word, "pink")
-                    content.push(new_word)
+                    content.push(removeEndCharIfSpecial(word, "pink"))
 				elsif word =~ /^@\w/
-                    new_word = removeEndCharIfSpecial(word, "red")
-					content.push(new_word)
+					content.push(removeEndCharIfSpecial(word, "red"))
 				#elsif word =~ /^http/ or word =~ /^photos.app.net/ or word =~ /^files.app.net/ or word =~ /^chimp.li/ or word =~ /^bli.ms/
 					#content.push(word.magenta)
 				else

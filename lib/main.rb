@@ -158,9 +158,7 @@ class AyaDN
 	end
 	def ayadnInteractions
 		puts $status.getInteractions
-		@hash = @api.getInteractions
-		stream = @view.new(@hash).showInteractions
-		puts stream + "\n\n"
+		puts @view.new(@api.getInteractions).showInteractions + "\n\n"
 	end
 	def ayadnGlobal
 		puts $status.getGlobal
@@ -215,72 +213,58 @@ class AyaDN
 	end
 	def ayadnUserInfos(name)
 		puts $status.infosUser(name)
-		@hash = @api.getUserInfos(name)
-		#$tools.meta(@hash['meta'])
-	    puts @view.new(@hash).showUsersInfos(name)
+	    puts @view.new(@api.getUserInfos(name)).showUsersInfos(name)
 	end
 	def ayadnComposeMessage(target)
 		puts $status.writeMessage
-		max_char = $message_max_length
 		begin
 			input_text = STDIN.gets.chomp
 		rescue Exception
 			abort($status.errorMessageNotSent)
 		end
-		to_regex = input_text.dup
-		without_markdown = $tools.getMarkdownText(to_regex)
-		real_length = without_markdown.length
+		real_length = $tools.getMarkdownText(input_text.dup).length
 		if real_length < $message_max_length
 			ayadnSendMessage(target, input_text)
 		else
-			to_remove = real_length - max_char
-			abort($status.errorMessageTooLong(real_length, to_remove))
+			abort($status.errorMessageTooLong(real_length, real_length - $message_max_length))
 		end
 	end
 	def ayadnSendMessage(target, text)
 		abort($status.emptyPost) if (text.empty? || text == nil)
 		puts $status.sendMessage
-		callback = @api.httpSendMessage(target, text)
-		blob = JSON.parse(callback)
+		blob = JSON.parse(@api.httpSendMessage(target, text))
 		@hash = blob['data']
 		private_message_channel_ID = @hash['channel_id']
 		#private_message_thread_ID = @hash['thread_id']
-		private_message_ID = @hash['id']
 		$tools.fileOps("makedir", $ayadn_messages_path)
-		puts "Channel ID: ".cyan + private_message_channel_ID.brown + " Message ID: ".cyan + private_message_ID.brown + "\n\n"
+		puts "Channel ID: ".cyan + private_message_channel_ID.brown + " Message ID: ".cyan + @hash['id'].brown + "\n\n"
 		puts $status.postSent
 		$tools.fileOps("savechannelid", private_message_channel_ID, target)
 	end
 
 	def ayadnComposeMessageToChannel(target)
 		puts $status.writeMessage
-		max_char = $message_max_length
 		begin
 			input_text = STDIN.gets.chomp
 		rescue Exception
 			abort($status.errorMessageNotSent)
 		end
-		to_regex = input_text.dup
-		without_markdown = $tools.getMarkdownText(to_regex)
-		real_length = without_markdown.length
+		real_length = $tools.getMarkdownText(input_text.dup).length
 		if real_length < $message_max_length
 			ayadnSendMessageToChannel(target, input_text)
 		else
-			to_remove = real_length - max_char
-			abort($status.errorMessageTooLong(real_length, to_remove))
+			abort($status.errorMessageTooLong(real_length, real_length - $message_max_length))
 		end
 	end
 	def ayadnSendMessageToChannel(target, text)
 		abort($status.emptyPost) if (text.empty? || text == nil)
 		puts $status.sendMessage
-		callback = @api.httpSendMessageToChannel(target, text)
-		blob = JSON.parse(callback)
+		blob = JSON.parse(@api.httpSendMessageToChannel(target, text))
 		@hash = blob['data']
 		private_channel_ID = @hash['channel_id']
 		#private_thread_ID = @hash['thread_id']
-		private_ID = @hash['id']
 		$tools.fileOps("makedir", $ayadn_messages_path)
-		puts "Channel ID: ".cyan + private_channel_ID.brown + " Message ID: ".cyan + private_ID.brown + "\n\n"
+		puts "Channel ID: ".cyan + private_channel_ID.brown + " Message ID: ".cyan + @hash['id'].brown + "\n\n"
 		puts $status.postSent
 		$tools.fileOps("savechannelid", private_channel_ID, target)
 	end
@@ -290,8 +274,7 @@ class AyaDN
 		if target != nil
 			fileURL = $ayadn_last_page_id_path + "/last_page_id-channels-#{target}"
 			last_page_id = $tools.fileOps("getlastpageid", fileURL) unless action == "all"
-			@hash = @api.getMessages(target, last_page_id)
-			messages_string, last_page_id = @view.new(@hash).showMessagesFromChannel
+			messages_string, last_page_id = @view.new(@api.getMessages(target, last_page_id)).showMessagesFromChannel
 			$tools.fileOps("writelastpageid", fileURL, last_page_id) unless last_page_id == nil
 			displayStream(messages_string)
 		else
@@ -304,8 +287,7 @@ class AyaDN
 					puts "\n"
 				end
 				puts "Do you want to see if you have more channels activated? (Y/n)".green
-				input = STDIN.getch
-				abort("\nCanceled.\n\n".red) unless input == ("y" || "Y")
+				abort("\nCanceled.\n\n".red) unless STDIN.getch == ("y" || "Y")
 				puts "\n"
 			end
 			@hash = @api.getChannels
@@ -342,7 +324,7 @@ class AyaDN
 			t1.join
 			t2.join
 			hash1 = t1.value
-			hash2 = t1.value
+			hash2 = t2.value
 			hash_data = hash1['data']
 			last_of_hash = hash_data.last
 			original_post = @view.new(nil).buildSimplePost(last_of_hash)
