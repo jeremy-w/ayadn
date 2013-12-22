@@ -6,6 +6,9 @@ class AyaDN
 	AYADN_CALLBACK_URL = "http://aya.io/ayadn/auth.html"
 
 	BASE_URL = "https://alpha-api.app.net/"
+
+	CONFIG_API_URL = BASE_URL + "stream/0/config"
+	
 	POSTS_URL = BASE_URL + "stream/0/posts/"
 	USERS_URL = BASE_URL + "stream/0/users/"
 	FILES_URL = BASE_URL + "stream/0/files/"
@@ -106,7 +109,7 @@ class AyaDN
 			CHANNELS_URL + "?access_token=#{@token}&count=200"
 		end
 		def messages(channel_id)
-			CHANNELS_URL + "#{channel_id}/messages?access_token=#{@token}"
+			CHANNELS_URL + "#{channel_id}/messages?access_token=#{@token}&count=200"
 		end
 		def get_message(channel_id, message_id)
 			CHANNELS_URL + "#{channel_id}/messages/#{message_id}?access_token=#{@token}"

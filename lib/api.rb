@@ -19,6 +19,11 @@ class AyaDN
 			@url += "&since_id=#{last_page_id}" if last_page_id != nil
 		end
 
+		def getAPIConfig
+			@url = CONFIG_API_URL
+			getHash
+		end
+
 		def getGlobal(last_page_id)
 			@url = @endpoints.global
 			@url += @endpoints.light_params
@@ -222,12 +227,14 @@ class AyaDN
 		def getFollowers(username, beforeID)
 			@url = @endpoints.followers(username)
 			@url += @endpoints.light_params
+			@url += "&count=200"
 			@url += "&before_id=#{beforeID}" if beforeID != nil
 			getHash
 		end
 		def getMuted(username, beforeID)
 			@url = @endpoints.muted(username)
 			@url += @endpoints.light_params
+			@url += "&count=200"
 			@url += "&before_id=#{beforeID}" if beforeID != nil
 			getHash
 		end
@@ -280,11 +287,11 @@ class AyaDN
 			resp = clientHTTP("delete")
 			$tools.checkHTTPResp(resp)
 		end
-		def deactivateChannel(channel_id)
-			@url = CHANNELS_URL + "#{channel_id}?"
-			@url += @endpoints.access_token
-			resp = clientHTTP("delete")
-			$tools.checkHTTPResp(resp)
-		end
+		# def deactivateChannel(channel_id)
+		# 	@url = CHANNELS_URL + "#{channel_id}?"
+		# 	@url += @endpoints.access_token
+		# 	resp = clientHTTP("delete")
+		# 	$tools.checkHTTPResp(resp)
+		# end
 	end
 end

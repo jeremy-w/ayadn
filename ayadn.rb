@@ -14,6 +14,7 @@ $tools = AyaDN::Tools.new
 token = $tools.fileOps("auth", "read")
 if token != nil
 	client = AyaDN.new(token)
+	client.configAPI
 else
 	puts $status.errorNotAuthorized
 	AyaDN.new(nil).ayadnAuthorize(nil)

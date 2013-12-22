@@ -143,11 +143,11 @@ class AyaDN
             s = "\nLoading the conversation around post ".green + "#{arg}".brown + ".\n".green
         end
         def writePost
-            s = "\n256 characters max, validate with [Enter] or cancel with [CTRL+C].\n".green
+            s = "\n#{$post_max_length} characters max, validate with [Enter] or cancel with [CTRL+C].\n".green
             s += "\nType your text: ".cyan
         end
         def writeMessage
-            s = "\n2048 characters max, validate with [Enter] or cancel with [CTRL+C].\n".green
+            s = "\n#{$message_max_length} characters max, validate with [Enter] or cancel with [CTRL+C].\n".green
             s += "\nType your text: ".cyan + "\n\n"
         end
         def writeReply(arg)

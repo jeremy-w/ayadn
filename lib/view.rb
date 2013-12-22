@@ -431,7 +431,7 @@ class AyaDN
 							broadcast_annotations.each do |anno|
 								if anno['type'] == "net.app.core.broadcast.metadata"
 									broadcast_name = anno['value']['title']
-									$tools.fileOps("savechannelid", channel_id, "Broadcast: #{broadcast_name}")
+									$tools.fileOps("savechannelid", channel_id, "#{broadcast_name} [Broadcast]")
 									the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "Broadcast channel: #{broadcast_name}\n".green
 								end
 							end
@@ -440,7 +440,7 @@ class AyaDN
 							patter_room_annotations.each do |anno|
 								if anno['type'] == "net.patter-app.settings"
 									patter_room_name = anno['value']['name']
-									$tools.fileOps("savechannelid", channel_id, "Patter-App Room: #{patter_room_name}")
+									$tools.fileOps("savechannelid", channel_id, "#{patter_room_name} [Patter-App Room]")
 									the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "Patter-App Room: #{patter_room_name}\n".green
 									next
 								end

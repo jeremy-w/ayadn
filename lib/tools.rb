@@ -83,6 +83,7 @@ class AyaDN
                 $ayadn_last_page_id_path = $ayadn_data_path + "/#{$identityPrefix}/.pagination"
                 $ayadn_messages_path = $ayadn_data_path + "/#{$identityPrefix}/messages"
                 $ayadn_authorization_path = $ayadn_data_path + "/#{$identityPrefix}/.auth"
+                $API_config_path = $ayadn_data_path + "/#{$identityPrefix}/.api"
                 $countGlobal = $configFileContents['counts']['global'].to_i
                 $countUnified = $configFileContents['counts']['unified'].to_i
                 $countCheckins = $configFileContents['counts']['checkins'].to_i
@@ -110,6 +111,7 @@ class AyaDN
                 $ayadn_last_page_id_path = $ayadn_data_path + "/#{$identityPrefix}/.pagination"
                 $ayadn_messages_path = $ayadn_data_path + "/#{$identityPrefix}/messages"
                 $ayadn_authorization_path = $ayadn_data_path + "/#{$identityPrefix}/.auth"
+                $API_config_path = $ayadn_data_path + "/#{$identityPrefix}/.api"
                 $countGlobal = $countUnified = $countCheckins = $countExplore = $countMentions = $countStarred = $countPosts = 100
                 $directedPosts = true
                 $countStreamBack = 30

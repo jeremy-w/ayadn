@@ -63,6 +63,50 @@ class AyaDN
 		end
 	end
 
+	def configAPI
+		time_now = DateTime.now
+		$tools.fileOps("makedir", $API_config_path)
+		file_API = $API_config_path + "/config.json"
+		file_timer = $API_config_path + "/timer.json"
+		if !File.exists?(file_API)
+			resp = @api.getAPIConfig
+			f = File.new(file_API, "w")
+			    f.puts(resp.to_json)
+			f.close
+			hash_timer = {
+				"checked" => time_now,
+				"deadline" => time_now + 1
+			}
+			f = File.new(file_timer, "w")
+			    f.puts(hash_timer.to_json)
+			f.close
+		else
+			f = File.open(file_timer, "r")
+			    hash_timer = JSON.parse(f.gets)
+			f.close
+			if DateTime.parse(hash_timer['deadline']) >= time_now 
+				f = File.open(file_API, "r")
+				    resp = JSON.parse(f.gets)
+				f.close
+			else
+				resp = @api.getAPIConfig
+				f = File.new(file_API, "w")
+				    f.puts(resp.to_json)
+				f.close
+				hash_timer = {
+					"checked" => "#{time_now}",
+					"deadline" => "#{time_now >> 1}" # one month later
+				}
+				f = File.new(file_timer, "w")
+				    f.puts(hash_timer.to_json)
+				f.close
+			end
+		end
+		data = resp['data']
+		$post_max_length = data['post']['text_max_length']
+		$message_max_length = data['message']['text_max_length']
+	end
+
 	def displayStream(stream)
 		!stream.empty? ? (puts stream) : (puts $status.noNewPosts)
 	end
@@ -181,7 +225,7 @@ class AyaDN
 	end
 	def ayadnComposeMessage(target)
 		puts $status.writeMessage
-		max_char = 2048
+		max_char = $message_max_length
 		begin
 			input_text = STDIN.gets.chomp
 		rescue Exception => e
@@ -190,7 +234,7 @@ class AyaDN
 		to_regex = input_text.dup
 		without_markdown = $tools.getMarkdownText(to_regex)
 		real_length = without_markdown.length
-		if real_length < 2048
+		if real_length < $message_max_length
 			ayadnSendMessage(target, input_text)
 		else
 			to_remove = real_length - max_char
@@ -214,7 +258,7 @@ class AyaDN
 
 	def ayadnComposeMessageToChannel(target)
 		puts $status.writeMessage
-		max_char = 2048
+		max_char = $message_max_length
 		begin
 			input_text = STDIN.gets.chomp
 		rescue Exception => e
@@ -223,7 +267,7 @@ class AyaDN
 		to_regex = input_text.dup
 		without_markdown = $tools.getMarkdownText(to_regex)
 		real_length = without_markdown.length
-		if real_length < 2048
+		if real_length < $message_max_length
 			ayadnSendMessageToChannel(target, input_text)
 		else
 			to_remove = real_length - max_char
@@ -326,7 +370,7 @@ class AyaDN
 
 	def ayadnComposePost(reply_to = "", mentions_list = "", my_username = "")
 		puts $status.writePost
-		max_char = 256
+		max_char = $post_max_length
 		char_count = max_char - mentions_list.length
 		# be careful to not color escape mentions_list or text
 		text = mentions_list
@@ -393,10 +437,10 @@ class AyaDN
 			exit
 		end
 	end
-	def ayadnDeactivateChannel(channel_id)
- 		resp = @api.deactivateChannel(channel_id)
- 		puts resp
- 	end
+	# def ayadnDeactivateChannel(channel_id)
+ # 		resp = @api.deactivateChannel(channel_id)
+ # 		puts resp
+ # 	end
 	def ayadnWhoReposted(postID)
 		puts $status.whoReposted(postID)
 		@hash = @api.getWhoReposted(postID)

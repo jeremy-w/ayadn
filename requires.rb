@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
-%w{rubygems open-uri net/http json io/console fileutils yaml pinboard base64}.each do |r|
+%w{rubygems date open-uri net/http json io/console fileutils yaml pinboard base64}.each do |r|
   require "#{r}"
 end
 
