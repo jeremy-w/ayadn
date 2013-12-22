@@ -5,6 +5,9 @@ AYADN is a learning exercise: while it's fully functional, it's still very alpha
 
 ## 2013-12-22 v0.5.1c
 - AyaDN follows the ADN config protocol (automatic post and message length)
+- faster + lower memory usage
+- list of commands
+- bugfix in mute/unmute
 
 ## 2013-12-21 v0.5.1b
 - layout bug fixes
