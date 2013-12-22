@@ -514,6 +514,7 @@ class AyaDN
 	end
 
 	def ayadnSaveList(list, name) # to be called with: var = ayadnSaveList("followers", "@ericd")
+		$bar_while_scrolling = false
 		file = "/#{name}-#{list}.json"
 		fileURL = $ayadn_lists_path + file
 		unless Dir.exists?$ayadn_lists_path
@@ -538,6 +539,7 @@ class AyaDN
 	end
 
 	def ayadnSavePost(postID)
+		$bar_while_scrolling = false
 		name = postID.to_s
 		unless Dir.exists?$ayadn_posts_path
 			puts "Creating posts directory in ".green + "#{$ayadn_data_path}...".brown
@@ -560,6 +562,7 @@ class AyaDN
 
 	# could be used in many places if needed
 	def ayadnGetOriginalPost(postID)
+		$bar_while_scrolling = false
 		original_post_ID = @api.getOriginalPost(postID)
 	end
 	#
@@ -571,6 +574,7 @@ class AyaDN
 	end
 
 	def ayadnFollowing(action, name)
+		$bar_while_scrolling = false
 		you_follow, follows_you = @api.getUserFollowInfo(name)
 		if action == "follow"
 			if you_follow == true
@@ -592,6 +596,7 @@ class AyaDN
 	end
 
 	def ayadnMuting(action, name)
+		$bar_while_scrolling = false
 		you_muted = @api.getUserMuteInfo(name)
 		if action == "mute"
 			if you_muted == "true"
@@ -613,6 +618,7 @@ class AyaDN
 	end
 
 	def ayadnStarringPost(action, postID)
+		$bar_while_scrolling = false
 		@hash = @api.getSinglePost(postID)
 		post_data = @hash['data']
 		you_starred = post_data['you_starred']
@@ -644,6 +650,7 @@ class AyaDN
 		end
 	end
 	def ayadnReposting(action, postID)
+		$bar_while_scrolling = false
 		@hash = @api.getSinglePost(postID)
 		post_data = @hash['data']
 		is_repost = post_data['repost_of']
