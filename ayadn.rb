@@ -175,6 +175,9 @@ when "inter", "interactions", "events"
 when "help", "h"
 	puts $tools.helpScreen
 
+when "commands"
+	puts $tools.list_of_commands
+
 when "webhelp"
 	puts $tools.helpScreen
 	begin 

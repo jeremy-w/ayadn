@@ -292,6 +292,7 @@ ayadn skip-mention show
 ayadn pin 16864003 ruby,json
 ayadn reset pagination
 ayadn help
+ayadn commands
 ayadn webhelp
 ayadn random
 ```  
