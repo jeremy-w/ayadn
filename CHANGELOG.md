@@ -3,6 +3,9 @@ AYADN
 
 AYADN is a learning exercise: while it's fully functional, it's still very alpha (remember I'm a beginner with Ruby).  
 
+## 2013-12-22 v0.5.1c
+- AyaDN follows the ADN config protocol (automatic post and message length)
+
 ## 2013-12-21 v0.5.1b
 - layout bug fixes
 - list all channels and show types + names
