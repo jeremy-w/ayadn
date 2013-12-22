@@ -6,11 +6,10 @@ class AyaDN
 			@hash = hash
 		end
 		def getData(hash)
-			adn_data = hash['data']
-			adn_data_reverse = adn_data.reverse
+			hash['data'].reverse
 		end
 		def getDataNormal(hash)
-			adn_data = hash['data']
+			hash['data']
 		end
 		def showMessagesFromChannel
 			buildMessages(getData(@hash))
@@ -71,7 +70,7 @@ class AyaDN
 				created_hour = item['event_date'][11...19]
 				objects_names, users_list, post_ids, post_text = [], [], [], [] # not the same as var1 = var2 = []
 				objects = item['objects']
-				obj_has_names = false
+				#obj_has_names = false
 				objects.each do |o|
 					case action
 					when "follow", "unfollow", "mute", "unmute"
@@ -129,7 +128,7 @@ class AyaDN
 			created_day, created_hour = objectDate(item)
 			links_string = objectLinks(item)
 			colored_post = coloredText(item)
-			post_string = objectView(post_id, created_day, created_hour, user_handle, user_real_name, colored_post, links_string, annotations, me_mentioned, num_replies, reply_to)
+			objectView(post_id, created_day, created_hour, user_handle, user_real_name, colored_post, links_string, annotations, me_mentioned, num_replies, reply_to)
 		end
 
 		def skip_hashtags(item, saved_tags)
@@ -184,10 +183,9 @@ class AyaDN
 					next
 				end
 				next if skip_hashtags(item, saved_tags)
-				entitiesMentions = item['entities']['mentions']
 				postMentionsArray = []
 				@skipped_mentions_encountered = false
-				for mention in entitiesMentions do
+				for mention in item['entities']['mentions'] do
 					case mention['name']
 					when *$skipped_mentions
 						@skipped_mentions_encountered = true
@@ -200,22 +198,16 @@ class AyaDN
 				for name in postMentionsArray do
 					me_mentioned = true if name == $identityPrefix
 				end
-				colored_post = coloredText(item)
-				user_name, user_real_name, handle = objectNames(item['user'])
-				created_day, created_hour = objectDate(item)
 				annotations = checkins_annotations(item)
 				post_string << create_content_string(item, annotations, me_mentioned)
 			end
 			return post_string, pagination_array
 		end
 		def buildSimplePost(post_hash)
-			colored_post = coloredText(post_hash)
-			user_name, user_real_name, handle = objectNames(post_hash['user'])
-			created_day, created_hour = objectDate(post_hash)
-			post_string = create_content_string(post_hash, nil, false)
+			create_content_string(post_hash, nil, false)
 		end
 		def buildSimplePostInfo(post_hash)
-			the_post_id = post_hash['id']
+			#the_post_id = post_hash['id']
 			post_text = post_hash['text']
 			post_URL = post_hash['canonical_url']
 			post_details = "Post URL: ".cyan + post_URL.brown + "\n"
@@ -237,8 +229,8 @@ class AyaDN
 			post_text != nil ? (colored_post = $tools.colorize(post_text)) : (puts "--Post deleted--\n\n".red; exit)
 			the_post_id = post_hash['id']
 			user_name, user_real_name, the_name = objectNames(post_hash['user'])
-			user_follows = post_hash['follows_you']
-			user_followed = post_hash['you_follow']
+			#user_follows = post_hash['follows_you']
+			#user_followed = post_hash['you_follow']
 			created_day, created_hour = objectDate(post_hash)
 			post_details = "\nThe " + created_day.cyan + ' at ' + created_hour.cyan + ' by ' + the_name.green
 			if !user_real_name.empty?
@@ -319,8 +311,8 @@ class AyaDN
 			list_string = ""
 			file_url = nil
 			file_name, file_token, file_source_name, file_source_url, file_kind, file_id, file_size, file_size_converted, file_public = filesDetails(resp_hash)
-			file_url_expires = resp_hash['url_expires']
-			derived_files = resp_hash['derived_files']
+			#file_url_expires = resp_hash['url_expires']
+			#derived_files = resp_hash['derived_files']
 			# list_string += "\nID: ".cyan + file_id.brown
 			list_string = file_view(file_name, file_kind, file_size, file_size_converted, file_source_name, file_source_url, created_day, created_hour)
 			if file_public == true
@@ -350,8 +342,8 @@ class AyaDN
 				created_day, created_hour = objectDate(item)
 				pagination_array.push(item['pagination_id'])
 				file_name, file_token, file_source_name, file_source_url, file_kind, file_id, file_size, file_size_converted, file_public = filesDetails(item)
-				file_url_expires = item['url_expires']
-				derived_files = item['derived_files']
+				#file_url_expires = item['url_expires']
+				#derived_files = item['derived_files']
 				list_string << "\nID: ".cyan + file_id.brown
 				list_string << file_view(file_name, file_kind, file_size, file_size_converted, file_source_name, file_source_url, created_day, created_hour)
 				if file_public == true
@@ -372,8 +364,8 @@ class AyaDN
 		end
 		def buildChannelsInfos(hash, type)
 			if type == "net.app.core.pm"
-				meta = hash['meta']
-				unread_messages = meta['unread_counts']['net.app.core.pm']
+				#meta = hash['meta']
+				#unread_messages = meta['unread_counts']['net.app.core.pm']
 				data = hash['data']
 				the_channels = ""
 				channels_list = []
@@ -383,12 +375,12 @@ class AyaDN
 					channel_type = item['type']
 					if channel_type == "net.app.core.pm"
 						channels_list.push(channel_id)
-						total_messages = item['counts']['messages']
+						#total_messages = item['counts']['messages']
 						#owner = "@" + item['owner']['username']
 						writers = item['writers']['user_ids']
-						readers = item['readers']['user_ids']
-						you_write = item['writers']['you']
-						you_read = item['readers']['you']
+						#readers = item['readers']['user_ids']
+						#you_write = item['writers']['you']
+						#you_read = item['readers']['you']
 						the_writers, the_readers = [], []
 						writers.each do |writer|
 							if writer != nil

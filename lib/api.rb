@@ -11,8 +11,7 @@ class AyaDN
 		end
 
 		def getHash
-			response = clientHTTP("get", @url)
-			theHash = JSON.parse(response)
+			JSON.parse(clientHTTP("get", @url))
 		end
 
 		def checkLastPageID(last_page_id)
@@ -96,7 +95,7 @@ class AyaDN
 				File.open("#{$ayadn_posts_path}/#{post_id}.post", "r") do |f|
 					fileContent = f.gets
 				end
-				theHash = eval(fileContent)
+				eval(fileContent)
 			else
 				abort($tools.errorSyntax)
 			end
@@ -121,22 +120,18 @@ class AyaDN
 			@url += @endpoints.light_params
 			theHash = getHash
 			postInfo = theHash['data']
-			userName = postInfo['user']['username']
 			#rawText = postInfo['text']
-			isRepost = postInfo['repost_of']
-			entitiesMentions = postInfo['entities']['mentions']
 			postMentionsArray = []
-			entitiesMentions.each do |item|
+			postInfo['entities']['mentions'].each do |item|
 				postMentionsArray.push(item['name'])
 			end
-			return postMentionsArray, userName, isRepost
+			return postMentionsArray, postInfo['user']['username'], postInfo['repost_of']
 		end
 		def getUserName(username)
 			@url = @endpoints.user_info(username)
 			@url += @endpoints.light_params
 			theHash = getHash
-			userInfo = theHash['data']
-			userName = userInfo['username']
+			theHash['data']['username']
 		end
 		def goDelete(post_id)
 			@url = @endpoints.single_post(post_id)
@@ -152,8 +147,7 @@ class AyaDN
 		def unstarPost(post_id)
 			@url = @endpoints.star(post_id)
 			@url += @endpoints.light_params
-			resp = clientHTTP("delete")
-			$tools.checkHTTPResp(resp)
+			$tools.checkHTTPResp(clientHTTP("delete"))
 		end
 		def repostPost(post_id)
 			@url = @endpoints.repost(post_id)
@@ -163,37 +157,29 @@ class AyaDN
 		def unrepostPost(post_id)
 			@url = @endpoints.repost(post_id)
 			@url += @endpoints.light_params
-			resp = clientHTTP("delete")
-			$tools.checkHTTPResp(resp)
+			$tools.checkHTTPResp(clientHTTP("delete"))
 		end
 		def ifExists(post_id)
 			theHash = getHash
 			postInfo = theHash['data']
-			isTherePost = postInfo['text']
-			isYours = postInfo['user']['username']
-			return isTherePost, isYours
+			return postInfo['text'], postInfo['user']['username']
 		end
 		def getOriginalPost(post_id)
 			theHash = getHash
-			postInfo = theHash['data']
-			isRepost = postInfo['repost_of']
-			goToID = isRepost['id']
+			theHash['data']['repost_of']['id']
 		end
 		def getUserFollowInfo(username)
 			@url = @endpoints.user_info(username)
 			@url += @endpoints.light_params
 			theHash = getHash
 			userInfo = theHash['data']
-			youFollow = userInfo['you_follow']
-			followsYou = userInfo['follows_you']
-			return youFollow, followsYou
+			return userInfo['you_follow'], userInfo['follows_you']
 		end
 		def getUserMuteInfo(username)
 			@url = @endpoints.user_info(username)
 			@url += @endpoints.light_params
 			theHash = getHash
-			userInfo = theHash['data']
-			youMuted = userInfo['you_muted']
+			theHash['data']['you_muted']
 		end
 		def muteUser(username)
 			@url = @endpoints.mute(username)
@@ -203,8 +189,7 @@ class AyaDN
 		def unmuteUser(username)
 			@url = @endpoints.mute(username)
 			@url += @endpoints.light_params
-			resp = clientHTTP("delete")
-			$tools.checkHTTPResp(resp)
+			$tools.checkHTTPResp(clientHTTP("delete"))
 		end
 		def followUser(username)
 			@url = @endpoints.follow(username)
@@ -214,8 +199,7 @@ class AyaDN
 		def unfollowUser(username)
 			@url = @endpoints.follow(username)
 			@url += @endpoints.light_params
-			resp = clientHTTP("delete")
-			$tools.checkHTTPResp(resp)
+			$tools.checkHTTPResp(clientHTTP("delete"))
 		end
 		def getFollowings(username, beforeID)
 			@url = @endpoints.following(username)
@@ -278,14 +262,12 @@ class AyaDN
 		def deleteFile(file_id)
 			@url = @endpoints.get_file(file_id)
 			@url += @endpoints.light_params
-			resp = clientHTTP("delete")
-			$tools.checkHTTPResp(resp)
+			$tools.checkHTTPResp(clientHTTP("delete"))
 		end
 		def deleteMessage(channel_id, message_id)
 			@url = @endpoints.get_message(channel_id, message_id)
 			@url += @endpoints.access_token
-			resp = clientHTTP("delete")
-			$tools.checkHTTPResp(resp)
+			$tools.checkHTTPResp(clientHTTP("delete"))
 		end
 		# def deactivateChannel(channel_id)
 		# 	@url = CHANNELS_URL + "#{channel_id}?"

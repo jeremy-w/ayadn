@@ -151,19 +151,15 @@ class AyaDN
         			sleep 2
         			$tools.countdown($countdown_2)
         		end					
-			rescue Exception => e
+			rescue Exception
 				abort($status.stopped)
 			end
 		end
 	end
 	def ayadnInteractions
 		puts $status.getInteractions
-		#$tools.fileOps("makedir", $ayadn_last_page_id_path)
-		#fileURL = $ayadn_last_page_id_path + "/last_page_id-interactions"
-		#last_page_id = $tools.fileOps("getlastpageid", fileURL)
 		@hash = @api.getInteractions
-		#$tools.fileOps("writelastpageid", fileURL, last_page_id) unless last_page_id == nil
-		stream, last_page_id = @view.new(@hash).showInteractions
+		stream = @view.new(@hash).showInteractions
 		puts stream + "\n\n"
 	end
 	def ayadnGlobal
@@ -228,7 +224,7 @@ class AyaDN
 		max_char = $message_max_length
 		begin
 			input_text = STDIN.gets.chomp
-		rescue Exception => e
+		rescue Exception
 			abort($status.errorMessageNotSent)
 		end
 		to_regex = input_text.dup
@@ -248,7 +244,7 @@ class AyaDN
 		blob = JSON.parse(callback)
 		@hash = blob['data']
 		private_message_channel_ID = @hash['channel_id']
-		private_message_thread_ID = @hash['thread_id']
+		#private_message_thread_ID = @hash['thread_id']
 		private_message_ID = @hash['id']
 		$tools.fileOps("makedir", $ayadn_messages_path)
 		puts "Channel ID: ".cyan + private_message_channel_ID.brown + " Message ID: ".cyan + private_message_ID.brown + "\n\n"
@@ -261,7 +257,7 @@ class AyaDN
 		max_char = $message_max_length
 		begin
 			input_text = STDIN.gets.chomp
-		rescue Exception => e
+		rescue Exception
 			abort($status.errorMessageNotSent)
 		end
 		to_regex = input_text.dup
@@ -278,13 +274,10 @@ class AyaDN
 		abort($status.emptyPost) if (text.empty? || text == nil)
 		puts $status.sendMessage
 		callback = @api.httpSendMessageToChannel(target, text)
-
-		#abort(callback.inspect)
-
 		blob = JSON.parse(callback)
 		@hash = blob['data']
 		private_channel_ID = @hash['channel_id']
-		private_thread_ID = @hash['thread_id']
+		#private_thread_ID = @hash['thread_id']
 		private_ID = @hash['id']
 		$tools.fileOps("makedir", $ayadn_messages_path)
 		puts "Channel ID: ".cyan + private_channel_ID.brown + " Message ID: ".cyan + private_ID.brown + "\n\n"
@@ -381,7 +374,7 @@ class AyaDN
 		print "\n#{text}"
 		begin
 			input_text = STDIN.gets.chomp
-		rescue Exception => e
+		rescue Exception
 			abort($status.errorPostNotSent)
 		end
 		post_text = text + input_text
@@ -427,7 +420,7 @@ class AyaDN
 	end
 	def ayadnDeletePost(postID)
 		puts $status.deletePost(postID)
-		is_there_post, is_yours = @api.goDelete(postID)
+		is_there_post = @api.goDelete(postID)
 		if is_there_post == nil
 			abort($status.errorAlreadyDeleted)
 		else
@@ -561,10 +554,10 @@ class AyaDN
 	end
 
 	# could be used in many places if needed
-	def ayadnGetOriginalPost(postID)
-		$bar_while_scrolling = false
-		original_post_ID = @api.getOriginalPost(postID)
-	end
+	# def ayadnGetOriginalPost(postID)
+	# 	$bar_while_scrolling = false
+	# 	original_post_ID = @api.getOriginalPost(postID)
+	# end
 	#
 
 	def ayadnSearch(value)
@@ -758,12 +751,12 @@ class AyaDN
  	end
 
  	# experimenting without curl
- 	def ayadnFileUpload(file_name)
- 		# puts "\nUploading ".green + file_name.brown + "\n"
- 		# response = @api.createIncompleteFileUpload(file_name)
- 		# puts response.inspect        #SUCCESS
- 		# THEN multipart => #FAIL
- 	end
+ 	# def ayadnFileUpload(file_name)
+ 	# 	# puts "\nUploading ".green + file_name.brown + "\n"
+ 	# 	# response = @api.createIncompleteFileUpload(file_name)
+ 	# 	# puts response.inspect        #SUCCESS
+ 	# 	# THEN multipart => #FAIL
+ 	# end
 
 
  	def ayadnFiles(action, target, value)
@@ -946,7 +939,7 @@ class AyaDN
  					pin_username = STDIN.gets.chomp()
  					puts "\nPlease enter your Pinboard password (invisible, CTRL+C to cancel): ".green
  					pin_password = STDIN.noecho(&:gets).chomp()
- 				rescue Exception => e
+ 				rescue Exception
  					abort($status.stopped)
  				end
  				$configFileContents['pinboard']['username'] = pin_username
@@ -961,94 +954,94 @@ class AyaDN
 
  	### experiment
  	### not DRY at all, this is ok, chill out
- 	def ayadnRecord(item)
- 		# first create with curl -i -H 'Authorization: BEARER xxx' "https://stream-channel.app.net/stream/user?auto_delete=1&include_annotations=1"
- 		# it stays open and returns a stream_id in the headers
- 		# TODO: replace curl with a good connection system with HTTP or Rest-Client
+ 	# def ayadnRecord(item)
+ 	# 	# first create with curl -i -H 'Authorization: BEARER xxx' "https://stream-channel.app.net/stream/user?auto_delete=1&include_annotations=1"
+ 	# 	# it stays open and returns a stream_id in the headers
+ 	# 	# TODO: replace curl with a good connection system with HTTP or Rest-Client
 
- 		command = "sleep 1; curl -i -H 'Authorization: BEARER #{@token}' 'https://stream-channel.app.net/stream/user?auto_delete=1&include_annotations=1'"
- 		pid = Process.spawn(command)
-        Process.detach(pid)
+ 	# 	command = "sleep 1; curl -i -H 'Authorization: BEARER #{@token}' 'https://stream-channel.app.net/stream/user?auto_delete=1&include_annotations=1'"
+ 	# 	pid = Process.spawn(command)
+  #       Process.detach(pid)
 
- 		puts "Enter stream id: "
- 		stream_id = STDIN.gets.chomp
- 		last_page_id = nil
- 		start = Time.now
- 		case item
- 		when "global" # works :)
- 			@url = "https://alpha-api.app.net/stream/0/posts/stream/global?connection_id=#{stream_id}&since_id=#{last_page_id}"
- 		when "unified" # doesn't work, have to implement some sort of real keep-alive connection
- 			@url = "https://alpha-api.app.net/stream/0/posts/stream/unified?connection_id=#{stream_id}&since_id=#{last_page_id}&include_directed_posts=1"
- 		end
-		puts "\nRecording stream in #{$ayadn_files_path}/rec-#{item}.json\n\n"
-		uri = URI.parse(@url)
-		https = Net::HTTP.new(uri.host,uri.port)
-		https.use_ssl = true
-		https.verify_mode = OpenSSL::SSL::VERIFY_NONE
-		request = Net::HTTP::Get.new(uri.request_uri)
-		request["Authorization"] = "Bearer #{@token}"
-		request["Content-Type"] = "application/json"
-		response = https.request(request)
-		@hash = JSON.parse(response.body)
-		big_stream = @hash['data']
-		f = File.new($ayadn_files_path + "/rec-#{item}.json", 'w')
-			f.puts(big_stream.to_json)
-		f.close
-		stream, last_page_id = completeStream
-		displayScrollStream(stream)
-		number_of_connections = 1
-		file_operations_timer = 0
-		loop do
- 			begin
- 				case item
-		 		when "global"		
-		 			@url = "https://alpha-api.app.net/stream/0/posts/stream/global?connection_id=#{stream_id}&since_id=#{last_page_id}"
-		 		when "unified"
-		 			@url = "https://alpha-api.app.net/stream/0/posts/stream/unified?connection_id=#{stream_id}&since_id=#{last_page_id}&include_directed_posts=1"
-		 		end
- 				uri = URI.parse(@url)
- 				request = Net::HTTP::Get.new(uri.request_uri)
- 				request["Authorization"] = "Bearer #{@token}"
- 				request["Content-Type"] = "application/json"
- 				before_request_id = last_page_id
-				response = https.request(request)
-				@hash = JSON.parse(response.body)
-				stream, last_page_id = completeStream
-				displayScrollStream(stream)
-				if last_page_id == nil
-					last_page_id = before_request_id
-					sleep 0.5 # trying to play nice with the API limits
-					number_of_connections += 1
-					next
-				end
-				# don't let it run for days, it will eat your RAM
-				# + the simple file dump isn't ok in the long run
-				big_stream << @hash['data']
-				number_of_connections += 1
-				file_operations_timer += 1
-				sleep 0.2 # trying to play nice with the API limits
-				if file_operations_timer == 10
-					puts "\nRecording stream in #{$ayadn_files_path}/rec-#{item}.json\n\n".green
-					#big_json = JSON.parse(IO.read($ayadn_files_path + "/rec-#{item}.json"))
-					f = File.new($ayadn_files_path + "/rec-#{item}.json", 'w')
-						f.puts(big_stream.to_json)
-					f.close
-					file_operations_timer = 0
-				end
-			rescue Exception => e
-				puts e.inspect
-				puts e.to_s
-				finish = Time.now
-				elapsed = finish.to_f - start.to_f
-				mins, secs = elapsed.divmod 60.0
-				puts "\nRequests: #{number_of_connections}\n"
-				puts "Elapsed time (min:secs.msecs): "
-				puts("%3d:%04.2f"%[mins.to_i, secs])
-				puts "\nStream recorded in #{$ayadn_files_path}/rec-#{item}.json"
-				exit
-			end
-		end
- 	end
+ 	# 	puts "Enter stream id: "
+ 	# 	stream_id = STDIN.gets.chomp
+ 	# 	last_page_id = nil
+ 	# 	start = Time.now
+ 	# 	case item
+ 	# 	when "global" # works :)
+ 	# 		@url = "https://alpha-api.app.net/stream/0/posts/stream/global?connection_id=#{stream_id}&since_id=#{last_page_id}"
+ 	# 	when "unified" # doesn't work, have to implement some sort of real keep-alive connection
+ 	# 		@url = "https://alpha-api.app.net/stream/0/posts/stream/unified?connection_id=#{stream_id}&since_id=#{last_page_id}&include_directed_posts=1"
+ 	# 	end
+		# puts "\nRecording stream in #{$ayadn_files_path}/rec-#{item}.json\n\n"
+		# uri = URI.parse(@url)
+		# https = Net::HTTP.new(uri.host,uri.port)
+		# https.use_ssl = true
+		# https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+		# request = Net::HTTP::Get.new(uri.request_uri)
+		# request["Authorization"] = "Bearer #{@token}"
+		# request["Content-Type"] = "application/json"
+		# response = https.request(request)
+		# @hash = JSON.parse(response.body)
+		# big_stream = @hash['data']
+		# f = File.new($ayadn_files_path + "/rec-#{item}.json", 'w')
+		# 	f.puts(big_stream.to_json)
+		# f.close
+		# stream, last_page_id = completeStream
+		# displayScrollStream(stream)
+		# number_of_connections = 1
+		# file_operations_timer = 0
+		# loop do
+ 	# 		begin
+ 	# 			case item
+		#  		when "global"		
+		#  			@url = "https://alpha-api.app.net/stream/0/posts/stream/global?connection_id=#{stream_id}&since_id=#{last_page_id}"
+		#  		when "unified"
+		#  			@url = "https://alpha-api.app.net/stream/0/posts/stream/unified?connection_id=#{stream_id}&since_id=#{last_page_id}&include_directed_posts=1"
+		#  		end
+ 	# 			uri = URI.parse(@url)
+ 	# 			request = Net::HTTP::Get.new(uri.request_uri)
+ 	# 			request["Authorization"] = "Bearer #{@token}"
+ 	# 			request["Content-Type"] = "application/json"
+ 	# 			before_request_id = last_page_id
+		# 		response = https.request(request)
+		# 		@hash = JSON.parse(response.body)
+		# 		stream, last_page_id = completeStream
+		# 		displayScrollStream(stream)
+		# 		if last_page_id == nil
+		# 			last_page_id = before_request_id
+		# 			sleep 0.5 # trying to play nice with the API limits
+		# 			number_of_connections += 1
+		# 			next
+		# 		end
+		# 		# don't let it run for days, it will eat your RAM
+		# 		# + the simple file dump isn't ok in the long run
+		# 		big_stream << @hash['data']
+		# 		number_of_connections += 1
+		# 		file_operations_timer += 1
+		# 		sleep 0.2 # trying to play nice with the API limits
+		# 		if file_operations_timer == 10
+		# 			puts "\nRecording stream in #{$ayadn_files_path}/rec-#{item}.json\n\n".green
+		# 			#big_json = JSON.parse(IO.read($ayadn_files_path + "/rec-#{item}.json"))
+		# 			f = File.new($ayadn_files_path + "/rec-#{item}.json", 'w')
+		# 				f.puts(big_stream.to_json)
+		# 			f.close
+		# 			file_operations_timer = 0
+		# 		end
+		# 	rescue Exception => e
+		# 		puts e.inspect
+		# 		puts e.to_s
+		# 		finish = Time.now
+		# 		elapsed = finish.to_f - start.to_f
+		# 		mins, secs = elapsed.divmod 60.0
+		# 		puts "\nRequests: #{number_of_connections}\n"
+		# 		puts "Elapsed time (min:secs.msecs): "
+		# 		puts("%3d:%04.2f"%[mins.to_i, secs])
+		# 		puts "\nStream recorded in #{$ayadn_files_path}/rec-#{item}.json"
+		# 		exit
+		# 	end
+		# end
+ 	# end
 end
 
 

@@ -41,7 +41,7 @@ class AyaDN
 			annotations_list = item['annotations']
 			xxx = 0
 			if annotations_list != nil
-				for it in annotations_list do
+				annotations_list.each do
 					annotation_type = annotations_list[xxx]['type']
 					annotation_value = annotations_list[xxx]['value']
 					if annotation_type == "net.app.core.checkin" or annotation_type == "net.app.ohai.location"
@@ -128,11 +128,11 @@ class AyaDN
 		def derivedFilesDetails(derived_files)
 			if derived_files != nil
 				if derived_files['image_thumb_960r'] != nil
-					file_derived_bigthumb_name = derived_files['image_thumb_960r']['name']
+					#file_derived_bigthumb_name = derived_files['image_thumb_960r']['name']
 					file_derived_bigthumb_url = derived_files['image_thumb_960r']['url']
 				end
 				if derived_files['image_thumb_200s'] != nil
-					file_derived_smallthumb_name = derived_files['image_thumb_200s']['name']
+					#file_derived_smallthumb_name = derived_files['image_thumb_200s']['name']
 					file_derived_smallthumb_url = derived_files['image_thumb_200s']['url']
 				end
 				list_string += "\nBig thumbnail: ".cyan + file_derived_bigthumb_url unless file_derived_bigthumb_url == nil

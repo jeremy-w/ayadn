@@ -253,7 +253,7 @@ class AyaDN
 					content.push(word)
 				end
 			end
-			coloredPost = content.join(" ")
+			content.join(" ")
 		end
         def removeEndCharIfSpecial(word, color)
             word_array = word.chars.to_a

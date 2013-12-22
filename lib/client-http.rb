@@ -30,10 +30,10 @@ class AyaDN
 				else
 						#print "\rConnecting to #{uri.host}#{uri.path}".cyan
 						body = ''
-						https.request(request) do |response| 
-							fileSize = response['Content-Length'].to_i
+						https.request(request) do |res| 
+							fileSize = res['Content-Length'].to_i
 							bytesTransferred = 0
-							response.read_body do |part|
+							res.read_body do |part|
 								bytesTransferred += part.length
 								rounded = bytesTransferred.percent_of(fileSize).round
 								print "\rFetching data: ".cyan + "#{rounded.to_s}%".brown
@@ -70,22 +70,22 @@ class AyaDN
 		end
 		##### 
 		# experimenting
-		def createIncompleteFileUpload(file_name) #this part works
-			https, request = connectWithHTTP(FILES_URL)
-			payload = {
-				"kind" => "image",
-				"type" => "com.ayadn.files",
-				"name" => File.basename(file_name),
-				"public" => true
-			}.to_json
-			response = https.request(request, payload)
-			callback = response.body
-		end
-		def setFileContentUpload(file_id, file_path, file_token) #this one doesn't
-			url = FILES_URL + "#{file_id}/content?file_token=#{file_token}"
-			uri = URI("#{url}")
-			# ...
-		end
+		# def createIncompleteFileUpload(file_name) #this part works
+		# 	https, request = connectWithHTTP(FILES_URL)
+		# 	payload = {
+		# 		"kind" => "image",
+		# 		"type" => "com.ayadn.files",
+		# 		"name" => File.basename(file_name),
+		# 		"public" => true
+		# 	}.to_json
+		# 	response = https.request(request, payload)
+		# 	return response.body
+		# end
+		# def setFileContentUpload(file_id, file_path, file_token) #this one doesn't
+		# 	url = FILES_URL + "#{file_id}/content?file_token=#{file_token}"
+		# 	uri = URI("#{url}")
+		# 	# ...
+		# end
 		#####
 
 		def httpPutFile(file, data) # data must be json
@@ -97,7 +97,7 @@ class AyaDN
 			request = Net::HTTP::Put.new(uri.path)
 			request["Authorization"] = "Bearer #{@token}"
 			request["Content-Type"] = "application/json"
-			response = https.request(request, data)
+			return https.request(request, data)
 		end
 
 		def connectWithHTTP(url)
@@ -112,7 +112,7 @@ class AyaDN
 		end
 		def httpPost(url)
 			https, request = connectWithHTTP(url)
-			response = https.request(request)
+			return https.request(request)
 		end
 		def httpSendMessage(target, text)
 			url = PM_URL
@@ -131,7 +131,7 @@ class AyaDN
 				"annotations" => ayadnAnno
 			}.to_json
 			response = https.request(request, payload)
-			callback = response.body
+			return response.body
 		end
 		def httpSendMessageToChannel(target, text)
 			url = CHANNELS_URL
@@ -144,14 +144,14 @@ class AyaDN
 				"parse_links" => true
 			}
 			ayadnAnno = clientAnnotations
-			destinations = []
+			#destinations = []
 			payload = {
 				"text" => "#{text}",
 				"entities" => entities_content,
 				"annotations" => ayadnAnno
 			}.to_json
 			response = https.request(request, payload)
-			callback = response.body
+			return response.body
 		end
 		def httpSend(text, replyto = nil)
 			url = POSTS_URL
@@ -177,7 +177,7 @@ class AyaDN
 						}.to_json
 			end
 			response = https.request(request, payload)
-			callback = response.body
+			return response.body
 		end
 
 		def clientAnnotations
