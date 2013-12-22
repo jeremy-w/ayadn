@@ -303,12 +303,10 @@ class AyaDN
 	def ayadnSendPost(text, reply_to = nil)
 		abort($status.emptyPost) if (text.empty? || text == nil)
 		puts $status.sendPost
-		callback = @api.httpSend(text, reply_to)
-		blob = JSON.parse(callback)
+		blob = JSON.parse(@api.httpSend(text, reply_to))
 		@hash = blob['data']
 		my_post_id = @hash['id']
-		#puts @view.new(@hash).buildPostInfo(@hash, isMine = true)
-		puts @view.new(@hash).buildSimplePostInfo(@hash)
+		puts @view.new(nil).buildSimplePostInfo(@hash)
 		puts $status.postSent
 		# show end of the stream after posting
 		if reply_to.empty?
@@ -325,14 +323,10 @@ class AyaDN
 			t2.join
 			hash1 = t1.value
 			hash2 = t2.value
-			hash_data = hash1['data']
-			last_of_hash = hash_data.last
-			original_post = @view.new(nil).buildSimplePost(last_of_hash)
-			unified_data = hash2['data']
-			first_of_unified = unified_data.last # because adnData.reverse in API
+			first_of_unified = hash2['data'].last # because adnData.reverse in API
 			first_of_unified_id = first_of_unified['id']
 			if first_of_unified_id.to_i > reply_to.to_i
-				puts original_post
+				puts @view.new(nil).buildSimplePost(hash1['data'])
 			end
 			@hash = hash1.merge!(hash2)
 			stream, last_page_id = completeStream
@@ -345,8 +339,7 @@ class AyaDN
 
 	def ayadnComposePost(reply_to = "", mentions_list = "", my_username = "")
 		puts $status.writePost
-		max_char = $post_max_length
-		char_count = max_char - mentions_list.length
+		char_count = $post_max_length - mentions_list.length
 		# be careful to not color escape mentions_list or text
 		text = mentions_list
 		if !mentions_list.empty?
@@ -360,15 +353,12 @@ class AyaDN
 			abort($status.errorPostNotSent)
 		end
 		post_text = text + input_text
-		to_regex = post_text.dup
-		without_markdown = $tools.getMarkdownText(to_regex)
-		total_length = char_count - without_markdown.length
-		real_length = max_char + total_length.abs
+		total_length = char_count - $tools.getMarkdownText(post_text.dup).length
+		real_length = $post_max_length + total_length.abs
 		if total_length > 0
 			ayadnSendPost(post_text, reply_to)
 		else
-			to_remove = real_length - max_char
-			abort($status.errorPostTooLong(real_length, to_remove))
+			abort($status.errorPostTooLong(real_length, real_length - $post_max_length))
 		end
 	end
 	def ayadnReply(postID)
@@ -397,17 +387,14 @@ class AyaDN
 				new_content.push("@" + item)
 			end
 		end
-		mentions_list = new_content.join(" ")
-		ayadnComposePost(postID, mentions_list)
+		ayadnComposePost(postID, new_content.join(" "))
 	end
 	def ayadnDeletePost(postID)
 		puts $status.deletePost(postID)
-		is_there_post = @api.goDelete(postID)
-		if is_there_post == nil
+		if @api.goDelete(postID) == nil
 			abort($status.errorAlreadyDeleted)
 		else
-			resp = @api.clientHTTP("delete")
-			$tools.checkHTTPResp(resp)
+			$tools.checkHTTPResp(@api.clientHTTP("delete"))
 			puts $status.postDeleted
 			exit
 		end
@@ -420,13 +407,13 @@ class AyaDN
 		puts $status.whoReposted(postID)
 		@hash = @api.getWhoReposted(postID)
 		abort($status.errorNobodyReposted) if @hash['data'].empty?
-	    puts @view.new(@hash).showUsersList()
+	    puts @view.new(@hash).showUsersList
 	end
 	def ayadnWhoStarred(postID)
 		puts $status.whoStarred(postID)
 		@hash = @api.getWhoStarred(postID)
 		abort($status.errorNobodyStarred) if @hash['data'].empty?
-	    puts @view.new(@hash).showUsersList()
+	    puts @view.new(@hash).showUsersList
 	end
 	def ayadnStarredPosts(name)
 		puts $status.starsUser(name)
@@ -442,8 +429,7 @@ class AyaDN
 	end
 	def ayadnPostInfos(action, postID)
 		puts $status.infosPost(postID)
-		@hash = @api.getPostInfos(action, postID)
-	    puts @view.new(@hash).showPostInfos(postID, isMine = false)
+	    puts @view.new(@api.getPostInfos(action, postID)).showPostInfos(postID, isMine = false)
 	end
 	def getList(list, name)
 		beforeID = nil
@@ -455,7 +441,7 @@ class AyaDN
 		elsif list == "muted"
 			@hash = @api.getMuted(name, beforeID)
 		end
-		users_hash, min_id = @view.new(@hash).buildFollowList()
+		users_hash, min_id = @view.new(@hash).buildFollowList
 	    big_hash.merge!(users_hash)
 	    beforeID = min_id
 	    loop do
@@ -466,7 +452,7 @@ class AyaDN
 			elsif list == "muted"
 				@hash = @api.getMuted(name, beforeID)
 			end
-		    users_hash, min_id = @view.new(@hash).buildFollowList()
+		    users_hash, min_id = @view.new(@hash).buildFollowList
 		    big_hash.merge!(users_hash)
 	    	break if min_id == nil
 	    	beforeID = min_id
@@ -477,9 +463,8 @@ class AyaDN
 	def ayadnShowList(list, name)
 		$bar_while_scrolling = false
 		puts $status.fetchingList(list)
-		@hash = getList(list, name)
 		puts $status.showList(list, name)
-		users, number = @view.new(@hash).showUsers()
+		users, number = @view.new(getList(list, name)).showUsers
 		if number == 0
 			puts $status.errorEmptyList
 			exit
@@ -490,8 +475,7 @@ class AyaDN
 
 	def ayadnSaveList(list, name) # to be called with: var = ayadnSaveList("followers", "@ericd")
 		$bar_while_scrolling = false
-		file = "/#{name}-#{list}.json"
-		fileURL = $ayadn_lists_path + file
+		fileURL = $ayadn_lists_path + "/#{name}-#{list}.json"
 		unless Dir.exists?$ayadn_lists_path
 			puts "Creating lists directory in ".green + "#{$ayadn_data_path}".brown + "\n"
 			FileUtils.mkdir_p $ayadn_lists_path
@@ -499,15 +483,13 @@ class AyaDN
 		if File.exists?(fileURL)
 			puts "\nYou already saved this list.\n".red
 			puts "Delete the old one and replace with this one? (n/y)\n".red
-			input = STDIN.getch
-			abort("\nCanceled.\n\n".red) unless input == ("y" || "Y")
+			abort("\nCanceled.\n\n".red) unless STDIN.getch == ("y" || "Y")
 		end
 		puts $status.showList(list, name)
 		puts "Please wait...\n".green
-		follow_list = getList(list, name)
 		puts "Saving the list...\n".green
 		f = File.new(fileURL, "w")
-			f.puts(follow_list.to_json)
+			f.puts(getList(list, name).to_json)
 		f.close
 		puts "\nSuccessfully saved the list.\n\n".green
 		exit
@@ -526,10 +508,9 @@ class AyaDN
 			abort("\nYou already saved this post.\n\n".red)
 		end
 		puts "\nLoading post ".green + "#{postID}".brown
-		@hash = @api.getSinglePost(postID)
 		puts $status.savingFile(name, $ayadn_posts_path, file)
 		f = File.new(fileURL, "w")
-			f.puts(@hash)
+			f.puts(@api.getSinglePost(postID))
 		f.close
 		puts "\nSuccessfully saved the post.\n\n".green
 		exit
@@ -552,18 +533,18 @@ class AyaDN
 		$bar_while_scrolling = false
 		you_follow, follows_you = @api.getUserFollowInfo(name)
 		if action == "follow"
-			if you_follow == true
+			if you_follow
 				abort("You're already following this user.\n\n".red)
 			else
-				resp = @api.followUser(name)
+				@api.followUser(name)
 				puts "\nYou just followed user ".green + "#{name}".brown + "\n\n"
 			end
 		elsif action == "unfollow"
-			if you_follow == false
-				abort("You're already not following this user.\n\n".red)
-			else
-				resp = @api.unfollowUser(name)
+			if you_follow
+				@api.unfollowUser(name)
 				puts "\nYou just unfollowed user ".green + "#{name}".brown + "\n\n"
+			else
+				abort("You're already not following this user.\n\n".red)
 			end
 		else
 			abort($status.errorSyntax)
@@ -574,18 +555,18 @@ class AyaDN
 		$bar_while_scrolling = false
 		you_muted = @api.getUserMuteInfo(name)
 		if action == "mute"
-			if you_muted == "true"
+			if you_muted
 				abort("You've already muted this user.\n\n".red)
 			else
-				resp = @api.muteUser(name)
+				@api.muteUser(name)
 				puts "\nYou just muted user ".green + "#{name}".brown + "\n\n"
 			end
 		elsif action == "unmute"
-			if you_muted == "false"
-				abort("This user is not muted.\n\n".red)
-			else
-				resp = @api.unmuteUser(name)
+			if you_muted
+				@api.unmuteUser(name)
 				puts "\nYou just unmuted user ".green + "#{name}".brown + "\n\n"
+			else
+				abort("This user is not muted.\n\n".red)
 			end
 		else
 			abort($status.errorSyntax)
