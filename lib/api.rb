@@ -26,21 +26,21 @@ class AyaDN
 		def getGlobal(last_page_id)
 			@url = @endpoints.global
 			@url += @endpoints.light_params
-			@url += @endpoints.include_directed if $directedPosts == true
+			@url += @endpoints.include_directed if $tools.config['timeline']['directed'] == true
 			checkLastPageID(last_page_id)
 			getHash
 		end	
 		def getUnified(last_page_id)
 			@url = @endpoints.unified
 			@url += @endpoints.base_params
-			@url += @endpoints.include_directed if $directedPosts == true
+			@url += @endpoints.include_directed if $tools.config['timeline']['directed'] == true
 			checkLastPageID(last_page_id)
 			getHash
 		end
 		def getSimpleUnified
 			@url = @endpoints.unified_streamback
 			@url += @endpoints.base_params
-			@url += @endpoints.include_directed if $directedPosts == true
+			@url += @endpoints.include_directed if $tools.config['timeline']['directed'] == true
 			getHash
 		end
 		def getInteractions
@@ -92,7 +92,7 @@ class AyaDN
 				getHash
 			elsif action == "load"
 				fileContent = {}
-				File.open("#{$ayadn_posts_path}/#{post_id}.post", "r") do |f|
+				File.open("#{$tools.ayadn_configuration[:posts_path]}/#{post_id}.post", "r") do |f|
 					fileContent = f.gets
 				end
 				eval(fileContent)

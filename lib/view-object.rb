@@ -66,7 +66,7 @@ class AyaDN
 						unless checkins_country_code.nil?
 							anno_string << " (#{checkins_country_code})".upcase.green
 						end
-						unless @source_name.nil? or $configShowClient == true
+						unless @source_name.nil? or $tools.config['timeline']['show_client'] == true
 							anno_string << "\nPosted with: ".cyan + "#{@source_name} [#{@source_link}]".green + " "
 						end
 						#anno_string += "\n"
@@ -89,8 +89,8 @@ class AyaDN
 			obj_view << ' '
 			obj_view << obj_created_day.cyan + ' ' + obj_created_hour.cyan 
 			obj_view << ' '
-			obj_view << "[#{@source_name}]".cyan if $configShowClient
-			if $configShowReplySymbols
+			obj_view << "[#{@source_name}]".cyan if $tools.config['timeline']['show_client']
+			if $tools.config['timeline']['show_symbols']
 				obj_view << " <".blue if reply_to != nil
 				obj_view << " >".blue if num_replies > 0
 			end

@@ -23,22 +23,22 @@ class AyaDN
 			"https://account.app.net/oauth/authenticate?client_id=#{AYADN_CLIENT_ID}&response_type=token&redirect_uri=#{AYADN_CALLBACK_URL}&scope=basic stream write_post follow public_messages messages files&include_marker=1"
 		end
 		def global
-			POSTS_URL + "stream/global?access_token=#{@token}&count=#{$countGlobal}"
+			POSTS_URL + "stream/global?access_token=#{@token}&count=#{$tools.config['counts']['global']}"
 		end
 		def unified
-			POSTS_URL + "stream/unified?access_token=#{@token}&count=#{$countUnified}"
+			POSTS_URL + "stream/unified?access_token=#{@token}&count=#{$tools.config['counts']['unified']}"
 		end
 		def unified_streamback
-			POSTS_URL + "stream/unified?access_token=#{@token}&count=#{$countStreamback}"
+			POSTS_URL + "stream/unified?access_token=#{@token}&count=#{$tools.config['timeline']['streamback']}"
 		end
 		def single_post(post_id)
 			POSTS_URL + "#{post_id}?access_token=#{@token}"
 		end
 		# def checkins
-		# 	POSTS_URL + "stream/explore/checkins?access_token=#{@token}&count=#{$countCheckins}"
+		# 	POSTS_URL + "stream/explore/checkins?access_token=#{@token}&count=#{$tools.config['counts']['checkins']}"
 		# end
 		# def trending
-		# 	POSTS_URL + "stream/explore/trending?access_token=#{@token}&count=#{$countExplore}"
+		# 	POSTS_URL + "stream/explore/trending?access_token=#{@token}&count=#{$tools.config['counts']['explore']}"
 		# end
 		# def conversations
 		# 	POSTS_URL + "stream/explore/conversations?access_token=#{@token}"
@@ -46,13 +46,13 @@ class AyaDN
 		def explore(stream)
 			case stream
 			when "checkins"
-				POSTS_URL + "stream/explore/checkins?access_token=#{@token}&count=#{$countCheckins}"
+				POSTS_URL + "stream/explore/checkins?access_token=#{@token}&count=#{$tools.config['counts']['checkins']}"
 			when "trending", "conversations", "photos"
-				POSTS_URL + "stream/explore/#{stream}?access_token=#{@token}&count=#{$countExplore}"
+				POSTS_URL + "stream/explore/#{stream}?access_token=#{@token}&count=#{$tools.config['counts']['explore']}"
 			end
 		end
 		# def photos
-		# 	POSTS_URL + "stream/explore/photos?access_token=#{@token}&count=#{$countExplore}"
+		# 	POSTS_URL + "stream/explore/photos?access_token=#{@token}&count=#{$tools.config['counts']['explore']}"
 		# end
 		def hashtags(tags)
 			POSTS_URL + "tag/#{tags}"
@@ -76,16 +76,16 @@ class AyaDN
 			POSTS_URL + "search?text=#{words}&access_token=#{@token}"
 		end
 		def mentions(username)
-			USERS_URL + "#{username}/mentions/?access_token=#{@token}&count=#{$countMentions}"
+			USERS_URL + "#{username}/mentions/?access_token=#{@token}&count=#{$tools.config['counts']['mentions']}"
 		end
 		def posts(username)
-			USERS_URL + "#{username}/posts/?access_token=#{@token}&count=#{$countPosts}"
+			USERS_URL + "#{username}/posts/?access_token=#{@token}&count=#{$tools.config['counts']['posts']}"
 		end
 		def user_info(username)
 			USERS_URL + "#{username}/?access_token=#{@token}"
 		end
 		def starred_posts(username)
-			USERS_URL + "#{username}/stars/?access_token=#{@token}&count=#{$countStarred}"
+			USERS_URL + "#{username}/stars/?access_token=#{@token}&count=#{$tools.config['counts']['starred']}"
 		end
 		def follow(username)
 			USERS_URL + "#{username}/follow/?access_token=#{@token}"

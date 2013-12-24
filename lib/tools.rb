@@ -28,28 +28,66 @@ class AyaDN
         def initialize
             @default_ayadn_data_path = Dir.home + "/ayadn/data"
             @installed_config_path = "#{@default_ayadn_data_path}/config.yml"
-            $configFileContents, $loaded = loadConfig
-            config
+            @configFileContents = loadConfig
+            identityPrefix = @configFileContents['identity']['prefix']
+            ayadn_data_path = Dir.home + @configFileContents['files']['ayadnfiles']  
+            @ayadn_configuration = {
+                :data_path => ayadn_data_path,
+                :posts_path => ayadn_data_path + "/#{identityPrefix}/posts",
+                :lists_path => ayadn_data_path + "/#{identityPrefix}/lists",
+                :files_path => ayadn_data_path + "/#{identityPrefix}/files",
+                :last_page_id_path => ayadn_data_path + "/#{identityPrefix}/.pagination",
+                :messages_path => ayadn_data_path + "/#{identityPrefix}/messages",
+                :authorization_path => ayadn_data_path + "/#{identityPrefix}/.auth",
+                :API_config_path => ayadn_data_path + "/#{identityPrefix}/.api",
+                :progress_indicator => false
+            }
         end
         def loadConfig
             if File.exists?(@installed_config_path)
-                configFileContents = YAML::load_file(@installed_config_path)
-                loaded = true
+                YAML::load_file(@installed_config_path)
             elsif File.exists?('./config.yml')
-                configFileContents = YAML::load_file('./config.yml')
-                loaded = true
+                YAML::load_file('./config.yml')
             else
-                configFileContents = {}
-                loaded = false
+                {
+                    "counts" => {
+                        "global" => 100,
+                        "unified" => 100,
+                        "checkins" => 100,
+                        "explore" => 100,
+                        "mentions" => 100,
+                        "starred" => 100,
+                        "posts" => 100
+                    },
+                    "timeline" => {
+                        "downside" => true,
+                        "directed" => true,
+                        "streamback" => 30,
+                        "countdown_1" => 5,
+                        "countdown_2" => 15,
+                        "show_client" => false,
+                        "show_symbols" => true
+                    },
+                    "files" => { "ayadnfiles" => "/ayadn/data" },
+                    "identity" => { "prefix" => "me" },
+                    "skipped" => {
+                        "sources" => [],
+                        "hashtags" => [],
+                        "mentions" => []
+                    },
+                    "pinboard" => {
+                        "username" => "",
+                        "password" => ""
+                    }
+                }
             end
-            return configFileContents, loaded
         end
         def saveConfig
             if File.exists?(@installed_config_path)
-                File.open(@installed_config_path, 'w') {|f| f.write $configFileContents.to_yaml }
+                File.open(@installed_config_path, 'w') {|f| f.write config.to_yaml }
                 puts "\nDone!\n\n".green
             elsif File.exists?('./config.yml')
-                File.open('./config.yml', 'w') {|f| f.write $configFileContents.to_yaml }
+                File.open('./config.yml', 'w') {|f| f.write config.to_yaml }
                 puts "\nDone!\n\n".green
             else
                 abort("ERROR FILE NOT FOUND".red)
@@ -72,57 +110,10 @@ class AyaDN
             puts "\nDone.\n\n".green
         end
         def config
-            if $loaded
-                $ayadnFiles = $configFileContents['files']['ayadnfiles']
-                $identityPrefix = $configFileContents['identity']['prefix']
-                $ayadn_data_path = Dir.home + $ayadnFiles
-                $ayadn_posts_path = $ayadn_data_path + "/#{$identityPrefix}/posts"
-                $ayadn_lists_path = $ayadn_data_path + "/#{$identityPrefix}/lists"
-                $ayadn_files_path = $ayadn_data_path + "/#{$identityPrefix}/files"
-                $ayadn_last_page_id_path = $ayadn_data_path + "/#{$identityPrefix}/.pagination"
-                $ayadn_messages_path = $ayadn_data_path + "/#{$identityPrefix}/messages"
-                $ayadn_authorization_path = $ayadn_data_path + "/#{$identityPrefix}/.auth"
-                $API_config_path = $ayadn_data_path + "/#{$identityPrefix}/.api"
-                $countGlobal = $configFileContents['counts']['global'].to_i
-                $countUnified = $configFileContents['counts']['unified'].to_i
-                $countCheckins = $configFileContents['counts']['checkins'].to_i
-                $countExplore = $configFileContents['counts']['explore'].to_i
-                $countMentions = $configFileContents['counts']['mentions'].to_i
-                $countPosts = $configFileContents['counts']['posts'].to_i
-                $countStarred = $configFileContents['counts']['starred'].to_i
-                $directedPosts = $configFileContents['timeline']['directed']
-                $countStreamBack = $configFileContents['timeline']['streamback'].to_i
-                $countdown_1 = $configFileContents['timeline']['countdown_1'].to_i
-                $countdown_2 = $configFileContents['timeline']['countdown_2'].to_i
-                $configShowClient = $configFileContents['timeline']['show_client']
-                $configShowReplySymbols = $configFileContents['timeline']['show_symbols']
-                $downsideTimeline = $configFileContents['timeline']['downside']
-                $skipped_sources = $configFileContents['skipped']['sources']
-                $skipped_tags = $configFileContents['skipped']['hashtags']
-                $skipped_mentions = $configFileContents['skipped']['mentions']
-            else
-                # defaults
-                $ayadn_data_path = Dir.home + "/ayadn/data"
-                $identityPrefix = "me"
-                $ayadn_posts_path = $ayadn_data_path + "/#{$identityPrefix}/posts"
-                $ayadn_lists_path = $ayadn_data_path + "/#{$identityPrefix}/lists"
-                $ayadn_files_path = $ayadn_data_path + "/#{$identityPrefix}/files"
-                $ayadn_last_page_id_path = $ayadn_data_path + "/#{$identityPrefix}/.pagination"
-                $ayadn_messages_path = $ayadn_data_path + "/#{$identityPrefix}/messages"
-                $ayadn_authorization_path = $ayadn_data_path + "/#{$identityPrefix}/.auth"
-                $API_config_path = $ayadn_data_path + "/#{$identityPrefix}/.api"
-                $countGlobal = $countUnified = $countCheckins = $countExplore = $countMentions = $countStarred = $countPosts = 100
-                $directedPosts = true
-                $countStreamBack = 30
-                $countdown_1 = 5
-                $countdown_2 = 15
-                $downsideTimeline = true
-                $skipped_sources = []
-                $skipped_tags = []
-                $skipped_mentions = []
-                $configShowClient = false
-                $configShowReplySymbols = true
-            end
+            @configFileContents
+        end
+        def ayadn_configuration
+            @ayadn_configuration
         end
 
         def fileOps(action, value, content = nil, option = nil)
@@ -145,7 +136,7 @@ class AyaDN
                     f.puts(content)
                 f.close
             when "savechannelid"
-                filePath = $ayadn_messages_path + "/channels.json"
+                filePath = ayadn_configuration[:messages_path] + "/channels.json"
                 newPrivateChannel = { "#{value}" => "#{content}" }
                 if !File.exists?filePath
                     f = File.new(filePath, "w")
@@ -159,10 +150,10 @@ class AyaDN
                     f.close
                 end
             when "loadchannels"
-                filePath = $ayadn_messages_path + "/channels.json"
+                filePath = ayadn_configuration[:messages_path] + "/channels.json"
                 JSON.load(IO.read(filePath)) if File.exists?filePath
             when "auth"
-                filePath = $ayadn_authorization_path + "/token"
+                filePath = ayadn_configuration[:authorization_path] + "/token"
                 if value == "read"
                     token = IO.read(filePath) if File.exists?filePath
                     if token != nil
@@ -178,7 +169,7 @@ class AyaDN
                     if content != nil
                         if option != nil
                             puts "\nResetting #{content} pagination for #{option}.\n".red
-                            filePath = $ayadn_last_page_id_path + "/last_page_id-#{content}-#{option}"
+                            filePath = ayadn_configuration[:last_page_id_path] + "/last_page_id-#{content}-#{option}"
                             if File.exists?(filePath)
                                 FileUtils.rm_rf(filePath)
                                 puts "\nDone!\n\n".green
@@ -187,7 +178,7 @@ class AyaDN
                             end
                         else
                             puts "\nResetting the pagination for #{content}.\n".red
-                            filePath = $ayadn_last_page_id_path + "/last_page_id-#{content}"
+                            filePath = ayadn_configuration[:last_page_id_path] + "/last_page_id-#{content}"
                             if File.exists?(filePath)
                                 FileUtils.rm_rf(filePath)
                                 puts "\nDone!\n\n".green
@@ -197,13 +188,13 @@ class AyaDN
                         end
                     else
                         puts "\nResetting all pagination data.\n".red
-                        Dir["#{$ayadn_last_page_id_path}/*"].each do |file|
+                        Dir["#{ayadn_configuration[:last_page_id_path]}/*"].each do |file|
                             FileUtils.rm_rf file
                         end
                         puts "\nDone!\n\n".green
                     end
                 elsif value == "credentials"
-                    filePath = $ayadn_authorization_path + "/token"
+                    filePath = ayadn_configuration[:authorization_path] + "/token"
                     if File.exists?(filePath)
                          FileUtils.rm_rf(filePath)
                     end

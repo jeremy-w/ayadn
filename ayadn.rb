@@ -11,6 +11,7 @@ puts "\n\nAYADN".red + " - " + "App.net command-line client\n".brown
 
 $status = AyaDN::ClientStatus.new
 $tools = AyaDN::Tools.new
+
 token = $tools.fileOps("auth", "read")
 if token != nil
 	client = AyaDN.new(token)
@@ -224,7 +225,7 @@ when "random"
 	# just for fun :)
 	api = AyaDN::API.new(token)
 	puts "Fetching random posts, wait a second... (quit with CTRL+C)\n\n".green
-	$countGlobal = 20
+	$tools.config['counts']['global'] = 20
 	hash = api.getGlobal(nil)
 	last_post = hash['data'][0]['id'].to_i
 	loop do

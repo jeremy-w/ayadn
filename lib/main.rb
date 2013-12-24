@@ -5,14 +5,13 @@ class AyaDN
 		@token = token
 		@api = AyaDN::API.new(@token)
 		@view = AyaDN::View
-		$bar_while_scrolling = true # this is ugly but I don't see anything LESS ugly for now
 	end
 	def stream
-		$tools.fileOps("makedir", $ayadn_last_page_id_path)
+		$tools.fileOps("makedir", $tools.ayadn_configuration[:last_page_id_path])
 	 	puts @view.new(@hash).showStream
 	end
 	def completeStream
-		$tools.fileOps("makedir", $ayadn_last_page_id_path)
+		$tools.fileOps("makedir", $tools.ayadn_configuration[:last_page_id_path])
 	    stream, pagination_array = @view.new(@hash).showCompleteStream
 	    last_page_id = pagination_array.last
 		return stream, last_page_id
@@ -38,7 +37,7 @@ class AyaDN
 	end
 
 	def ayadnAuthorize(action)
-		$tools.fileOps("makedir", $ayadn_authorization_path)
+		$tools.fileOps("makedir", $tools.ayadn_configuration[:authorization_path])
 		if action == "reset"
 			$tools.fileOps("reset", "credentials")
 		end
@@ -65,9 +64,9 @@ class AyaDN
 
 	def configAPI
 		time_now = DateTime.now
-		$tools.fileOps("makedir", $API_config_path)
-		file_API = $API_config_path + "/config.json"
-		file_timer = $API_config_path + "/timer.json"
+		$tools.fileOps("makedir", $tools.ayadn_configuration[:API_config_path])
+		file_API = $tools.ayadn_configuration[:API_config_path] + "/config.json"
+		file_timer = $tools.ayadn_configuration[:API_config_path] + "/timer.json"
 		if !File.exists?(file_API)
 			resp = @api.getAPIConfig
 			if resp['meta']['code'] == 200
@@ -118,12 +117,12 @@ class AyaDN
 		!stream.empty? ? (puts stream) : (print "\r")
 	end
 	def ayadnScroll(value, target)
-		$bar_while_scrolling = true # this is ugly but I don't see anything LESS ugly for now
+		$tools.ayadn_configuration[:progress_indicator] = true
 		value = "unified" if value == nil
 		if target == nil
-			fileURL = $ayadn_last_page_id_path + "/last_page_id-#{value}"
+			fileURL = $tools.ayadn_configuration[:last_page_id_path] + "/last_page_id-#{value}"
 		else
-			fileURL = $ayadn_last_page_id_path + "/last_page_id-#{value}-#{target}"
+			fileURL = $tools.ayadn_configuration[:last_page_id_path] + "/last_page_id-#{value}-#{target}"
 		end
 		loop do
 			begin
@@ -144,16 +143,16 @@ class AyaDN
 				# todo: color post id if I'm mentioned
 				stream, last_page_id = completeStream
 				displayScrollStream(stream)
-				$bar_while_scrolling = false # this is ugly but I don't see anything LESS ugly for now
+				$tools.ayadn_configuration[:progress_indicator] = false
 				if last_page_id != nil
 					$tools.fileOps("writelastpageid", fileURL, last_page_id)
 					print "\r                                         "
             		puts "\n\n"
-            		$tools.countdown($countdown_1)
+            		$tools.countdown($tools.config['timeline']['countdown_1'])
             	else
         			print "\rNo new posts                ".red
         			sleep 2
-        			$tools.countdown($countdown_2)
+        			$tools.countdown($tools.config['timeline']['countdown_1'])
         		end					
 			rescue Exception
 				abort($status.stopped)
@@ -166,7 +165,7 @@ class AyaDN
 	end
 	def ayadnGlobal
 		puts $status.getGlobal
-		fileURL = $ayadn_last_page_id_path + "/last_page_id-global"
+		fileURL = $tools.ayadn_configuration[:last_page_id_path] + "/last_page_id-global"
 		last_page_id = $tools.fileOps("getlastpageid", fileURL)
 		@hash = @api.getGlobal(last_page_id)
 		stream, last_page_id = completeStream
@@ -174,7 +173,7 @@ class AyaDN
 		displayStream(stream)
 	end
 	def ayadnUnified
-		fileURL = $ayadn_last_page_id_path + "/last_page_id-unified"
+		fileURL = $tools.ayadn_configuration[:last_page_id_path] + "/last_page_id-unified"
 		last_page_id = $tools.fileOps("getlastpageid", fileURL)
 		puts $status.getUnified
 		@hash = @api.getUnified(last_page_id)
@@ -189,7 +188,7 @@ class AyaDN
 		displayStream(stream)
 	end
 	def ayadnExplore(explore)
-		fileURL = $ayadn_last_page_id_path + "/last_page_id-#{explore}"
+		fileURL = $tools.ayadn_configuration[:last_page_id_path] + "/last_page_id-#{explore}"
 		last_page_id = $tools.fileOps("getlastpageid", fileURL)
 		puts $status.getExplore(explore)
 		@hash = @api.getExplore(explore, last_page_id)
@@ -198,7 +197,7 @@ class AyaDN
 		displayStream(stream)
 	end
 	def ayadnUserMentions(name)
-		fileURL = $ayadn_last_page_id_path + "/last_page_id-mentions-#{name}"
+		fileURL = $tools.ayadn_configuration[:last_page_id_path] + "/last_page_id-mentions-#{name}"
 		last_page_id = $tools.fileOps("getlastpageid", fileURL)
 		puts $status.mentionsUser(name)
 		@hash = @api.getUserMentions(name, last_page_id)
@@ -207,7 +206,7 @@ class AyaDN
 		displayStream(stream)
 	end
 	def ayadnUserPosts(name)
-		fileURL = $ayadn_last_page_id_path + "/last_page_id-posts-#{name}"
+		fileURL = $tools.ayadn_configuration[:last_page_id_path] + "/last_page_id-posts-#{name}"
 		last_page_id = $tools.fileOps("getlastpageid", fileURL)
 		puts $status.postsUser(name)
 		@hash = @api.getUserPosts(name, last_page_id)
@@ -240,7 +239,7 @@ class AyaDN
 		@hash = blob['data']
 		private_message_channel_ID = @hash['channel_id']
 		#private_message_thread_ID = @hash['thread_id']
-		$tools.fileOps("makedir", $ayadn_messages_path)
+		$tools.fileOps("makedir", $tools.ayadn_configuration[:messages_path])
 		puts "Channel ID: ".cyan + private_message_channel_ID.brown + " Message ID: ".cyan + @hash['id'].brown + "\n\n"
 		puts $status.postSent
 		$tools.fileOps("savechannelid", private_message_channel_ID, target)
@@ -267,16 +266,16 @@ class AyaDN
 		@hash = blob['data']
 		private_channel_ID = @hash['channel_id']
 		#private_thread_ID = @hash['thread_id']
-		$tools.fileOps("makedir", $ayadn_messages_path)
+		$tools.fileOps("makedir", $tools.ayadn_configuration[:messages_path])
 		puts "Channel ID: ".cyan + private_channel_ID.brown + " Message ID: ".cyan + @hash['id'].brown + "\n\n"
 		puts $status.postSent
 		$tools.fileOps("savechannelid", private_channel_ID, target)
 	end
 	def ayadnGetMessages(target, action = nil)
-		$tools.fileOps("makedir", $ayadn_messages_path)
-		$bar_while_scrolling = false
+		$tools.fileOps("makedir", $tools.ayadn_configuration[:messages_path])
+		$tools.ayadn_configuration[:progress_indicator] = false
 		if target != nil
-			fileURL = $ayadn_last_page_id_path + "/last_page_id-channels-#{target}"
+			fileURL = $tools.ayadn_configuration[:last_page_id_path] + "/last_page_id-channels-#{target}"
 			last_page_id = $tools.fileOps("getlastpageid", fileURL) unless action == "all"
 			messages_string, last_page_id = @view.new(@api.getMessages(target, last_page_id)).showMessagesFromChannel
 			$tools.fileOps("writelastpageid", fileURL, last_page_id) unless last_page_id == nil
@@ -314,12 +313,12 @@ class AyaDN
 		puts $status.postSent
 		# show end of the stream after posting
 		if reply_to.empty?
-			$bar_while_scrolling = false
+			$tools.ayadn_configuration[:progress_indicator] = false
 			@hash = @api.getSimpleUnified
 			stream, last_page_id = completeStream
 			displayStream(stream)
 		else
-			$bar_while_scrolling = true
+			$tools.ayadn_configuration[:progress_indicator] = true
 			@reply_to = reply_to
 			t1 = Thread.new{@api.getPostReplies(@reply_to)}
 			t2 = Thread.new{@api.getSimpleUnified}
@@ -366,7 +365,7 @@ class AyaDN
 		end
 	end
 	def ayadnReply(postID)
-		$bar_while_scrolling = false
+		$tools.ayadn_configuration[:progress_indicator] = false
 		puts $status.replyingToPost(postID)
 		post_mentions_array, replying_to_this_username, is_repost = @api.getPostMentions(postID) 
 		if is_repost != nil
@@ -375,10 +374,10 @@ class AyaDN
 			puts $status.redirectingToOriginal(postID)
 			post_mentions_array, replying_to_this_username, is_repost = @api.getPostMentions(postID) 
 		end
-		if $identityPrefix == "me"
+		if $tools.config['identity']['prefix'] == "me"
 			my_username = @api.getUserName("me")
 		else
-			my_username = $identityPrefix
+			my_username = $tools.config['identity']['prefix']
 		end
 		#my_handle = "@" + my_username
 		replying_to_handle = "@" + replying_to_this_username
@@ -465,7 +464,7 @@ class AyaDN
 	end
 
 	def ayadnShowList(list, name)
-		$bar_while_scrolling = false
+		$tools.ayadn_configuration[:progress_indicator] = false
 		puts $status.fetchingList(list)
 		puts $status.showList(list, name)
 		users, number = @view.new(getList(list, name)).showUsers
@@ -478,11 +477,11 @@ class AyaDN
 	end
 
 	def ayadnSaveList(list, name) # to be called with: var = ayadnSaveList("followers", "@ericd")
-		$bar_while_scrolling = false
-		fileURL = $ayadn_lists_path + "/#{name}-#{list}.json"
-		unless Dir.exists?$ayadn_lists_path
-			puts "Creating lists directory in ".green + "#{$ayadn_data_path}".brown + "\n"
-			FileUtils.mkdir_p $ayadn_lists_path
+		$tools.ayadn_configuration[:progress_indicator] = false
+		fileURL = $tools.ayadn_configuration[:lists_path] + "/#{name}-#{list}.json"
+		unless Dir.exists?$tools.ayadn_configuration[:lists_path]
+			puts "Creating lists directory in ".green + "#{$tools.ayadn_configuration[:data_path]}".brown + "\n"
+			FileUtils.mkdir_p $tools.ayadn_configuration[:lists_path]
 		end
 		if File.exists?(fileURL)
 			puts "\nYou already saved this list.\n".red
@@ -500,19 +499,19 @@ class AyaDN
 	end
 
 	def ayadnSavePost(postID)
-		$bar_while_scrolling = false
+		$tools.ayadn_configuration[:progress_indicator] = false
 		name = postID.to_s
-		unless Dir.exists?$ayadn_posts_path
-			puts "Creating posts directory in ".green + "#{$ayadn_data_path}...".brown
-			FileUtils.mkdir_p $ayadn_posts_path
+		unless Dir.exists?$tools.ayadn_configuration[:posts_path]
+			puts "Creating posts directory in ".green + "#{$tools.ayadn_configuration[:data_path]}...".brown
+			FileUtils.mkdir_p $tools.ayadn_configuration[:posts_path]
 		end
 		file = "/#{name}.post"
-		fileURL = $ayadn_posts_path + file
+		fileURL = $tools.ayadn_configuration[:posts_path] + file
 		if File.exists?(fileURL)
 			abort("\nYou already saved this post.\n\n".red)
 		end
 		puts "\nLoading post ".green + "#{postID}".brown
-		puts $status.savingFile(name, $ayadn_posts_path, file)
+		puts $status.savingFile(name, $tools.ayadn_configuration[:posts_path], file)
 		f = File.new(fileURL, "w")
 			f.puts(@api.getSinglePost(postID))
 		f.close
@@ -522,7 +521,7 @@ class AyaDN
 
 	# could be used in many places if needed
 	# def ayadnGetOriginalPost(postID)
-	# 	$bar_while_scrolling = false
+	# 	$tools.ayadn_configuration[:progress_indicator] = false
 	# 	original_post_ID = @api.getOriginalPost(postID)
 	# end
 	#
@@ -534,7 +533,7 @@ class AyaDN
 	end
 
 	def ayadnFollowing(action, name)
-		$bar_while_scrolling = false
+		$tools.ayadn_configuration[:progress_indicator] = false
 		you_follow, follows_you = @api.getUserFollowInfo(name)
 		if action == "follow"
 			if you_follow
@@ -556,7 +555,7 @@ class AyaDN
 	end
 
 	def ayadnMuting(action, name)
-		$bar_while_scrolling = false
+		$tools.ayadn_configuration[:progress_indicator] = false
 		you_muted = @api.getUserMuteInfo(name)
 		if action == "mute"
 			if you_muted
@@ -578,7 +577,7 @@ class AyaDN
 	end
 
 	def ayadnStarringPost(action, postID)
-		$bar_while_scrolling = false
+		$tools.ayadn_configuration[:progress_indicator] = false
 		@hash = @api.getSinglePost(postID)
 		post_data = @hash['data']
 		you_starred = post_data['you_starred']
@@ -610,7 +609,7 @@ class AyaDN
 		end
 	end
 	def ayadnReposting(action, postID)
-		$bar_while_scrolling = false
+		$tools.ayadn_configuration[:progress_indicator] = false
 		@hash = @api.getSinglePost(postID)
 		post_data = @hash['data']
 		is_repost = post_data['repost_of']
@@ -645,74 +644,74 @@ class AyaDN
 		$tools.fileOps("reset", target, content, option)
 	end
 	def ayadnSkipSource(action, source)
-		puts "Current skipped sources: ".green + $skipped_sources.join(", ").red + "\n\n"
+		puts "Current skipped sources: ".green + $tools.config['skipped']['sources'].join(", ").red + "\n\n"
 		if action == "add"
 			puts "Adding ".green + source.red + " to the skipped sources.".green + "\n\n"
-			$configFileContents['skipped']['sources'].each do |config_sources|
+			$tools.config['skipped']['sources'].each do |config_sources|
 				if config_sources == source
 					puts "#{source}".red + " is already skipped.\n\n".green
 					exit
 				end
 			end
-			$configFileContents['skipped']['sources'].push(source)
-			puts "New skipped sources: ".green + $configFileContents['skipped']['sources'].join(", ").red + "\n\n"
+			$tools.config['skipped']['sources'].push(source)
+			puts "New skipped sources: ".green + $tools.config['skipped']['sources'].join(", ").red + "\n\n"
 			$tools.saveConfig
 		elsif action == "remove"
 			puts "Removing ".green + source.red + " from the skipped sources.".green + "\n\n"
-			$configFileContents['skipped']['sources'].each do |config_sources|
+			$tools.config['skipped']['sources'].each do |config_sources|
 				if config_sources == source
-					$configFileContents['skipped']['sources'].delete(config_sources)
+					$tools.config['skipped']['sources'].delete(config_sources)
 				end
 			end
-			puts "New skipped sources: ".green + $configFileContents['skipped']['sources'].join(", ").red + "\n\n"
+			puts "New skipped sources: ".green + $tools.config['skipped']['sources'].join(", ").red + "\n\n"
 			$tools.saveConfig
 		end
  	end
  	def ayadnSkipTag(action, tag)
-		puts "Current skipped #hashtags: ".green + $skipped_tags.join(", ").red + "\n\n"
+		puts "Current skipped #hashtags: ".green + $tools.config['skipped']['hashtags'].join(", ").red + "\n\n"
 		if action == "add"
 			puts "Adding ".green + tag.red + " to the skipped #hashtags.".green + "\n\n"
-			$configFileContents['skipped']['hashtags'].each do |config_tags|
+			$tools.config['skipped']['hashtags'].each do |config_tags|
 				if config_tags == tag
 					puts "#{tag}".red + " is already skipped.\n\n".green
 					exit
 				end
 			end
-			$configFileContents['skipped']['hashtags'].push(tag.downcase)
-			puts "New skipped #hashtags: ".green + $configFileContents['skipped']['hashtags'].join(", ").red + "\n\n"
+			$tools.config['skipped']['hashtags'].push(tag.downcase)
+			puts "New skipped #hashtags: ".green + $tools.config['skipped']['hashtags'].join(", ").red + "\n\n"
 			$tools.saveConfig
 		elsif action == "remove"
 			puts "Removing ".green + tag.red + " from the skipped #hashtags.".green + "\n\n"
-			$configFileContents['skipped']['hashtags'].each do |config_tags|
+			$tools.config['skipped']['hashtags'].each do |config_tags|
 				if config_tags == tag
-					$configFileContents['skipped']['hashtags'].delete(config_tags)
+					$tools.config['skipped']['hashtags'].delete(config_tags)
 				end
 			end
-			puts "New skipped #hashtags: ".green + $configFileContents['skipped']['hashtags'].join(", ").red + "\n\n"
+			puts "New skipped #hashtags: ".green + $tools.config['skipped']['hashtags'].join(", ").red + "\n\n"
 			$tools.saveConfig
 		end
  	end
  	def ayadnSkipMention(action, mention)
-		puts "Current skipped @mentions: ".green + $skipped_mentions.join(", ").red + "\n\n"
+		puts "Current skipped @mentions: ".green + $tools.config['skipped']['mentions'].join(", ").red + "\n\n"
 		if action == "add"
 			puts "Adding ".green + mention.red + " to the skipped @mentions.".green + "\n\n"
-			$configFileContents['skipped']['mentions'].each do |config_mentions|
+			$tools.config['skipped']['mentions'].each do |config_mentions|
 				if config_mentions == mention
 					puts "#{mention}".red + " is already skipped.\n\n".green
 					exit
 				end
 			end
-			$configFileContents['skipped']['mentions'].push(mention.downcase)
-			puts "New skipped @mentions: ".green + $configFileContents['skipped']['mentions'].join(", ").red + "\n\n"
+			$tools.config['skipped']['mentions'].push(mention.downcase)
+			puts "New skipped @mentions: ".green + $tools.config['skipped']['mentions'].join(", ").red + "\n\n"
 			$tools.saveConfig
 		elsif action == "remove"
 			puts "Removing ".green + mention.red + " from the skipped @mentions.".green + "\n\n"
-			$configFileContents['skipped']['mentions'].each do |config_mentions|
+			$tools.config['skipped']['mentions'].each do |config_mentions|
 				if config_mentions == mention
-					$configFileContents['skipped']['mentions'].delete(config_mentions)
+					$tools.config['skipped']['mentions'].delete(config_mentions)
 				end
 			end
-			puts "New skipped @mentions: ".green + $configFileContents['skipped']['mentions'].join(", ").red + "\n\n"
+			puts "New skipped @mentions: ".green + $tools.config['skipped']['mentions'].join(", ").red + "\n\n"
 			$tools.saveConfig
 		end
  	end
@@ -758,22 +757,22 @@ class AyaDN
  		when "download"
  			#with_url = true
  			with_url = false
- 			$tools.fileOps("makedir", $ayadn_files_path)
+ 			$tools.fileOps("makedir", $tools.ayadn_configuration[:files_path])
  			if target.split(",").length == 1
 	 			view, file_url, file_name = @view.new(@api.getSingleFile(target)).showFileInfo(with_url)
 	 			puts "\nDownloading file ".green + target.to_s.brown
 	 			puts view
 	 			#new_file_name = "#{target}_#{file_name}" # should put target before .ext instead
 	 			new_file_name = "#{file_name}"
-	 			download_file_path = $ayadn_files_path + "/#{new_file_name}"
+	 			download_file_path = $tools.ayadn_configuration[:files_path] + "/#{new_file_name}"
 	 			if !File.exists?download_file_path
 	 				resp = @api.clientHTTP("download", file_url)
 		 			f = File.new(download_file_path, "wb")
 		 				f.puts(resp.body)
 		 			f.close
-		 			puts "File downloaded in ".green + $ayadn_files_path.pink + "/#{new_file_name}".brown + "\n\n"
+		 			puts "File downloaded in ".green + $tools.ayadn_configuration[:files_path].pink + "/#{new_file_name}".brown + "\n\n"
 		 		else
-		 			puts "Canceled: ".red + "#{new_file_name} ".pink + "already exists in ".red + "#{$ayadn_files_path}".brown + "\n\n"
+		 			puts "Canceled: ".red + "#{new_file_name} ".pink + "already exists in ".red + "#{$tools.ayadn_configuration[:files_path]}".brown + "\n\n"
 	 			end
 	 		else
 	 			@hash = @api.getMultipleFiles(target)
@@ -783,15 +782,15 @@ class AyaDN
 		 			puts "\nDownloading file ".green + unique_file_id.to_s.brown
 		 			puts view
 		 			new_file_name = "#{unique_file_id}_#{file_name}"
-		 			download_file_path = $ayadn_files_path + "/#{new_file_name}"
+		 			download_file_path = $tools.ayadn_configuration[:files_path] + "/#{new_file_name}"
 		 			if !File.exists?download_file_path
 	 					resp = @api.clientHTTP("download", file_url)
 			 			f = File.new(download_file_path, "wb")
 			 				f.puts(resp.body)
 			 			f.close
-			 			puts "File downloaded in ".green + $ayadn_files_path.pink + "/#{new_file_name}".brown + "\n\n"
+			 			puts "File downloaded in ".green + $tools.ayadn_configuration[:files_path].pink + "/#{new_file_name}".brown + "\n\n"
 			 		else
-			 			puts "Canceled: ".red + "#{new_file_name} ".pink + "already exists in ".red + "#{$ayadn_files_path}".brown + "\n\n"
+			 			puts "Canceled: ".red + "#{new_file_name} ".pink + "already exists in ".red + "#{$tools.ayadn_configuration[:files_path]}".brown + "\n\n"
 		 			end
 		 		end
 	 		end
@@ -801,7 +800,7 @@ class AyaDN
             	puts "\nThis feature doesn't work on Windows yet. Sorry.\n\n".red
             	exit
             end
- 			$tools.fileOps("makedir", $ayadn_files_path)
+ 			$tools.fileOps("makedir", $tools.ayadn_configuration[:files_path])
  			uploaded_ids = []
  			target.split(",").each do |file|
  				puts "Uploading ".cyan + "#{File.basename(file)}".brown + "\n\n"
@@ -867,9 +866,9 @@ class AyaDN
 			post_text = data['text']
 			user_name = data['user']['username']
 			link = data['entities']['links'][0]['url']
- 			if $configFileContents['pinboard']['username'] != nil
+ 			if $tools.config['pinboard']['username'] != nil
  				puts "Saving post ".green + post_id.brown + " to Pinboard...\n".green
- 				$tools.saveToPinboard(post_id, $configFileContents['pinboard']['username'], URI.unescape(Base64::decode64($configFileContents['pinboard']['password'])), link, tags, post_text, user_name)
+ 				$tools.saveToPinboard(post_id, $tools.config['pinboard']['username'], URI.unescape(Base64::decode64($tools.config['pinboard']['password'])), link, tags, post_text, user_name)
  				puts "Done!\n\n".green
  			else
  				puts "\nConfiguration does not include your Pinbard credentials.\n".red
@@ -881,8 +880,8 @@ class AyaDN
  				rescue Exception
  					abort($status.stopped)
  				end
- 				$configFileContents['pinboard']['username'] = pin_username
- 				$configFileContents['pinboard']['password'] = URI.escape(Base64::encode64(pin_password))
+ 				$tools.config['pinboard']['username'] = pin_username
+ 				$tools.config['pinboard']['password'] = URI.escape(Base64::encode64(pin_password))
  				$tools.saveConfig
  				puts "Saving post ".green + post_id.brown + " to Pinboard...\n".green
  				$tools.saveToPinboard(post_id, pin_username, pin_password, link, tags, post_text, user_name)
@@ -912,7 +911,7 @@ class AyaDN
  	# 	when "unified" # doesn't work, have to implement some sort of real keep-alive connection
  	# 		@url = "https://alpha-api.app.net/stream/0/posts/stream/unified?connection_id=#{stream_id}&since_id=#{last_page_id}&include_directed_posts=1"
  	# 	end
-		# puts "\nRecording stream in #{$ayadn_files_path}/rec-#{item}.json\n\n"
+		# puts "\nRecording stream in #{$tools.ayadn_configuration[:files_path]}/rec-#{item}.json\n\n"
 		# uri = URI.parse(@url)
 		# https = Net::HTTP.new(uri.host,uri.port)
 		# https.use_ssl = true
@@ -923,7 +922,7 @@ class AyaDN
 		# response = https.request(request)
 		# @hash = JSON.parse(response.body)
 		# big_stream = @hash['data']
-		# f = File.new($ayadn_files_path + "/rec-#{item}.json", 'w')
+		# f = File.new($tools.ayadn_configuration[:files_path] + "/rec-#{item}.json", 'w')
 		# 	f.puts(big_stream.to_json)
 		# f.close
 		# stream, last_page_id = completeStream
@@ -960,9 +959,9 @@ class AyaDN
 		# 		file_operations_timer += 1
 		# 		sleep 0.2 # trying to play nice with the API limits
 		# 		if file_operations_timer == 10
-		# 			puts "\nRecording stream in #{$ayadn_files_path}/rec-#{item}.json\n\n".green
-		# 			#big_json = JSON.parse(IO.read($ayadn_files_path + "/rec-#{item}.json"))
-		# 			f = File.new($ayadn_files_path + "/rec-#{item}.json", 'w')
+		# 			puts "\nRecording stream in #{$tools.ayadn_configuration[:files_path]}/rec-#{item}.json\n\n".green
+		# 			#big_json = JSON.parse(IO.read($tools.ayadn_configuration[:files_path] + "/rec-#{item}.json"))
+		# 			f = File.new($tools.ayadn_configuration[:files_path] + "/rec-#{item}.json", 'w')
 		# 				f.puts(big_stream.to_json)
 		# 			f.close
 		# 			file_operations_timer = 0
@@ -976,7 +975,7 @@ class AyaDN
 		# 		puts "\nRequests: #{number_of_connections}\n"
 		# 		puts "Elapsed time (min:secs.msecs): "
 		# 		puts("%3d:%04.2f"%[mins.to_i, secs])
-		# 		puts "\nStream recorded in #{$ayadn_files_path}/rec-#{item}.json"
+		# 		puts "\nStream recorded in #{$tools.ayadn_configuration[:files_path]}/rec-#{item}.json"
 		# 		exit
 		# 	end
 		# end

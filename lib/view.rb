@@ -15,11 +15,11 @@ class AyaDN
 			buildMessages(getData(@hash))
 		end
 		def showStream
-			$downsideTimeline ? the_hash = getData(@hash) : the_hash = getDataNormal(@hash)
+			$tools.config['timeline']['downside'] ? the_hash = getData(@hash) : the_hash = getDataNormal(@hash)
 			buildStream(the_hash)
 		end
 		def showCompleteStream
-			$downsideTimeline ? the_hash = getData(@hash) : the_hash = getDataNormal(@hash)
+			$tools.config['timeline']['downside'] ? the_hash = getData(@hash) : the_hash = getDataNormal(@hash)
 			stream, pagination_array = buildCompleteStream(the_hash)
 		end
 		def showChannels(type)
@@ -153,8 +153,8 @@ class AyaDN
 			post_string = ""
 			pagination_array = []
 			saved_tags = []
-			if $skipped_tags != nil
-				for tag in $skipped_tags do
+			if $tools.config['skipped']['hashtags'] != nil
+				for tag in $tools.config['skipped']['hashtags'] do
 					saved_tags << tag.downcase
 				end
 			end
@@ -163,7 +163,7 @@ class AyaDN
 				next if item['text'] == nil
 				@source_name, @source_link = objectSource(item)
 				case @source_name
-				when *$skipped_sources
+				when *$tools.config['skipped']['sources']
 					next
 				end
 				next if skip_hashtags(item, saved_tags)
@@ -171,7 +171,7 @@ class AyaDN
 				@skipped_mentions_encountered = false
 				for mention in item['entities']['mentions'] do
 					case mention['name']
-					when *$skipped_mentions
+					when *$tools.config['skipped']['mentions']
 						@skipped_mentions_encountered = true
 						next
 					end
@@ -180,7 +180,7 @@ class AyaDN
 				next if @skipped_mentions_encountered == true
 				me_mentioned = false
 				for name in postMentionsArray do
-					me_mentioned = true if name == $identityPrefix
+					me_mentioned = true if name == $tools.config['identity']['prefix']
 				end
 				post_string << create_content_string(item, checkins_annotations(item), me_mentioned)
 			end
