@@ -237,9 +237,9 @@ class AyaDN
 		def colorize(contentText)
 			content = Array.new
 			for word in contentText.split(" ") do
-				if word =~ /^#\w/
+				if word =~ /#\w+/
                     content.push(removeEndCharIfSpecial(word, "pink"))
-				elsif word =~ /^@\w/
+				elsif word =~ /@\w+/
 					content.push(removeEndCharIfSpecial(word, "red"))
 				#elsif word =~ /^http/ or word =~ /^photos.app.net/ or word =~ /^files.app.net/ or word =~ /^chimp.li/ or word =~ /^bli.ms/
 					#content.push(word.magenta)
