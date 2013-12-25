@@ -28,14 +28,12 @@ class AyaDN
 		def showDebugStream
 			buildDebugStream(getDataNormal(@hash))
 		end
-
 		def showUsersList
 			buildUsersList(getDataNormal(@hash))
 		end
 		def showInteractions
 			buildInteractions(getData(@hash))
 		end
-
 		def showUsers
 			users = ""
 			@hash.sort.each do |handle, name|
@@ -43,12 +41,14 @@ class AyaDN
 			end
 			return users, @hash.length
 		end
-
 		def showUsersInfos(name)
 			buildUserInfos(name, getDataNormal(@hash))
 		end
 		def showPostInfos(post_id, is_mine)
 			buildPostInfo(getDataNormal(@hash), is_mine)
+		end
+		def showFileInfo(with_url)
+			buildFileInfo(getDataNormal(@hash), with_url)
 		end
 		def buildDebugStream(post_hash)
 			# ret_string = ""
@@ -59,7 +59,6 @@ class AyaDN
 			#exit
 			#return ret_string
 		end
-
 		def buildInteractions(hash)
 			inter_string = ""
 			hash.each do |item|
@@ -111,25 +110,6 @@ class AyaDN
 			end
 			return inter_string
 		end
-
-		def create_content_string(item, annotations, me_mentioned)
-			user_name, user_real_name, user_handle = objectNames(item['user'])
-			created_day, created_hour = objectDate(item)
-			objectView(item['id'], created_day, created_hour, user_handle, user_real_name, coloredText(item), objectLinks(item), annotations, me_mentioned, item['num_replies'], item['reply_to'])
-		end
-
-		def skip_hashtags(item, saved_tags)
-			skipped_hashtags_encountered = false
-			for post_tag in item['entities']['hashtags'] do
-				case post_tag['name']
-				when *saved_tags
-					skipped_hashtags_encountered = true
-			 		next # get out of this loop
-				end
-			end
-			return skipped_hashtags_encountered
-		end
-
 		def buildStream(post_hash)
 			post_string = ""
 			for item in post_hash do
@@ -148,7 +128,6 @@ class AyaDN
 			last_id = last_viewed['pagination_id'] unless last_viewed == nil
 			return messages_string, last_id
 		end
-
 		def buildCompleteStream(post_hash)
 			post_string = ""
 			pagination_array = []
@@ -267,9 +246,6 @@ class AyaDN
 			end
 			#return users_hash, pagination_array
 			return users_hash, @hash['meta']['min_id']
-		end
-		def showFileInfo(with_url)
-			buildFileInfo(getDataNormal(@hash), with_url)
 		end
 		def buildFileInfo(resp_hash, with_url)
 			created_day, created_hour = objectDate(resp_hash)

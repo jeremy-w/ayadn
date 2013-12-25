@@ -2,6 +2,22 @@
 # encoding: utf-8
 class AyaDN
 	class View
+		def create_content_string(item, annotations, me_mentioned)
+			user_name, user_real_name, user_handle = objectNames(item['user'])
+			created_day, created_hour = objectDate(item)
+			objectView(item['id'], created_day, created_hour, user_handle, user_real_name, coloredText(item), objectLinks(item), annotations, me_mentioned, item['num_replies'], item['reply_to'])
+		end
+		def skip_hashtags(item, saved_tags)
+			skipped_hashtags_encountered = false
+			for post_tag in item['entities']['hashtags'] do
+				case post_tag['name']
+				when *saved_tags
+					skipped_hashtags_encountered = true
+			 		next # get out of this loop
+				end
+			end
+			return skipped_hashtags_encountered
+		end
 		def coloredText(item)
 			obj_text = item['text']
 			obj_text != nil ? (colored_post = $tools.colorize(obj_text)) : (colored_post = "--Post deleted--".red)

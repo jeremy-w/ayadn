@@ -166,17 +166,15 @@ class AyaDN
 	def ayadnGlobal
 		puts $status.getGlobal
 		fileURL = @last_page_id_path + "/last_page_id-global"
-		last_page_id = $files.get_last_page_id(fileURL)
-		@hash = @api.getGlobal(last_page_id)
+		@hash = @api.getGlobal($files.get_last_page_id(fileURL))
 		stream, last_page_id = completeStream
 		$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
 		displayStream(stream)
 	end
 	def ayadnUnified
 		fileURL = @last_page_id_path + "/last_page_id-unified"
-		last_page_id = $files.get_last_page_id(fileURL)
 		puts $status.getUnified
-		@hash = @api.getUnified(last_page_id)
+		@hash = @api.getUnified($files.get_last_page_id(fileURL))
 		stream, last_page_id = completeStream
 		$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
 		displayStream(stream)
@@ -189,27 +187,24 @@ class AyaDN
 	end
 	def ayadnExplore(explore)
 		fileURL = @last_page_id_path + "/last_page_id-#{explore}"
-		last_page_id = $files.get_last_page_id(fileURL)
 		puts $status.getExplore(explore)
-		@hash = @api.getExplore(explore, last_page_id)
+		@hash = @api.getExplore(explore, $files.get_last_page_id(fileURL))
 		stream, last_page_id = completeStream
 		$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
 		displayStream(stream)
 	end
 	def ayadnUserMentions(name)
 		fileURL = @last_page_id_path + "/last_page_id-mentions-#{name}"
-		last_page_id = $files.get_last_page_id(fileURL)
 		puts $status.mentionsUser(name)
-		@hash = @api.getUserMentions(name, last_page_id)
+		@hash = @api.getUserMentions(name, $files.get_last_page_id(fileURL))
 		stream, last_page_id = completeStream
 		$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
 		displayStream(stream)
 	end
 	def ayadnUserPosts(name)
 		fileURL = @last_page_id_path + "/last_page_id-posts-#{name}"
-		last_page_id = $files.get_last_page_id(fileURL)
 		puts $status.postsUser(name)
-		@hash = @api.getUserPosts(name, last_page_id)
+		@hash = @api.getUserPosts(name, $files.get_last_page_id(fileURL))
 		stream, last_page_id = completeStream
 		$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
 		displayStream(stream)
@@ -434,27 +429,25 @@ class AyaDN
 		puts $status.infosPost(postID)
 	    puts @view.new(@api.getPostInfos(action, postID)).showPostInfos(postID, isMine = false)
 	end
+	def fetch_list(list, name, beforeID)
+		case list
+		when "followers"
+			@api.getFollowers(name, beforeID)
+		when "followings"
+			@api.getFollowings(name, beforeID)
+		when "muted"
+			@api.getMuted(name, beforeID)
+		end
+	end
 	def getList(list, name)
 		beforeID = nil
 		big_hash = {}
-		if list == "followers"
-			@hash = @api.getFollowers(name, beforeID)
-		elsif list == "followings"
-			@hash = @api.getFollowings(name, beforeID)
-		elsif list == "muted"
-			@hash = @api.getMuted(name, beforeID)
-		end
+		@hash = fetch_list(list, name, beforeID)
 		users_hash, min_id = @view.new(@hash).buildFollowList
 	    big_hash.merge!(users_hash)
 	    beforeID = min_id
 	    loop do
-			if list == "followers"
-				@hash = @api.getFollowers(name, beforeID)
-			elsif list == "followings"
-				@hash = @api.getFollowings(name, beforeID)
-			elsif list == "muted"
-				@hash = @api.getMuted(name, beforeID)
-			end
+			@hash = fetch_list(list, name, beforeID)
 		    users_hash, min_id = @view.new(@hash).buildFollowList
 		    big_hash.merge!(users_hash)
 	    	break if min_id == nil
