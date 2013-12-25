@@ -143,11 +143,11 @@ class AyaDN
             "\nLoading the conversation around post ".green + "#{arg}".brown + ".\n".green
         end
         def writePost
-            s = "\n#{$tools.ayadn_configuration['post_max_length']} characters max, validate with [Enter] or cancel with [CTRL+C].\n".green
+            s = "\n#{$tools.ayadn_configuration[:post_max_length]} characters max, validate with [Enter] or cancel with [CTRL+C].\n".green
             s += "\nType your text: ".cyan
         end
         def writeMessage
-            s = "\n#{$tools.ayadn_configuration['message_max_length']} characters max, validate with [Enter] or cancel with [CTRL+C].\n".green
+            s = "\n#{$tools.ayadn_configuration[:message_max_length]} characters max, validate with [Enter] or cancel with [CTRL+C].\n".green
             s += "\nType your text: ".cyan + "\n\n"
         end
         def writeReply(arg)

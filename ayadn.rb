@@ -11,8 +11,9 @@ puts "\n\nAYADN".red + " - " + "App.net command-line client\n".brown
 
 $status = AyaDN::ClientStatus.new
 $tools = AyaDN::Tools.new
+$files = AyaDN::Files.new
 
-token = $tools.files_ops("auth", "read")
+token = $files.auth_read
 if token != nil
 	client = AyaDN.new(token)
 	client.configAPI
@@ -212,9 +213,9 @@ when "skip-mention"
 
 when "reset"
 	if arg2 == "pagination"
-		client.ayadnReset("pagination", arg3, arg4)
+		client.ayadnReset(arg3, arg4)
 	elsif arg2 == nil
-		client.ayadnReset("pagination", nil, nil)
+		client.ayadnReset(nil, nil)
 	end
 
 # when "deactivate"
