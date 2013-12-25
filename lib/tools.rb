@@ -17,7 +17,8 @@ class AyaDN
                 :messages_path => ayadn_data_path + "/#{identityPrefix}/messages",
                 :authorization_path => ayadn_data_path + "/#{identityPrefix}/.auth",
                 :API_config_path => ayadn_data_path + "/#{identityPrefix}/.api",
-                :progress_indicator => false
+                :progress_indicator => false,
+                :platform => RbConfig::CONFIG['host_os']
             }
         end
         def loadConfig
@@ -63,11 +64,9 @@ class AyaDN
             if File.exists?(@installed_config_path)
                 File.open(@installed_config_path, 'w') {|f| f.write config.to_yaml }
                 puts "\nDone!\n\n".green
-            elsif File.exists?('./config.yml')
+            else
                 File.open('./config.yml', 'w') {|f| f.write config.to_yaml }
                 puts "\nDone!\n\n".green
-            else
-                abort("ERROR FILE NOT FOUND".red)
             end
         end
         def installConfig
@@ -92,6 +91,9 @@ class AyaDN
         def ayadn_configuration
             @ayadn_configuration
         end
+        def winplatforms
+            /mswin|mingw|mingw32|cygwin/
+        end
 		def colorize(contentText)
 			content = Array.new
 			for word in contentText.split(" ") do
@@ -112,20 +114,17 @@ class AyaDN
             last_char = word_array.last
             if last_char =~ /[.,:;?!-'`&"()\/]/
                 word_array.pop
-                word_without_special_char = word_array.join("")
                 if color == "red"
-                    word_colored = word_without_special_char.red
+                    word_colored = word_array.join("").red
                 elsif color == "pink"
-                    word_colored = word_without_special_char.pink
+                    word_colored = word_array.join("").pink
                 end
-                new_array = word_colored.chars.to_a
-                new_array.push(last_char)
-                word = new_array.join("")
+                word_colored.chars.to_a.push(last_char).join("")
             else
                 if color == "red"
-                    word = word.red
+                    word.red
                 elsif color == "pink"
-                    word = word.pink
+                    word.pink
                 end
             end
         end
@@ -160,13 +159,7 @@ class AyaDN
             end
         end
         def startBrowser(url)
-            # thanks to https://github.com/veenstra
-            command = case RbConfig::CONFIG['host_os'] 
-              when /darwin/ then "open '#{url}'"
-            end
-            command = "sleep 1; #{command}"
-            pid = Process.spawn(command)
-            Process.detach(pid)
+            Process.detach(Process.spawn("sleep 1; open '#{url}'"))
         end
         def meta(meta)
             case meta['code']

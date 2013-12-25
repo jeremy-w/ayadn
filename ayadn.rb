@@ -116,7 +116,7 @@ when "list"
 	elsif arg2 == "muted"
 		client.ayadnShowList("muted", "me")
 	elsif arg2 == "files"
-		client.ayadnFiles("list", nil, arg3)
+		client.ayadn_list_files(arg3)
 	else
 		puts $status.errorSyntax
 	end
@@ -245,8 +245,17 @@ when "random"
 		end
 	end
 
-when "upload", "download", "remove", "delete-file", "private", "public"
-	client.ayadnFiles(arg1, arg2, nil)
+when "download"
+	client.ayadn_download_files(arg2)
+
+when "delete-file"
+	client.ayadn_delete_file(arg2)
+
+when "upload"
+	client.ayadn_upload_files(arg2)
+
+when "private", "public"
+	client.ayadn_attribute_file(arg1, arg2)
 
 when "pin"
 	client.ayadnBookmark(ARGV)
