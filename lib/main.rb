@@ -105,9 +105,8 @@ class AyaDN
 				f.close
 			end
 		end
-		data = resp['data']
-		$post_max_length = data['post']['text_max_length']
-		$message_max_length = data['message']['text_max_length']
+		$tools.ayadn_configuration['post_max_length'] = resp['data']['post']['text_max_length']
+		$tools.ayadn_configuration['message_max_length'] = resp['data']['message']['text_max_length']
 	end
 
 	def displayStream(stream)
@@ -226,10 +225,10 @@ class AyaDN
 			abort($status.errorMessageNotSent)
 		end
 		real_length = $tools.getMarkdownText(input_text.dup).length
-		if real_length < $message_max_length
+		if real_length < $tools.ayadn_configuration['message_max_length']
 			ayadnSendMessage(target, input_text)
 		else
-			abort($status.errorMessageTooLong(real_length, real_length - $message_max_length))
+			abort($status.errorMessageTooLong(real_length, real_length - $tools.ayadn_configuration['message_max_length']))
 		end
 	end
 	def ayadnSendMessage(target, text)
@@ -253,10 +252,10 @@ class AyaDN
 			abort($status.errorMessageNotSent)
 		end
 		real_length = $tools.getMarkdownText(input_text.dup).length
-		if real_length < $message_max_length
+		if real_length < $tools.ayadn_configuration['message_max_length']
 			ayadnSendMessageToChannel(target, input_text)
 		else
-			abort($status.errorMessageTooLong(real_length, real_length - $message_max_length))
+			abort($status.errorMessageTooLong(real_length, real_length - $tools.ayadn_configuration['message_max_length']))
 		end
 	end
 	def ayadnSendMessageToChannel(target, text)
@@ -342,7 +341,7 @@ class AyaDN
 
 	def ayadnComposePost(reply_to = "", mentions_list = "", my_username = "")
 		puts $status.writePost
-		char_count = $post_max_length - mentions_list.length
+		char_count = $tools.ayadn_configuration['post_max_length'] - mentions_list.length
 		# be careful to not color escape mentions_list or text
 		text = mentions_list
 		if !mentions_list.empty?
@@ -357,11 +356,11 @@ class AyaDN
 		end
 		post_text = text + input_text
 		total_length = char_count - $tools.getMarkdownText(post_text.dup).length
-		real_length = $post_max_length + total_length.abs
+		real_length = $tools.ayadn_configuration['post_max_length'] + total_length.abs
 		if total_length > 0
 			ayadnSendPost(post_text, reply_to)
 		else
-			abort($status.errorPostTooLong(real_length, real_length - $post_max_length))
+			abort($status.errorPostTooLong(real_length, real_length - $tools.ayadn_configuration['post_max_length']))
 		end
 	end
 	def ayadnReply(postID)
