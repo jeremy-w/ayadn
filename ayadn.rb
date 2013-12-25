@@ -12,7 +12,7 @@ puts "\n\nAYADN".red + " - " + "App.net command-line client\n".brown
 $status = AyaDN::ClientStatus.new
 $tools = AyaDN::Tools.new
 
-token = $tools.fileOps("auth", "read")
+token = $tools.files_ops("auth", "read")
 if token != nil
 	client = AyaDN.new(token)
 	client.configAPI

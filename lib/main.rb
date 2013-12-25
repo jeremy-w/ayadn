@@ -7,11 +7,11 @@ class AyaDN
 		@view = AyaDN::View
 	end
 	def stream
-		$tools.fileOps("makedir", $tools.ayadn_configuration[:last_page_id_path])
+		$tools.files_ops("makedir", $tools.ayadn_configuration[:last_page_id_path])
 	 	puts @view.new(@hash).showStream
 	end
 	def completeStream
-		$tools.fileOps("makedir", $tools.ayadn_configuration[:last_page_id_path])
+		$tools.files_ops("makedir", $tools.ayadn_configuration[:last_page_id_path])
 	    stream, pagination_array = @view.new(@hash).showCompleteStream
 	    last_page_id = pagination_array.last
 		return stream, last_page_id
@@ -37,11 +37,11 @@ class AyaDN
 	end
 
 	def ayadnAuthorize(action)
-		$tools.fileOps("makedir", $tools.ayadn_configuration[:authorization_path])
+		$tools.files_ops("makedir", $tools.ayadn_configuration[:authorization_path])
 		if action == "reset"
-			$tools.fileOps("reset", "credentials")
+			$tools.files_ops("reset", "credentials")
 		end
-		auth_token = $tools.fileOps("auth", "read")
+		auth_token = $tools.files_ops("auth", "read")
 		if auth_token == nil
 			url = @api.makeAuthorizeURL
 			case RbConfig::CONFIG['host_os']
@@ -54,7 +54,7 @@ class AyaDN
 				$tools.startBrowser(url)
 			end
 			auth_token = STDIN.gets.chomp()
-			$tools.fileOps("auth", "write", auth_token)
+			$tools.files_ops("auth", "write", auth_token)
 			puts $status.authorized
 			sleep 3
 			puts $tools.helpScreen
@@ -64,7 +64,7 @@ class AyaDN
 
 	def configAPI
 		time_now = DateTime.now
-		$tools.fileOps("makedir", $tools.ayadn_configuration[:API_config_path])
+		$tools.files_ops("makedir", $tools.ayadn_configuration[:API_config_path])
 		file_API = $tools.ayadn_configuration[:API_config_path] + "/config.json"
 		file_timer = $tools.ayadn_configuration[:API_config_path] + "/timer.json"
 		if !File.exists?(file_API)
@@ -127,7 +127,7 @@ class AyaDN
 		loop do
 			begin
 				print "\r                                         \r"
-				last_page_id = $tools.fileOps("getlastpageid", fileURL)
+				last_page_id = $tools.files_ops("getlastpageid", fileURL)
 				case value
 				when "global"
 					@hash = @api.getGlobal(last_page_id)
@@ -145,7 +145,7 @@ class AyaDN
 				displayScrollStream(stream)
 				$tools.ayadn_configuration[:progress_indicator] = false
 				if last_page_id != nil
-					$tools.fileOps("writelastpageid", fileURL, last_page_id)
+					$tools.files_ops("writelastpageid", fileURL, last_page_id)
 					print "\r                                         "
             		puts "\n\n"
             		$tools.countdown($tools.config['timeline']['countdown_1'])
@@ -166,19 +166,19 @@ class AyaDN
 	def ayadnGlobal
 		puts $status.getGlobal
 		fileURL = $tools.ayadn_configuration[:last_page_id_path] + "/last_page_id-global"
-		last_page_id = $tools.fileOps("getlastpageid", fileURL)
+		last_page_id = $tools.files_ops("getlastpageid", fileURL)
 		@hash = @api.getGlobal(last_page_id)
 		stream, last_page_id = completeStream
-		$tools.fileOps("writelastpageid", fileURL, last_page_id) unless last_page_id == nil
+		$tools.files_ops("writelastpageid", fileURL, last_page_id) unless last_page_id == nil
 		displayStream(stream)
 	end
 	def ayadnUnified
 		fileURL = $tools.ayadn_configuration[:last_page_id_path] + "/last_page_id-unified"
-		last_page_id = $tools.fileOps("getlastpageid", fileURL)
+		last_page_id = $tools.files_ops("getlastpageid", fileURL)
 		puts $status.getUnified
 		@hash = @api.getUnified(last_page_id)
 		stream, last_page_id = completeStream
-		$tools.fileOps("writelastpageid", fileURL, last_page_id) unless last_page_id == nil
+		$tools.files_ops("writelastpageid", fileURL, last_page_id) unless last_page_id == nil
 		displayStream(stream)
 	end
 	def ayadnHashtags(tag)
@@ -189,29 +189,29 @@ class AyaDN
 	end
 	def ayadnExplore(explore)
 		fileURL = $tools.ayadn_configuration[:last_page_id_path] + "/last_page_id-#{explore}"
-		last_page_id = $tools.fileOps("getlastpageid", fileURL)
+		last_page_id = $tools.files_ops("getlastpageid", fileURL)
 		puts $status.getExplore(explore)
 		@hash = @api.getExplore(explore, last_page_id)
 		stream, last_page_id = completeStream
-		$tools.fileOps("writelastpageid", fileURL, last_page_id) unless last_page_id == nil
+		$tools.files_ops("writelastpageid", fileURL, last_page_id) unless last_page_id == nil
 		displayStream(stream)
 	end
 	def ayadnUserMentions(name)
 		fileURL = $tools.ayadn_configuration[:last_page_id_path] + "/last_page_id-mentions-#{name}"
-		last_page_id = $tools.fileOps("getlastpageid", fileURL)
+		last_page_id = $tools.files_ops("getlastpageid", fileURL)
 		puts $status.mentionsUser(name)
 		@hash = @api.getUserMentions(name, last_page_id)
 		stream, last_page_id = completeStream
-		$tools.fileOps("writelastpageid", fileURL, last_page_id) unless last_page_id == nil
+		$tools.files_ops("writelastpageid", fileURL, last_page_id) unless last_page_id == nil
 		displayStream(stream)
 	end
 	def ayadnUserPosts(name)
 		fileURL = $tools.ayadn_configuration[:last_page_id_path] + "/last_page_id-posts-#{name}"
-		last_page_id = $tools.fileOps("getlastpageid", fileURL)
+		last_page_id = $tools.files_ops("getlastpageid", fileURL)
 		puts $status.postsUser(name)
 		@hash = @api.getUserPosts(name, last_page_id)
 		stream, last_page_id = completeStream
-		$tools.fileOps("writelastpageid", fileURL, last_page_id) unless last_page_id == nil
+		$tools.files_ops("writelastpageid", fileURL, last_page_id) unless last_page_id == nil
 		displayStream(stream)
 	end
 	def ayadnUserInfos(name)
@@ -239,10 +239,10 @@ class AyaDN
 		@hash = blob['data']
 		private_message_channel_ID = @hash['channel_id']
 		#private_message_thread_ID = @hash['thread_id']
-		$tools.fileOps("makedir", $tools.ayadn_configuration[:messages_path])
+		$tools.files_ops("makedir", $tools.ayadn_configuration[:messages_path])
 		puts "Channel ID: ".cyan + private_message_channel_ID.brown + " Message ID: ".cyan + @hash['id'].brown + "\n\n"
 		puts $status.postSent
-		$tools.fileOps("savechannelid", private_message_channel_ID, target)
+		$tools.files_ops("savechannelid", private_message_channel_ID, target)
 	end
 
 	def ayadnComposeMessageToChannel(target)
@@ -266,22 +266,22 @@ class AyaDN
 		@hash = blob['data']
 		private_channel_ID = @hash['channel_id']
 		#private_thread_ID = @hash['thread_id']
-		$tools.fileOps("makedir", $tools.ayadn_configuration[:messages_path])
+		$tools.files_ops("makedir", $tools.ayadn_configuration[:messages_path])
 		puts "Channel ID: ".cyan + private_channel_ID.brown + " Message ID: ".cyan + @hash['id'].brown + "\n\n"
 		puts $status.postSent
-		$tools.fileOps("savechannelid", private_channel_ID, target)
+		$tools.files_ops("savechannelid", private_channel_ID, target)
 	end
 	def ayadnGetMessages(target, action = nil)
-		$tools.fileOps("makedir", $tools.ayadn_configuration[:messages_path])
+		$tools.files_ops("makedir", $tools.ayadn_configuration[:messages_path])
 		$tools.ayadn_configuration[:progress_indicator] = false
 		if target != nil
 			fileURL = $tools.ayadn_configuration[:last_page_id_path] + "/last_page_id-channels-#{target}"
-			last_page_id = $tools.fileOps("getlastpageid", fileURL) unless action == "all"
+			last_page_id = $tools.files_ops("getlastpageid", fileURL) unless action == "all"
 			messages_string, last_page_id = @view.new(@api.getMessages(target, last_page_id)).showMessagesFromChannel
-			$tools.fileOps("writelastpageid", fileURL, last_page_id) unless last_page_id == nil
+			$tools.files_ops("writelastpageid", fileURL, last_page_id) unless last_page_id == nil
 			displayStream(messages_string)
 		else
-			loaded_channels = $tools.fileOps("loadchannels", nil)
+			loaded_channels = $tools.files_ops("loadchannels", nil)
 			if loaded_channels != nil
 				puts "Backed-up list of your active channels:\n".green
 				loaded_channels.each do |k,v|
@@ -641,7 +641,7 @@ class AyaDN
 		end
 	end
 	def ayadnReset(target, content, option)
-		$tools.fileOps("reset", target, content, option)
+		$tools.files_ops("reset", target, content, option)
 	end
 	def ayadnSkipSource(action, source)
 		puts "Current skipped sources: ".green + $tools.config['skipped']['sources'].join(", ").red + "\n\n"
@@ -757,7 +757,7 @@ class AyaDN
  		when "download"
  			#with_url = true
  			with_url = false
- 			$tools.fileOps("makedir", $tools.ayadn_configuration[:files_path])
+ 			$tools.files_ops("makedir", $tools.ayadn_configuration[:files_path])
  			if target.split(",").length == 1
 	 			view, file_url, file_name = @view.new(@api.getSingleFile(target)).showFileInfo(with_url)
 	 			puts "\nDownloading file ".green + target.to_s.brown
@@ -800,7 +800,7 @@ class AyaDN
             	puts "\nThis feature doesn't work on Windows yet. Sorry.\n\n".red
             	exit
             end
- 			$tools.fileOps("makedir", $tools.ayadn_configuration[:files_path])
+ 			$tools.files_ops("makedir", $tools.ayadn_configuration[:files_path])
  			uploaded_ids = []
  			target.split(",").each do |file|
  				puts "Uploading ".cyan + "#{File.basename(file)}".brown + "\n\n"

@@ -348,7 +348,7 @@ class AyaDN
 							if writer != nil
 								user = AyaDN::API.new(@token).getUserInfos(writer)
 								handle = "@" + user['data']['username']
-								$tools.fileOps("savechannelid", channel_id, handle)
+								$tools.files_ops("savechannelid", channel_id, handle)
 								the_writers.push(handle)
 							end
 						end
@@ -373,16 +373,16 @@ class AyaDN
 					if channel_type != "net.app.core.pm"
 						channels_list.push(channel_id)
 						if channel_type == "net.app.ohai.journal"
-							$tools.fileOps("savechannelid", channel_id, "Ohai Journal")
+							$tools.files_ops("savechannelid", channel_id, "Ohai Journal")
 							the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "your Ohai Journal channel\n".green
 						elsif channel_type == "net.paste-app.clips"
-							$tools.fileOps("savechannelid", channel_id, "Paste-App Clips")
+							$tools.files_ops("savechannelid", channel_id, "Paste-App Clips")
 							the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "your Paste-App Clips channel\n".green
 						elsif channel_type == "net.app.core.broadcast"
 							item['annotations'].each do |anno|
 								if anno['type'] == "net.app.core.broadcast.metadata"
 									broadcast_name = anno['value']['title']
-									$tools.fileOps("savechannelid", channel_id, "#{broadcast_name} [Broadcast]")
+									$tools.files_ops("savechannelid", channel_id, "#{broadcast_name} [Broadcast]")
 									the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "Broadcast channel: #{broadcast_name}\n".green
 								end
 							end
@@ -390,13 +390,13 @@ class AyaDN
 							item['annotations'].each do |anno|
 								if anno['type'] == "net.patter-app.settings"
 									patter_room_name = anno['value']['name']
-									$tools.fileOps("savechannelid", channel_id, "#{patter_room_name} [Patter-App Room]")
+									$tools.files_ops("savechannelid", channel_id, "#{patter_room_name} [Patter-App Room]")
 									the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "Patter-App Room: #{patter_room_name}\n".green
 									next
 								end
 							end
 						else
-							$tools.fileOps("savechannelid", channel_id, channel_type)
+							$tools.files_ops("savechannelid", channel_id, channel_type)
 							the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "#{channel_type}\n"
 						end
 					end
