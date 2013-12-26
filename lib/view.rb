@@ -50,15 +50,7 @@ class AyaDN
 		def showFileInfo(with_url)
 			buildFileInfo(getDataNormal(@hash), with_url)
 		end
-		def buildDebugStream(post_hash)
-			# ret_string = ""
-			# post_hash.each do |k, v|
-			# 	ret_string << "#{k}: #{v}\n\n"
-			# end
-			jj post_hash
-			#exit
-			#return ret_string
-		end
+		
 		def buildInteractions(hash)
 			inter_string = ""
 			hash.each do |item|

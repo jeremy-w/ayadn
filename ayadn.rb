@@ -203,13 +203,34 @@ when "debug"
 	end
 
 when "skip-source"
-	client.ayadnSkipSource(arg2, arg3)
+	if arg2 == "add"
+		client.ayadn_skip_add("sources", arg3)
+	elsif arg2 == "remove"
+		client.ayadn_skip_remove("sources", arg3)
+	else
+		puts $status.errorSyntax
+	end
+	#client.ayadnSkipSource(arg2, arg3)
 
 when "skip-tag"
-	client.ayadnSkipTag(arg2, arg3)
+	if arg2 == "add"
+		client.ayadn_skip_add("hashtags", arg3)
+	elsif arg2 == "remove"
+		client.ayadn_skip_remove("hashtags", arg3)
+	else
+		puts $status.errorSyntax
+	end
+	#client.ayadnSkipTag(arg2, arg3)
 
 when "skip-mention"
-	client.ayadnSkipMention(arg2, arg3)
+	if arg2 == "add"
+		client.ayadn_skip_add("mentions", arg3)
+	elsif arg2 == "remove"
+		client.ayadn_skip_remove("mentions", arg3)
+	else
+		puts $status.errorSyntax
+	end
+	#client.ayadnSkipMention(arg2, arg3)
 
 when "reset"
 	if arg2 == "pagination"

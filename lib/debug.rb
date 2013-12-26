@@ -20,4 +20,13 @@ class AyaDN
 		@hash = @api.getUniqueMessage(channel_id, message_id)
 		debugStream
 	end
+	def buildDebugStream(post_hash)
+		# ret_string = ""
+		# post_hash.each do |k, v|
+		# 	ret_string << "#{k}: #{v}\n\n"
+		# end
+		jj post_hash
+		#exit
+		#return ret_string
+	end
 end
