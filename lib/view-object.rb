@@ -94,9 +94,9 @@ class AyaDN
 		end
 		def objectView(obj_id, obj_created_day, obj_created_hour, obj_user_handle, obj_user_realname, obj_colored_text, obj_links, annotations, me_mentioned, num_replies, reply_to)
 			if me_mentioned == true
-				obj_view = obj_id.to_s.cyan.reverse_color.ljust(14)
+				obj_view = "\n" + obj_id.to_s.cyan.reverse_color.ljust(14)
 			else
-				obj_view = obj_id.to_s.cyan.ljust(14)
+				obj_view = "\n" + obj_id.to_s.cyan.ljust(14)
 			end
 			obj_view << ' '
 			obj_view << obj_user_handle.green
@@ -115,7 +115,7 @@ class AyaDN
 			if annotations != nil
 				obj_view << annotations + "\n"
 			end
-			obj_view << obj_links + "\n\n"
+			obj_view << obj_links + "\n"
 		end
 		def file_view(file_name, file_kind, file_size, file_size_converted, file_source_name, file_source_url, created_day, created_hour)
 			file_elements = "\nName: ".cyan + file_name.green

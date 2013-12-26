@@ -16,6 +16,7 @@ class AyaDN
 		$files.makedir(@last_page_id_path)
 	    stream, pagination_array = @view.new(@hash).showCompleteStream
 	    last_page_id = pagination_array.last
+	    puts "\n" if last_page_id != nil
 		return stream, last_page_id
 	end
 	def displayStream(stream)
@@ -35,6 +36,7 @@ class AyaDN
 		loop do
 			begin
 				print "\r                                         \r"
+				#puts "\n"
 				last_page_id = $files.get_last_page_id(fileURL)
 				case value
 				when "global"
@@ -55,12 +57,12 @@ class AyaDN
 				if last_page_id != nil
 					$files.write_last_page_id(fileURL, last_page_id)
 					print "\r                                         "
-            		puts "\n\n"
+            		#puts "\n"
             		$tools.countdown($tools.config['timeline']['countdown_1'])
             	else
         			print "\rNo new posts                ".red
         			sleep 2
-        			$tools.countdown($tools.config['timeline']['countdown_1'])
+        			$tools.countdown($tools.config['timeline']['countdown_2'])
         		end					
 			rescue Exception
 				abort($status.stopped)
