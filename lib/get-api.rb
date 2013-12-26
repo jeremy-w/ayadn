@@ -32,8 +32,8 @@ class AyaDN
 			f.close
 		end
 		hash_timer = {
-			"checked" => @time_now,
-			"deadline" => @time_now + 1
+			checked: @time_now,
+			deadline: @time_now + 1
 		}
 		f = File.new(file_timer, "w")
 		    f.puts(hash_timer.to_json)

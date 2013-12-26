@@ -8,7 +8,7 @@ class AyaDN
 		end
 		def makedir(value)
 			unless Dir.exists? value
-			    FileUtils.mkdir_p :value
+			    FileUtils.mkdir_p value
 			end
 		end
 		def get_last_page_id(value)
