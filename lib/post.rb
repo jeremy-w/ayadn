@@ -11,33 +11,33 @@ class AyaDN
 		puts $status.postSent
 		# show end of the stream after posting
 		if reply_to.empty?
-			@progress_indicator = false
+			#@progress_indicator = false
 			@hash = @api.getSimpleUnified
 			stream, last_page_id = completeStream
+			stream.sub!(/#{my_post_id}/, my_post_id.to_s.green.reverse_color)
 			displayStream(stream)
 		else
-			@progress_indicator = true
-			@reply_to = reply_to
-			t1 = Thread.new{@api.getPostReplies(@reply_to)}
-			t2 = Thread.new{@api.getSimpleUnified}
-			t1.join
-			t2.join
-			hash1 = t1.value
-			hash2 = t2.value
-			first_of_unified = hash2['data'].last # because adnData.reverse in API
-			first_of_unified_id = first_of_unified['id']
-			if first_of_unified_id.to_i > reply_to.to_i
-				puts @view.new(nil).buildSimplePost(first_of_unified)
-			end
-			@hash = hash1.merge!(hash2)
+			#@progress_indicator = true
+			#@reply_to = reply_to
+			@hash = @api.getPostReplies(reply_to)
+			# t1 = Thread.new{@api.getPostReplies(@reply_to)}
+			# t2 = Thread.new{@api.getSimpleUnified}
+			# t1.join
+			# t2.join
+			# hash1 = t1.value
+			# hash2 = t2.value
+			# first = hash2['data'].last # because adnData.reverse in API
+			# first_id = first['id']
+			# if first_id.to_i > reply_to.to_i
+			# 	puts @view.new(nil).buildSimplePost(hash1['data'].last)
+			# end
+			#@hash = hash1.merge(hash2)
 			stream, last_page_id = completeStream
-			stream.sub!(/#{reply_to}/, reply_to.to_s.red.reverse_color) if first_of_unified_id.to_i < reply_to.to_i
+			stream.sub!(/#{reply_to}/, reply_to.to_s.red.reverse_color)
 			stream.sub!(/#{my_post_id}/, my_post_id.to_s.green.reverse_color)
 			displayStream(stream)
 		end
 	end
-
-
 	def ayadnComposePost(reply_to = "", mentions_list = "", my_username = "")
 		puts $status.writePost
 		char_count = $tools.ayadn_configuration[:post_max_length] - mentions_list.length
