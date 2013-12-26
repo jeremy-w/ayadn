@@ -210,7 +210,6 @@ when "skip-source"
 	else
 		puts $status.errorSyntax
 	end
-	#client.ayadnSkipSource(arg2, arg3)
 
 when "skip-tag"
 	if arg2 == "add"
@@ -220,7 +219,6 @@ when "skip-tag"
 	else
 		puts $status.errorSyntax
 	end
-	#client.ayadnSkipTag(arg2, arg3)
 
 when "skip-mention"
 	if arg2 == "add"
@@ -230,7 +228,6 @@ when "skip-mention"
 	else
 		puts $status.errorSyntax
 	end
-	#client.ayadnSkipMention(arg2, arg3)
 
 when "reset"
 	if arg2 == "pagination"
