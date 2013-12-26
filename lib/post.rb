@@ -27,7 +27,7 @@ class AyaDN
 			first_of_unified = hash2['data'].last # because adnData.reverse in API
 			first_of_unified_id = first_of_unified['id']
 			if first_of_unified_id.to_i > reply_to.to_i
-				puts @view.new(nil).buildSimplePost(hash1['data'])
+				puts @view.new(nil).buildSimplePost(first_of_unified)
 			end
 			@hash = hash1.merge!(hash2)
 			stream, last_page_id = completeStream
