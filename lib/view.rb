@@ -51,7 +51,7 @@ class AyaDN
 			buildFileInfo(getDataNormal(@hash), with_url)
 		end
 		def buildStream(post_hash)
-			post_string = ""
+			post_string = "\n"
 			for item in post_hash do
 				# create_content_string(item, annotations, me_mentioned)
 				post_string << create_content_string(item, nil, false)
@@ -59,7 +59,7 @@ class AyaDN
 			return post_string
 		end
 		def buildMessages(messages_stream)
-			messages_string = ""
+			messages_string = "\n"
 			for item in messages_stream do
 				@source_name, @source_link = objectSource(item)
 				messages_string << create_content_string(item, checkins_annotations(item), false) # create_content_string(item, annotations, me_mentioned)
@@ -112,7 +112,7 @@ class AyaDN
 			#the_post_id = post_hash['id']
 			post_text = post_hash['text']
 			post_URL = post_hash['canonical_url']
-			post_details = "Post URL: ".cyan + post_URL.brown + "\n"
+			post_details = "\nPost URL: ".cyan + post_URL.brown + "\n"
 			is_reply = post_hash['reply_to']
 			if is_reply != nil
 				post_details << "This post is a reply to post ".cyan + is_reply.brown + "\n"
@@ -130,15 +130,15 @@ class AyaDN
 			#user_follows = post_hash['follows_you']
 			#user_followed = post_hash['you_follow']
 			created_day, created_hour = objectDate(post_hash)
-			post_details = "\nThe " + created_day.cyan + ' at ' + created_hour.cyan + ' by ' + the_name.green
+			post_details = "\n" + created_day.cyan + ' ' + created_hour.cyan + ' ' + the_name.green
 			if !user_real_name.empty?
 				post_details << " [#{user_real_name}]".reddish
 			end
 			post_details << ":\n"
 			post_details << "\n" + colored_post + "\n\n" 
-			post_details << "Post ID: ".cyan + post_hash['id'].to_s.green + "\n"
+			post_details << "ID: ".cyan + post_hash['id'].to_s.green + "\n"
 			post_details << objectLinks(post_hash) + "\n"
-			post_details << "\nPost URL: ".cyan + post_hash['canonical_url'].brown
+			post_details << "Post URL: ".cyan + post_hash['canonical_url'].brown
 			is_reply = post_hash['reply_to']
 			repost_of = post_hash['repost_of']
 			if is_reply != nil
@@ -168,7 +168,7 @@ class AyaDN
 			post_details << "\n\n\n"
 		end
 		def buildUsersList(users_hash)
-			users_string = ""
+			users_string = "\n"
 			users_hash.each do |item|
 				user_name, user_real_name, user_handle = objectNames(item)
 				users_string << user_handle.green + " #{user_real_name}\n".cyan
@@ -244,7 +244,7 @@ class AyaDN
 		end
 		def buildUserInfos(name, adn_data)
 			user_name, user_real_name, the_name = objectNames(adn_data)
-			user_show = "ID: ".cyan.ljust(21) + adn_data['id'].green + "\n"
+			user_show = "\nID: ".cyan.ljust(21) + adn_data['id'].green + "\n"
 			if user_real_name != nil
 				user_show << "Name: ".cyan.ljust(21) + user_real_name.green + "\n"
 			end

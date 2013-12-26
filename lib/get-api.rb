@@ -3,7 +3,7 @@
 class AyaDN
 	def configAPI
 		@time_now = DateTime.now
-		api_config_path = $tools.ayadn_configuration[:API_config_path]
+		api_config_path = $tools.ayadn_configuration[:api_config_path]
 		$files.makedir(api_config_path)
 		file_API = api_config_path + "/config.json"
 		file_timer = api_config_path + "/timer.json"

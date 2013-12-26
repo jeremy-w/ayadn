@@ -40,6 +40,7 @@ class AyaDN
 	def getList(list, name)
 		beforeID = nil
 		big_hash = {}
+		@progress_indicator = false
 	    loop do
 			@hash = fetch_list(list, name, beforeID)
 		    users_hash, min_id = @view.new(@hash).buildFollowList
@@ -51,10 +52,10 @@ class AyaDN
 	end
 
 	def ayadnShowList(list, name)
-		@progress_indicator = false
 		puts $status.fetchingList(list)
 		puts $status.showList(list, name)
 		users, number = @view.new(getList(list, name)).showUsers
+		puts "\n"
 		if number == 0
 			puts $status.errorEmptyList
 			exit

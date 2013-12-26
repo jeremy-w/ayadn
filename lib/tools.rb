@@ -9,16 +9,16 @@ class AyaDN
             identityPrefix = @configFileContents['identity']['prefix']
             ayadn_data_path = Dir.home + @configFileContents['files']['ayadnfiles']  
             @ayadn_configuration = {
-                :data_path => ayadn_data_path,
-                :posts_path => ayadn_data_path + "/#{identityPrefix}/posts",
-                :lists_path => ayadn_data_path + "/#{identityPrefix}/lists",
-                :files_path => ayadn_data_path + "/#{identityPrefix}/files",
-                :last_page_id_path => ayadn_data_path + "/#{identityPrefix}/.pagination",
-                :messages_path => ayadn_data_path + "/#{identityPrefix}/messages",
-                :authorization_path => ayadn_data_path + "/#{identityPrefix}/.auth",
-                :API_config_path => ayadn_data_path + "/#{identityPrefix}/.api",
-                :progress_indicator => false,
-                :platform => RbConfig::CONFIG['host_os']
+                data_path: ayadn_data_path,
+                posts_path: ayadn_data_path + "/#{identityPrefix}/posts",
+                lists_path: ayadn_data_path + "/#{identityPrefix}/lists",
+                files_path: ayadn_data_path + "/#{identityPrefix}/files",
+                last_page_id_path: ayadn_data_path + "/#{identityPrefix}/.pagination",
+                messages_path: ayadn_data_path + "/#{identityPrefix}/messages",
+                authorization_path: ayadn_data_path + "/#{identityPrefix}/.auth",
+                api_config_path: ayadn_data_path + "/#{identityPrefix}/.api",
+                progress_indicator: false,
+                platform: RbConfig::CONFIG['host_os']
             }
         end
         def loadConfig
