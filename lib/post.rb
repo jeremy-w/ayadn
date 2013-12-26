@@ -10,7 +10,7 @@ class AyaDN
 		puts @view.new(nil).buildSimplePostInfo(@hash)
 		puts $status.postSent
 		# show end of the stream after posting
-		if reply_to == nil
+		if (reply_to == nil || reply_to.empty? )
 			#@progress_indicator = false
 			@hash = @api.getSimpleUnified
 			stream, last_page_id = completeStream
