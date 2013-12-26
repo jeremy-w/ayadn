@@ -88,6 +88,21 @@ class AyaDN
                  FileUtils.rm_rf(@token_path)
             end
 		end
+	 	def download_file(file_url, new_file_name, token)
+	 		download_file_path = $tools.ayadn_configuration[:files_path] + "/#{new_file_name}"
+			if !File.exists?download_file_path
+				resp = AyaDN::API.new(token).clientHTTP("download", file_url)
+				f = File.new(download_file_path, "wb")
+					f.puts(resp.body)
+				f.close
+				puts "File downloaded in ".green + $tools.ayadn_configuration[:files_path].pink + "/#{new_file_name}".brown + "\n\n"
+			else
+				puts "Canceled: ".red + "#{new_file_name} ".pink + "already exists in ".red + "#{$tools.ayadn_configuration[:files_path]}".brown + "\n\n"
+			end
+	 	end
+	 	def delete_file(target, token)
+	 		JSON.parse(AyaDN::API.new(token).deleteFile(target))
+	 	end
 		def uploadFiles(file, token)
 		    file_ext = File.extname(file).downcase
 		    case file_ext
