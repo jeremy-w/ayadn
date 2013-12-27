@@ -88,6 +88,12 @@ class AyaDN
                  FileUtils.rm_rf(@token_path)
             end
 		end
+		def save_post(post_id)
+			makedir($tools.ayadn_configuration[:posts_path])
+			f = File.new($tools.ayadn_configuration[:posts_path] + "/#{post_id}.post", "w")
+				f.puts(AyaDN::API.new(auth_read).getSinglePost(post_id))
+			f.close
+		end
 	 	def download_file(file_url, new_file_name, token)
 	 		download_file_path = $tools.ayadn_configuration[:files_path] + "/#{new_file_name}"
 			if !File.exists?download_file_path

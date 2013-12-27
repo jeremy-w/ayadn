@@ -20,6 +20,8 @@ timeline:
     show_symbols: true
 files:
     ayadnfiles: "/ayadn/data"
+    auto_save_sent_messages: false # auto backup your sent private messages
+    auto_save_sent_posts: false
 identity: # change this prefix in each folder for your username in you're using several ADN accounts (don't use "@")
     prefix: me
 skipped: # posts matching these values won't show up

@@ -71,7 +71,7 @@ when "infos", "i"
 	if arg2 =~ /^@/ || arg2 == "me"
 		client.ayadnUserInfos(arg2)
 	elsif arg2.is_integer?
-		client.ayadnPostInfos("call", arg2)
+		client.ayadnPostInfos(arg2)
 	else
 		puts $status.errorInfos(arg2)
 	end
@@ -97,7 +97,7 @@ when "save"
 	arg2.is_integer? ? client.ayadnSavePost(arg2) : (puts $status.errorPostID(arg2))
 
 when "load"
-	arg2.is_integer? ? client.ayadnPostInfos("load", arg2) : (puts $status.errorPostID(arg2))
+	arg2.is_integer? ? client.ayadnLoadPost(arg2) : (puts $status.errorPostID(arg2))
 
 when "backup"
 	if arg2 == "followings"

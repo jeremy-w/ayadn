@@ -18,7 +18,7 @@ class AyaDN
                 authorization_path: ayadn_data_path + "/#{identityPrefix}/.auth",
                 api_config_path: ayadn_data_path + "/#{identityPrefix}/.api",
                 progress_indicator: false,
-                platform: RbConfig::CONFIG['host_os']
+                platform: RbConfig::CONFIG['host_os'] 
             }
         end
         def loadConfig
@@ -46,7 +46,11 @@ class AyaDN
                         "show_client" => false,
                         "show_symbols" => true
                     },
-                    "files" => { "ayadnfiles" => "/ayadn/data" },
+                    "files" => { 
+                        "ayadnfiles" => "/ayadn/data",
+                        "auto_save_sent_messages" => false,
+                        "auto_save_sent_posts" => false
+                    },
                     "identity" => { "prefix" => "me" },
                     "skipped" => {
                         "sources" => [],

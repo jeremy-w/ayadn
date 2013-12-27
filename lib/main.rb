@@ -188,24 +188,23 @@ class AyaDN
 		stream, last_page_id = completeStream
 		displayStream(stream)
 	end
-	def ayadnPostInfos(action, postID)
+	def ayadnPostInfos(postID)
 		puts $status.infosPost(postID)
-	    puts @view.new(@api.getPostInfos(action, postID)).showPostInfos(postID, isMine = false)
+	    puts @view.new(@api.getPostInfos(postID)).showPostInfos(postID, isMine = false)
+	end
+	def ayadnLoadPost(postID)
+		puts $status.infosPost(postID)
+		puts @view.new(nil).buildPostInfo(@api.load_post(postID), true)
 	end
 
 	def ayadnSavePost(postID)
 		@progress_indicator = false
 		name = postID.to_s
-		unless Dir.exists?$tools.ayadn_configuration[:posts_path]
-			puts "Creating posts directory in ".green + "#{$tools.ayadn_configuration[:data_path]}...".brown
-			FileUtils.mkdir_p $tools.ayadn_configuration[:posts_path]
-		end
+		$files.makedir($tools.ayadn_configuration[:posts_path])
 		file = "/#{name}.post"
 		fileURL = $tools.ayadn_configuration[:posts_path] + file
-		if File.exists?(fileURL)
-			abort("\nYou already saved this post.\n\n".red)
-		end
-		puts "\nLoading post ".green + "#{postID}".brown
+		abort("\nYou already saved this post.\n\n".red) if File.exists?(fileURL)
+		puts "\nLoading post from App.net...".green + name.brown
 		puts $status.savingFile(name, $tools.ayadn_configuration[:posts_path], file)
 		f = File.new(fileURL, "w")
 			f.puts(@api.getSinglePost(postID))

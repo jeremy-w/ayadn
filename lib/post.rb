@@ -9,8 +9,15 @@ class AyaDN
 		my_post_id = @hash['id']
 		puts @view.new(nil).buildSimplePostInfo(@hash)
 		puts $status.postSent
+		# save post
+		if $tools.config['files']['auto_save_sent_posts']
+			fileURL = $tools.ayadn_configuration[:posts_path] + "/#{my_post_id}.post"
+			f = File.new(fileURL, "w")
+			f.puts(@hash)
+			f.close
+		end
 		# show end of the stream after posting
-		if (reply_to == nil || reply_to.empty? )
+		if (reply_to == nil || reply_to.empty?)
 			#@progress_indicator = false
 			@hash = @api.getSimpleUnified
 			stream, last_page_id = completeStream
@@ -115,6 +122,13 @@ class AyaDN
 		puts "Channel ID: ".cyan + private_message_channel_ID.brown + " Message ID: ".cyan + @hash['id'].brown + "\n\n"
 		puts $status.postSent
 		$files.save_channel_id(private_message_channel_ID, target)
+		# save message
+		if $tools.config['files']['auto_save_sent_messages']
+			fileURL = $tools.ayadn_configuration[:messages_path] + "/#{target}-#{@hash['id']}.post"
+			f = File.new(fileURL, "w")
+			f.puts(@hash)
+			f.close
+		end
 	end
 
 	def ayadnComposeMessageToChannel(target)
