@@ -109,14 +109,17 @@ when "backup"
 	end
 
 when "list"
-	if arg2 == "followings"
+	case arg2
+	when "followings"
 		(arg3 =~ /^@/ || arg3 == "me") ? client.ayadnShowList("followings", arg3) : (puts $status.errorSyntax)
-	elsif arg2 == "followers"
+	when "followers"
 		(arg3 =~ /^@/ || arg3 == "me") ? client.ayadnShowList("followers", arg3) : (puts $status.errorSyntax)
-	elsif arg2 == "muted"
+	when "muted"
 		client.ayadnShowList("muted", "me")
-	elsif arg2 == "files"
+	when "files"
 		client.ayadn_list_files(arg3)
+	when "options","config"
+		client.ayadn_show_options
 	else
 		puts $status.errorSyntax
 	end
@@ -168,7 +171,6 @@ when "channels"
 
 when "messages"
 	# arg2 is integer -> display channel stream
-	# arg2 is nil -> get a list of your previously used channels
 	# arg3 == nil = with pagination, arg3 == "all" = no pagination
 	client.ayadnGetMessages(arg2, arg3)
 

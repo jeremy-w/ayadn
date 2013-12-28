@@ -5,9 +5,10 @@ AYADN is a learning exercise: while it's fully functional, it's still very alpha
 
 ## 2013-12-28 v0.5.2a
 - auto save sent messages/posts (options, false by default)
-- better channels management
+- better channels detection
 - allow special characters in Search
 - bugfixes in layout, scroll and many other places
+- list current options
 
 ## 2013-12-22 v0.5.1c
 - AyaDN follows the ADN config protocol (automatic post and message length)

@@ -10,9 +10,7 @@
 - implement some solid error handling
 - secure and sanitize input argv
 - get rid of the global variables
-- better colorization for replies and mentions
 - show current options
-- show list of commands
 - create branches for experimental purposes
 - clean up and DRY
 
@@ -23,7 +21,6 @@
     - backup all your files
     - save/bookmark conversations (for backup/reference purposes)
     - live character countdown including Markdown detection
-    - discover channels
     - follow a conversation in real time
     - more options activable from the app itself
     - export posts/streams to different formats

@@ -39,10 +39,10 @@ class AyaDN
 				#puts "\n"
 				last_page_id = $files.get_last_page_id(fileURL)
 				case value
-				when "global"
-					@hash = @api.getGlobal(last_page_id)
 				when "unified"
 					@hash = @api.getUnified(last_page_id)
+				when "global"
+					@hash = @api.getGlobal(last_page_id)
 				when "checkins", "photos", "conversations", "trending"
 					@hash = @api.getExplore(value, last_page_id)
 				when "mentions"
@@ -341,5 +341,35 @@ class AyaDN
 	end
 	def ayadnReset(content, option)
 		$files.reset_pagination(content, option)
+	end
+	def ayadn_show_options
+		puts "Current options in ".cyan + "config.yml\n".magenta
+		$tools.config.each do |k,v|
+			puts "#{k.capitalize}:".cyan
+			v.each do |x,y|
+				puts "\t#{x.green} => #{y.to_s.brown}"
+			end
+		end
+		puts "\n"
+		puts "AyaDN local data: \n".magenta
+		puts "Posts path:".cyan
+		puts "\t" + $tools.ayadn_configuration[:posts_path].brown + "/".brown
+		puts "Messages path:".cyan
+		puts "\t" + $tools.ayadn_configuration[:messages_path].brown + "/".brown
+		puts "Lists path:".cyan
+		puts "\t" + $tools.ayadn_configuration[:lists_path].brown + "/".brown
+		puts "Files path:".cyan
+		puts "\t" + $tools.ayadn_configuration[:files_path].brown + "/".brown
+		puts "\n"
+		puts "AyaDN system configuration: \n".magenta
+		puts "Authorization token path:".cyan
+		puts "\t" + $tools.ayadn_configuration[:authorization_path].brown + "/".brown
+		puts "API configuration path:".cyan
+		puts "\t" + $tools.ayadn_configuration[:api_config_path].brown + "/".brown
+		puts "Pagination data path:".cyan
+		puts "\t" + $tools.ayadn_configuration[:last_page_id_path].brown + "/".brown
+		puts "Detected platform:".cyan
+		puts "\t" + $tools.ayadn_configuration[:platform].brown
+		puts "\n"
 	end
 end
