@@ -123,6 +123,28 @@ class AyaDN
 		puts $status.infosUser(name)
 	    puts @view.new(@api.getUserInfos(name)).showUsersInfos(name)
 	end
+	def get_loaded_channels
+		loaded_channels = $files.load_channels
+		if loaded_channels != nil
+			puts "Backed-up list of your active channels:\n".green
+			loaded_channels.each do |k,v|
+				puts "Channel: ".cyan + k.brown
+				puts "Title: ".cyan + v.magenta
+				puts "\n"
+			end
+			puts "Do you want to see if you have more channels activated? (Y/n)".green
+			abort("\nCanceled.\n\n".red) unless STDIN.getch == ("y" || "Y")
+			puts "\n"
+		end
+	end
+	def ayadn_get_channels
+		@hash = @api.get_pm_channels
+		the_channels, channels_list = @view.new(@hash).show_pm_channels
+		puts the_channels
+		@hash = @api.get_channels
+		the_channels, channels_list = @view.new(@hash).show_channels
+		puts the_channels
+	end
 	def ayadnGetMessages(target, action = nil)
 		$files.makedir($tools.ayadn_configuration[:messages_path])
 		@progress_indicator = false
@@ -133,23 +155,7 @@ class AyaDN
 			$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
 			displayStream(messages_string)
 		else
-			loaded_channels = $files.load_channels
-			if loaded_channels != nil
-				puts "Backed-up list of your active channels:\n".green
-				loaded_channels.each do |k,v|
-					puts "Channel: ".cyan + k.brown
-					puts "Title: ".cyan + v.magenta
-					puts "\n"
-				end
-				puts "Do you want to see if you have more channels activated? (Y/n)".green
-				abort("\nCanceled.\n\n".red) unless STDIN.getch == ("y" || "Y")
-				puts "\n"
-			end
-			@hash = @api.getChannels
-			the_channels, channels_list = @view.new(@hash).showChannels("net.app.core.pm")
-			puts the_channels
-			the_channels, channels_list = @view.new(@hash).showChannels(nil)
-			puts the_channels
+			puts $status.errorSyntax
 		end
 	end
 

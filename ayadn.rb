@@ -162,7 +162,11 @@ when "pm", "send"
 		end
 	end
 
-when "messages", "channels"
+when "channels"
+	client.get_loaded_channels
+	client.ayadn_get_channels
+
+when "messages"
 	# arg2 is integer -> display channel stream
 	# arg2 is nil -> get a list of your previously used channels
 	# arg3 == nil = with pagination, arg3 == "all" = no pagination

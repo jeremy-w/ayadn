@@ -22,8 +22,11 @@ class AyaDN
 			$tools.config['timeline']['downside'] ? the_hash = getData(@hash) : the_hash = getDataNormal(@hash)
 			stream, pagination_array = buildCompleteStream(the_hash)
 		end
-		def showChannels(type)
-			stream, pagination_array = buildChannelsInfos(@hash, type)
+		def show_pm_channels
+			stream, pagination_array = build_pm_channels_infos
+		end
+		def show_channels
+			stream, pagination_array = build_channels_infos
 		end
 		def showDebugStream
 			buildDebugStream(getDataNormal(@hash))

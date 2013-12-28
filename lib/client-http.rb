@@ -39,7 +39,7 @@ class AyaDN
 							res.read_body do |part|
 								bytesTransferred += part.length
 								rounded = bytesTransferred.percent_of(fileSize).round
-								print "\rFetching data: ".cyan + "#{rounded.to_s}%".brown
+								print "\rFetching data: ".cyan + "#{rounded.to_s}%     ".brown
 								body << part
 							end
 						end

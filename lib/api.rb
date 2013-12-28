@@ -235,7 +235,13 @@ class AyaDN
 			checkLastPageID(last_page_id)
 			getHash
 		end
-		def getChannels
+		def get_pm_channels
+			@url = @endpoints.channels
+			@url += @endpoints.base_params
+			@url += "&channel_types=net.app.core.pm"
+			getHash
+		end
+		def get_channels
 			@url = @endpoints.channels
 			@url += @endpoints.base_params
 			getHash
