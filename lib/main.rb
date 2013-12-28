@@ -200,9 +200,15 @@ class AyaDN
 	end
 	def ayadnLoadPost(postID)
 		puts $status.infosPost(postID)
-		puts @view.new(nil).buildPostInfo(@api.load_post(postID), true)
+		puts @view.new(nil).buildPostInfo(load_post(postID), true)
 	end
-
+	def load_post(post_id)
+		fileContent = {}
+		File.open("#{$tools.ayadn_configuration[:posts_path]}/#{post_id}.post", "r") do |f|
+			fileContent = f.gets
+		end
+		resp = eval(fileContent)
+	end
 	def ayadnSavePost(postID)
 		@progress_indicator = false
 		name = postID.to_s

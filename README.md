@@ -37,8 +37,6 @@ AYADN
 
 - read posts starred by a user
 
-- read posts reposted by a user
-
 - see users who starred/reposted a post
 
 - read/scroll other streams: "checkins", "global", "trending", "conversations"

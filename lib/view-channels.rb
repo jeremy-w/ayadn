@@ -13,7 +13,7 @@ class AyaDN
 				channel_type = item['type']
 				if channel_type == "net.app.core.pm"
 					channels_list.push(channel_id)
-					#total_messages = item['counts']['messages']
+					total_messages = item['counts']['messages']
 					#owner = "@" + item['owner']['username']
 					#readers = item['readers']['user_ids']
 					#you_write = item['writers']['you']
@@ -21,9 +21,10 @@ class AyaDN
 					the_writers, the_readers = [], []
 					item['writers']['user_ids'].each do |writer|
 						if writer != nil
-							puts "\nFetching username of user ##{writer}"
+							puts "\nFetching username of user ##{writer}".green
 							user = AyaDN::API.new(@token).getUserInfos(writer)
-							handle = "@" + user['data']['username']
+							username = user['data']['username']
+							handle = "@" + username
 							$files.save_channel_id(channel_id, handle)
 							the_writers.push(handle)
 						end
@@ -32,6 +33,7 @@ class AyaDN
 					#the_channels << "Creator: ".cyan + owner.magenta + "\n"
 					#the_channels << "Channels type: ".cyan + "#{channel_type}\n".brown
 					the_channels << "Interlocutor(s): ".cyan + the_writers.join(", ").magenta + "\n"
+					the_channels << "Messages: ".cyan + total_messages.to_s.green + "\n"
 				end
 			end
 			the_channels << "\n"

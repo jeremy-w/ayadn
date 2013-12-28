@@ -85,13 +85,6 @@ class AyaDN
 			@url += @endpoints.light_params
 			getHash
 		end
-		def load_post(post_id)
-			fileContent = {}
-			File.open("#{$tools.ayadn_configuration[:posts_path]}/#{post_id}.post", "r") do |f|
-				fileContent = f.gets
-			end
-			resp = eval(fileContent)
-		end
 		def getPostInfos(post_id)
 			@url = @endpoints.single_post(post_id)
 			@url += @endpoints.base_params
