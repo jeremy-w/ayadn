@@ -10,7 +10,7 @@ class AyaDN
 		user_name = data['user']['username']
 		link = data['entities']['links'][0]['url']
 		if $tools.config['pinboard']['username'] != nil
-			puts "Saving post ".green + post_id.brown + " to Pinboard...\n".green
+			puts "\nSaving post ".green + post_id.brown + " to Pinboard...\n".green
 			$tools.saveToPinboard(post_id, $tools.config['pinboard']['username'], URI.unescape(Base64::decode64($tools.config['pinboard']['password'])), link, tags, post_text, user_name)
 			puts "Done!\n\n".green
 		else
