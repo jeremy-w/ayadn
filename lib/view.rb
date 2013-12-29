@@ -29,7 +29,7 @@ class AyaDN
 			stream, pagination_array = build_channels_infos
 		end
 		def showDebugStream
-			buildDebugStream(getDataNormal(@hash))
+			jj getDataNormal(@hash)
 		end
 		def showUsersList
 			buildUsersList(getDataNormal(@hash))

@@ -87,6 +87,10 @@ class AyaDN
 						end
 						#anno_string += "\n"
 					end
+					if annotation_type == "net.app.core.oembed"
+						photo_link = annotation_value['embeddable_url']
+						anno_string << "\nPhoto: ".cyan + photo_link.brown
+					end
 					xxx += 1
 				end
 				return anno_string

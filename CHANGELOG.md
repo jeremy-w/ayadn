@@ -3,7 +3,11 @@ AYADN
 
 AYADN is a learning exercise: while it's fully functional, it's still very alpha (remember I'm a beginner with Ruby).  
 
-## 2013-12-28 v0.5.2a
+## 2013-12-29 v0.5.3
+- better mentions management in post reply
+- detect oembed photo links
+
+## 2013-12-28 v0.5.2
 - auto save sent messages/posts (options, false by default)
 - better channels detection
 - allow special characters in Search

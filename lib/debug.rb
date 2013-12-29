@@ -9,7 +9,7 @@ class AyaDN
 		debugStream
 	end
 	def ayadnDebugPost(postID)
-		@hash = @api.getPostInfos("call", postID)
+		@hash = @api.getPostInfos(postID)
 		debugStream
 	end
 	def ayadnDebugUser(username)
