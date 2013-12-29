@@ -343,7 +343,7 @@ class AyaDN
 		$files.reset_pagination(content, option)
 	end
 	def ayadn_show_options
-		puts "Current options in ".cyan + "config.yml\n".magenta
+		puts "\nCurrent options in ".cyan + "config.yml\n".magenta
 		$tools.config.each do |k,v|
 			puts "#{k.capitalize}:".cyan
 			v.each do |x,y|

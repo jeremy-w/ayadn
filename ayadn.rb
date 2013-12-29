@@ -34,11 +34,11 @@ when nil, "flux", "stream", "uni", "unified"
 	client.ayadnUnified
 
 when "write", "w"
-	arg2 != nil ? client.ayadnSendPost(arg2, nil) : client.ayadnComposePost
+	arg2 != nil ? client.ayadnSendPost(arg2, nil) : client.ayadn_compose_post
 
 when "reply", "r"
 	if arg2 != nil
-		arg2.is_integer? ? client.ayadnReply(arg2) : (puts $status.errorPostID(arg2))
+		arg2.is_integer? ? client.ayadn_reply(arg2) : (puts $status.errorPostID(arg2))
 	else
 		puts $status.errorNoID
 	end

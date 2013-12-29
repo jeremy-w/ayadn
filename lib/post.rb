@@ -1,8 +1,24 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 class AyaDN
+	def ayadn_compose_post
+		puts $status.writePost + "\n"
+		char_count = $tools.ayadn_configuration[:post_max_length]
+		begin
+			input_text = STDIN.gets.chomp
+		rescue Exception
+			abort($status.errorPostNotSent)
+		end
+		real_text_length = $tools.getMarkdownText(input_text.dup).length
+		remaining_text_length = char_count - real_text_length
+		if remaining_text_length >= 0
+			ayadnSendPost(input_text, nil)
+		else
+			abort($status.errorPostTooLong(real_text_length, remaining_text_length.abs))
+		end
+	end
 	def ayadnSendPost(text, reply_to = nil)
-		abort($status.emptyPost) if (text.empty? || text == nil)
+		abort($status.emptyPost) if (text == nil)
 		puts $status.sendPost
 		blob = JSON.parse(@api.httpSend(text, reply_to))
 		@hash = blob['data']
@@ -45,31 +61,7 @@ class AyaDN
 			displayStream(stream)
 		end
 	end
-	def ayadnComposePost(reply_to = "", mentions_list = "", my_username = "")
-		puts $status.writePost
-		char_count = $tools.ayadn_configuration[:post_max_length] - mentions_list.length
-		# be careful to not color escape mentions_list or text
-		text = mentions_list
-		if !mentions_list.empty?
-			text += " "
-			char_count -= 1
-		end
-		print "\n#{text}"
-		begin
-			input_text = STDIN.gets.chomp
-		rescue Exception
-			abort($status.errorPostNotSent)
-		end
-		post_text = text + input_text
-		total_length = char_count - $tools.getMarkdownText(post_text.dup).length
-		real_length = $tools.ayadn_configuration[:post_max_length] + total_length.abs
-		if total_length > 0
-			ayadnSendPost(post_text, reply_to)
-		else
-			abort($status.errorPostTooLong(real_length, real_length - $tools.ayadn_configuration[:post_max_length]))
-		end
-	end
-	def ayadnReply(postID)
+	def ayadn_reply(postID)
 		@progress_indicator = false
 		puts $status.replyingToPost(postID)
 		post_mentions_array, replying_to_this_username, is_repost = @api.getPostMentions(postID) 
@@ -95,8 +87,49 @@ class AyaDN
 				new_content.push("@" + item)
 			end
 		end
-		ayadnComposePost(postID, new_content.join(" "))
+		if post_mentions_array.length > 1
+			all_mentions = new_content.dup
+			leading_mention = all_mentions.first
+			all_mentions.shift
+			puts "\nThe leading mention (".green + leading_mention.brown + ") has been put at the beginning of your post.\nThe rest of the mentions (".green + all_mentions.join(", ").brown + ") will be added automatically at the end.".green
+		end
+		ayadn_compose_reply(postID, new_content)
 	end
+	def ayadn_compose_reply(reply_to, mentions_list = "")
+		puts $status.writePost
+		all_mentions = mentions_list.dup
+		char_count = $tools.ayadn_configuration[:post_max_length]
+		leading_mention = all_mentions.first
+		mentions_list.shift
+		mentions_list = mentions_list.join(" ")
+		if leading_mention != nil
+			text = leading_mention + " "
+			char_count -= 1
+		else
+			text = ""
+		end
+		print "\n#{text}"
+		begin
+			input_text = STDIN.gets.chomp
+		rescue Exception
+			abort($status.errorPostNotSent)
+		end
+		if leading_mention != nil
+			post_text = text + input_text + " " + mentions_list
+			real_text_length = $tools.getMarkdownText(post_text.dup).length
+		else
+			post_text = input_text
+			real_text_length = $tools.getMarkdownText(post_text.dup).length
+		end
+		remaining_text_length = char_count - real_text_length
+		if remaining_text_length >= 0
+			ayadnSendPost(post_text, reply_to)
+		else
+			abort($status.errorPostTooLong(real_length, real_length - $tools.ayadn_configuration[:post_max_length]))
+		end
+	end
+
+
 	def ayadnComposeMessage(target)
 		puts $status.writeMessage
 		begin
