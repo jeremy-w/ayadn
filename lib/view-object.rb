@@ -88,8 +88,18 @@ class AyaDN
 						#anno_string += "\n"
 					end
 					if annotation_type == "net.app.core.oembed"
+						@same_link = false
 						photo_link = annotation_value['embeddable_url']
-						anno_string << "\nPhoto: ".cyan + photo_link.brown
+						if photo_link != nil
+							item['entities']['links'].each do |link|
+								if link['url'] == photo_link
+									@same_link = true
+								end
+							end
+						end
+						if @same_link == false
+							anno_string << "\nLink: ".cyan + photo_link.brown
+						end
 					end
 					xxx += 1
 				end
