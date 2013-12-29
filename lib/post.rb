@@ -91,7 +91,7 @@ class AyaDN
 			all_mentions = new_content.dup
 			leading_mention = all_mentions.first
 			all_mentions.shift
-			puts "\nThe leading mention (".green + leading_mention.brown + ") has been put at the beginning of your post.\nThe rest of the mentions (".green + all_mentions.join(", ").brown + ") will be added automatically at the end.".green
+			puts "\nThe leading mention (".green + leading_mention.red + ") has been put at the beginning of your post.\nThe rest of the mentions (".green + all_mentions.join(", ").red + ") will be added automatically at the end.".green
 		end
 		ayadn_compose_reply(postID, new_content)
 	end
