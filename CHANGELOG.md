@@ -3,6 +3,9 @@ AYADN
 
 AYADN is a learning exercise: while it's fully functional, it's still very alpha (remember I'm a beginner with Ruby).  
 
+## 2013-12-30 v0.5.4
+- custom posts count by stream
+
 ## 2013-12-29 v0.5.3
 - better mentions management in post reply
 - detect oembed photo links

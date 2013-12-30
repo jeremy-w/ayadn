@@ -288,6 +288,15 @@ ayadn skip-mention add username
 ayadn skip-mention remove username
 ayadn skip-mention show
 ayadn pin 16864003 ruby,json
+ayadn unified 10
+ayadn global 10
+ayadn checkins 10
+ayadn photos 10
+ayadn trending 10
+ayadn conversations 10
+ayadn mentions @ericd 10
+ayadn posts @ericd 10
+ayadn starred @ericd 10
 ayadn reset pagination
 ayadn help
 ayadn commands

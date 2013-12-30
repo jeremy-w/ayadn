@@ -94,8 +94,8 @@ class AyaDN
 							item['entities']['links'].each do |link|
 								@same_link = true if link['url'] == photo_link
 							end
+							anno_string << ("\nLink: ".cyan + photo_link.brown) if @same_link == false
 						end
-						anno_string << ("\nLink: ".cyan + photo_link.brown) if @same_link == false
 					end
 					xxx += 1
 				end

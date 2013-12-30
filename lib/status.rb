@@ -27,10 +27,10 @@ class AyaDN
             "\nThank you for authorizing AyaDN. You won't need to do this anymore.\n\n".green
         end
         def noNewPosts
-            "No new posts since your last visit.\n\n".red
+            "\nNo new posts since your last visit.\n\n".red
         end
         def errorEmptyList
-            "The list is empty.\n\n".red
+            "\nThe list is empty.\n\n".red
         end
         def errorSyntax
             "\nSyntax error.\n\n".red
@@ -81,66 +81,66 @@ class AyaDN
             "Redirecting to the original post: ".cyan + "#{postID}\n".brown
         end
         def fetchingList(list)
-            "\nFetching the \'#{list}\' list. Please wait.\n".green
+            "\nFetching the \'#{list}\' list. Please wait\n".green
         end
         def getUnified
-            "\nLoading the ".green + "unified ".brown + "Stream.\n".green
+            "\nLoading the ".green + "unified ".brown + "Stream\n".green
         end
         def getExplore(explore)
-            "\nLoading the ".green + "#{explore}".brown + " Stream.\n".green
+            "\nLoading the ".green + "#{explore}".brown + " Stream\n".green
         end
         def getGlobal
-            "\nLoading the ".green + "global ".brown + "Stream.\n".green
+            "\nLoading the ".green + "global ".brown + "Stream\n".green
         end
         def whoReposted(arg)
-            s = "\nLoading informations on post ".green + "#{arg}".brown + ".\n ".green
+            s = "\nLoading informations on post ".green + "#{arg}".brown + "\n "
             s += "\nReposted by: \n".cyan
         end
         def whoStarred(arg)
-            s = "\nLoading informations on post ".green + "#{arg}".brown + ".\n".green
+            s = "\nLoading informations on post ".green + "#{arg}".brown + "\n"
             s += "\nStarred by: \n".cyan
         end
         def infosUser(arg)
-            "\nLoading informations on ".green + "#{arg}".brown + "\n\n"
+            "\nLoading informations on ".green + "#{arg}".brown + "\n"
         end
         def infosPost(arg)
-            "\nLoading informations on post ".green + "#{arg}".brown + ".\n".green
+            "\nLoading informations on post ".green + "#{arg}".brown + "\n"
         end
         def postsUser(arg)
-            "\nLoading posts of ".green + "#{arg}".brown + ".\n".green
+            "\nLoading posts of ".green + "#{arg}".brown + "\n"
         end
         def mentionsUser(arg)
-            "\nLoading posts mentionning ".green + "#{arg}".brown + ".\n".green
+            "\nLoading posts mentionning ".green + "#{arg}".brown + "\n"
         end
         def starsUser(arg)
-            "\nLoading ".green + "#{arg}".reddish + "'s favorite posts.\n".green
+            "\nLoading ".green + "#{arg}".reddish + "'s favorite posts\n".green
         end
         def starsPost(arg)
-            "\nLoading users who starred post ".green + "#{arg}".reddish + ".\n" .green
+            "\nLoading users who starred post ".green + "#{arg}".reddish + "\n"
         end
         def getHashtags(arg)
-            "\nLoading posts containing ".green + "##{arg}".pink + ".\n".green
+            "\nLoading posts containing ".green + "##{arg}".pink + "\n".green
         end
         def sendPost
-            "\nSending post.\n".green
+            "\nSending post\n".green
         end
         def sendMessage
-            "\nSending private Message.\n".green
+            "\nSending private Message\n".green
         end
         def postSent
-            "Successfully posted.\n\n".green
+            "Successfully posted\n".green
         end
         def postDeleted
-            "\nPost successfully deleted.\n\n".green
+            "\nPost successfully deleted\n".green
         end
         def replyingToPost(postID)
-            "Replying to post ".cyan + "#{postID}.\n".brown
+            "Replying to post ".cyan + "#{postID}\n".brown
         end
         def deletePost(postID)
-            "\nDeleting post ".green + "#{postID}".brown + ".\n".green
+            "\nDeleting post ".green + "#{postID}".brown + "\n"
         end
         def getPostReplies(arg)
-            "\nLoading the conversation around post ".green + "#{arg}".brown + ".\n".green
+            "\nLoading the conversation around post ".green + "#{arg}".brown + "\n"
         end
         def writePost
             s = "\n#{$tools.ayadn_configuration[:post_max_length]} characters max, validate with [Enter] or cancel with [CTRL+C].\n".green
@@ -151,7 +151,7 @@ class AyaDN
             s += "\nType your text: ".cyan + "\n\n"
         end
         def writeReply(arg)
-            "\nLoading informations of post " + "#{arg}".brown + ".\n".green
+            "\nLoading informations of post " + "#{arg}".brown + "\n"
         end
         def savingFile(name, path, file)
             "\nSaving ".green + "#{name} ".brown + "in ".green + "#{path}#{file}".magenta

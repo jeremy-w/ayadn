@@ -30,8 +30,12 @@ case arg1
 when "scroll"
 	client.ayadnScroll(arg2, arg3)
 
-when nil, "flux", "stream", "uni", "unified"
-	client.ayadnUnified
+when nil
+	client.ayadnUnified(nil)
+#when self.class
+#	abort("ok #{arg1}")
+when "unified"
+	client.ayadnUnified(arg2)
 
 when "write", "w"
 	arg2 != nil ? client.ayadnSendPost(arg2, nil) : client.ayadn_compose_post
@@ -44,20 +48,20 @@ when "reply", "r"
 	end
 
 when "global", "g"
-	client.ayadnGlobal
+	client.ayadnGlobal(arg2)
 
 when "mentions", "m"
-	(arg2 =~ /^@/ || arg2 == "me") ? client.ayadnUserMentions(arg2) : (puts $status.errorUserID(arg2))
+	(arg2 =~ /^@/ || arg2 == "me") ? client.ayadnUserMentions(arg2, arg3) : (puts $status.errorUserID(arg2))
 
 when "posts", "p"
-	(arg2 =~ /^@/ || arg2 == "me") ? client.ayadnUserPosts(arg2) : (puts $status.errorUserID(arg2))
+	(arg2 =~ /^@/ || arg2 == "me") ? client.ayadnUserPosts(arg2, arg3) : (puts $status.errorUserID(arg2))
 
 when "trending", "conversations", "checkins", "photos"
-	client.ayadnExplore(arg1)
+	client.ayadnExplore(arg1, arg2)
 
 when "starred"
 	if arg2 =~ /^@/ || arg2 == "me"
-		client.ayadnStarredPosts(arg2)
+		client.ayadnStarredPosts(arg2, arg3)
 	elsif arg2.is_integer?
 		client.ayadnWhoStarred(arg2)
 	else
