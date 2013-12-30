@@ -51,7 +51,7 @@ class AyaDN
 			$tools.meta(resp['meta'])
 			uploaded_ids.push(resp['data']['id'])
 		end
-		view, file_url, pagination_array = @view.new(@api.getFilesList(nil)).showFilesList(with_url, false)
+		view, file_url, pagination_array = @view.new(@api.getFilesList(nil)).showFilesList(nil, false)
 		uploaded_ids.each do |id|
 			view.gsub!("#{id}", "#{id}".reverse_color)
 		end
@@ -74,7 +74,7 @@ class AyaDN
 		if meta['code'] == 200
 			puts "\nDone!\n".green
 			changed_file_id = resp['data']['id']
-			view, file_url, pagination_array = @view.new(@api.getFilesList(nil)).showFilesList(with_url, false)
+			view, file_url, pagination_array = @view.new(@api.getFilesList(nil)).showFilesList(nil, false)
 			view.gsub!("#{changed_file_id}", "#{changed_file_id}".reverse_color)
 			puts view
 		else

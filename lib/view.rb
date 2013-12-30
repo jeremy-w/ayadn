@@ -191,16 +191,13 @@ class AyaDN
 			return users_hash, @hash['meta']['min_id']
 		end
 		def buildFileInfo(resp_hash, with_url)
-			created_day, created_hour = objectDate(resp_hash)
-			list_string = ""
-			file_name, file_token, file_source_name, file_source_url, file_kind, file_id, file_size, file_size_converted, file_public = filesDetails(resp_hash)
+			files_details_hash = filesDetails(resp_hash)
 			#file_url_expires = resp_hash['url_expires']
 			#derived_files = resp_hash['derived_files']
-			# list_string += "\nID: ".cyan + file_id.brown
-			list_string = file_view(file_name, file_kind, file_size, file_size_converted, file_source_name, file_source_url, created_day, created_hour)
-			if file_public
+			list_string = file_view(files_details_hash)
+			if files_details_hash[:file_is_public]
 				list_string << "\nThis file is ".cyan + "public".blue
-				file_url = resp_hash['url_permanent']
+				file_url = files_details_hash[:file_url]
 			else
 				list_string << "\nThis file is ".cyan + "private".red
 				file_url = resp_hash['url']
@@ -210,7 +207,7 @@ class AyaDN
 				#list_string << derivedFilesDetails(derived_files)
 			end
 			list_string << "\n\n"
-			return list_string, file_url, file_name
+			return list_string, file_url, files_details_hash[:name]
 		end
 		def showFilesList(with_url, reverse)
 			if reverse == false
@@ -224,14 +221,14 @@ class AyaDN
 			resp_hash.each do |item|
 				created_day, created_hour = objectDate(item)
 				pagination_array.push(item['pagination_id'])
-				file_name, file_token, file_source_name, file_source_url, file_kind, file_id, file_size, file_size_converted, file_public = filesDetails(item)
+				files_details_hash = filesDetails(item)
 				#file_url_expires = item['url_expires']
 				#derived_files = item['derived_files']
-				list_string << "\nID: ".cyan + file_id.brown
-				list_string << file_view(file_name, file_kind, file_size, file_size_converted, file_source_name, file_source_url, created_day, created_hour)
-				if file_public
+				list_string << "\nID: ".cyan + files_details_hash[:id].brown
+				list_string << file_view(files_details_hash)
+				if files_details_hash[:file_is_public]
 					list_string << "\nThis file is ".cyan + "public".blue
-					list_string << "\nLink: ".cyan + item['url_short'].magenta
+					list_string << "\nLink: ".cyan + item['url_permanent'].magenta
 				else
 					list_string << "\nThis file is ".cyan + "private".red
 					if with_url

@@ -5,7 +5,20 @@ class AyaDN
 		def create_content_string(item, annotations, me_mentioned)
 			user_name, user_real_name, user_handle = objectNames(item['user'])
 			created_day, created_hour = objectDate(item)
-			objectView(item['id'], created_day, created_hour, user_handle, user_real_name, coloredText(item), objectLinks(item), annotations, me_mentioned, item['num_replies'], item['reply_to'])
+			view_params = {
+				id: item['id'],
+				created_day: created_day,
+				created_hour: created_hour,
+				user_handle: user_handle,
+				user_real_name: user_real_name,
+				text: coloredText(item),
+				links: objectLinks(item),
+				annotations: annotations,
+				me_mentioned: me_mentioned,
+				num_replies: item['num_replies'],
+				reply_to: item['reply_to']
+			}
+			object_view(view_params)
 		end
 		def skip_hashtags(item, saved_tags)
 			skipped_hashtags_encountered = false
@@ -106,42 +119,56 @@ class AyaDN
 				return anno_string
 			end
 		end
-		def objectView(obj_id, obj_created_day, obj_created_hour, obj_user_handle, obj_user_realname, obj_colored_text, obj_links, annotations, me_mentioned, num_replies, reply_to)
-			if me_mentioned == true
-				obj_view = "\n" + obj_id.to_s.cyan.reverse_color.ljust(14)
+		def object_view(params)
+			if params[:me_mentioned] == true
+				obj_view = "\n" + params[:id].to_s.cyan.reverse_color.ljust(14)
 			else
-				obj_view = "\n" + obj_id.to_s.cyan.ljust(14)
+				obj_view = "\n" + params[:id].to_s.cyan.ljust(14)
 			end
 			obj_view << ' '
-			obj_view << obj_user_handle.green
+			obj_view << params[:user_handle].green
 			obj_view << ' '
-			obj_view << "[#{obj_user_realname}]".magenta
+			obj_view << "[#{params[:user_real_name]}]".magenta
 			obj_view << ' '
-			obj_view << obj_created_day.cyan + ' ' + obj_created_hour.cyan 
+			obj_view << params[:created_day].cyan + ' ' + params[:created_hour].cyan 
 			obj_view << ' '
 			obj_view << "[#{@source_name}]".cyan if $tools.config['timeline']['show_client']
 			if $tools.config['timeline']['show_symbols']
-				obj_view << " <".blue if reply_to != nil
-				obj_view << " >".blue if num_replies > 0
+				obj_view << " <".blue if params[:reply_to] != nil
+				obj_view << " >".blue if params[:num_replies] > 0
 			end
 			obj_view << "\n"
-			obj_view << obj_colored_text
-			if annotations != nil
-				obj_view << annotations + "\n"
+			obj_view << params[:text]
+			if params[:annotations] != nil
+				obj_view << params[:annotations] + "\n"
 			end
-			obj_view << obj_links + "\n"
+			obj_view << params[:links] + "\n"
 		end
-		def file_view(file_name, file_kind, file_size, file_size_converted, file_source_name, file_source_url, created_day, created_hour)
-			file_elements = "\nName: ".cyan + file_name.green
-			file_elements << "\nKind: ".cyan + file_kind.pink
-			file_elements << "\nSize: ".cyan + file_size_converted.reddish unless file_size == nil
-			file_elements << "\nDate: ".cyan + created_day.green + " " + created_hour.green
-			file_elements << "\nSource: ".cyan + file_source_name.brown + " - #{file_source_url}".brown
+		def file_view(params)
+			file_elements = "\nName: ".cyan + params[:name].green
+			file_elements << "\nKind: ".cyan + params[:kind].pink
+			file_elements << "\nSize: ".cyan + params[:file_size_converted].reddish unless params[:file_size] == nil
+			file_elements << "\nDate: ".cyan + params[:created_day].green + " " + params[:created_hour].green
+			file_elements << "\nSource: ".cyan + params[:source_name].brown + " - #{params[:source_link]}".brown
 		end
 		def filesDetails(item)
+			created_day, created_hour = objectDate(item)
 			file_size = item['size']
 			file_size_converted = file_size.to_filesize unless file_size == nil
-			return item['name'], item['file_token'], item['source']['name'], item['source']['name'], item['kind'], item['id'], file_size, file_size_converted, item['public']
+			{
+				name: item['name'],
+				file_token: item['file_token'],
+				source_name: item['source']['name'],
+				source_link: item['source']['link'],
+				kind: item['kind'],
+				id: item['id'],
+				file_size: file_size,
+				file_size_converted: file_size_converted,
+				file_is_public: item['public'],
+				file_url: item['url_permanent'],
+				created_day: created_day,
+				created_hour: created_hour
+			}
 		end
 		def derivedFilesDetails(derived_files)
 			if derived_files != nil

@@ -87,7 +87,7 @@ class AyaDN
 				new_content.push("@" + item)
 			end
 		end
-		if post_mentions_array.length > 1
+		if new_content.length > 1
 			all_mentions = new_content.dup
 			leading_mention = all_mentions.first
 			all_mentions.shift
