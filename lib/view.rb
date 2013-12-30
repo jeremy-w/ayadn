@@ -128,7 +128,7 @@ class AyaDN
 		end
 		def buildPostInfo(post_hash, is_mine)
 			post_text = post_hash['text']
-			post_text != nil ? (colored_post = $tools.colorize(post_text)) : (puts "--Post deleted--\n\n".red; exit)
+			post_text != nil ? (colored_post = $tools.colorize(post_text)) : (puts "\n--Post deleted--\n\n".red; exit)
 			user_name, user_real_name, the_name = objectNames(post_hash['user'])
 			#user_follows = post_hash['follows_you']
 			#user_followed = post_hash['you_follow']

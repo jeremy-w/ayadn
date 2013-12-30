@@ -223,7 +223,7 @@ ayadn [PRESS ENTER KEY] *to display the unified stream*
 ayadn scroll [PRESS ENTER KEY] *to scroll the unified stream*
 ayadn write [PRESS ENTER KEY] *to write your post*
 ayadn write '@ericd Good morning Eric!' [PRESS ENTER KEY] *(prefer the previous method, safer)*
-ayadn reply 15723266 [PRESS ENTER KEY] *to reply, then write your post*
+ayadn reply 18527205 [PRESS ENTER KEY] *to reply, then write your post*
 ayadn pm @ericd [PRESS ENTER KEY] *to send a private message to @ericd*
 ayadn global
 ayadn scroll global
@@ -240,10 +240,10 @@ ayadn scroll mentions @ericd
 ayadn posts @ericd
 ayadn scroll posts @ericd
 ayadn starred @ericd
-ayadn starred 15723266
-ayadn reposted 15723266
+ayadn starred 18527205
+ayadn reposted 18527205
 ayadn infos @ericd
-ayadn infos 15723266
+ayadn infos 18527205
 ayadn convo 15726105
 ayadn tag nowplaying
 ayadn follow @ericd
@@ -265,10 +265,10 @@ ayadn channels
 ayadn send 12345
 ayadn messages 12345
 ayadn messages 12345 all
-ayadn star 15723266
-ayadn unstar 15723266
-ayadn repost 15723266
-ayadn unrepost 15723266
+ayadn star 18527205
+ayadn unstar 18527205
+ayadn repost 18527205
+ayadn unrepost 18527205
 ayadn delete 12345678
 ayadn list muted
 ayadn list followings @ericd
@@ -276,8 +276,8 @@ ayadn list followers @ericd
 ayadn backup muted
 ayadn backup followings @ericd
 ayadn backup followers @ericd
-ayadn save 15723266
-ayadn load 15723266
+ayadn save 18527205
+ayadn load 18527205
 ayadn skip-source add IFTTT
 ayadn skip-source remove IFTTT
 ayadn skip-source show

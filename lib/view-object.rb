@@ -33,7 +33,7 @@ class AyaDN
 		end
 		def coloredText(item)
 			obj_text = item['text']
-			obj_text != nil ? (colored_post = $tools.colorize(obj_text)) : (colored_post = "--Post deleted--".red)
+			obj_text != nil ? (colored_post = $tools.colorize(obj_text)) : (colored_post = "\n--Post deleted--".red)
 		end
 		def objectDate(item)
 			created_at = item['created_at']
