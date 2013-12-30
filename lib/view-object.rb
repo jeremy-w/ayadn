@@ -75,27 +75,14 @@ class AyaDN
 						checkins_region = annotation_value['region']
 						checkins_postcode = annotation_value['postcode']
 						checkins_country_code = annotation_value['country_code']
-						fancy = checkins_name.length + 6
-						anno_string << "\n" + ("." * fancy) #longueur du nom plus son étiquette
-						unless checkins_name.nil?
-							anno_string << "\nName: ".cyan + checkins_name.upcase.reddish
-						end
-						unless checkins_address.nil?
-							anno_string << "\nAddress: ".cyan + checkins_address.green
-						end
-						unless checkins_locality.nil?
-							anno_string << "\nLocality: ".cyan + checkins_locality.green
-						end
-						unless checkins_postcode.nil?
-							anno_string << " (#{checkins_postcode})".green
-						end
-						unless checkins_region.nil?
-							anno_string << "\nState/Region: ".cyan + checkins_region.green
-						end
-						unless checkins_country_code.nil?
-							anno_string << " (#{checkins_country_code})".upcase.green
-						end
-						unless @source_name.nil? or $tools.config['timeline']['show_client'] == true
+						anno_string << "\n" + ("." * (checkins_name.length + 6)) #longueur du nom plus son étiquette
+						anno_string << ("\nName: ".cyan + checkins_name.upcase.reddish) unless checkins_name.nil?
+						anno_string << ("\nAddress: ".cyan + checkins_address.green) unless checkins_address.nil?
+						anno_string << ("\nLocality: ".cyan + checkins_locality.green) unless checkins_locality.nil?
+						anno_string << (" (#{checkins_postcode})".green) unless checkins_postcode.nil?
+						anno_string << ("\nState/Region: ".cyan + checkins_region.green) unless checkins_region.nil?
+						anno_string << (" (#{checkins_country_code})".upcase.green) unless checkins_country_code.nil?
+						unless @source_name.nil? or $tools.config['timeline']['show_client']
 							anno_string << "\nPosted with: ".cyan + "#{@source_name} [#{@source_link}]".green + " "
 						end
 						#anno_string += "\n"
@@ -105,14 +92,10 @@ class AyaDN
 						photo_link = annotation_value['embeddable_url']
 						if photo_link != nil
 							item['entities']['links'].each do |link|
-								if link['url'] == photo_link
-									@same_link = true
-								end
+								@same_link = true if link['url'] == photo_link
 							end
 						end
-						if @same_link == false
-							anno_string << "\nLink: ".cyan + photo_link.brown
-						end
+						anno_string << ("\nLink: ".cyan + photo_link.brown) if @same_link == false
 					end
 					xxx += 1
 				end
