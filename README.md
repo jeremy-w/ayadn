@@ -393,6 +393,22 @@ Without arguments: resets all your pagination data.
 
 *Note: AyaDN doesn't use Stream Markers (stream syncing), and it's not a bug but a feature :p This is because AyaDN is meant as an independent tool that shouldn't interfere with other ADN clients.*  
 
+### Custom posts count
+
+You can specify the number of posts retrieved with most streams:
+
+```
+ayadn unified 10
+ayadn global 10
+ayadn checkins 10
+ayadn photos 10
+ayadn trending 10
+ayadn conversations 10
+ayadn mentions @ericd 10
+ayadn posts @ericd 10
+ayadn starred @ericd 10
+```  
+
 ### Running multiple accounts
 
 - main idea: one AyaDN folder per account
