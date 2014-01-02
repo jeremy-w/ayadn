@@ -32,8 +32,7 @@ when "scroll"
 
 when nil
 	client.ayadnUnified(nil)
-#when self.class
-#	abort("ok #{arg1}")
+
 when "unified"
 	client.ayadnUnified(arg2)
 

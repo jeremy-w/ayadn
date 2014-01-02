@@ -298,6 +298,7 @@ ayadn mentions @ericd 10
 ayadn posts @ericd 10
 ayadn starred @ericd 10
 ayadn reset pagination
+ayadn list options
 ayadn help
 ayadn commands
 ayadn webhelp
