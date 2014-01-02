@@ -84,13 +84,13 @@ class AyaDN
             "\nFetching the \'#{list}\' list. Please wait\n".green
         end
         def getUnified
-            "\nLoading the ".green + "unified ".brown + "Stream\n".green
+            "\nLoading the ".green + "unified ".brown + "Stream".green
         end
         def getExplore(explore)
-            "\nLoading the ".green + "#{explore}".brown + " Stream\n".green
+            "\nLoading the ".green + "#{explore}".brown + " Stream".green
         end
         def getGlobal
-            "\nLoading the ".green + "global ".brown + "Stream\n".green
+            "\nLoading the ".green + "global ".brown + "Stream".green
         end
         def whoReposted(arg)
             s = "\nLoading informations on post ".green + "#{arg}".brown + "\n "
@@ -134,7 +134,7 @@ class AyaDN
             "\nPost successfully deleted\n".green
         end
         def replyingToPost(postID)
-            "Replying to post ".cyan + "#{postID}\n".brown
+            "\nReplying to post ".cyan + "#{postID}\n".brown
         end
         def deletePost(postID)
             "\nDeleting post ".green + "#{postID}".brown + "\n"

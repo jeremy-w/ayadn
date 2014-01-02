@@ -57,7 +57,7 @@ class AyaDN
 				if last_page_id != nil
 					$files.write_last_page_id(fileURL, last_page_id)
 					print "\r                                         "
-            		#puts "\n"
+            		puts "\n"
             		$tools.countdown($tools.config['timeline']['countdown_1'])
             	else
         			print "\rNo new posts                ".red
