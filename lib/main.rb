@@ -146,7 +146,7 @@ class AyaDN
 				end
 				puts "\n"
 			end
-			puts "Do you want to refresh the list? (Y/n)".green
+			puts "Do you want to refresh the list? (y/N)".green
 			abort("\nCanceled.\n\n".red) unless STDIN.getch == ("y" || "Y")
 			puts "\n"
 		end
