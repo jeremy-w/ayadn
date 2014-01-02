@@ -40,6 +40,30 @@ class AyaDN
 	            f.close
 	        end
 		end
+		def save_channel_message(id, text, username, message_date)
+			channel_to_save = { id => {
+				text: text,
+				username: username,
+				message_date: message_date
+				} 
+			}
+			the_path = $tools.ayadn_configuration[:messages_path] + "/channels_with_recent_message.json"
+			if !File.exists?the_path
+			    f = File.new(the_path, "w")
+			        f.puts(channel_to_save.to_json)
+			    f.close
+			else
+			    the_hash = JSON.parse(IO.read(the_path)).to_hash
+			    the_hash.merge!(channel_to_save)
+			    f = File.new(the_path, "w")
+			        f.puts(the_hash.to_json)
+			    f.close
+			end
+		end
+		def load_channels_with_messages
+			the_path = $tools.ayadn_configuration[:messages_path] + "/channels_with_recent_message.json"
+			JSON.load(IO.read(the_path)) if File.exists?the_path
+		end
 		def load_channels
 			JSON.load(IO.read(@channels_path)) if File.exists?@channels_path
 		end

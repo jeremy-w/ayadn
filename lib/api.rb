@@ -232,11 +232,13 @@ class AyaDN
 			@url = @endpoints.channels
 			@url += @endpoints.base_params
 			@url += "&channel_types=net.app.core.pm"
+			@url += "&include_recent_message=1"
 			getHash
 		end
 		def get_channels
 			@url = @endpoints.channels
 			@url += @endpoints.base_params
+			@url += "&include_recent_message=1"
 			getHash
 		end
 		def getFilesList(beforeID)

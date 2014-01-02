@@ -135,14 +135,18 @@ class AyaDN
 	end
 	def get_loaded_channels
 		loaded_channels = $files.load_channels
+		channels_with_messages = $files.load_channels_with_messages
 		if loaded_channels != nil
 			puts "Backed-up list of your active channels:\n".green
 			loaded_channels.each do |k,v|
 				puts "Channel: ".cyan + k.brown
 				puts "Title: ".cyan + v.magenta
+				if channels_with_messages != nil && channels_with_messages[k] != nil
+					puts "Last message by @#{channels_with_messages[k]['username']} (#{channels_with_messages[k]['message_date']}): \n".cyan + channels_with_messages[k]['text']
+				end
 				puts "\n"
 			end
-			puts "Do you want to see if you have more channels activated? (Y/n)".green
+			puts "Do you want to refresh the list? (Y/n)".green
 			abort("\nCanceled.\n\n".red) unless STDIN.getch == ("y" || "Y")
 			puts "\n"
 		end

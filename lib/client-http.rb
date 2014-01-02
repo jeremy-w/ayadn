@@ -47,7 +47,7 @@ class AyaDN
 						#puts ""
 						code = JSON.parse(body)
 						if code['meta']['code'] == 404
-							puts "Does not exist (or has been deleted).\n\n".red
+							puts "\nDoes not exist (or has been deleted).\n\n".red
 							exit
 						end
 						return body

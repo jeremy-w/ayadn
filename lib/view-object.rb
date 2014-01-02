@@ -3,7 +3,11 @@
 class AyaDN
 	class View
 		def create_content_string(item, annotations, me_mentioned)
-			user_name, user_real_name, user_handle = objectNames(item['user'])
+			if item['user']
+				user_name, user_real_name, user_handle = objectNames(item['user'])
+			else
+				user_name, user_real_name, user_handle = ""
+			end
 			created_day, created_hour = objectDate(item)
 			view_params = {
 				id: item['id'],
@@ -109,9 +113,9 @@ class AyaDN
 				obj_view = "\n" + params[:id].to_s.cyan.ljust(14)
 			end
 			obj_view << ' '
-			obj_view << params[:user_handle].green
+			obj_view << params[:user_handle].green if params[:user_handle]
 			obj_view << ' '
-			obj_view << "[#{params[:user_real_name]}]".magenta
+			obj_view << "[#{params[:user_real_name]}]".magenta if params[:user_real_name]
 			obj_view << ' '
 			obj_view << params[:created_day].cyan + ' ' + params[:created_hour].cyan 
 			obj_view << ' '

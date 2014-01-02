@@ -41,6 +41,13 @@ class AyaDN
 					#the_channels << "Channels type: ".cyan + "#{channel_type}\n".brown
 					the_channels << "Interlocutor(s): ".cyan + the_writers.join(", ").magenta + "\n"
 					the_channels << "Messages: ".cyan + total_messages.to_s.green + "\n"
+					if item['recent_message']
+						if item['recent_message']['text']
+							message_date = objectDate(item['recent_message']).join(" ")
+							the_channels << "Last message by @#{item['recent_message']['user']['username']} (#{message_date}): \n".cyan + item['recent_message']['text'] + "\n"
+							$files.save_channel_message(channel_id, item['recent_message']['text'], item['recent_message']['user']['username'], message_date)
+						end
+					end
 				end
 			end
 			the_channels << "\n"
@@ -80,6 +87,13 @@ class AyaDN
 					else
 						$files.save_channel_id(channel_id, channel_type)
 						the_channels << "\nChannel ID: ".cyan + "#{channel_id}\n".brown + " -> " + "#{channel_type}\n"
+					end
+					if item['recent_message']
+						if item['recent_message']['text']
+							message_date = objectDate(item['recent_message']).join(" ")
+							the_channels << "Last message by @#{item['recent_message']['user']['username']} (#{message_date}): \n".cyan + item['recent_message']['text'] + "\n"
+							$files.save_channel_message(channel_id, item['recent_message']['text'], item['recent_message']['user']['username'], message_date)
+						end
 					end
 				end
 			end
