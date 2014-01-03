@@ -72,7 +72,7 @@ class AyaDN
 		end
 		def getUserInfos(username)
 			@url = @endpoints.user_info(username)
-			@url += @endpoints.light_params
+			@url += @endpoints.base_params
 			getHash
 		end
 		def getWhoReposted(post_id)

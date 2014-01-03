@@ -251,7 +251,8 @@ class AyaDN
 		end
 		def buildUserInfos(name, adn_data)
 			user_name, user_real_name, the_name = objectNames(adn_data)
-			user_show = "\nID: ".cyan.ljust(21) + adn_data['id'].green + "\n"
+			created_at = adn_data['created_at']
+			user_show = "\nID: ".cyan.ljust(22) + adn_data['id'].green + "\n"
 			if user_real_name != nil
 				user_show << "Name: ".cyan.ljust(21) + user_real_name.green + "\n"
 			end
@@ -270,6 +271,7 @@ class AyaDN
 			end
 			user_show << "Posts: ".cyan.ljust(21) + adn_data['counts']['posts'].to_s.green + "\n" + "Followers: ".cyan.ljust(21) + adn_data['counts']['followers'].to_s.green + "\n" + "Following: ".cyan.ljust(21) + adn_data['counts']['following'].to_s.green + "\n"
 			user_show << "Web: ".cyan.ljust(21) + "http://".green + adn_data['verified_domain'].green + "\n" if adn_data['verified_domain'] != nil
+			user_show << "Joined: ".cyan.ljust(21) + created_at[0...10].green + " " + created_at[11...19].green + "\n"
 			user_show << "\n"
 			user_show << the_name.brown
 			if name != "me"
@@ -287,7 +289,7 @@ class AyaDN
 					user_show << "You muted ".reddish + the_name.brown + "\n"
 				end
 			else
-				user_show << ":".cyan + " yourself!".brown + "\n"
+				user_show << " =>" + " yourself!".brown + "\n"
 			end
 			user_show << "\n"
 			user_show << "Bio: \n\n".cyan + user_descr + "\n\n"

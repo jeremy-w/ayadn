@@ -123,6 +123,9 @@ when "list"
 		client.ayadn_list_files(arg3)
 	when "options","config"
 		client.ayadn_show_options
+	when "channels"
+		client.get_loaded_channels
+		client.ayadn_get_channels
 	else
 		puts $status.errorSyntax
 	end
