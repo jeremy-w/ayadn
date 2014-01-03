@@ -197,6 +197,9 @@ when "webhelp"
 		puts "\nFailed to start a browser automatically. Please visit ".cyan + "https://github.com/ericdke/ayadn#ayadn".magenta
 	end
 
+when "options"
+	client.ayadn_show_options
+
 when "debug"
 	if arg2 == nil
 		client.ayadnDebugStream
