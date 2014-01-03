@@ -5,7 +5,7 @@
   require "#{r}"
 end
 
-%w{authorize main list post get-api api debug endpoints client-http view view-object view-interactions view-channels skip tools files adn_files extend status colors help pinboard}.each do |r|
+%w{authorize main list post get-api api debug endpoints client-http view view-object view-interactions view-channels skip tools files adn_files extend status colors help pinboard user-stream}.each do |r|
   require_relative "lib/#{r}"
 end
 

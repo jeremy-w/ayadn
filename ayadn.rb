@@ -293,9 +293,8 @@ when "private", "public"
 when "pin"
 	client.ayadnBookmark(ARGV)
 
-# # experiment
-# when "record"
-# 	client.ayadnRecord(arg2)
+when "stream_global"
+	client.ayadn_userstream
 
 when "authorize", "login"
 	AyaDN.new(nil).ayadnAuthorize("reset")
