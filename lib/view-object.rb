@@ -95,8 +95,12 @@ class AyaDN
 						@same_link = false
 						photo_link = annotation_value['embeddable_url']
 						if photo_link != nil
+							photo_link_parsed = URI.parse(photo_link)
+							photo_link_to_compare = photo_link_parsed.host + photo_link_parsed.path
 							item['entities']['links'].each do |link|
-								@same_link = true if link['url'] == photo_link
+								in_entities_parsed = URI.parse(link['url'])
+								in_entities_to_compare = in_entities_parsed.host + in_entities_parsed.path
+								@same_link = true if in_entities_to_compare == photo_link_to_compare
 							end
 							anno_string << ("\nLink: ".cyan + photo_link.brown) if @same_link == false
 						end
