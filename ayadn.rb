@@ -219,28 +219,37 @@ when "debug"
 	end
 
 when "skip-source"
-	if arg2 == "add"
+	case arg2
+	when "add"
 		client.ayadn_skip_add("sources", arg3)
-	elsif arg2 == "remove"
+	when "remove"
 		client.ayadn_skip_remove("sources", arg3)
+	when "show"
+		client.ayadn_show_options
 	else
 		puts $status.errorSyntax
 	end
 
 when "skip-tag"
-	if arg2 == "add"
+	case arg2
+	when "add"
 		client.ayadn_skip_add("hashtags", arg3)
-	elsif arg2 == "remove"
+	when "remove"
 		client.ayadn_skip_remove("hashtags", arg3)
+	when "show"
+		client.ayadn_show_options
 	else
 		puts $status.errorSyntax
 	end
 
 when "skip-mention"
-	if arg2 == "add"
+	case arg2
+	when "add"
 		client.ayadn_skip_add("mentions", arg3)
-	elsif arg2 == "remove"
+	when "remove"
 		client.ayadn_skip_remove("mentions", arg3)
+	when "show"
+		client.ayadn_show_options
 	else
 		puts $status.errorSyntax
 	end
