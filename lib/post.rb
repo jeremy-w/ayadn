@@ -72,7 +72,8 @@ class AyaDN
 			post_mentions_array, replying_to_this_username, is_repost = @api.getPostMentions(postID) 
 		end
 		if $tools.config['identity']['prefix'] == "me"
-			my_username = @api.getUserName("me")
+			me_saved = $files.users_read("me")
+			me_saved ? (my_username = me_saved) : (my_username = @api.getUserName("me"))
 		else
 			my_username = $tools.config['identity']['prefix']
 		end
@@ -82,10 +83,7 @@ class AyaDN
 		# if I'm not answering myself, add the @username of the "replyee"
 		new_content.push(replying_to_handle) if replying_to_this_username != my_username 
 		post_mentions_array.each do |item|
-			# if I'm in the post's mentions, erase me, else insert the mention
-			if item != my_username
-				new_content.push("@" + item)
-			end
+			new_content.push("@" + item) if item != my_username
 		end
 		if new_content.length > 1
 			all_mentions = new_content.dup

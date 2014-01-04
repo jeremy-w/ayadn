@@ -109,7 +109,9 @@ class AyaDN
 				next if @skipped_mentions_encountered == true
 				me_mentioned = false
 				for name in postMentionsArray do
-					me_mentioned = true if name == $tools.config['identity']['prefix']
+					if name == ($tools.config['identity']['prefix'] || $files.users_read("me"))
+						me_mentioned = true 
+					end
 				end
 				post_string << create_content_string(item, checkins_annotations(item), me_mentioned)
 			end
@@ -252,6 +254,7 @@ class AyaDN
 		def buildUserInfos(name, adn_data)
 			user_name, user_real_name, the_name = objectNames(adn_data)
 
+			$files.users_write("me", user_name) if name == "me"
 			$files.users_write(adn_data['id'], user_name) if $files.users_read(adn_data['id']) == nil
 
 			created_at = adn_data['created_at']
