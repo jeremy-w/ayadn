@@ -47,9 +47,7 @@ class AyaDN
 			links = item['entities']['links']
 			links_string = ""
 			if !links.empty?
-				if item['annotations'] == nil
-					links_string << "\n"
-				end
+				links_string << "\n" if item['annotations'] == nil
 				for link in links do
 					links_string << "Link: ".cyan + link['url'].brown + "\n"
 				end
@@ -134,9 +132,7 @@ class AyaDN
 			end
 			obj_view << "\n"
 			obj_view << params[:text]
-			if params[:annotations] != nil
-				obj_view << params[:annotations] + "\n"
-			end
+			obj_view << (params[:annotations] + "\n") if params[:annotations] != nil
 			obj_view << params[:links] + "\n"
 		end
 		def file_view(params)

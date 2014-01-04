@@ -53,7 +53,7 @@ class AyaDN
 	            f.close
 	        end
 		end
-		def save_channel_message(id, text, username, message_date)
+		def save_channel_message(id, text, username, message_date) # id, text, username, message_date
 			channel_to_save = { id => {
 				text: text,
 				username: username,
@@ -82,9 +82,7 @@ class AyaDN
 		end
 		def auth_read
 			token = IO.read(@token_path) if File.exists?@token_path
-			if token != nil
-			    return token.chomp()
-			end
+			return token.chomp() if token != nil
 		end
 		def auth_write(content)
 			f = File.new(@token_path, "w")
@@ -121,9 +119,7 @@ class AyaDN
             end
 		end
 		def reset_credentials
-            if File.exists?(@token_path)
-                 FileUtils.rm_rf(@token_path)
-            end
+            FileUtils.rm_rf(@token_path) if File.exists?(@token_path)
 		end
 		def save_post(post_id)
 			makedir($tools.ayadn_configuration[:posts_path])
@@ -147,8 +143,7 @@ class AyaDN
 	 		JSON.parse(AyaDN::API.new(token).deleteFile(target))
 	 	end
 		def uploadFiles(file, token)
-		    file_ext = File.extname(file).downcase
-		    case file_ext
+		    case File.extname(file).downcase
 		    when ".png"
 		        `curl -k -H 'Authorization: BEARER #{token}' https://alpha-api.app.net/stream/0/files -F 'type=com.ayadn.files' -F "content=@#{file};type=image/png" -X POST`
 		    when ".gif"

@@ -126,9 +126,7 @@ class AyaDN
 			post_URL = post_hash['canonical_url']
 			post_details = "\nPost URL: ".cyan + post_URL.brown + "\n"
 			is_reply = post_hash['reply_to']
-			if is_reply != nil
-				post_details << "This post is a reply to post ".cyan + is_reply.brown + "\n"
-			end
+			post_details << ("This post is a reply to post ".cyan + is_reply.brown + "\n") if is_reply != nil
 			if post_text != nil
 				without_braces = $tools.withoutSquareBraces($tools.getMarkdownText(post_text.dup))
 				post_details << "\nLength: ".cyan + without_braces.length.to_s.reddish
@@ -143,9 +141,7 @@ class AyaDN
 			#user_followed = post_hash['you_follow']
 			created_day, created_hour = objectDate(post_hash)
 			post_details = "\n" + created_day.cyan + ' ' + created_hour.cyan + ' ' + the_name.green
-			if !user_real_name.empty?
-				post_details << " [#{user_real_name}]".reddish
-			end
+			post_details << (" [#{user_real_name}]".reddish) if !user_real_name.empty?
 			post_details << ":\n"
 			post_details << "\n" + colored_post + "\n\n" 
 			post_details << "ID: ".cyan + post_hash['id'].to_s.green + "\n"
@@ -153,9 +149,7 @@ class AyaDN
 			post_details << "Post URL: ".cyan + post_hash['canonical_url'].brown
 			is_reply = post_hash['reply_to']
 			repost_of = post_hash['repost_of']
-			if is_reply != nil
-				post_details << "\nThis post is a reply to post ".cyan + is_reply.brown
-			end
+			post_details << ("\nThis post is a reply to post ".cyan + is_reply.brown) if is_reply != nil
 			if is_mine == false
 				if repost_of != nil
 					post_details << "\nThis post is a repost of post ".cyan + repost_of['id'].brown
@@ -164,12 +158,8 @@ class AyaDN
 					post_details << "  Reposts: ".cyan + post_hash['num_reposts'].to_s.reddish
 					post_details << "  Stars: ".cyan + post_hash['num_stars'].to_s.reddish
 				end
-				if post_hash['you_reposted'] == true
-					post_details << "\nYou reposted this post.".cyan
-				end
-				if post_hash['you_starred'] == true
-					post_details << "\nYou starred this post.".cyan
-				end
+				post_details << ("\nYou reposted this post.".cyan) if post_hash['you_reposted']
+				post_details << ("\nYou starred this post.".cyan) if post_hash['you_starred']
 				post_details << "\nPosted with: ".cyan + post_hash['source']['name'].reddish
 				post_details << "  Locale: ".cyan + post_hash['user']['locale'].reddish
 				post_details << "  Timezone: ".cyan + post_hash['user']['timezone'].reddish
@@ -219,11 +209,7 @@ class AyaDN
 			return list_string, file_url, files_details_hash[:name]
 		end
 		def showFilesList(with_url, reverse)
-			if reverse == false
-				resp_hash = getData(@hash)
-			else
-				resp_hash = getDataNormal(@hash)
-			end
+			reverse ? resp_hash = getDataNormal(@hash) : resp_hash = getData(@hash)
 			list_string = ""
 			file_url = nil
 			pagination_array = []
@@ -259,22 +245,12 @@ class AyaDN
 
 			created_at = adn_data['created_at']
 			user_show = "\nID: ".cyan.ljust(22) + adn_data['id'].green + "\n"
-			if user_real_name != nil
-				user_show << "Name: ".cyan.ljust(21) + user_real_name.green + "\n"
-			end
-			if adn_data['description'] != nil
-				user_descr = adn_data['description']['text']
-			else
-				user_descr = "No description available.".cyan
-			end
+			user_show << ("Name: ".cyan.ljust(21) + user_real_name.green + "\n") if user_real_name != nil
+			adn_data['description'] != nil ? user_descr = adn_data['description']['text'] : user_descr = "No description available.".cyan
 			user_timezone = adn_data['timezone']
-			if user_timezone != nil
-				user_show << "Timezone: ".cyan.ljust(21) + user_timezone.green + "\n"
-			end
+			user_show << ("Timezone: ".cyan.ljust(21) + user_timezone.green + "\n") if user_timezone != nil
 			locale = adn_data['locale']
-			if locale != nil
-				user_show << "Locale: ".cyan.ljust(21) + locale.green + "\n"
-			end
+			user_show << ("Locale: ".cyan.ljust(21) + locale.green + "\n") if locale != nil
 			user_show << "Posts: ".cyan.ljust(21) + adn_data['counts']['posts'].to_s.green + "\n" + "Followers: ".cyan.ljust(21) + adn_data['counts']['followers'].to_s.green + "\n" + "Following: ".cyan.ljust(21) + adn_data['counts']['following'].to_s.green + "\n"
 			user_show << "Web: ".cyan.ljust(21) + "http://".green + adn_data['verified_domain'].green + "\n" if adn_data['verified_domain'] != nil
 			user_show << "Joined: ".cyan.ljust(21) + created_at[0...10].green + " " + created_at[11...19].green + "\n"
@@ -291,11 +267,9 @@ class AyaDN
 				else
 					user_show << "You don't follow ".reddish + the_name.brown + "\n"
 				end
-				if adn_data['you_muted']
-					user_show << "You muted ".reddish + the_name.brown + "\n"
-				end
+				user_show << ("You muted ".reddish + the_name.brown + "\n") if adn_data['you_muted']
 			else
-				user_show << " =>" + " yourself!".brown + "\n"
+				user_show << " => " + "yourself!".brown + "\n"
 			end
 			user_show << "\n"
 			user_show << "Bio: \n\n".cyan + user_descr + "\n\n"
