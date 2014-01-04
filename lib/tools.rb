@@ -13,6 +13,7 @@ class AyaDN
                 posts_path: ayadn_data_path + "/#{identityPrefix}/posts",
                 lists_path: ayadn_data_path + "/#{identityPrefix}/lists",
                 files_path: ayadn_data_path + "/#{identityPrefix}/files",
+                db_path: ayadn_data_path + "/#{identityPrefix}/db",
                 last_page_id_path: ayadn_data_path + "/#{identityPrefix}/.pagination",
                 messages_path: ayadn_data_path + "/#{identityPrefix}/messages",
                 authorization_path: ayadn_data_path + "/#{identityPrefix}/.auth",

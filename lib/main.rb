@@ -184,6 +184,7 @@ class AyaDN
 		end
 	end
 	def ayadn_delete_message(channel_id, message_id)
+		puts "\nDeleting message #{message_id} in channel #{channel_id}".green
 		@url = @api.unique_message(channel_id, message_id)
 		$tools.checkHTTPResp(@api.clientHTTP("delete"))
 		puts "\nDone!\n".green

@@ -12,6 +12,7 @@ puts "\n\nAYADN".red + " - " + "App.net command-line client\n".brown
 $status = AyaDN::ClientStatus.new
 $tools = AyaDN::Tools.new
 $files = AyaDN::Files.new
+$files.makedir($tools.ayadn_configuration[:db_path])
 
 token = $files.auth_read
 if token != nil

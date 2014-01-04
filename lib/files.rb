@@ -6,6 +6,19 @@ class AyaDN
 			@token_path = $tools.ayadn_configuration[:authorization_path] + "/token"
 			@channels_path = $tools.ayadn_configuration[:messages_path] + "/channels.json"
 		end
+		def users_write(key, value)
+			db = PStore.new($tools.ayadn_configuration[:db_path] + "/users.db")
+			db.transaction do
+				db[key] = value
+			end
+		end
+		def users_read(key)
+			db = PStore.new($tools.ayadn_configuration[:db_path] + "/users.db")
+			db.transaction do
+				@value = db[key]
+			end
+			return @value
+		end
 		def makedir(value)
 			unless Dir.exists? value
 			    FileUtils.mkdir_p value

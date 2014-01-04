@@ -43,7 +43,7 @@ AYADN
 
 - read a timeline of your interactions
 
-- delete a post
+- delete a post/message
 
 - save/load a post locally
 
@@ -270,6 +270,7 @@ ayadn unstar 18527205
 ayadn repost 18527205
 ayadn unrepost 18527205
 ayadn delete 12345678
+ayadn delete-message 12345 23456789 *channel_id message_id*
 ayadn list muted
 ayadn list followings @ericd
 ayadn list followers @ericd
@@ -495,6 +496,8 @@ On Mac OS X, you may have to answer `yes` if your computer asks you to download 
 
 ## Help
 
+### Console
+
 Be aware of the way the console treats what you type.
 
 When posting with `"double quotes"`, any special character will be interpreted! So `"echo !"` becomes `"echo last command"`. You may not want to do that...
@@ -513,7 +516,13 @@ ayadn.rb write "Here's an escaped exclamation mark \! and a normal simple quote 
   
 `ayadn.rb write`  
 
+### Database
 
+AyaDN keeps a database of the ids of all the users it sees (it reduces the number of API calls and speeds up the app.)
+
+If you think that this file is causing problems to AyaDN or if it's simply getting too big, just trash it.
+
+The file is: `%USERNAME%/ayadn/data/username/db/users.db`
 
 ## Demo
 

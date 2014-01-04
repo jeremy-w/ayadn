@@ -251,6 +251,9 @@ class AyaDN
 		end
 		def buildUserInfos(name, adn_data)
 			user_name, user_real_name, the_name = objectNames(adn_data)
+
+			$files.users_write(adn_data['id'], user_name) if $files.users_read(adn_data['id']) == nil
+
 			created_at = adn_data['created_at']
 			user_show = "\nID: ".cyan.ljust(22) + adn_data['id'].green + "\n"
 			if user_real_name != nil

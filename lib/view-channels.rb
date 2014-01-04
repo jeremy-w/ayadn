@@ -8,7 +8,6 @@ class AyaDN
 			the_channels = ""
 			channels_list = []
 			puts "\nGetting users infos, please wait a few seconds... (could take a while the first time if you have a lot of channels activated)\n".cyan
-			fetched_names = {}
 			@hash['data'].each do |item|
 				channel_id = item['id']
 				channel_type = item['type']
@@ -22,15 +21,16 @@ class AyaDN
 					the_writers, the_readers = [], []
 					item['writers']['user_ids'].each do |writer|
 						if writer != nil
-							if fetched_names[writer]
-								handle = "@" + fetched_names[writer]
+							known_user = $files.users_read(writer)
+							if known_user
+								handle = "@" + known_user
 								puts "\n#{writer} already known: #{handle}. Skipping the username search".green
 							else
 								puts "\nFetching username of user ##{writer}".green
 								user = AyaDN::API.new(@token).getUserInfos(writer)
 								username = user['data']['username']
 								handle = "@" + username
-								fetched_names[writer] = username
+								$files.users_write(writer, username)
 							end
 							$files.save_channel_id(channel_id, handle)
 							the_writers.push(handle)

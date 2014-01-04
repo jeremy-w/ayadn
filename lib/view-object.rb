@@ -60,7 +60,11 @@ class AyaDN
 			return item['source']['name'], item['source']['link']
 		end
 		def objectNames(item)
+			user_id = item['id']
 			user_name = item['username']
+
+			$files.users_write(user_id, user_name) if $files.users_read(user_id) == nil
+
 			user_handle = "@" + user_name
 			return user_name, item['name'], user_handle
 		end
