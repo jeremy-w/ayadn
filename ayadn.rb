@@ -278,6 +278,9 @@ when "random"
 		end
 	end
 
+when "delete-message"
+	client.ayadn_delete_message(arg2, arg3) #channel, message
+
 when "download"
 	client.ayadn_download_files(arg2)
 

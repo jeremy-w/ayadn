@@ -217,6 +217,10 @@ class AyaDN
 			@url += @endpoints.base_params
 			getHash
 		end
+		def unique_message(channel_id, message_id)
+			@url = @endpoints.get_message(channel_id, message_id)
+			@url += @endpoints.base_params
+		end
 		def getUniqueMessage(channel_id, message_id)
 			@url = @endpoints.get_message(channel_id, message_id)
 			@url += @endpoints.base_params

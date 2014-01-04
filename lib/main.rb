@@ -183,6 +183,11 @@ class AyaDN
 			exit
 		end
 	end
+	def ayadn_delete_message(channel_id, message_id)
+		@url = @api.unique_message(channel_id, message_id)
+		$tools.checkHTTPResp(@api.clientHTTP("delete"))
+		puts "\nDone!\n".green
+	end
 
 	def ayadnWhoReposted(postID)
 		puts $status.whoReposted(postID)
