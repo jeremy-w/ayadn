@@ -381,6 +381,8 @@ class AyaDN
 		puts "\t" + $tools.ayadn_configuration[:lists_path].brown + "/".brown
 		puts "Files path:".cyan
 		puts "\t" + $tools.ayadn_configuration[:files_path].brown + "/".brown
+		puts "Database path:".cyan
+		puts "\t" + $tools.ayadn_configuration[:db_path].brown + "/".brown
 		puts "\n"
 		puts "AyaDN system configuration: \n".magenta
 		puts "Authorization token path:".cyan

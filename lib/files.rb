@@ -53,11 +53,11 @@ class AyaDN
 	            f.close
 	        end
 		end
-		def save_channel_message(id, text, username, message_date) # id, text, username, message_date
-			channel_to_save = { id => {
-				text: text,
-				username: username,
-				message_date: message_date
+		def save_channel_message(params)
+			channel_to_save = { params[:id] => {
+				text: params[:text],
+				username: params[:username],
+				message_date: params[:message_date]
 				} 
 			}
 			the_path = $tools.ayadn_configuration[:messages_path] + "/channels_with_recent_message.json"

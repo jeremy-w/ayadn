@@ -10,8 +10,6 @@
 - implement some solid error handling
 - secure and sanitize input argv
 - get rid of the global variables
-- show current options
-- create branches for experimental purposes
 - clean up and DRY
 
 ## Next
@@ -25,10 +23,8 @@
     - more options activable from the app itself
     - export posts/streams to different formats
     - semantic questions like "does user x follow user x"
-    - log mode: database all the things
     - flag user(s) or hashtag(s) + colorize their posts
 - new options:
-    - configurable path
     - pagination activated/deactivated
     - color sets
     - include/exclude elements of the headline
