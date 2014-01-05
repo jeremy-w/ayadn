@@ -243,7 +243,8 @@ class AyaDN
 		puts "\nLoading post from App.net...".green + name.brown
 		puts $status.savingFile(name, $tools.ayadn_configuration[:posts_path], file)
 		f = File.new(fileURL, "w")
-			f.puts(@api.getSinglePost(postID))
+		resp = @api.getSinglePost(postID)
+			f.puts(resp['data'])
 		f.close
 		puts "\nSuccessfully saved the post.\n\n".green
 		exit
