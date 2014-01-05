@@ -192,6 +192,6 @@ class AyaDN
 		$files.makedir($tools.ayadn_configuration[:messages_path])
 		puts "Channel ID: ".cyan + private_channel_ID.brown + " Message ID: ".cyan + @hash['id'].brown + "\n\n"
 		puts $status.postSent
-		$files.save_channel_id(private_message_channel_ID, target)
+		$files.save_channel_id(private_channel_ID, target)
 	end
 end
