@@ -62,10 +62,7 @@ class AyaDN
 		end
 		def buildStream(post_hash)
 			post_string = "\n"
-			for item in post_hash do
-				# create_content_string(item, annotations, me_mentioned)
-				post_string << create_content_string(item, nil, false)
-			end
+			post_string << post_hash.map {|item| create_content_string(item, nil, false)}
 			return post_string
 		end
 		def buildMessages(messages_stream)
@@ -83,9 +80,7 @@ class AyaDN
 			pagination_array = []
 			saved_tags = []
 			if $tools.config['skipped']['hashtags'] != nil
-				for tag in $tools.config['skipped']['hashtags'] do
-					saved_tags << tag.downcase
-				end
+				saved_tags = $tools.config['skipped']['hashtags'].map {|tag| tag.downcase}
 			end
 			for item in post_hash do
 				pagination_array.push(item['pagination_id'])
@@ -136,16 +131,19 @@ class AyaDN
 		def buildPostInfo(post_hash, is_mine)
 			post_text = post_hash['text']
 			post_text != nil ? (colored_post = $tools.colorize(post_text)) : (puts "\n--Post deleted--\n\n".red; exit)
-			user_name, user_real_name, the_name = objectNames(post_hash['user'])
-			#user_follows = post_hash['follows_you']
-			#user_followed = post_hash['you_follow']
+			params = objectNames(post_hash['user'])
 			created_day, created_hour = objectDate(post_hash)
-			post_details = "\n" + created_day.cyan + ' ' + created_hour.cyan + ' ' + the_name.green
-			post_details << (" [#{user_real_name}]".reddish) if !user_real_name.empty?
-			post_details << ":\n"
+			post_details = "\n" + created_day.cyan + ' ' + created_hour.cyan + ' ' + params[2].green
+			post_details << (" [#{params[1]}]".reddish) if !params[1].empty?
+			post_details << " (follows you)".blue if post_hash['user']['follows_you']
+			post_details << " (you follow)".blue if post_hash['user']['you_follow']
+			unless post_hash['user']['follows_you'] || post_hash['user']['you_follow']
+				post_details << " (you don't follow, doesn't follow you)".blue
+			end
+			post_details << "\n"
 			post_details << "\n" + colored_post + "\n\n" 
 			post_details << "ID: ".cyan + post_hash['id'].to_s.green + "\n"
-			post_details << objectLinks(post_hash) + "\n"
+			post_details << objectLinks(post_hash)
 			post_details << "Post URL: ".cyan + post_hash['canonical_url'].brown
 			is_reply = post_hash['reply_to']
 			repost_of = post_hash['repost_of']
@@ -172,21 +170,17 @@ class AyaDN
 		def buildUsersList(users_hash)
 			users_string = "\n"
 			users_hash.each do |item|
-				user_name, user_real_name, user_handle = objectNames(item)
-				users_string << user_handle.green + " #{user_real_name}\n".cyan
+				param = objectNames(item)
+				users_string << param[1].green + " #{param[2]}\n".cyan
 			end
 			users_string << "\n\n"
 		end
 		def buildFollowList
-			#hashes = getDataNormal(@hash)
-			#pagination_array = []
 			users_hash = {}
 			@hash['data'].each do |item|
-				user_name, user_real_name, user_handle = objectNames(item)
-				#pagination_array.push(item['pagination_id'])
-				users_hash[user_handle] = user_real_name
+				param = objectNames(item)
+				users_hash[param[2]] = param[1]
 			end
-			#return users_hash, pagination_array
 			return users_hash, @hash['meta']['min_id']
 		end
 		def buildFileInfo(resp_hash, with_url)

@@ -59,11 +59,11 @@ class AyaDN
 					print "\r                                         "
             		puts "\n"
             		$tools.countdown($tools.config['timeline']['countdown_1'])
-            	else
+				else
         			print "\rNo new posts                ".red
         			sleep 2
         			$tools.countdown($tools.config['timeline']['countdown_2'])
-        		end					
+				end					
 			rescue Exception
 				abort($status.stopped)
 			end
@@ -96,8 +96,7 @@ class AyaDN
 	def ayadnHashtags(tag)
 		puts $status.getHashtags(tag)
 		@hash = @api.getHashtags(tag)
-		stream, last_page_id = completeStream
-		displayStream(stream)
+		displayStream(completeStream[0])
 		puts "\n"
 	end
 	def ayadnExplore(explore, count=nil)
@@ -209,14 +208,12 @@ class AyaDN
 		puts $status.starsUser(name)
 		$tools.config['counts']['starred'] = count if count != nil
 		@hash = @api.getStarredPosts(name)
-		stream, last_page_id = completeStream
-		displayStream(stream)
+		displayStream(completeStream[0])
 	end
 	def ayadnConversation(postID)
 		puts $status.getPostReplies(postID)
 		@hash = @api.getPostReplies(postID)
-		stream, last_page_id = completeStream
-		displayStream(stream)
+		displayStream(completeStream[0])
 	end
 	def ayadnPostInfos(postID)
 		puts $status.infosPost(postID)
@@ -231,7 +228,7 @@ class AyaDN
 		File.open("#{$tools.ayadn_configuration[:posts_path]}/#{post_id}.post", "r") do |f|
 			fileContent = f.gets
 		end
-		resp = eval(fileContent)
+		eval(fileContent)
 	end
 	def ayadnSavePost(postID)
 		@progress_indicator = false
@@ -252,22 +249,21 @@ class AyaDN
 
 	def ayadnSearch(value)
 		@hash = @api.getSearch(value)
-		stream, last_page_id = completeStream
-		displayStream(stream)
+		displayStream(completeStream[0])
 	end
 
 	def ayadnFollowing(action, name)
 		@progress_indicator = false
-		you_follow, follows_you = @api.getUserFollowInfo(name)
+		following = @api.getUserFollowInfo(name)
 		if action == "follow"
-			if you_follow
+			if following[0]
 				abort("You're already following this user.\n\n".red)
 			else
 				@api.followUser(name)
 				puts "\nYou just followed user ".green + "#{name}".brown + "\n\n"
 			end
 		elsif action == "unfollow"
-			if you_follow
+			if following[0]
 				@api.unfollowUser(name)
 				puts "\nYou just unfollowed user ".green + "#{name}".brown + "\n\n"
 			else

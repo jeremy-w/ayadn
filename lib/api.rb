@@ -112,9 +112,7 @@ class AyaDN
 			postInfo = theHash['data']
 			#rawText = postInfo['text']
 			postMentionsArray = []
-			postInfo['entities']['mentions'].each do |item|
-				postMentionsArray.push(item['name'])
-			end
+			postInfo['entities']['mentions'].each { |item| postMentionsArray.push(item['name']) }
 			return postMentionsArray, postInfo['user']['username'], postInfo['repost_of']
 		end
 		def getUserName(username)

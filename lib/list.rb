@@ -9,12 +9,12 @@ class AyaDN
 			pagination_array = []
 			i = 1
 	    	loop do
-	    		view, file_url, pagination_array = @view.new(@api.getFilesList(beforeID)).showFilesList(with_url, true)
-	    		beforeID = pagination_array.last
+	    		params = @view.new(@api.getFilesList(beforeID)).showFilesList(with_url, true)
+	    		beforeID = params[2].last
 	    		break if beforeID == nil
-					puts view
+					puts params[0]
 					i += 1
-	    		if pagination_array.first != nil
+	    		if params[2].first != nil
 	    			$tools.countdown(5) unless i == 2
 	    			print "\r" + (" " * 40) unless i == 2
 	    			print "\n\nPlease wait, fetching page (".cyan + "#{beforeID}".pink + ")...\n".cyan unless i == 2
@@ -23,8 +23,8 @@ class AyaDN
 			puts "\n"
 		else
 			puts "\nGetting the list of your recent files...\n".green
-			view, file_url, pagination_array = @view.new(@api.getFilesList(nil)).showFilesList(with_url, false)
-			puts view
+			params = @view.new(@api.getFilesList(nil)).showFilesList(with_url, false)
+			puts params[0]
 		end
  	end
 	def fetch_list(list, name, beforeID)
