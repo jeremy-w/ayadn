@@ -265,8 +265,6 @@ ayadn channels
 ayadn send 12345
 ayadn messages 12345
 ayadn messages 12345 all
-ayadn alias-channel 12345 channel_name
-ayadn messages channel_name
 ayadn star 18527205
 ayadn unstar 18527205
 ayadn repost 18527205
@@ -291,6 +289,9 @@ ayadn skip-mention add username
 ayadn skip-mention remove username
 ayadn skip-mention show
 ayadn pin 16864003 ruby,json
+ayadn alias-channel 12345 channel_name
+ayadn messages channel_name
+ayadn list alias
 ayadn unified 10
 ayadn global 10
 ayadn checkins 10
@@ -474,7 +475,11 @@ To ease the process, you can create aliases for channel IDs:
 
 `ayadn alias-channel 12345 mychannel`
 
-then read its messages with `ayadn messages mychannel`.  
+then read its messages with `ayadn messages mychannel`.
+
+List your existing aliases with `ayadn list alias`.
+
+Aliases are cumulable. If something goes awfully wrong, just trash the file: `%USERNAME%/ayadn/data/username/db/channels_alias.db`
 
 ### Ruby 1.9.3
 
