@@ -129,7 +129,7 @@ class AyaDN
                     FileUtils.rm_rf file
                 end
                 puts "\nDone!\n\n".green
-            end
+			end
 		end
 		def reset_credentials
             FileUtils.rm_rf(@token_path) if File.exists?(@token_path)

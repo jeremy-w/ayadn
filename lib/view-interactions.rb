@@ -15,7 +15,7 @@ class AyaDN
 						objects_names.push("@" + o['username'])
 					when "star", "unstar", "repost", "unrepost", "reply"
 						post_ids.push(o['id'])
-						text = o['text']
+						#text = o['text']
 						post_info = buildPostInfo(o, false)
 						post_text.push(post_info.chomp("\n\n"))
 						#post_text << text

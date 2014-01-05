@@ -217,7 +217,7 @@ class AyaDN
 	end
 	def ayadnPostInfos(postID)
 		puts $status.infosPost(postID)
-	    puts @view.new(@api.getPostInfos(postID)).showPostInfos(postID, isMine = false)
+	    puts @view.new(@api.getPostInfos(postID)).showPostInfos(postID, false)
 	end
 	def ayadnLoadPost(postID)
 		puts $status.infosPost(postID)

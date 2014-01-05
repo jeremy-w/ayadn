@@ -18,7 +18,7 @@ class AyaDN
 					#readers = item['readers']['user_ids']
 					#you_write = item['writers']['you']
 					#you_read = item['readers']['you']
-					the_writers, the_readers = [], []
+					the_writers = []
 					item['writers']['user_ids'].each do |writer|
 						if writer != nil
 							known_user = $files.users_read(writer)

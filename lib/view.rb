@@ -208,7 +208,6 @@ class AyaDN
 			file_url = nil
 			pagination_array = []
 			resp_hash.each do |item|
-				created_day, created_hour = objectDate(item)
 				pagination_array.push(item['pagination_id'])
 				files_details_hash = filesDetails(item)
 				#file_url_expires = item['url_expires']

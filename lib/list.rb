@@ -6,7 +6,6 @@ class AyaDN
 		if value == "all"
 			puts "\nGetting the list of all your files...\n".green
 			beforeID = nil
-			pagination_array = []
 			i = 1
 	    	loop do
 	    		params = @view.new(@api.getFilesList(beforeID)).showFilesList(with_url, true)
