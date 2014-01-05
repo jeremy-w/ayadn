@@ -450,6 +450,8 @@ Some commands have shortcuts:
 - reply: r
 - mentions: m
 - posts: p
+- channels: ch
+- messages: msg
 - infos: i
 - convo: c
 - tag: t

@@ -379,6 +379,42 @@ class AyaDN
 		puts ayadn_list_aliases
 		puts "Done!\n\n".green
 	end
+	def ayadn_does(params)
+		target_name, source_name = params[3].dup, params[1].dup
+		case params[2]
+		when "follow", "follows", "following", "followed"
+			fw = []
+			target_name[0,0] = '@' if target_name[0] != "@"
+			source_name[0,0] = '@' if source_name[0] != "@"
+			real_target_name = target_name.dup
+			real_target_name[0] = ''
+			source_list = @api.getFollowings(source_name, nil)
+			source_list['data'].each {|user| fw << user['username']}
+			min_id, more = source_list['meta']['min_id'], source_list['meta']['more']
+			if more
+				loop do
+					source_list = @api.getFollowings(source_name, min_id)
+					break if source_list['meta']['more'] == false
+					source_list['data'].each {|user| fw << user['username']}
+					min_id = source_list['meta']['min_id']
+				end
+			end
+			@f = false
+			fw.each do |name| 
+				if name == real_target_name
+					@f = true
+					break
+				end
+			end
+			if @f
+				puts "\nYes, " + "#{source_name} ".green + "follows " + "#{target_name}\n\n".green
+			else
+				puts "\nNo, " + "#{source_name} ".magenta + "doesn't follow " + "#{target_name}\n\n".magenta 
+			end
+		else
+			puts $status.errorSyntax
+		end
+	end
 	def ayadn_show_options
 		puts "\nCurrent options in ".cyan + "config.yml\n".magenta
 		$tools.config.each do |k,v|

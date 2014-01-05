@@ -34,7 +34,7 @@ when "scroll"
 when nil
 	client.ayadnUnified(nil)
 
-when "unified"
+when "unified", "uni"
 	client.ayadnUnified(arg2)
 
 when "write", "w"
@@ -177,11 +177,11 @@ when "send"
 		client.ayadnComposeMessageToChannel(arg2)
 	end
 
-when "channels"
+when "channels", "ch"
 	client.get_loaded_channels
 	client.ayadn_get_channels
 
-when "messages"
+when "messages", "msg"
 	# arg2 is integer -> display channel stream
 	# arg3 == nil = with pagination, arg3 == "all" = no pagination
 	client.ayadnGetMessages(arg2, arg3)
@@ -195,7 +195,7 @@ when "inter", "interactions", "events"
 when "help", "h"
 	puts $tools.helpScreen
 
-when "commands"
+when "commands", "usage"
 	puts $tools.list_of_commands
 
 when "webhelp"
@@ -316,6 +316,9 @@ when "alias-channel"
 
 when "stream_global"
 	client.ayadn_userstream
+
+when "does", "do", "is", "has"
+	client.ayadn_does(ARGV)
 
 when "authorize", "login"
 	AyaDN.new(nil).ayadnAuthorize("reset")
