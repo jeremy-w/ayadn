@@ -182,6 +182,9 @@ class AyaDN
 	def ayadnSendMessageToChannel(target, text)
 		abort($status.emptyPost) if (text.empty? || text == nil)
 		puts $status.sendMessage
+		if !target.is_integer?
+			target = $files.load_channel_id(target)
+		end
 		blob = JSON.parse(@api.httpSendMessageToChannel(target, text))
 		@hash = blob['data']
 		private_channel_ID = @hash['channel_id']
