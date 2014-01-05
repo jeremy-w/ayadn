@@ -5,6 +5,7 @@ AYADN is a learning exercise: while it's fully functional, it's still very alpha
 
 ## 2014-01-05 v0.5.6
 - channels aliases
+- does @xxx follow @yyy
 
 ## 2014-01-04 v0.5.5
 - delete messages

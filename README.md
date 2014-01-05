@@ -23,6 +23,8 @@ AYADN
 
 - follow/unfollow a user
 
+- ask if a user follows another one
+
 - mute/unmute a user
 
 - search posts for word(s)
@@ -270,7 +272,7 @@ ayadn unstar 18527205
 ayadn repost 18527205
 ayadn unrepost 18527205
 ayadn delete 12345678
-ayadn delete-message 12345 23456789 *channel_id message_id*
+ayadn delete-message 12345 23456789
 ayadn list muted
 ayadn list followings @ericd
 ayadn list followers @ericd
@@ -301,6 +303,7 @@ ayadn conversations 10
 ayadn mentions @ericd 10
 ayadn posts @ericd 10
 ayadn starred @ericd 10
+ayadn does @ericd follow @ayadn
 ayadn reset pagination
 ayadn list options
 ayadn help

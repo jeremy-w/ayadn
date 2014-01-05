@@ -133,6 +133,7 @@ class AyaDN
 		    commands << "ayadn mentions @ericd 10\n"
 		    commands << "ayadn posts @ericd 10\n"
 		    commands << "ayadn starred @ericd 10\n"
+		    commands << "ayadn does @ericd follow @ayadn\n"
 		    commands << "ayadn reset pagination\n"
 		    commands << "ayadn help\n"
 		    commands << "ayadn commands\n"
