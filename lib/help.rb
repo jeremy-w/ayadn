@@ -98,6 +98,8 @@ class AyaDN
 		    commands << "ayadn send 12345\n"
 		    commands << "ayadn messages 12345\n"
 		    commands << "ayadn messages 12345 all\n"
+		    commands << "ayadn alias-channel 12345 channel_name\n"
+			commands << "ayadn messages channel_name\n"
 		    commands << "ayadn star 18527205\n"
 		    commands << "ayadn unstar 18527205\n"
 		    commands << "ayadn repost 18527205\n"

@@ -39,6 +39,19 @@ class AyaDN
 			    f.puts(content)
 			f.close
 		end
+		def save_channel_alias(channel_id, channel_alias)
+			db = PStore.new($tools.ayadn_configuration[:db_path] + "/channels_alias.db")
+			db.transaction do
+				db[channel_alias] = channel_id
+			end
+		end
+		def load_channel_id(channel_alias)
+			db = PStore.new($tools.ayadn_configuration[:db_path] + "/channels_alias.db")
+			db.transaction do
+				@channel_id = db[channel_alias]
+			end
+			return @channel_id
+		end
 		def save_channel_id(value, content)
 	        newPrivateChannel = { "#{value}" => "#{content}" }
 	        if !File.exists?@channels_path

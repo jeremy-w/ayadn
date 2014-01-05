@@ -127,6 +127,8 @@ when "list"
 	when "channels"
 		client.get_loaded_channels
 		client.ayadn_get_channels
+	when "aliases", "alias"
+		client.ayadn_list_aliases
 	else
 		puts $status.errorSyntax
 	end
@@ -305,6 +307,9 @@ when "private", "public"
 
 when "pin"
 	client.ayadnBookmark(ARGV)
+
+when "alias-channel"
+	client.ayadn_alias_channel(arg2, arg3)
 
 when "stream_global"
 	client.ayadn_userstream

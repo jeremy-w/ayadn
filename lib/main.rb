@@ -163,6 +163,9 @@ class AyaDN
 		$files.makedir($tools.ayadn_configuration[:messages_path])
 		@progress_indicator = false
 		if target != nil
+			if !target.is_integer?
+				target = $files.load_channel_id(target)
+			end
 			fileURL = @last_page_id_path + "/last_page_id-channels-#{target}"
 			last_page_id = $files.get_last_page_id(fileURL) unless action == "all"
 			messages_string, last_page_id = @view.new(@api.getMessages(target, last_page_id)).showMessagesFromChannel
@@ -362,6 +365,22 @@ class AyaDN
 	end
 	def ayadnReset(content, option)
 		$files.reset_pagination(content, option)
+	end
+	def ayadn_list_aliases
+		db = PStore.new($tools.ayadn_configuration[:db_path] + "/channels_alias.db")
+		db.transaction do
+			db.roots.each do |root|
+				puts "#{db[root]} ".brown + "=> " + "#{root} ".green
+			end
+		end
+		puts "\n"
+	end
+	def ayadn_alias_channel(channel_id, channel_alias)
+		puts "\nAdding new alias: ".cyan + "#{channel_id} ".brown + "=> " + "#{channel_alias}\n".green
+		$files.save_channel_alias(channel_id, channel_alias)
+		puts "List of saved aliases: \n".cyan
+		puts ayadn_list_aliases
+		puts "Done!\n\n".green
 	end
 	def ayadn_show_options
 		puts "\nCurrent options in ".cyan + "config.yml\n".magenta

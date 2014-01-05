@@ -3,6 +3,9 @@ AYADN
 
 AYADN is a learning exercise: while it's fully functional, it's still very alpha (remember I'm a beginner with Ruby).  
 
+## 2014-01-05 v0.5.6
+- channels aliases
+
 ## 2014-01-04 v0.5.5
 - delete messages
 - users database

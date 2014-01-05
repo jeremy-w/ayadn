@@ -265,6 +265,8 @@ ayadn channels
 ayadn send 12345
 ayadn messages 12345
 ayadn messages 12345 all
+ayadn alias-channel 12345 channel_name
+ayadn messages channel_name
 ayadn star 18527205
 ayadn unstar 18527205
 ayadn repost 18527205
@@ -464,6 +466,15 @@ ayadn t ruby
 
 *Other commands don't have a shortcut, reducing the risk of accidental manipulation.*
 
+### Channels
+
+You may display your channels with `ayadn channels` and read their messages with `ayadn messages 12345` with 12345 being the channel ID.
+
+To ease the process, you can create aliases for channel IDs:
+
+`ayadn alias-channel 12345 mychannel`
+
+then read its messages with `ayadn messages mychannel`.  
 
 ### Ruby 1.9.3
 
