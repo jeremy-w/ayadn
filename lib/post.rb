@@ -123,7 +123,7 @@ class AyaDN
 		if remaining_text_length >= 0
 			ayadnSendPost(post_text, reply_to)
 		else
-			abort($status.errorPostTooLong(real_length, real_length - $tools.ayadn_configuration[:post_max_length]))
+			abort($status.errorPostTooLong(real_text_length, real_text_length - $tools.ayadn_configuration[:post_max_length]))
 		end
 	end
 
