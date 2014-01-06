@@ -13,6 +13,7 @@ class AyaDN
 				id: item['id'],
 				created_day: created_day,
 				created_hour: created_hour,
+				user_name: user_name,
 				user_handle: user_handle,
 				user_real_name: user_real_name,
 				text: coloredText(item),
@@ -113,10 +114,14 @@ class AyaDN
 			end
 		end
 		def object_view(params)
-			if params[:me_mentioned] == true
-				obj_view = "\n" + params[:id].to_s.cyan.reverse_color.ljust(14)
+			if params[:me_mentioned]
+				obj_view = "\n" + params[:id].to_s.red.reverse_color.ljust(14)
 			else
-				obj_view = "\n" + params[:id].to_s.cyan.ljust(14)
+				if params[:user_name] == $tools.config['identity']['prefix']
+					obj_view = "\n" + params[:id].to_s.green.reverse_color.ljust(14)
+				else
+					obj_view = "\n" + params[:id].to_s.cyan.ljust(14)	
+				end
 			end
 			obj_view << ' '
 			obj_view << params[:user_handle].green if params[:user_handle]
@@ -125,7 +130,7 @@ class AyaDN
 			obj_view << ' '
 			obj_view << params[:created_day].cyan + ' ' + params[:created_hour].cyan 
 			obj_view << ' '
-			obj_view << "[#{@source_name}]".cyan if $tools.config['timeline']['show_client']
+			obj_view << "[#{@source_name[0]}]".cyan if $tools.config['timeline']['show_client']
 			if $tools.config['timeline']['show_symbols']
 				obj_view << " <".blue if params[:reply_to] != nil
 				obj_view << " >".blue if params[:num_replies] > 0

@@ -85,8 +85,8 @@ class AyaDN
 			for item in post_hash do
 				pagination_array.push(item['pagination_id'])
 				next if item['text'] == nil
-				@source_name, @source_link = objectSource(item)
-				case @source_name
+				@source_name = objectSource(item)
+				case @source_name[0]
 				when *$tools.config['skipped']['sources']
 					next
 				end
