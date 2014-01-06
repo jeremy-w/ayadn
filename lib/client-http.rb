@@ -5,6 +5,33 @@ class AyaDN
 		# WIP
 		# TESTING DIFFERENT WAYS
 		# TODO: DRY
+		def check_http_error_code(body)
+			code = JSON.parse(body)
+			case code['meta']['code']
+			when 204
+				puts "\nNo content (or incomplete).\n\n".red
+				exit
+			when 400
+				puts "\nBad request.\n\n".red
+				puts code['meta'].inspect
+				exit
+			when 401
+				puts "\nUnauthorized.\n\n".red
+				exit
+			when 403
+				puts "\nForbidden.\n\n".red
+				exit
+			when 404
+				puts "\nDoes not exist (or has been deleted).\n\n".red
+				exit
+			when 429
+				puts "\nToo many requests.\n\n".red
+				exit
+			when 507
+				puts "\nInsufficient storage.\n\n".red
+				exit
+			end
+		end
 		def clientHTTP(action, target = nil)
 			case action
 			when "delete"
@@ -29,6 +56,7 @@ class AyaDN
 				if @progress_indicator == false
 					#print "Connecting to #{uri.host}#{uri.path} ...\n\n".cyan
 					response = https.request(request)
+					check_http_error_code(response.body)
 					return response.body
 				else
 					#print "\rConnecting to #{uri.host}#{uri.path}".cyan
@@ -45,18 +73,7 @@ class AyaDN
 					end
 					print "\r                           "
 					#puts ""
-					code = JSON.parse(body)
-					case code['meta']['code']
-					when 403
-						puts "\nForbidden (access denied).\n\n".red
-						exit
-					when 404
-						puts "\nDoes not exist (or has been deleted).\n\n".red
-						exit
-					when 429
-						puts "\nToo many requests.\n\n".red
-						exit
-					end
+					check_http_error_code(body)
 					return body
 				end
 
