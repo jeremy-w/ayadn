@@ -103,9 +103,11 @@ class AyaDN
 			content = Array.new
 			for word in contentText.split(" ") do
 				if word =~ /#\w+/
-                    content.push(removeEndCharIfSpecial(word, "pink"))
-				elsif word =~ /@\w+/
-					content.push(removeEndCharIfSpecial(word, "red"))
+                    content.push(word.gsub(/#([A-Za-z0-9_]{1,255})(?![\w+])/, '#\1'.pink))
+                    #content.push(removeEndCharIfSpecial(word, "pink"))
+				elsif word =~ /@\w+/ 
+                    content.push(word.gsub(/@([A-Za-z0-9_]{1,40})(?![\w+])/, '@\1'.red))
+					#content.push(removeEndCharIfSpecial(word, "red"))
 				#elsif word =~ /^http/ or word =~ /^photos.app.net/ or word =~ /^files.app.net/ or word =~ /^chimp.li/ or word =~ /^bli.ms/
 					#content.push(word.magenta)
 				else
