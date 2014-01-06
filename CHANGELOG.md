@@ -3,7 +3,10 @@ AYADN
 
 AYADN is a learning exercise: while it's fully functional, it's still very alpha (remember I'm a beginner with Ruby).  
 
-## 2014-01-05 v0.5.6
+## 2014-01-05 v0.5.6b
+- fixed a bug that prevented AyaDN to run on Ruby 2.0
+
+## 2014-01-05 v0.5.6a
 - channels aliases
 - does @xxx follow @yyy
 

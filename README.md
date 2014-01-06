@@ -484,15 +484,7 @@ then read its messages with `ayadn messages mychannel`.
 
 List your existing aliases with `ayadn list alias`.
 
-Aliases are cumulable. If something goes awfully wrong, just trash the file: `%USERNAME%/ayadn/data/username/db/channels_alias.db`
-
-### Ruby 1.9.3
-
-Ruby 1.9.3 is mandatory. If you're running an older version, you need to install 1.9.3, with "rvm" for example:
-
-```
-\curl -L https://get.rvm.io | bash -s stable --ruby=1.9.3
-```  
+Aliases are cumulable. If something goes awfully wrong, just trash the file: `%USERNAME%/ayadn/data/username/db/channels_alias.db`  
 
 ### GCC
 

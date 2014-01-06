@@ -115,7 +115,7 @@ class AyaDN
 		end
 		def object_view(params)
 			if params[:me_mentioned]
-				obj_view = "\n" + params[:id].to_s.red.reverse_color.ljust(14) 
+				obj_view = "\n" + params[:id].to_s.red.reverse_color.ljust(14)
 			else
 				if params[:user_name] == $tools.config['identity']['prefix']
 					obj_view = "\n" + params[:id].to_s.green.reverse_color.ljust(14)
