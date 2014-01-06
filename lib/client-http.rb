@@ -31,26 +31,33 @@ class AyaDN
 					response = https.request(request)
 					return response.body
 				else
-						#print "\rConnecting to #{uri.host}#{uri.path}".cyan
-						body = ''
-						https.request(request) do |res| 
-							fileSize = res['Content-Length'].to_i
-							bytesTransferred = 0
-							res.read_body do |part|
-								bytesTransferred += part.length
-								rounded = bytesTransferred.percent_of(fileSize).round(1)
-								print "\rFetching data: ".cyan + "#{rounded.to_s}%     ".brown
-								body << part
-							end
+					#print "\rConnecting to #{uri.host}#{uri.path}".cyan
+					body = ''
+					https.request(request) do |res| 
+						fileSize = res['Content-Length'].to_i
+						bytesTransferred = 0
+						res.read_body do |part|
+							bytesTransferred += part.length
+							rounded = bytesTransferred.percent_of(fileSize).round(1)
+							print "\rFetching data: ".cyan + "#{rounded.to_s}%     ".brown
+							body << part
 						end
-						print "\r                           "
-						#puts ""
-						code = JSON.parse(body)
-						if code['meta']['code'] == 404
-							puts "\nDoes not exist (or has been deleted).\n\n".red
-							exit
-						end
-						return body
+					end
+					print "\r                           "
+					#puts ""
+					code = JSON.parse(body)
+					case code['meta']['code']
+					when 403
+						puts "\nForbidden (access denied).\n\n".red
+						exit
+					when 404
+						puts "\nDoes not exist (or has been deleted).\n\n".red
+						exit
+					when 429
+						puts "\nToo many requests.\n\n".red
+						exit
+					end
+					return body
 				end
 
 

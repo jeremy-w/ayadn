@@ -105,10 +105,10 @@ git clone https://github.com/ericdke/ayadn.git
 
 Mac OS X, Linux: if you already have [bundler](http://bundler.io), you should just enter the `ayadn-master` folder and run `bundle install`.
 
-Example if you downloaded or cloned AyaDN in your downloads folder:
+Example if you cloned AyaDN in your downloads folder:
 
 ```
-cd ~/Downloads/ayadn-master
+cd ~/Downloads/ayadn
 bundle install
 ```  
 
@@ -119,7 +119,6 @@ bundle install
 If you're not using Bundler, you have to install some dependencies manually:
 
 ```
-cd ayadn-master
 gem install json pinboard
 ```  
 
