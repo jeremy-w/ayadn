@@ -68,7 +68,7 @@ class AyaDN
 		def buildMessages(messages_stream)
 			messages_string = "\n"
 			for item in messages_stream do
-				@source_name, @source_link = objectSource(item)
+				@source_name_and_link = objectSource(item)
 				messages_string << create_content_string(item, checkins_annotations(item), false) # create_content_string(item, annotations, me_mentioned)
 			end
 			last_viewed = messages_stream.last
@@ -85,8 +85,8 @@ class AyaDN
 			for item in post_hash do
 				pagination_array.push(item['pagination_id'])
 				next if item['text'] == nil
-				@source_name = objectSource(item)
-				case @source_name[0]
+				@source_name_and_link = objectSource(item)
+				case @source_name_and_link[:name]
 				when *$tools.config['skipped']['sources']
 					next
 				end

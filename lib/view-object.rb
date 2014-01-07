@@ -56,7 +56,8 @@ class AyaDN
 			return links_string
 		end
 		def objectSource(item)
-			return item['source']['name'], item['source']['link']
+			{name: item['source']['name'], link: item['source']['link']}
+			#return item['source']['name'], item['source']['link']
 		end
 		def objectNames(item)
 			user_id = item['id']
@@ -89,8 +90,8 @@ class AyaDN
 						anno_string << (" (#{checkins_postcode})".green) unless checkins_postcode.nil?
 						anno_string << ("\nState/Region: ".cyan + checkins_region.green) unless checkins_region.nil?
 						anno_string << (" (#{checkins_country_code})".upcase.green) unless checkins_country_code.nil?
-						unless @source_name.nil? or $tools.config['timeline']['show_client']
-							anno_string << "\nPosted with: ".cyan + "#{@source_name} [#{@source_link}]".green + " "
+						unless @source_name_and_link[:name].nil? or $tools.config['timeline']['show_client']
+							anno_string << "\nPosted with: ".cyan + "#{@source_name_and_link[:name]} [#{@source_name_and_link[:link]}]".green + " "
 						end
 						#anno_string += "\n"
 					end
@@ -130,7 +131,7 @@ class AyaDN
 			obj_view << ' '
 			obj_view << params[:created_day].cyan + ' ' + params[:created_hour].cyan 
 			obj_view << ' '
-			obj_view << "[#{@source_name}]".cyan if $tools.config['timeline']['show_client']
+			obj_view << "[#{@source_name_and_link[:name]}]".cyan if $tools.config['timeline']['show_client']
 			if $tools.config['timeline']['show_symbols']
 				obj_view << " <".blue if params[:reply_to] != nil
 				obj_view << " >".blue if params[:num_replies] > 0
