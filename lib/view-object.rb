@@ -130,7 +130,7 @@ class AyaDN
 			obj_view << ' '
 			obj_view << params[:created_day].cyan + ' ' + params[:created_hour].cyan 
 			obj_view << ' '
-			obj_view << "[#{@source_name[0]}]".cyan if $tools.config['timeline']['show_client']
+			obj_view << "[#{@source_name}]".cyan if $tools.config['timeline']['show_client']
 			if $tools.config['timeline']['show_symbols']
 				obj_view << " <".blue if params[:reply_to] != nil
 				obj_view << " >".blue if params[:num_replies] > 0
