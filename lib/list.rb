@@ -47,7 +47,7 @@ class AyaDN
 	    	break if min_id == nil
 	    	beforeID = min_id
 		end
-	    return big_hash
+		big_hash
 	end
 
 	def ayadnShowList(list, name)

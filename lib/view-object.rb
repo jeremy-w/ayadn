@@ -4,7 +4,7 @@ class AyaDN
 	class View
 		def create_content_string(item, annotations, me_mentioned)
 			if item['user']
-				user_name, user_real_name, user_handle = objectNames(item['user'])
+				user_name, user_real_name, user_handle = objectNames(item['user']).values_at(:user_name, :user_real_name, :user_handle)
 			else
 				user_name, user_real_name, user_handle = ""
 			end
@@ -62,11 +62,10 @@ class AyaDN
 		def objectNames(item)
 			user_id = item['id']
 			user_name = item['username']
-
 			$files.users_write(user_id, user_name) if $files.users_read(user_id) == nil
-
 			user_handle = "@" + user_name
-			return user_name, item['name'], user_handle
+			#return user_name, item['name'], user_handle
+			{user_name: user_name, user_real_name: item['name'], user_handle: user_handle}
 		end
 		def checkins_annotations(item)
 			anno_string = ""

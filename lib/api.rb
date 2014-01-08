@@ -26,21 +26,21 @@ class AyaDN
 		def getGlobal(last_page_id)
 			@url = @endpoints.global
 			@url += @endpoints.light_params
-			@url += @endpoints.include_directed if $tools.config['timeline']['directed'] == true
+			@url += @endpoints.include_directed if $tools.config['timeline']['directed']
 			checkLastPageID(last_page_id)
 			getHash
 		end	
 		def getUnified(last_page_id)
 			@url = @endpoints.unified
 			@url += @endpoints.base_params
-			@url += @endpoints.include_directed if $tools.config['timeline']['directed'] == true
+			@url += @endpoints.include_directed if $tools.config['timeline']['directed']
 			checkLastPageID(last_page_id)
 			getHash
 		end
 		def getSimpleUnified
 			@url = @endpoints.unified_streamback
 			@url += @endpoints.base_params
-			@url += @endpoints.include_directed if $tools.config['timeline']['directed'] == true
+			@url += @endpoints.include_directed if $tools.config['timeline']['directed']
 			getHash
 		end
 		def getInteractions
@@ -160,8 +160,7 @@ class AyaDN
 			@url = @endpoints.user_info(username)
 			@url += @endpoints.light_params
 			theHash = getHash
-			userInfo = theHash['data']
-			return userInfo['you_follow'], userInfo['follows_you']
+			{you_follow: theHash['data']['you_follow'], follows_you: theHash['data']['follows_you']}
 		end
 		def getUserMuteInfo(username)
 			@url = @endpoints.user_info(username)

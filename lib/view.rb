@@ -46,8 +46,9 @@ class AyaDN
 		end
 		def showUsers
 			users = ""
-			@hash.sort.each do |handle, name|
-				users << "#{handle}".red + " - " + "#{name}\n".cyan
+			@hash = @hash.sort_by {|id, arr| arr[0]}
+			@hash.each do |id, arr|
+				users << "#{arr[0]} ".red.ljust(30) + "#{arr[1]}\n".green
 			end
 			return users, @hash.length
 		end
@@ -101,7 +102,7 @@ class AyaDN
 					end
 					postMentionsArray.push(mention['name'])
 				end
-				next if @skipped_mentions_encountered == true
+				next if @skipped_mentions_encountered
 				me_mentioned = false
 				for name in postMentionsArray do
 					if name == ($tools.config['identity']['prefix'] || $files.users_read("me"))
@@ -133,8 +134,8 @@ class AyaDN
 			post_text != nil ? (colored_post = $tools.colorize(post_text)) : (puts "\n--Post deleted--\n\n".red; exit)
 			params = objectNames(post_hash['user'])
 			created_day, created_hour = objectDate(post_hash)
-			post_details = "\n" + created_day.cyan + ' ' + created_hour.cyan + ' ' + params[2].green
-			post_details << (" [#{params[1]}]".reddish) if !params[1].empty?
+			post_details = "\n" + created_day.cyan + ' ' + created_hour.cyan + ' ' + params[:user_handle].green
+			post_details << (" [#{params[:user_real_name]}]".reddish) if !params[:user_real_name].empty?
 			post_details << " (follows you)".blue if post_hash['user']['follows_you']
 			post_details << " (you follow)".blue if post_hash['user']['you_follow']
 			unless post_hash['user']['follows_you'] || post_hash['user']['you_follow']
@@ -171,15 +172,16 @@ class AyaDN
 			users_string = "\n"
 			users_hash.each do |item|
 				param = objectNames(item)
-				users_string << param[1].green + " #{param[2]}\n".cyan
+				users_string << param[:user_real_name].green + " #{param[:user_handle]}\n".cyan
 			end
 			users_string << "\n\n"
 		end
 		def buildFollowList
 			users_hash = {}
 			@hash['data'].each do |item|
-				param = objectNames(item)
-				users_hash[param[2]] = param[1]
+				#param = objectNames(item)
+				user_handle = "@" + item['username']
+				users_hash[item['id']] = [user_handle, item['name']]
 			end
 			return users_hash, @hash['meta']['min_id']
 		end
@@ -231,14 +233,15 @@ class AyaDN
 			return list_string, file_url, pagination_array
 		end
 		def buildUserInfos(name, adn_data)
-			user_name, user_real_name, the_name = objectNames(adn_data)
+			#user_name, user_real_name, the_name = objectNames(adn_data)
+			name_params = objectNames(adn_data)
 
-			$files.users_write("me", user_name) if name == "me"
-			$files.users_write(adn_data['id'], user_name) if $files.users_read(adn_data['id']) == nil
+			$files.users_write("me", name_params[:user_name]) if name == "me"
+			$files.users_write(adn_data['id'], name_params[:user_name]) if $files.users_read(adn_data['id']) == nil
 
 			created_at = adn_data['created_at']
 			user_show = "\nID: ".cyan.ljust(22) + adn_data['id'].green + "\n"
-			user_show << ("Name: ".cyan.ljust(21) + user_real_name.green + "\n") if user_real_name != nil
+			user_show << ("Name: ".cyan.ljust(21) + name_params[:user_real_name].green + "\n") if name_params[:user_real_name] != nil
 			adn_data['description'] != nil ? user_descr = adn_data['description']['text'] : user_descr = "No description available.".cyan
 			user_timezone = adn_data['timezone']
 			user_show << ("Timezone: ".cyan.ljust(21) + user_timezone.green + "\n") if user_timezone != nil
@@ -248,7 +251,7 @@ class AyaDN
 			user_show << "Web: ".cyan.ljust(21) + "http://".green + adn_data['verified_domain'].green + "\n" if adn_data['verified_domain'] != nil
 			user_show << "Joined: ".cyan.ljust(21) + created_at[0...10].green + " " + created_at[11...19].green + "\n"
 			user_show << "\n"
-			user_show << the_name.brown
+			user_show << name_params[:user_handle].brown
 			if name != "me"
 				if adn_data['follows_you']
 					user_show << " follows you\n".green
@@ -256,11 +259,11 @@ class AyaDN
 					user_show << " doesn't follow you\n".reddish
 				end
 				if adn_data['you_follow']
-					user_show << "You follow ".green + the_name.brown + "\n"
+					user_show << "You follow ".green + name_params[:user_handle].brown + "\n"
 				else
-					user_show << "You don't follow ".reddish + the_name.brown + "\n"
+					user_show << "You don't follow ".reddish + name_params[:user_handle].brown + "\n"
 				end
-				user_show << ("You muted ".reddish + the_name.brown + "\n") if adn_data['you_muted']
+				user_show << ("You muted ".reddish + name_params[:user_handle].brown + "\n") if adn_data['you_muted']
 			else
 				user_show << " => " + "yourself!".brown + "\n"
 			end

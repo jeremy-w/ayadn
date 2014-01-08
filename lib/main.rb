@@ -50,7 +50,6 @@ class AyaDN
 				when "posts"
 					@hash = @api.getUserPosts(target, last_page_id)
 				end
-				# todo: color post id if I'm mentioned
 				stream, last_page_id = completeStream
 				displayScrollStream(stream)
 				@progress_indicator = false
@@ -233,12 +232,13 @@ class AyaDN
 	def ayadnSavePost(postID)
 		@progress_indicator = false
 		name = postID.to_s
-		$files.makedir($tools.ayadn_configuration[:posts_path])
+		posts_path = $tools.ayadn_configuration[:posts_path]
+		$files.makedir(posts_path)
 		file = "/#{name}.post"
-		fileURL = $tools.ayadn_configuration[:posts_path] + file
+		fileURL = posts_path + file
 		abort("\nYou already saved this post.\n\n".red) if File.exists?(fileURL)
 		puts "\nLoading post from App.net...".green + name.brown
-		puts $status.savingFile(name, $tools.ayadn_configuration[:posts_path], file)
+		puts $status.savingFile(name, posts_path, file)
 		f = File.new(fileURL, "w")
 		resp = @api.getSinglePost(postID)
 			f.puts(resp['data'])
@@ -256,14 +256,14 @@ class AyaDN
 		@progress_indicator = false
 		following = @api.getUserFollowInfo(name)
 		if action == "follow"
-			if following[0]
+			if following[:you_follow]
 				abort("You're already following this user.\n\n".red)
 			else
 				@api.followUser(name)
 				puts "\nYou just followed user ".green + "#{name}".brown + "\n\n"
 			end
 		elsif action == "unfollow"
-			if following[0]
+			if following[:follows_you]
 				@api.unfollowUser(name)
 				puts "\nYou just unfollowed user ".green + "#{name}".brown + "\n\n"
 			else
