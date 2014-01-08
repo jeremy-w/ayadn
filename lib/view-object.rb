@@ -20,7 +20,8 @@ class AyaDN
 				links: objectLinks(item),
 				annotations: annotations,
 				me_mentioned: me_mentioned,
-				num_replies: item['num_replies']
+				num_replies: item['num_replies'],
+				reply_to: item['reply_to']
 			}
 			if item['repost_of'] != nil
 				view_params.merge!({repost_of: item['repost_of'], num_reposts: item['repost_of']['num_reposts']})
