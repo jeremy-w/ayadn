@@ -143,7 +143,7 @@ class AyaDN
 	 	def download_file(file_url, new_file_name, token)
 	 		download_file_path = $tools.ayadn_configuration[:files_path] + "/#{new_file_name}"
 			if !File.exists?download_file_path
-				resp = AyaDN::API.new(token).clientHTTP("download", file_url)
+				resp = AyaDN::API.new(token).http_download(file_url)
 				f = File.new(download_file_path, "wb")
 					f.puts(resp.body)
 				f.close
@@ -153,7 +153,7 @@ class AyaDN
 			end
 	 	end
 	 	def delete_file(target, token)
-	 		JSON.parse(AyaDN::API.new(token).deleteFile(target))
+	 		puts AyaDN::API.new(token).deleteFile(target)
 	 	end
 		def uploadFiles(file, token)
 		    case File.extname(file).downcase

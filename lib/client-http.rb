@@ -32,68 +32,63 @@ class AyaDN
 				exit
 			end
 		end
-		def clientHTTP(action, target = nil)
-			case action
-			when "delete"
-				uri = URI("#{@url}")
-				https = Net::HTTP.new(uri.host,uri.port)
-				https.use_ssl = true
-				https.verify_mode = OpenSSL::SSL::VERIFY_NONE
-				request = Net::HTTP::Delete.new(uri.path)
-				request["Authorization"] = "Bearer #{@token}"
-				request["Content-Type"] = "application/json"
+		def http_get(target)
+			encoded_url = URI.encode("#{target}")
+			uri = URI.parse(encoded_url)
+			https = Net::HTTP.new(uri.host,uri.port)
+			https.use_ssl = true
+			https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+			request = Net::HTTP::Get.new(uri.request_uri)
+			request["Authorization"] = "Bearer #{@token}"
+			request["Content-Type"] = "application/json"
+			if @progress_indicator == false
+				#print "Connecting to #{uri.host}#{uri.path} ...\n\n".cyan
 				response = https.request(request)
-			when "get"
-				encoded_url = URI.encode("#{target}")
-				uri = URI.parse(encoded_url)
-				https = Net::HTTP.new(uri.host,uri.port)
-				https.use_ssl = true
-				https.verify_mode = OpenSSL::SSL::VERIFY_NONE
-				request = Net::HTTP::Get.new(uri.request_uri)
-				request["Authorization"] = "Bearer #{@token}"
-				request["Content-Type"] = "application/json"
-				
-				if @progress_indicator == false
-					#print "Connecting to #{uri.host}#{uri.path} ...\n\n".cyan
-					response = https.request(request)
-					check_http_error_code(response.body)
-					return response.body
-				else
-					#print "\rConnecting to #{uri.host}#{uri.path}".cyan
-					body = ''
-					https.request(request) do |res| 
-						fileSize = res['Content-Length'].to_i
-						bytesTransferred = 0
-						res.read_body do |part|
-							bytesTransferred += part.length
-							rounded = bytesTransferred.percent_of(fileSize).round(1)
-							print "\rFetching data: ".cyan + "#{rounded.to_s}%     ".brown
-							body << part
-						end
+				check_http_error_code(response.body)
+				return response.body
+			else
+				#print "\rConnecting to #{uri.host}#{uri.path}".cyan
+				body = ''
+				https.request(request) do |res| 
+					fileSize = res['Content-Length'].to_i
+					bytesTransferred = 0
+					res.read_body do |part|
+						bytesTransferred += part.length
+						rounded = bytesTransferred.percent_of(fileSize).round(1)
+						print "\rFetching data: ".cyan + "#{rounded.to_s}%     ".brown
+						body << part
 					end
-					print "\r                           "
-					#puts ""
-					check_http_error_code(body)
-					return body
 				end
-
-
-
-			when "download"
-				uri = URI("#{target}")
-				final_uri = ''
-				open(uri) do |h|
-				  final_uri = h.base_uri.to_s
-				end
-				new_uri = URI.parse(final_uri)
-				https = Net::HTTP.new(new_uri.host,new_uri.port)
-				https.use_ssl = true
-				https.verify_mode = OpenSSL::SSL::VERIFY_NONE
-				request = Net::HTTP::Get.new(new_uri.request_uri)
-				request["Authorization"] = "Bearer #{@token}"
-				request["Content-Type"] = "application/json"
-				response = https.request(request)
+				print "\r                           "
+				#puts ""
+				check_http_error_code(body)
+				return body
 			end
+		end
+		def http_delete
+			uri = URI("#{@url}")
+			https = Net::HTTP.new(uri.host,uri.port)
+			https.use_ssl = true
+			https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+			request = Net::HTTP::Delete.new(uri.path)
+			request["Authorization"] = "Bearer #{@token}"
+			request["Content-Type"] = "application/json"
+			https.request(request)
+		end
+		def http_download(target=nil)
+			uri = URI("#{target}")
+			final_uri = ''
+			open(uri) do |h|
+			  final_uri = h.base_uri.to_s
+			end
+			new_uri = URI.parse(final_uri)
+			https = Net::HTTP.new(new_uri.host,new_uri.port)
+			https.use_ssl = true
+			https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+			request = Net::HTTP::Get.new(new_uri.request_uri)
+			request["Authorization"] = "Bearer #{@token}"
+			request["Content-Type"] = "application/json"
+			https.request(request)
 		end
 		##### 
 		# experimenting

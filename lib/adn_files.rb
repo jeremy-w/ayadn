@@ -25,8 +25,8 @@ class AyaDN
 		puts "Do you wish to continue? (y/N) ".reddish
 		if STDIN.getch == ("y" || "Y")
 			puts "\nPlease wait...".green
-			resp = $files.delete_file(target, @token)
-			$tools.meta(resp['meta'])
+			$files.delete_file(target, @token)
+			puts "\nDone!\n\n".green
 		else
 			puts "\n\nCanceled.\n\n".red
 			exit

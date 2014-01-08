@@ -20,9 +20,11 @@ class AyaDN
 				links: objectLinks(item),
 				annotations: annotations,
 				me_mentioned: me_mentioned,
-				num_replies: item['num_replies'],
-				reply_to: item['reply_to']
+				num_replies: item['num_replies']
 			}
+			if item['repost_of'] != nil
+				view_params.merge!({repost_of: item['repost_of'], num_reposts: item['repost_of']['num_reposts']})
+			end
 			object_view(view_params)
 		end
 		def skip_hashtags(item, saved_tags)
@@ -131,6 +133,9 @@ class AyaDN
 			obj_view << params[:created_day].cyan + ' ' + params[:created_hour].cyan 
 			obj_view << ' '
 			obj_view << "[#{@source_name_and_link[:name]}]".cyan if $tools.config['timeline']['show_client']
+			if params[:repost_of] && $tools.config['timeline']['show_reposters']
+				obj_view << " [x#{params[:num_reposts]}]".blue
+			end
 			if $tools.config['timeline']['show_symbols']
 				obj_view << " <".blue if params[:reply_to] != nil
 				obj_view << " >".blue if params[:num_replies] > 0
@@ -139,6 +144,7 @@ class AyaDN
 			obj_view << params[:text]
 			obj_view << (params[:annotations] + "\n") if params[:annotations] != nil
 			obj_view << params[:links] + "\n"
+			obj_view
 		end
 		def file_view(params)
 			file_elements = "\nName: ".cyan + params[:name].green

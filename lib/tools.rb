@@ -45,7 +45,8 @@ class AyaDN
                         "countdown_1" => 5,
                         "countdown_2" => 15,
                         "show_client" => false,
-                        "show_symbols" => true
+                        "show_symbols" => true,
+                        "show_reposters" => false
                     },
                     "files" => { 
                         "ayadnfiles" => "/ayadn/data",

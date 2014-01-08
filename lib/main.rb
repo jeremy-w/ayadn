@@ -2,6 +2,7 @@
 # encoding: utf-8
 class AyaDN
 	def initialize(token)
+		$PROGRAM_NAME = "AyaDN"
 		@token = token
 		@api = AyaDN::API.new(@token)
 		@view = AyaDN::View
@@ -179,7 +180,7 @@ class AyaDN
 		if @api.goDelete(postID) == nil
 			abort($status.errorAlreadyDeleted)
 		else
-			$tools.checkHTTPResp(@api.clientHTTP("delete"))
+			$tools.checkHTTPResp(@api.http_delete)
 			puts $status.postDeleted
 			exit
 		end
@@ -187,7 +188,7 @@ class AyaDN
 	def ayadn_delete_message(channel_id, message_id)
 		puts "\nDeleting message #{message_id} in channel #{channel_id}".green
 		@url = @api.unique_message(channel_id, message_id)
-		$tools.checkHTTPResp(@api.clientHTTP("delete"))
+		$tools.checkHTTPResp(@api.http_delete)
 		puts "\nDone!\n".green
 	end
 

@@ -11,7 +11,7 @@ class AyaDN
 		end
 
 		def getHash
-			JSON.parse(clientHTTP("get", @url))
+			JSON.parse(http_get(@url))
 		end
 
 		def checkLastPageID(last_page_id)
@@ -135,7 +135,7 @@ class AyaDN
 		def unstarPost(post_id)
 			@url = @endpoints.star(post_id)
 			@url += @endpoints.light_params
-			$tools.checkHTTPResp(clientHTTP("delete"))
+			$tools.checkHTTPResp(http_delete())
 		end
 		def repostPost(post_id)
 			@url = @endpoints.repost(post_id)
@@ -145,7 +145,7 @@ class AyaDN
 		def unrepostPost(post_id)
 			@url = @endpoints.repost(post_id)
 			@url += @endpoints.light_params
-			$tools.checkHTTPResp(clientHTTP("delete"))
+			$tools.checkHTTPResp(http_delete())
 		end
 		def ifExists(post_id)
 			theHash = getHash
@@ -176,7 +176,7 @@ class AyaDN
 		def unmuteUser(username)
 			@url = @endpoints.mute(username)
 			@url += @endpoints.light_params
-			$tools.checkHTTPResp(clientHTTP("delete"))
+			$tools.checkHTTPResp(http_delete())
 		end
 		def followUser(username)
 			@url = @endpoints.follow(username)
@@ -186,7 +186,7 @@ class AyaDN
 		def unfollowUser(username)
 			@url = @endpoints.follow(username)
 			@url += @endpoints.light_params
-			$tools.checkHTTPResp(clientHTTP("delete"))
+			$tools.checkHTTPResp(http_delete())
 		end
 		def getFollowings(username, beforeID)
 			@url = @endpoints.following(username)
@@ -261,17 +261,17 @@ class AyaDN
 		def deleteFile(file_id)
 			@url = @endpoints.get_file(file_id)
 			@url += @endpoints.light_params
-			$tools.checkHTTPResp(clientHTTP("delete"))
+			$tools.checkHTTPResp(http_delete())
 		end
 		def deleteMessage(channel_id, message_id)
 			@url = @endpoints.get_message(channel_id, message_id)
 			@url += @endpoints.access_token
-			$tools.checkHTTPResp(clientHTTP("delete"))
+			$tools.checkHTTPResp(http_delete())
 		end
 		# def deactivateChannel(channel_id)
 		# 	@url = CHANNELS_URL + "#{channel_id}?"
 		# 	@url += @endpoints.access_token
-		# 	resp = clientHTTP("delete")
+		# 	resp = http_delete
 		# 	$tools.checkHTTPResp(resp)
 		# end
 	end
