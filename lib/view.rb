@@ -179,7 +179,6 @@ class AyaDN
 		def buildFollowList
 			users_hash = {}
 			@hash['data'].each do |item|
-				#param = objectNames(item)
 				user_handle = "@" + item['username']
 				users_hash[item['id']] = [user_handle, item['name']]
 			end
@@ -233,12 +232,9 @@ class AyaDN
 			return list_string, file_url, pagination_array
 		end
 		def buildUserInfos(name, adn_data)
-			#user_name, user_real_name, the_name = objectNames(adn_data)
 			name_params = objectNames(adn_data)
-
 			$files.users_write("me", name_params[:user_name]) if name == "me"
 			$files.users_write(adn_data['id'], name_params[:user_name]) if $files.users_read(adn_data['id']) == nil
-
 			created_at = adn_data['created_at']
 			user_show = "\nID: ".cyan.ljust(22) + adn_data['id'].green + "\n"
 			user_show << ("Name: ".cyan.ljust(21) + name_params[:user_real_name].green + "\n") if name_params[:user_real_name] != nil

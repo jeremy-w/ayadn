@@ -42,7 +42,7 @@ class AyaDN
 		    help << "ayadn tag nowplaying \n"#.green + "(search for hashtag #nowplaying)\n"
 		    help << "ayadn star 14805036 \n"#.green + "(star post n°14805036)\n"
 		    help << "ayadn checkins \n"#.green + "(display the Checkins stream)\n"
-		    help << "ayadn scroll global \n"
+		    help << "ayadn scroll unified \n"
 		    help << "ayadn follow @ayadn \n"#.green + "(follow user @ericd)\n"
 		    help << "ayadn search ruby,json \n"#.green + "(search for posts with these words)\n"
 		    #help << "ayadn list files \n"

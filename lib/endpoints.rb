@@ -34,15 +34,6 @@ class AyaDN
 		def single_post(post_id)
 			POSTS_URL + "#{post_id}?access_token=#{@token}"
 		end
-		# def checkins
-		# 	POSTS_URL + "stream/explore/checkins?access_token=#{@token}&count=#{$tools.config['counts']['checkins']}"
-		# end
-		# def trending
-		# 	POSTS_URL + "stream/explore/trending?access_token=#{@token}&count=#{$tools.config['counts']['explore']}"
-		# end
-		# def conversations
-		# 	POSTS_URL + "stream/explore/conversations?access_token=#{@token}"
-		# end
 		def explore(stream)
 			case stream
 			when "checkins"
@@ -51,9 +42,6 @@ class AyaDN
 				POSTS_URL + "stream/explore/#{stream}?access_token=#{@token}&count=#{$tools.config['counts']['explore']}"
 			end
 		end
-		# def photos
-		# 	POSTS_URL + "stream/explore/photos?access_token=#{@token}&count=#{$tools.config['counts']['explore']}"
-		# end
 		def hashtags(tags)
 			POSTS_URL + "tag/#{tags}"
 		end

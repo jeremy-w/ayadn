@@ -25,7 +25,6 @@ class AyaDN
 		my_post_id = @hash['id']
 		puts @view.new(nil).buildSimplePostInfo(@hash)
 		puts $status.postSent
-		# save post
 		if $tools.config['files']['auto_save_sent_posts']
 			fileURL = $tools.ayadn_configuration[:posts_path] + "/#{my_post_id}.post"
 			f = File.new(fileURL, "w")
