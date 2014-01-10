@@ -264,7 +264,7 @@ class AyaDN
 				puts "\nYou just followed user ".green + "#{name}".brown + "\n\n"
 			end
 		elsif action == "unfollow"
-			if following[:follows_you]
+			if following[:you_follow]
 				@api.unfollowUser(name)
 				puts "\nYou just unfollowed user ".green + "#{name}".brown + "\n\n"
 			else
