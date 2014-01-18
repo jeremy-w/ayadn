@@ -17,6 +17,8 @@ AYADN
 
 - repost/unrepost a post
 
+- quote a post
+
 - send a private message
 
 - read your private messages
@@ -270,6 +272,7 @@ ayadn star 18527205
 ayadn unstar 18527205
 ayadn repost 18527205
 ayadn unrepost 18527205
+ayadn quote 18527205
 ayadn delete 12345678
 ayadn delete-message 12345 23456789
 ayadn list muted
@@ -450,6 +453,7 @@ Some commands have shortcuts:
 
 - write: w
 - reply: r
+- quote: q
 - mentions: m
 - posts: p
 - channels: ch

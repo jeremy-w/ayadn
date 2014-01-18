@@ -3,6 +3,13 @@ AYADN
 
 AYADN is a learning exercise: while it's fully functional, it's still very alpha (remember I'm a beginner with Ruby).  
 
+## 2014-01-09 v0.5.7a
+- quote a post (different from repost)
+
+## 2014-01-08 v0.5.6c
+- show reposts count (option, true)
+- bugfixes
+
 ## 2014-01-05 v0.5.6b
 - fixed a bug that prevented AyaDN to run on Ruby 2.0
 

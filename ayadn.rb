@@ -59,18 +59,6 @@ when "posts", "p"
 when "trending", "conversations", "checkins", "photos"
 	client.ayadnExplore(arg1, arg2)
 
-when "starred"
-	if arg2 =~ /^@/ || arg2 == "me"
-		client.ayadnStarredPosts(arg2, arg3)
-	elsif arg2.is_integer?
-		client.ayadnWhoStarred(arg2)
-	else
-		puts $status.errorUserID(arg2)
-	end
-
-when "reposted"
-	arg2.is_integer? ? client.ayadnWhoReposted(arg2) : (puts $status.errorPostID(arg2))
-
 when "infos", "i"
 	if arg2 =~ /^@/ || arg2 == "me"
 		client.ayadnUserInfos(arg2)
@@ -95,21 +83,6 @@ when "delete"
 		(input == "y" || input == "Y") ? client.ayadnDeletePost(arg2) : (puts "\nCanceled.\n\n".red)
 	else
 		puts $status.errorPostID(arg2)
-	end
-
-when "save"
-	arg2.is_integer? ? client.ayadnSavePost(arg2) : (puts $status.errorPostID(arg2))
-
-when "load"
-	arg2.is_integer? ? client.ayadnLoadPost(arg2) : (puts $status.errorPostID(arg2))
-
-when "backup"
-	if arg2 == "followings"
-		(arg3 =~ /^@/ || arg3 == "me") ? client.ayadnSaveList("followings", arg3) : (puts $status.errorSyntax)
-	elsif arg2 == "followers"
-		(arg3 =~ /^@/ || arg3 == "me") ? client.ayadnSaveList("followers", arg3) : (puts $status.errorSyntax)
-	elsif arg2 == "muted"
-		client.ayadnSaveList("muted", "me")
 	end
 
 when "list"
@@ -186,11 +159,45 @@ when "messages", "msg"
 	# arg3 == nil = with pagination, arg3 == "all" = no pagination
 	client.ayadnGetMessages(arg2, arg3)
 
+when "quote", "comment", "q"
+	if arg2.is_integer?
+		client.ayadn_quote(arg2)
+	else
+		puts $status.errorSyntax
+	end
+
 when "search", "s"
 	arg2 != nil ? client.ayadnSearch(arg2) : (puts $status.errorSyntax)
 
+when "starred"
+	if arg2 =~ /^@/ || arg2 == "me"
+		client.ayadnStarredPosts(arg2, arg3)
+	elsif arg2.is_integer?
+		client.ayadnWhoStarred(arg2)
+	else
+		puts $status.errorUserID(arg2)
+	end
+
+when "reposted"
+	arg2.is_integer? ? client.ayadnWhoReposted(arg2) : (puts $status.errorPostID(arg2))
+
 when "inter", "interactions", "events"
 	client.ayadnInteractions
+
+when "save"
+	arg2.is_integer? ? client.ayadnSavePost(arg2) : (puts $status.errorPostID(arg2))
+
+when "load"
+	arg2.is_integer? ? client.ayadnLoadPost(arg2) : (puts $status.errorPostID(arg2))
+
+when "backup"
+	if arg2 == "followings"
+		(arg3 =~ /^@/ || arg3 == "me") ? client.ayadnSaveList("followings", arg3) : (puts $status.errorSyntax)
+	elsif arg2 == "followers"
+		(arg3 =~ /^@/ || arg3 == "me") ? client.ayadnSaveList("followers", arg3) : (puts $status.errorSyntax)
+	elsif arg2 == "muted"
+		client.ayadnSaveList("muted", "me")
+	end
 
 when "help", "h"
 	puts $tools.helpScreen

@@ -44,6 +44,38 @@ class AyaDN
 			displayStream(stream)
 		end
 	end
+	def ayadn_quote(post_id)
+		@progress_indicator = false
+		post_to_quote = @api.getSinglePost(post_id)
+		meta, data = post_to_quote['meta'], post_to_quote['data']
+		puts "\n"
+		if data['text'] != nil
+			text_to_quote = $tools.withoutSquareBraces(data['text']).chomp(" ")
+		else
+			abort("\n\nError: no text to quote.\n\n".red)
+		end
+		@new_string = text_to_quote
+		if data['entities']['links'] != nil
+			data['entities']['links'].each do |obj| 
+				@new_string = text_to_quote.gsub("#{obj['text']}", "[#{obj['text']}](#{obj['url']})").chomp(" ")
+			end
+		end
+		new_text = " >> @#{data['user']['username']}: " + (@new_string ||= text_to_quote)
+		remaining = $tools.ayadn_configuration[:post_max_length] - $tools.getMarkdownText($tools.withoutSquareBraces(new_text.dup)).length - 1
+		puts "AyaDN will automatically quote the original post like this after your comment:\n".green
+		puts '"' + new_text + '"' + "\n"
+		abort("\nCANCELED: original text is too long, can't quote it.\n\n".red) if remaining <= 1
+		puts "#{remaining} characters remaining.".magenta + " Write your comment: \n\n".brown
+		begin
+			input_text = STDIN.gets.chomp
+		rescue Exception
+			abort($status.errorPostNotSent)
+		end
+		new_text = input_text + new_text
+		remaining = $tools.ayadn_configuration[:post_max_length] - $tools.getMarkdownText(new_text.dup).length
+		abort("\n" + $status.errorPostTooLong(new_text.length, new_text.length -  $tools.ayadn_configuration[:post_max_length])) if remaining <= 0
+		ayadnSendPost(new_text)
+	end
 	def ayadn_reply(postID)
 		@progress_indicator = false
 		puts $status.replyingToPost(postID)

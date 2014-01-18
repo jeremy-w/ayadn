@@ -63,7 +63,7 @@ class AyaDN
             "\n\nCanceled. Your message hasn't been sent.\n\n".red
         end
         def errorMessageTooLong(realLength, to_remove)
-            "\nError: your message is ".red + "#{realLength} ".brown + " characters long, please remove ".red + "#{to_remove} ".brown + "characters.\n\n".red
+            "\nError: your message is ".red + "#{realLength} ".brown + "characters long, please remove ".red + "#{to_remove} ".brown + "characters.\n\n".red
         end
         def errorPostTooLong(realLength, to_remove)
             "\nError: your post is ".red + "#{realLength} ".brown + " characters long, please remove ".red + "#{to_remove} ".brown + "characters.\n\n".red

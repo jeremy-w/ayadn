@@ -1,6 +1,5 @@
 ## To do
 
-- check every error scenario possible on the user + API side
 - learn to run tests, rspec, ...
 - replace the last 'curl' calls with ruby (multipart) upload
 - handle some "connection lost, trying again in xx sec" things
@@ -9,7 +8,6 @@
 - make it more modular
 - implement some solid error handling
 - secure and sanitize input argv
-- get rid of the global variables
 - clean up and DRY
 
 ## Next
@@ -18,11 +16,9 @@
 - some other ones not so secret:
     - backup all your files
     - save/bookmark conversations (for backup/reference purposes)
-    - live character countdown including Markdown detection
     - follow a conversation in real time
     - more options activable from the app itself
     - export posts/streams to different formats
-    - semantic questions like "does user x follow user x"
     - flag user(s) or hashtag(s) + colorize their posts
 - new options:
     - pagination activated/deactivated

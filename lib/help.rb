@@ -104,6 +104,7 @@ class AyaDN
 		    commands << "ayadn unstar 18527205\n"
 		    commands << "ayadn repost 18527205\n"
 		    commands << "ayadn unrepost 18527205\n"
+		    commands << "ayadn quote 18527205\n"
 		    commands << "ayadn delete 12345678\n"
 		    commands << "ayadn delete-message 12345 23456789\n"
 		    commands << "ayadn list muted\n"
