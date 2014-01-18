@@ -166,6 +166,9 @@ when "quote", "comment", "q"
 		puts $status.errorSyntax
 	end
 
+when "nowplaying", "itunes", "np"
+	client.ayadn_nowplaying
+
 when "search", "s"
 	arg2 != nil ? client.ayadnSearch(arg2) : (puts $status.errorSyntax)
 

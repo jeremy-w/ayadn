@@ -73,6 +73,8 @@ AYADN
 
 - save a post link to your Pinboard account
 
+- post the current iTunes song with #nowplaying hashtag (OS X only)
+
 - [and more!](https://github.com/ericdke/ayadn#list-of-commands)
 
 *See the [AyaDN page](http://ayadn-app.net) for screenshots.*  
@@ -253,6 +255,7 @@ ayadn follow @ericd
 ayadn unfollow @ericd
 ayadn mute @ericd
 ayadn unmute @ericd
+ayadn nowplaying
 ayadn interactions
 ayadn list files
 ayadn list files all
@@ -462,6 +465,7 @@ Some commands have shortcuts:
 - convo: c
 - tag: t
 - search: s
+- nowplaying: np
 - help: h
 
 Examples:  
@@ -471,6 +475,7 @@ ayadn w
 ayadn r 12345678
 ayadn m @ericd
 ayadn t ruby
+ayadn np
 ```  
 
 *Other commands don't have a shortcut, reducing the risk of accidental manipulation.*

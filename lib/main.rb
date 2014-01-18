@@ -380,6 +380,31 @@ class AyaDN
 		puts ayadn_list_aliases
 		puts "Done!\n\n".green
 	end
+	def ayadn_nowplaying
+		case $tools.ayadn_configuration[:platform]   
+        when $tools.winplatforms
+        	puts "\nThis feature only works with Mac OS X and iTunes. Sorry.\n\n".red
+        	exit
+        end
+        begin
+			track = `osascript -e 'tell application "iTunes"' -e 'set trackName to name of current track' -e 'return trackName' -e 'end tell'`
+			artist = `osascript -e 'tell application "iTunes"' -e 'set trackArtist to artist of current track' -e 'return trackArtist' -e 'end tell'`
+		rescue => e
+			puts "\n\nError: #{e}\n\n".red
+			exit
+		end
+		track.chomp!
+		artist.chomp!
+ 		if track.length == 0 || artist.length == 0
+			abort("\nCanceled: couldn't get enough information (empty field).\n\n".red)
+		end
+		text_to_post = "#nowplaying '#{track}' by #{artist}"
+		puts "\nAyaDN will post this to your timeline:\n\n".cyan
+		puts text_to_post + "\n\n"
+		puts "Do you confirm? (y/N) ".brown
+		abort("\nCanceled.\n\n".red) unless STDIN.getch == ("y" || "Y")
+		ayadnSendPost(text_to_post, nil)
+	end
 	def ayadn_does(params)
 		target_name, source_name = params[3].dup, params[1].dup
 		case params[2]

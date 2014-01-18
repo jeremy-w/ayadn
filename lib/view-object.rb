@@ -87,7 +87,7 @@ class AyaDN
 						checkins_postcode = annotation_value['postcode']
 						checkins_country_code = annotation_value['country_code']
 						anno_string << "\n" + ("." * (checkins_name.length + 6))
-						anno_string << ("\nName: ".cyan + checkins_name.upcase.reddish) unless checkins_name.nil?
+						anno_string << ("\nName: ".cyan + checkins_name.upcase.reddish)
 						anno_string << ("\nAddress: ".cyan + checkins_address.green) unless checkins_address.nil?
 						anno_string << ("\nLocality: ".cyan + checkins_locality.green) unless checkins_locality.nil?
 						anno_string << (" (#{checkins_postcode})".green) unless checkins_postcode.nil?
