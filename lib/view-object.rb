@@ -78,6 +78,9 @@ class AyaDN
 					annotation_value = annotations_list[xxx]['value']
 					if annotation_type == "net.app.core.checkin" or annotation_type == "net.app.ohai.location"
 						checkins_name = annotation_value['name']
+						if checkins_name.nil?
+							checkins_name = ""
+						end
 						checkins_address = annotation_value['address']
 						checkins_locality = annotation_value['locality']
 						checkins_region = annotation_value['region']
