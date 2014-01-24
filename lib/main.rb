@@ -74,10 +74,15 @@ class AyaDN
 		puts @view.new(@api.getInteractions).showInteractions + "\n\n"
 	end
 	def check_count(count, target)
-		counted = false
+		@counted = false
 		if count != nil && count.is_integer?
-			$tools.config['counts'][target] = count
-			counted = true
+			case target
+			when "conversations", "photos", "trending"
+				$tools.config['counts']['explore'] = count
+			else
+				$tools.config['counts'][target] = count
+			end
+			@counted = true
 		end
 	end
 	def ayadnGlobal(count=nil)
@@ -86,7 +91,7 @@ class AyaDN
 		check_count(count, "global")
 		@hash = @api.getGlobal($files.get_last_page_id(fileURL))
 		stream, last_page_id = completeStream
-		if counted == false
+		if @counted == false
 			$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
 		end
 		displayStream(stream)
@@ -98,7 +103,7 @@ class AyaDN
 		check_count(count, "unified")
 		@hash = @api.getUnified($files.get_last_page_id(fileURL))
 		stream, last_page_id = completeStream
-		if counted == false
+		if @counted == false
 			$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
 		end
 		displayStream(stream)
@@ -113,10 +118,10 @@ class AyaDN
 	def ayadnExplore(explore, count=nil)
 		fileURL = @last_page_id_path + "/last_page_id-#{explore}"
 		puts $status.getExplore(explore)
-		check_count(count, "explore")
+		check_count(count, explore)
 		@hash = @api.getExplore(explore, $files.get_last_page_id(fileURL))
 		stream, last_page_id = completeStream
-		if counted == false
+		if @counted == false
 			$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
 		end
 		displayStream(stream)
@@ -128,7 +133,7 @@ class AyaDN
 		check_count(count, "mentions")
 		@hash = @api.getUserMentions(name, $files.get_last_page_id(fileURL))
 		stream, last_page_id = completeStream
-		if counted == false
+		if @counted == false
 			$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
 		end
 		displayStream(stream)
@@ -140,7 +145,7 @@ class AyaDN
 		check_count(count, "posts")
 		@hash = @api.getUserPosts(name, $files.get_last_page_id(fileURL))
 		stream, last_page_id = completeStream
-		if counted == false
+		if @counted == false
 			$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
 		end
 		displayStream(stream)
