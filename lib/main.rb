@@ -73,23 +73,34 @@ class AyaDN
 		puts $status.getInteractions
 		puts @view.new(@api.getInteractions).showInteractions + "\n\n"
 	end
+	def check_count(count, target)
+		counted = false
+		if count != nil && count.is_integer?
+			$tools.config['counts'][target] = count
+			counted = true
+		end
+	end
 	def ayadnGlobal(count=nil)
 		puts $status.getGlobal
 		fileURL = @last_page_id_path + "/last_page_id-global"
-		$tools.config['counts']['global'] = count if count != nil
+		check_count(count, "global")
 		@hash = @api.getGlobal($files.get_last_page_id(fileURL))
 		stream, last_page_id = completeStream
-		$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
+		if counted == false
+			$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
+		end
 		displayStream(stream)
 		puts "\n"
 	end
 	def ayadnUnified(count=nil)
 		fileURL = @last_page_id_path + "/last_page_id-unified"
 		puts $status.getUnified
-		$tools.config['counts']['unified'] = count if count != nil
+		check_count(count, "unified")
 		@hash = @api.getUnified($files.get_last_page_id(fileURL))
 		stream, last_page_id = completeStream
-		$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
+		if counted == false
+			$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
+		end
 		displayStream(stream)
 		puts "\n"
 	end
@@ -102,30 +113,36 @@ class AyaDN
 	def ayadnExplore(explore, count=nil)
 		fileURL = @last_page_id_path + "/last_page_id-#{explore}"
 		puts $status.getExplore(explore)
-		$tools.config['counts']['explore'] = count if count != nil
+		check_count(count, "explore")
 		@hash = @api.getExplore(explore, $files.get_last_page_id(fileURL))
 		stream, last_page_id = completeStream
-		$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
+		if counted == false
+			$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
+		end
 		displayStream(stream)
 		puts "\n"
 	end
 	def ayadnUserMentions(name, count=nil)
 		fileURL = @last_page_id_path + "/last_page_id-mentions-#{name}"
 		puts $status.mentionsUser(name)
-		$tools.config['counts']['mentions'] = count if count != nil
+		check_count(count, "mentions")
 		@hash = @api.getUserMentions(name, $files.get_last_page_id(fileURL))
 		stream, last_page_id = completeStream
-		$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
+		if counted == false
+			$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
+		end
 		displayStream(stream)
 		puts "\n"
 	end
 	def ayadnUserPosts(name, count=nil)
 		fileURL = @last_page_id_path + "/last_page_id-posts-#{name}"
 		puts $status.postsUser(name)
-		$tools.config['counts']['posts'] = count if count != nil
+		check_count(count, "posts")
 		@hash = @api.getUserPosts(name, $files.get_last_page_id(fileURL))
 		stream, last_page_id = completeStream
-		$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
+		if counted == false
+			$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
+		end
 		displayStream(stream)
 	end
 	def ayadnUserInfos(name)
@@ -206,7 +223,7 @@ class AyaDN
 	end
 	def ayadnStarredPosts(name, count=nil)
 		puts $status.starsUser(name)
-		$tools.config['counts']['starred'] = count if count != nil
+		check_count(count, "starred")
 		@hash = @api.getStarredPosts(name)
 		displayStream(completeStream[0])
 	end
@@ -403,6 +420,7 @@ class AyaDN
 		puts text_to_post + "\n\n"
 		puts "Do you confirm? (y/N) ".brown
 		abort("\nCanceled.\n\n".red) unless STDIN.getch == ("y" || "Y")
+		puts "\n"
 		ayadnSendPost(text_to_post, nil)
 	end
 	def ayadn_does(params)
