@@ -139,7 +139,7 @@ class AyaDN
 			post_details << " (follows you)".blue if post_hash['user']['follows_you']
 			post_details << " (you follow)".blue if post_hash['user']['you_follow']
 			unless post_hash['user']['follows_you'] || post_hash['user']['you_follow']
-				post_details << " (you don't follow, doesn't follow you)".blue
+				post_details << " (you don't follow, doesn't follow you)".blue unless params[:user_name] == $tools.config['identity']['prefix']
 			end
 			post_details << "\n"
 			post_details << "\n" + colored_post + "\n\n" 

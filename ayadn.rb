@@ -59,7 +59,7 @@ when "posts", "p"
 when "trending", "conversations", "checkins", "photos"
 	client.ayadnExplore(arg1, arg2)
 
-when "infos", "i"
+when "infos", "i", "info"
 	if arg2 =~ /^@/ || arg2 == "me"
 		client.ayadnUserInfos(arg2)
 	elsif arg2.is_integer?
@@ -68,10 +68,10 @@ when "infos", "i"
 		puts $status.errorInfos(arg2)
 	end
 
-when "convo", "c"
+when "convo", "c", "thread"
 	arg2.is_integer? ? client.ayadnConversation(arg2) : (puts $status.errorPostID(arg2))
 
-when "tag", "t"
+when "tag", "t", "hashtag"
 	theTag = arg2.dup
 	theTag[0] = "" if theTag =~ /^#/
 	client.ayadnHashtags(theTag)
@@ -87,9 +87,9 @@ when "delete"
 
 when "list"
 	case arg2
-	when "followings"
+	when "followings", "fwings"
 		(arg3 =~ /^@/ || arg3 == "me") ? client.ayadnShowList("followings", arg3) : (puts $status.errorSyntax)
-	when "followers"
+	when "followers", "fwers"
 		(arg3 =~ /^@/ || arg3 == "me") ? client.ayadnShowList("followers", arg3) : (puts $status.errorSyntax)
 	when "muted"
 		client.ayadnShowList("muted", "me")
@@ -97,10 +97,10 @@ when "list"
 		client.ayadn_list_files(arg3)
 	when "options","config"
 		client.ayadn_show_options
-	when "channels"
+	when "channels", "ch"
 		client.get_loaded_channels
 		client.ayadn_get_channels
-	when "aliases", "alias"
+	when "aliases", "alias", "channel-alias", "alias-channel"
 		client.ayadn_list_aliases
 	else
 		puts $status.errorSyntax

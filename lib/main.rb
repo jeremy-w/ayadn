@@ -192,6 +192,7 @@ class AyaDN
 			messages_string, last_page_id = @view.new(@api.getMessages(target, last_page_id)).showMessagesFromChannel
 			$files.write_last_page_id(fileURL, last_page_id) unless last_page_id == nil
 			displayStream(messages_string)
+			puts $status.noNewPosts if messages_string == "\n"
 		else
 			puts $status.errorSyntax
 		end
