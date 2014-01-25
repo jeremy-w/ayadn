@@ -3,7 +3,7 @@ AYADN
 
 [App.net](http://app.net) command-line client developed in Ruby.
 
-## Features
+## FEATURES
 
 - read/scroll your App.net stream
 
@@ -77,7 +77,7 @@ AYADN
 
 - [and more!](https://github.com/ericdke/ayadn#list-of-commands)
 
-*See the [AyaDN page](http://ayadn-app.net) for screenshots.*  
+*See also the [AyaDN landing page](http://ayadn-app.net) and the [AyaDN blog](http://ayadn.re-app.net).*  
 
 ## TL;DR
 
@@ -89,7 +89,7 @@ bundle install
 ./ayadn.rb write 'Posting to App.net with Ruby!'
 ``` 
 
-## Instructions
+## INSTALL
 
 **Mac OS X, Linux = it just works.**
 
@@ -97,7 +97,7 @@ AyaDN is also compatible with Windows (install Ruby with Rubygems at [http://rub
 
 ### Step 1
 
-Download the ZIP (button in the sidebar) or clone the project:
+Clone the project, or download the ZIP (button in the sidebar).
 
 ```
 git clone https://github.com/ericdke/ayadn.git
@@ -107,7 +107,7 @@ git clone https://github.com/ericdke/ayadn.git
 
 #### With Bundler 
 
-Mac OS X, Linux: if you already have [bundler](http://bundler.io), you should just enter the `ayadn-master` folder and run `bundle install`.
+Mac OS X, Linux: if you already have [bundler](http://bundler.io), you should just enter the `ayadn` folder and run `bundle install`.
 
 Example if you cloned AyaDN in your downloads folder:
 
@@ -144,19 +144,13 @@ While you can use the app with the ruby interpreter -see [How to use](https://gi
 chmod +x ayadn.rb
 ```  
 
-Even better: after that, declare the app folder in your $PATH *or* create a symlink of the app in `/usr/local/bin` or equivalent.
-
-```
-sudo ln -s ayadn.rb /usr/local/bin/ayadn
-```  
-
 ### Step 4
 
 You have to authorize AyaDN to use your App.net credentials.
 
 **Just run AyaDN to start the process!**  
 
-## How to use
+## HOW TO USE
 
 **`ayadn` + optional action + optional target(s) + optional value(s)**
 
@@ -166,7 +160,7 @@ If you provide the `write` command without text, you will enter the compose mess
 
 By default, AyaDN displays only the new posts in the stream since your last visit.
 
-### Through the Ruby interpreter
+### Through the ruby interpreter
 
 If you've not made the app executable, use it through Ruby:
 
@@ -175,7 +169,7 @@ ruby ayadn.rb
 ruby ayadn.rb write
 ```
 
-### As an executable in your PATH
+### As an executable in your path
 
 If the app is executable and in your $PATH, just launch it:
 
@@ -193,14 +187,14 @@ If the app is executable but not in your $PATH, launch it locally:
 ./ayadn.rb write
 ```  
 
-### If you made the symlink (recommended)
+### If you made the symlink
 
 ```
 ayadn
 ayadn write 
 ```  
 
-### With an alias (recommended)
+### With an alias
 
 The geekiest option is to make an alias in your `.bashrc`:
 
@@ -219,7 +213,7 @@ a pm @ericd
 
 Enjoy!  
 
-## List of commands
+## LIST OF COMMANDS
 
 *Only the first lines include the `[PRESS ENTER KEY]` indication and a description for obvious readability reasons.*
 
@@ -318,7 +312,7 @@ ayadn random
 ```  
 
 
-## Tips  
+## TIPS  
 
 ### Username
 
@@ -492,7 +486,43 @@ then read its messages with `ayadn messages mychannel`.
 
 List your existing aliases with `ayadn list alias`.
 
-Aliases are cumulable. If something goes awfully wrong, just trash the file: `%USERNAME%/ayadn/data/username/db/channels_alias.db`  
+Aliases are cumulable. If something goes awfully wrong, just trash the file: `%USERNAME%/ayadn/data/username/db/channels_alias.db`   
+
+### Just for fun
+
+`ayadn random`  
+
+## HELP
+
+### Console
+
+Be aware of the way the console/terminal treats what you type.
+
+When posting with `"double quotes"`, any special character will be interpreted! 
+
+So `"echo !"` becomes `"echo last command"`. You may not want to do that...
+
+So you have to post with `'simple quotes'`, this way the console don't mess with your content.
+
+The thing is, how do you then post a text *containing one ore more exclamation marks AND/OR one or more simple quotes?*
+
+The answer is to post with *"double quotes"* but use `\`, the *antislash* character, before any exclamation mark:
+
+```
+ayadn.rb write "Here's an escaped exclamation mark \! and a normal simple quote in the same text"
+```  
+
+**My advice: to avoid any problems, post with the compose feature, that is to say without providing arguments:**  
+  
+`ayadn.rb write`  
+
+### Database
+
+AyaDN keeps a database of the ids of all the users it sees (it reduces the number of API calls and speeds up the app.)
+
+If you think that this file is causing problems to AyaDN or if it's simply getting too big, just trash it.
+
+The file is: `%USERNAME%/ayadn/data/username/db/users.db`
 
 ### GCC
 
@@ -509,49 +539,9 @@ It should give you the location of your `gcc`, typically `/usr/bin/gcc`. Then ma
 sudo ln -s /usr/bin/gcc /usr/bin/gcc-4.2
 ```  
 
-On Mac OS X, you may have to answer `yes` if your computer asks you to download and install the "developer tools".   
+On Mac OS X, you may have to answer `yes` if your computer asks you to download and install the "developer tools".  
 
-### Just for fun
-
-`ayadn random`  
-
-## Help
-
-### Console
-
-Be aware of the way the console treats what you type.
-
-When posting with `"double quotes"`, any special character will be interpreted! So `"echo !"` becomes `"echo last command"`. You may not want to do that...
-
-So you have to post with `'simple quotes'`, this way the console don't mess with your content.
-
-The thing is, how do you then post a text *containing one ore more exclamation marks AND/OR one or more simple quotes?*
-
-The answer is to post with *"double quotes"* but use `\`, the *antislash* character, before any exclamation mark:
-
-```
-ayadn.rb write "Here's an escaped exclamation mark \! and a normal simple quote in the same text."
-```  
-
-**To avoid any problem, post with the compose feature, that is to say without providing arguments:**  
-  
-`ayadn.rb write`  
-
-### Database
-
-AyaDN keeps a database of the ids of all the users it sees (it reduces the number of API calls and speeds up the app.)
-
-If you think that this file is causing problems to AyaDN or if it's simply getting too big, just trash it.
-
-The file is: `%USERNAME%/ayadn/data/username/db/users.db`
-
-## Demo
-
-*(todo)*
-
-A few screencaps [here](http://ericd.re-app.net).
-
-## Contact
+## CONTACT
 
 Contact me on ADN [(@ericd)](http://alpha.app.net/ericd) if you have questions, ideas, or... if you know Ruby and you want to help a newbie to code better. ;)
 
@@ -559,7 +549,7 @@ The handle for the app itself is [@ayadn](http://alpha.app.net/ayadn) and will b
 
 Don't bother with @ayaio or @aya_tests, they are bots. 
 
-## Credits
+## CREDITS
 
 ### Beta-testers
 

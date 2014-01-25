@@ -397,7 +397,12 @@ class AyaDN
 	end
 	def ayadn_alias_channel(channel_id, channel_alias)
 		puts "\nAdding new alias: ".cyan + "#{channel_id} ".brown + "=> " + "#{channel_alias}\n".green
-		$files.save_channel_alias(channel_id, channel_alias)
+		if channel_id.is_integer? && channel_alias != nil
+			$files.save_channel_alias(channel_id, channel_alias)
+		else
+			puts $status.errorSyntax
+			exit
+		end
 		puts "List of saved aliases: \n".cyan
 		puts ayadn_list_aliases
 		puts "Done!\n\n".green
