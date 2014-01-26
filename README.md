@@ -111,11 +111,11 @@ AYADN
 
 - save a post link to your Pinboard account
 
-- post the current iTunes song with #nowplaying hashtag (OS X only)
+- post the current iTunes song with #nowplaying hashtag *(OS X only)*
 
 - [and more!](https://github.com/ericdke/ayadn#list-of-commands)
 
-*See also the [AyaDN landing page](http://ayadn-app.net) and the [AyaDN blog](http://ayadn.re-app.net).*  
+*There's also a [landing page](http://ayadn-app.net) and, of course, the [blog](http://ayadn.re-app.net).*  
 
 ## TL;DR
 
@@ -131,7 +131,7 @@ bundle install
 
 **Mac OS X, Linux = it just works.**
 
-AyaDN is also compatible with Windows (install Ruby with Rubygems at [http://rubyinstaller.org](http://rubyinstaller.org)).
+Ayadn is also compatible with Windows (install Ruby with Rubygems at [http://rubyinstaller.org](http://rubyinstaller.org)).
 
 ### Step 1
 
@@ -147,7 +147,7 @@ git clone https://github.com/ericdke/ayadn.git
 
 Mac OS X, Linux: if you already have [bundler](http://bundler.io), you should just enter the `ayadn` folder and run `bundle install`.
 
-Example if you cloned AyaDN in your downloads folder:
+Example if you cloned Ayadn in your downloads folder:
 
 ```
 cd ~/Downloads/ayadn
@@ -170,7 +170,7 @@ gem install json pinboard
 gem install win32console -v 1.3.2
 ```  
 
-You only have to install the Gems *once*, it's not necessary to do it each time you update AyaDN.
+You only have to install the Gems *once*, it's not necessary to do it each time you update Ayadn.
 
 *Windows: jump to Step 4*
 
@@ -184,19 +184,19 @@ chmod +x ayadn.rb
 
 ### Step 4
 
-You have to authorize AyaDN to use your App.net credentials.
+You have to authorize Ayadn to use your App.net credentials.
 
-**Just run AyaDN to start the process!**  
+**Just run Ayadn to start the process!**  
 
 ## HOW TO USE
 
 **`ayadn` + optional action + optional target(s) + optional value(s)**
 
-If you don't provide any option to AyaDN, your personnalized stream is displayed.
+If you don't provide any option to Ayadn, your personnalized stream is displayed.
 
 If you provide the `write` command without text, you will enter the compose message feature. *(recommended)*  
 
-By default, AyaDN displays only the new posts in the stream since your last visit.
+By default, Ayadn displays only the new posts in the stream since your last visit.
 
 ### Through the ruby interpreter
 
@@ -356,17 +356,17 @@ ayadn random
 
 One thing I really recommend is to **fill in your username** in the `config.yml` file (without the "@"). 
 
-AyaDN will then be able to perform a lot better and faster (less API calls, more colors, etc).  
+Ayadn will then be able to perform a lot better and faster (less API calls, more colors, etc).  
 
 ### Configuration
 
-Unless you're planning on using [multiple accounts](https://github.com/ericdke/ayadn#running-multiple-accounts), you should then install the configuration file in the permanent AyaDN folder:
+Unless you're planning on using [multiple accounts](https://github.com/ericdke/ayadn#running-multiple-accounts), you should then install the configuration file in the permanent Ayadn folder:
 
 ```
 ayadn install config
 ```  
 
-Now you may safely edit your preferences in `%USERDIR%/ayadn/data/config.yml` without losing anything when updating AyaDN.  
+Now you may safely edit your preferences in `%USERDIR%/ayadn/data/config.yml` without losing anything when updating Ayadn.  
 
 ### Skip specific posts
 
@@ -413,18 +413,18 @@ The `muted` option only works for yourself (this is a normal limitation from the
 - Write/paste a simple link:
 
 ```
-ayadn write 'Subscribe to the #AyaDN broadcast! https://app.net/c/2zqf'
+ayadn write 'Subscribe to the #Ayadn broadcast! https://app.net/c/2zqf'
 ```  
 
 - Write/paste a markdown link to embed the link:
 
 ```
-ayadn write '[Subscribe](https://app.net/c/2zqf) to the #AyaDN broadcast!'
+ayadn write '[Subscribe](https://app.net/c/2zqf) to the #Ayadn broadcast!'
 ```  
 
 ### Reset pagination data
 
-If AyaDN shows you "No recent posts" but you still want to see the stream again, you have to reset the pagination data first.
+If Ayadn shows you "No recent posts" but you still want to see the stream again, you have to reset the pagination data first.
 
 ```
 ayadn reset
@@ -436,7 +436,7 @@ ayadn reset pagination posts @ericd
 
 Without arguments: resets all your pagination data.  
 
-*Note: AyaDN doesn't use Stream Markers (stream syncing), and it's not a bug but a feature :p This is because AyaDN is meant as an independent tool that shouldn't interfere with other ADN clients.*  
+*Note: Ayadn doesn't use Stream Markers (stream syncing), and it's not a bug but a feature :p This is because Ayadn is meant as an independent tool that shouldn't interfere with other ADN clients.*  
 
 ### Custom posts count
 
@@ -456,11 +456,11 @@ ayadn starred @ericd 10
 
 ### Running multiple accounts
 
-- main idea: one AyaDN folder per account
+- main idea: one Ayadn folder per account
 - change the name of the ayadn folder to @yourusername
 - replace "me" in `config.yml` by your username (without "@")
 - do `ayadn authorize` to force a new process (you may have to log off your browser (or delete cookies) first if you want to change accounts)
-- don't ever run "ayadn install config" or AyaDN will ignore your multiple settings  
+- don't ever run "ayadn install config" or Ayadn will ignore your multiple settings  
 
 ### Pinboard
 
@@ -556,9 +556,9 @@ ayadn.rb write "Here's an escaped exclamation mark \! and a normal simple quote 
 
 ### Database
 
-AyaDN keeps a database of the ids of all the users it sees (it reduces the number of API calls and speeds up the app.)
+Ayadn keeps a database of the ids of all the users it sees (it reduces the number of API calls and speeds up the app.)
 
-If you think that this file is causing problems to AyaDN or if it's simply getting too big, just trash it.
+If you think that this file is causing problems to Ayadn or if it's simply getting too big, just trash it.
 
 The file is: `%USERNAME%/ayadn/data/username/db/users.db`
 
