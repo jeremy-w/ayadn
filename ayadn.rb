@@ -233,7 +233,7 @@ when "debug"
 		end
 	end
 
-when "skip-source"
+when "skip-source", "skip-client"
 	case arg2
 	when "add"
 		client.ayadn_skip_add("sources", arg3)
@@ -245,7 +245,7 @@ when "skip-source"
 		puts $status.errorSyntax
 	end
 
-when "skip-tag"
+when "skip-tag", "skip-hashtag"
 	case arg2
 	when "add"
 		client.ayadn_skip_add("hashtags", arg3)
@@ -257,7 +257,7 @@ when "skip-tag"
 		puts $status.errorSyntax
 	end
 
-when "skip-mention"
+when "skip-mention", "skip-name", "skip-username"
 	case arg2
 	when "add"
 		client.ayadn_skip_add("mentions", arg3)
