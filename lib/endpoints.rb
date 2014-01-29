@@ -90,6 +90,12 @@ class AyaDN
 		def muted(username)
 			USERS_URL + "#{username}/muted/?access_token=#{@token}"
 		end
+		def block(username)
+			USERS_URL + "#{username}/block/?access_token=#{@token}"
+		end
+		def blocked(username)
+			USERS_URL + "#{username}/blocked/?access_token=#{@token}"
+		end
 		def interactions
 			USERS_URL + "me/interactions?access_token=#{@token}"
 		end

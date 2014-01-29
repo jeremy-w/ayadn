@@ -93,6 +93,8 @@ when "list"
 		(arg3 =~ /^@/ || arg3 == "me") ? client.ayadnShowList("followers", arg3) : (puts $status.errorSyntax)
 	when "muted"
 		client.ayadnShowList("muted", "me")
+	when "blocked"
+		client.ayadnShowList("blocked", "me")
 	when "files"
 		client.ayadn_list_files(arg3)
 	when "options","config"
@@ -123,12 +125,6 @@ when "follow"
 
 when "unfollow"
 	arg2 =~ /^@/ ? client.ayadnFollowing("unfollow", arg2) : (puts $status.errorUserID(arg2))
-
-when "mute"
-	arg2 =~ /^@/ ? client.ayadnMuting("mute", arg2) : (puts $status.errorUserID(arg2))
-
-when "unmute"
-	arg2 =~ /^@/ ? client.ayadnMuting("unmute", arg2) : (puts $status.errorUserID(arg2))
 
 when "pm"
 	if arg2 =~ /^@/
@@ -268,6 +264,18 @@ when "skip-mention", "skip-name", "skip-username"
 	else
 		puts $status.errorSyntax
 	end
+
+when "mute"
+	arg2 =~ /^@/ ? client.ayadnMuting("mute", arg2) : (puts $status.errorUserID(arg2))
+
+when "unmute"
+	arg2 =~ /^@/ ? client.ayadnMuting("unmute", arg2) : (puts $status.errorUserID(arg2))
+
+when "block"
+	arg2 =~ /^@/ ? client.ayadnBlocking("block", arg2) : (puts $status.errorUserID(arg2))
+
+when "unblock"
+	arg2 =~ /^@/ ? client.ayadnBlocking("unblock", arg2) : (puts $status.errorUserID(arg2))
 
 when "reset"
 	if arg2 == "pagination"

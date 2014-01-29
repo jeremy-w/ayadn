@@ -34,6 +34,8 @@ class AyaDN
 			@api.getFollowings(name, beforeID)
 		when "muted"
 			@api.getMuted(name, beforeID)
+		when "blocked"
+			@api.getBlocked(name, beforeID)
 		end
 	end
 	def getList(list, name)

@@ -320,6 +320,35 @@ class AyaDN
 		end
 	end
 
+	def ayadnBlocking(action, name)
+		@progress_indicator = false
+		you_blocked = @api.getUserBlockInfo(name)
+		if action == "block"
+			if you_blocked
+				abort("\nYou've already blocked this user.\n\n".red)
+			else
+				puts "\nAre you sure you want to block ".red + "#{name} ".brown + "?\n\nIt will mute him/her, then both of you will automatically unfollow each other (if applicable).".red + "\n\n(y/N)?\n\n".brown
+				case STDIN.getch
+				when "y", "Y"
+					@api.blockUser(name)
+					puts "debug"
+					puts "\nYou just blocked user ".green + "#{name}".brown + "\n\n"
+					exit
+				end
+				puts $status.canceled
+			end
+		elsif action == "unblock"
+			if you_blocked
+				@api.unblockUser(name)
+				puts "\nYou just unblocked user ".green + "#{name}".brown + "\n\n"
+			else
+				abort("\nThis user is not blocked.\n\n".red)
+			end
+		else
+			abort($status.errorSyntax)
+		end
+	end
+
 	def ayadnStarringPost(action, postID)
 		@progress_indicator = false
 		@hash = @api.getSinglePost(postID)

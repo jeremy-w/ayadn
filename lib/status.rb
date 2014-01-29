@@ -2,6 +2,9 @@
 # encoding: utf-8
 class AyaDN
     class ClientStatus
+        def canceled
+            "\nCanceled.\n\n".red
+        end
         def showList(list, name)
             if list == "muted"
                 "Your list of muted users:\n".green

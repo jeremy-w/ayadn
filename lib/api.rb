@@ -168,6 +168,12 @@ class AyaDN
 			theHash = getHash
 			theHash['data']['you_muted']
 		end
+		def getUserBlockInfo(username)
+			@url = @endpoints.user_info(username)
+			@url += @endpoints.light_params
+			theHash = getHash
+			theHash['data']['you_blocked']
+		end
 		def muteUser(username)
 			@url = @endpoints.mute(username)
 			@url += @endpoints.light_params
@@ -175,6 +181,16 @@ class AyaDN
 		end
 		def unmuteUser(username)
 			@url = @endpoints.mute(username)
+			@url += @endpoints.light_params
+			$tools.checkHTTPResp(http_delete())
+		end
+		def blockUser(username)
+			@url = @endpoints.block(username)
+			@url += @endpoints.light_params
+			httpPost(@url)
+		end
+		def unblockUser(username)
+			@url = @endpoints.block(username)
 			@url += @endpoints.light_params
 			$tools.checkHTTPResp(http_delete())
 		end
@@ -204,6 +220,13 @@ class AyaDN
 		end
 		def getMuted(username, beforeID)
 			@url = @endpoints.muted(username)
+			@url += @endpoints.light_params
+			@url += "&count=200"
+			@url += "&before_id=#{beforeID}" if beforeID != nil
+			getHash
+		end
+		def getBlocked(username, beforeID)
+			@url = @endpoints.blocked(username)
 			@url += @endpoints.light_params
 			@url += "&count=200"
 			@url += "&before_id=#{beforeID}" if beforeID != nil

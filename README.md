@@ -285,8 +285,10 @@ ayadn convo 15726105
 ayadn tag nowplaying
 ayadn follow @ericd
 ayadn unfollow @ericd
-ayadn mute @ericd
-ayadn unmute @ericd
+ayadn mute @ayaio
+ayadn unmute @ayaio
+ayadn block @spammer
+ayadn unblock @spammer
 ayadn nowplaying
 ayadn interactions
 ayadn list files
