@@ -61,11 +61,11 @@ class AyaDN
 			end
 		end
 		new_text = " >> @#{data['user']['username']}: " + (@new_string ||= text_to_quote)
-		remaining = $tools.ayadn_configuration[:post_max_length] - $tools.getMarkdownText($tools.withoutSquareBraces(new_text.dup)).length - 1
-		puts "AyaDN will automatically quote the original post like this after your comment:\n".green
-		puts '"' + new_text + '"' + "\n"
+		remaining = $tools.ayadn_configuration[:post_max_length] - $tools.getMarkdownText(new_text.dup).length - 1
+		puts "AyaDN will automatically quote the original post like this after your comment. Markdown and embedded links will be preserved. (CTRL-C to cancel):\n".green
+		puts '"' + $tools.getMarkdownText(new_text.dup) + '"' + "\n"
 		abort("\nCANCELED: original text is too long, can't quote it.\n\n".red) if remaining <= 1
-		puts "#{remaining} characters remaining.".magenta + " Write your comment: \n\n".brown
+		puts "\n#{remaining}".magenta + " characters remaining. Write your comment: \n\n".brown
 		begin
 			input_text = STDIN.gets.chomp
 		rescue Exception
