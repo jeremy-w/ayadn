@@ -3,6 +3,10 @@ AYADN
 
 AYADN is a learning exercise: while it's fully functional, it's still very alpha (remember I'm a beginner with Ruby).  
 
+## 2014-01-29 v0.5.8b
+- block/unblock a user
+- many bugfixes
+
 ## 2014-01-18 v0.5.8a
 - bug fix (empty name in checkins)
 - feature: #nowplaying (iTunes + OS X only)
