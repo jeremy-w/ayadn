@@ -36,7 +36,8 @@ class AyaDN
                         "explore" => 100,
                         "mentions" => 100,
                         "starred" => 100,
-                        "posts" => 100
+                        "posts" => 100,
+                        "search" => 200
                     },
                     "timeline" => {
                         "downside" => true,

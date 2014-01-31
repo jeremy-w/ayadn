@@ -7,6 +7,7 @@ counts: # number of elements retrieved by a stream on the first access, 200 max
     mentions: 100
     posts: 100
     starred: 100
+    search: 200
 timeline:
     # if true, the timeline is displayed from old to recent
     downside: true 
