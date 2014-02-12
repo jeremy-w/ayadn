@@ -17,4 +17,7 @@ EOS
   s.files        = Dir["{lib}/**/*.rb", "bin/*", "LICENSE", "*.md"]
   s.homepage    = 'http://www.ayadn-app.net/'
   s.license     = 'ISC'
+
+  s.add_runtime_dependency 'json', '~> 1.8.1'
+  s.add_runtime_dependency 'pinboard', '~> 0.1.1'
 end
