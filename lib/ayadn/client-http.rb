@@ -1,4 +1,8 @@
 #!/usr/bin/env ruby
+require 'json'
+require 'net/http'
+require 'openssl'
+
 # encoding: utf-8
 class AyaDN
 	class API

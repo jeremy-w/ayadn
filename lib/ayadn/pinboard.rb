@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+require 'base64'
+require 'open-uri'
+
 # encoding: utf-8
 class AyaDN
 	def ayadnBookmark(*args)

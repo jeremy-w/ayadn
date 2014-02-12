@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+require 'pstore'
+require 'fileutils'
+
 # encoding: utf-8
 class AyaDN
 	class Files

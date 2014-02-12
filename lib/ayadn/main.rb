@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+require 'pstore'
+
 # encoding: utf-8
 class AyaDN
 	def initialize(token)

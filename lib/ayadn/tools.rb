@@ -1,5 +1,9 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
+require 'yaml'
+require 'rubygems'
+require 'pinboard'
+
 class AyaDN
 	class Tools
         def initialize
