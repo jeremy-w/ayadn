@@ -1,3 +1,4 @@
+require 'ayadn/requires.rb'
 require 'ayadn/adn_files.rb'
 require 'ayadn/api.rb'
 require 'ayadn/authorize.rb'
