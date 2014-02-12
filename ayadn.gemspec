@@ -3,6 +3,7 @@ Gem::Specification.new do |s|
   s.version     = '0.0.0'
   s.executables << 'ayadn'
   s.required_ruby_version = '>= 2.0.0'
+  s.platform    = Gem::Platform::RUBY
   s.date        = '2014-02-11'
   s.summary     = "App.net command-line client in Ruby"
   s.description = <<EOS
