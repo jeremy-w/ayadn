@@ -28,6 +28,7 @@ EOS
                      lib/ayadn/main.rb
                      lib/ayadn/pinboard.rb
                      lib/ayadn/post.rb
+                     lib/ayadn/requires.rb
                      lib/ayadn/skip.rb
                      lib/ayadn/status.rb
                      lib/ayadn/tools.rb
