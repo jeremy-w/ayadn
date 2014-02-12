@@ -5,8 +5,7 @@
 # http://alpha.app.net/ericd
 # © 2013
 
-require_relative 'requires'
-
+require 'ayadn'
 puts "\n\nAYADN".red + " - " + "App.net command-line client\n".brown
 
 $status = AyaDN::ClientStatus.new
