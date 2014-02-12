@@ -13,31 +13,7 @@ users.
 EOS
   s.authors     = ["Eric Dejonckheere"]
   s.email       = 'eric@aya.io'
-  s.files       = %w(lib/ayadn.rb
-                     lib/ayadn/adn_files.rb
-                     lib/ayadn/api.rb
-                     lib/ayadn/authorize.rb
-                     lib/ayadn/client-http.rb
-                     lib/ayadn/colors.rb
-                     lib/ayadn/debug.rb
-                     lib/ayadn/endpoints.rb
-                     lib/ayadn/extend.rb
-                     lib/ayadn/files.rb
-                     lib/ayadn/get-api.rb
-                     lib/ayadn/help.rb
-                     lib/ayadn/list.rb
-                     lib/ayadn/main.rb
-                     lib/ayadn/pinboard.rb
-                     lib/ayadn/post.rb
-                     lib/ayadn/requires.rb
-                     lib/ayadn/skip.rb
-                     lib/ayadn/status.rb
-                     lib/ayadn/tools.rb
-                     lib/ayadn/user-stream.rb
-                     lib/ayadn/view-channels.rb
-                     lib/ayadn/view-interactions.rb
-                     lib/ayadn/view-object.rb
-                     lib/ayadn/view.rb)
+  s.files        = Dir["{lib}/**/*.rb", "bin/*", "LICENSE", "*.md"]
   s.homepage    = 'http://www.ayadn-app.net/'
   s.license     = 'ISC'
 end
