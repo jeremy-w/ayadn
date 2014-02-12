@@ -1,6 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'ayadn'
   s.version     = '0.0.0'
+  s.executables << 'ayadn'
   s.date        = '2014-02-11'
   s.summary     = "App.net command-line client in Ruby"
   s.description = <<EOS
